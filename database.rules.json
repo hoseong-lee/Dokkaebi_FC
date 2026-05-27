@@ -1,0 +1,15 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "matches": {
+      ".indexOn": ["seasonId", "status", "date"]
+    },
+    "seasons": {
+      ".indexOn": ["active"]
+    },
+    "players": {
+      ".indexOn": ["number"]
+    }
+  }
+}

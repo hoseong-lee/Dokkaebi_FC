@@ -7,7 +7,7 @@ import {
   updateMatch,
   deleteMatch,
   submitMatchResult
-} from '@/firebase/firestore'
+} from '@/firebase/database'
 import { isUpcoming } from '@/utils/date'
 
 export const useMatchesStore = defineStore('matches', () => {

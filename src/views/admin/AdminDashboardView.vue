@@ -34,8 +34,8 @@ async function createSeason() {
     const year = dayjs().year()
     await seasonStore.create({
       name: `${year} 시즌`,
-      startDate: dayjs(`${year}-01-01`).toDate(),
-      endDate: dayjs(`${year}-12-31`).toDate(),
+      startDate: dayjs(`${year}-01-01`).valueOf(),
+      endDate: dayjs(`${year}-12-31`).valueOf(),
       active: true
     })
     toast.success(`${year} 시즌을 생성했습니다.`)

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { getActiveSeason, listSeasons, createSeason } from '@/firebase/firestore'
+import { getActiveSeason, listSeasons, createSeason } from '@/firebase/database'
 
 export const useSeasonStore = defineStore('season', () => {
   const activeSeason = ref(null)

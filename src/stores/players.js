@@ -6,7 +6,7 @@ import {
   createPlayer,
   updatePlayer,
   deletePlayer
-} from '@/firebase/firestore'
+} from '@/firebase/database'
 import { POSITION_ORDER } from '@/utils/stats'
 
 export const usePlayersStore = defineStore('players', () => {

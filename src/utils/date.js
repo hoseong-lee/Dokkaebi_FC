@@ -43,8 +43,9 @@ export function toInputDateTime(value) {
   return d ? d.format('YYYY-MM-DDTHH:mm') : ''
 }
 
+// RTDB 는 Date 객체를 저장할 수 없으므로 epoch ms(number)로 반환
 export function fromInputDateTime(str) {
-  return str ? dayjs(str).toDate() : null
+  return str ? dayjs(str).valueOf() : null
 }
 
 export { dayjs }

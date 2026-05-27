@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { listAuditLogs } from '@/firebase/firestore'
+import { listAuditLogs } from '@/firebase/database'
 import { formatDateTime } from '@/utils/date'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'

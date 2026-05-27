@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { usePlayersStore } from '@/stores/players'
-import { uploadPlayerPhoto } from '@/firebase/storage'
+// 사진 업로드 미사용 — import { uploadPlayerPhoto } from '@/firebase/storage'
 import { POSITION_ORDER, POSITION_LABEL, FOOT_LABEL } from '@/utils/stats'
 import { required, isPositiveInt } from '@/utils/validators'
 import { confirm } from '@/composables/useConfirm'
@@ -18,15 +18,15 @@ const toast = useToast()
 const modalOpen = ref(false)
 const editingId = ref(null)
 const saving = ref(false)
-const photoFile = ref(null)
-const photoPreview = ref('')
+// 사진 업로드 미사용
+// const photoFile = ref(null)
+// const photoPreview = ref('')
 
 const form = reactive({
   name: '',
   number: '',
   position: 'FW',
   preferredFoot: 'R',
-  photoURL: '',
   active: true
 })
 
@@ -36,11 +36,8 @@ function resetForm() {
     number: '',
     position: 'FW',
     preferredFoot: 'R',
-    photoURL: '',
     active: true
   })
-  photoFile.value = null
-  photoPreview.value = ''
 }
 
 function openCreate() {
@@ -56,20 +53,18 @@ function openEdit(p) {
     number: p.number ?? '',
     position: p.position || 'FW',
     preferredFoot: p.preferredFoot || 'R',
-    photoURL: p.photoURL || '',
     active: p.active !== false
   })
-  photoFile.value = null
-  photoPreview.value = p.photoURL || ''
   modalOpen.value = true
 }
 
-function onPhotoPick(e) {
-  const file = e.target.files?.[0]
-  if (!file) return
-  photoFile.value = file
-  photoPreview.value = URL.createObjectURL(file)
-}
+// 사진 업로드 미사용
+// function onPhotoPick(e) {
+//   const file = e.target.files?.[0]
+//   if (!file) return
+//   photoFile.value = file
+//   photoPreview.value = URL.createObjectURL(file)
+// }
 
 async function save() {
   if (!required(form.name)) return toast.error('이름을 입력하세요.')
@@ -82,7 +77,6 @@ async function save() {
       number: form.number === '' ? null : Number(form.number),
       position: form.position,
       preferredFoot: form.preferredFoot,
-      photoURL: form.photoURL,
       active: form.active
     }
 
@@ -93,11 +87,11 @@ async function save() {
       id = await store.add(payload)
     }
 
-    // 사진 업로드 (id 확보 후)
-    if (photoFile.value) {
-      const url = await uploadPlayerPhoto(id, photoFile.value)
-      await store.update(id, { photoURL: url })
-    }
+    // 사진 업로드 미사용
+    // if (photoFile.value) {
+    //   const url = await uploadPlayerPhoto(id, photoFile.value)
+    //   await store.update(id, { photoURL: url })
+    // }
 
     toast.success(editingId.value ? '선수 정보를 수정했습니다.' : '선수를 등록했습니다.')
     modalOpen.value = false
@@ -165,6 +159,7 @@ onMounted(() => store.fetchAll())
 
     <BaseModal v-model="modalOpen" :title="editingId ? '선수 수정' : '선수 등록'">
       <div class="space-y-4">
+        <!-- 사진 업로드 미사용
         <div class="flex justify-center">
           <label class="cursor-pointer text-center">
             <PlayerAvatar :player="{ name: form.name, photoURL: photoPreview }" :size="72" />
@@ -172,6 +167,7 @@ onMounted(() => store.fetchAll())
             <input type="file" accept="image/*" class="hidden" @change="onPhotoPick" />
           </label>
         </div>
+        -->
 
         <div>
           <label class="block text-xs text-gray-500 mb-1">이름</label>

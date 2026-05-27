@@ -5,7 +5,7 @@ import {
   addAllowedEmail,
   updateAllowedEmail,
   removeAllowedEmail
-} from '@/firebase/firestore'
+} from '@/firebase/database'
 
 export const useAllowedEmailsStore = defineStore('allowedEmails', () => {
   const emails = ref([])

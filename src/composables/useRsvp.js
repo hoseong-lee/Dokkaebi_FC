@@ -1,7 +1,7 @@
 import { ref, computed, onUnmounted } from 'vue'
-import { collection, onSnapshot } from 'firebase/firestore'
-import { db, auth } from '@/firebase/config'
-import { setRsvp } from '@/firebase/firestore'
+import { ref as dbRef, onValue } from 'firebase/database'
+import { rtdb, auth } from '@/firebase/config'
+import { setRsvp } from '@/firebase/database'
 
 // 경기 상세에서만 실시간 구독 (연결 유지 비용 고려)
 export function useRsvp(matchId) {
@@ -18,10 +18,11 @@ export function useRsvp(matchId) {
     declined: rsvps.value.filter((r) => r.status === 'declined')
   }))
 
-  const unsub = onSnapshot(
-    collection(db, 'matches', matchId, 'rsvps'),
+  const unsub = onValue(
+    dbRef(rtdb, `matches/${matchId}/rsvps`),
     (snap) => {
-      rsvps.value = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+      const v = snap.val() || {}
+      rsvps.value = Object.entries(v).map(([id, val]) => ({ id, ...val }))
       loading.value = false
     },
     (err) => {
