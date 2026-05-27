@@ -125,9 +125,8 @@ export async function createMatch(data) {
     score: { dokkaebi: null, opponent: null },
     lineup: data.lineup || [],
     events: [],
+    quarters: [],
     momPlayerId: null,
-    formation: data.formation || null,
-    positions: data.positions || {},
     status: 'scheduled',
     createdBy: auth.currentUser?.uid || null,
     createdAt: serverTimestamp(),
@@ -153,14 +152,63 @@ function bump(updates, playerId, seasonId, field, delta) {
   if (seasonId) updates[nsPath(`players/${playerId}/seasonStats/${seasonId}/${field}`)] = increment(delta)
 }
 
-// 경기 결과 입력/수정: 이전 통계 대비 net diff 만 멀티패스 update 로 원자 반영.
+// 쿼터 배열 → 집계 { quarters(정규화), events(flatten+quarter), lineup(union), score(합산) }
+export function aggregateQuarters(quarters = []) {
+  const events = []
+  const lineupSet = new Set()
+  let dok = 0
+  let opp = 0
+  const normQuarters = quarters.map((q, i) => {
+    const qEvents = (q.events || []).map((e) => ({
+      minute: Number(e.minute) || 0,
+      type: e.type || 'goal',
+      playerId: e.playerId,
+      assistPlayerId: e.assistPlayerId || null
+    }))
+    const qLineup = q.lineup || []
+    qLineup.forEach((pid) => lineupSet.add(pid))
+    const qGoals = qEvents.filter((e) => e.type === 'goal').length
+    const qOpp = Number(q.opponentScore) || 0
+    dok += qGoals
+    opp += qOpp
+    qEvents.forEach((e) => events.push({ ...e, quarter: i + 1 }))
+    return {
+      lineup: qLineup,
+      events: qEvents,
+      opponentScore: qOpp,
+      score: { dokkaebi: qGoals, opponent: qOpp },
+      formation: q.formation || null,
+      positions: q.positions || {}
+    }
+  })
+  return {
+    quarters: normQuarters,
+    events,
+    lineup: [...lineupSet],
+    score: { dokkaebi: dok, opponent: opp }
+  }
+}
+
+// 직전 저장 상태(쿼터 우선, 없으면 레거시 aggregate)에서 통계 집계용 이벤트/명단 추출
+function prevAggregate(data) {
+  if (Array.isArray(data.quarters) && data.quarters.length) {
+    return aggregateQuarters(data.quarters)
+  }
+  return { events: data.events || [], lineup: data.lineup || [] }
+}
+
+// 경기 결과 입력/수정(쿼터별): 이전 통계 대비 net diff 만 멀티패스 update 로 원자 반영.
 export async function submitMatchResult(matchId, result) {
   const snap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
   if (!snap.exists()) throw new Error('경기를 찾을 수 없습니다.')
   const data = snap.val()
   const seasonId = data.seasonId
-  const prevTally = tallyEvents(data.events || [])
-  const nextTally = tallyEvents(result.events || [])
+
+  const agg = aggregateQuarters(result.quarters || [])
+  const prev = prevAggregate(data)
+
+  const prevTally = tallyEvents(prev.events)
+  const nextTally = tallyEvents(agg.events)
 
   const updates = {}
 
@@ -170,8 +218,9 @@ export async function submitMatchResult(matchId, result) {
     bump(updates, pid, seasonId, 'assists', (nextTally[pid]?.assists || 0) - (prevTally[pid]?.assists || 0))
   }
 
-  const prevL = new Set(data.lineup || [])
-  const nextL = new Set(result.lineup || [])
+  // 출전수: 한 쿼터라도 뛰면 1경기
+  const prevL = new Set(prev.lineup)
+  const nextL = new Set(agg.lineup)
   for (const pid of nextL) if (!prevL.has(pid)) bump(updates, pid, seasonId, 'appearances', 1)
   for (const pid of prevL) if (!nextL.has(pid)) bump(updates, pid, seasonId, 'appearances', -1)
 
@@ -180,13 +229,12 @@ export async function submitMatchResult(matchId, result) {
     if (result.momPlayerId) bump(updates, result.momPlayerId, seasonId, 'momCount', 1)
   }
 
-  updates[nsPath(`matches/${matchId}/score`)] = result.score
-  updates[nsPath(`matches/${matchId}/events`)] = result.events || []
-  updates[nsPath(`matches/${matchId}/lineup`)] = result.lineup || []
+  updates[nsPath(`matches/${matchId}/quarters`)] = agg.quarters
+  updates[nsPath(`matches/${matchId}/score`)] = agg.score
+  updates[nsPath(`matches/${matchId}/events`)] = agg.events // 집계(타임라인/표시용)
+  updates[nsPath(`matches/${matchId}/lineup`)] = agg.lineup // 출전 union(표시용)
   updates[nsPath(`matches/${matchId}/momPlayerId`)] = result.momPlayerId ?? null
   updates[nsPath(`matches/${matchId}/notes`)] = result.notes ?? data.notes ?? ''
-  updates[nsPath(`matches/${matchId}/formation`)] = result.formation ?? data.formation ?? null
-  updates[nsPath(`matches/${matchId}/positions`)] = result.positions ?? data.positions ?? {}
   updates[nsPath(`matches/${matchId}/status`)] = 'finished'
   updates[nsPath(`matches/${matchId}/updatedAt`)] = serverTimestamp()
 

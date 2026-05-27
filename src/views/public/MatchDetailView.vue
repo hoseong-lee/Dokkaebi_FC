@@ -42,6 +42,7 @@ const lineupPlayers = computed(() =>
   (match.value?.lineup || []).map((id) => playersStore.getById(id)).filter(Boolean)
 )
 
+const quarters = computed(() => match.value?.quarters || [])
 const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
 
@@ -119,21 +120,35 @@ watch(() => route.params.id, load)
 
     <RsvpSection :match-id="match.id" />
 
-    <section v-if="match.formation" class="bg-white rounded-2xl shadow p-6">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-navy">포메이션</h2>
-        <span class="text-sm font-bold text-dokkaebi">{{ match.formation }}</span>
+    <!-- 쿼터별 기록 -->
+    <section v-if="quarters.length" class="bg-white rounded-2xl shadow p-6 space-y-5">
+      <h2 class="font-bold text-navy">쿼터별 기록</h2>
+      <div v-for="(q, i) in quarters" :key="i" class="border-t first:border-t-0 pt-4 first:pt-0">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-semibold text-sm text-gray-700">{{ i + 1 }}쿼터</span>
+          <span class="text-sm font-bold tabular-nums">
+            {{ q.score?.dokkaebi ?? 0 }} : {{ q.score?.opponent ?? 0 }}
+          </span>
+        </div>
+        <MatchEventTimeline :events="q.events || []" :player-map="playerMap" />
+        <FormationPitch
+          v-if="q.formation"
+          class="mt-3"
+          :formation="q.formation"
+          :positions="q.positions || {}"
+          :players="playersStore.players"
+        />
       </div>
-      <FormationPitch
-        :formation="match.formation"
-        :positions="match.positions || {}"
-        :players="playersStore.players"
-      />
+      <div v-if="match.momPlayerId" class="pt-3 border-t text-sm">
+        <span class="text-amber-500 font-bold">⭐ MOM</span>
+        <span class="ml-2 font-medium">{{ playerMap[match.momPlayerId] }}</span>
+      </div>
     </section>
 
-    <section v-if="isFinished" class="bg-white rounded-2xl shadow p-6">
+    <!-- 레거시(쿼터 없는) 경기 -->
+    <section v-else-if="isFinished" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">경기 이벤트</h2>
-      <MatchEventTimeline :events="match.events" :player-map="playerMap" />
+      <MatchEventTimeline :events="match.events || []" :player-map="playerMap" />
       <div v-if="match.momPlayerId" class="mt-4 pt-3 border-t text-sm">
         <span class="text-amber-500 font-bold">⭐ MOM</span>
         <span class="ml-2 font-medium">{{ playerMap[match.momPlayerId] }}</span>
