@@ -11,15 +11,21 @@ service cloud.firestore {
       return request.auth.token.email.lower();
     }
 
+    // 부트스트랩 관리자: allowedEmails 가 비어 있어도 항상 관리자.
+    // src/firebase/auth.js 의 BOOTSTRAP_ADMINS 와 동일하게 유지할 것.
+    function isBootstrapAdmin() {
+      return isSignedIn() && userEmail() == '3hosungo@gmail.com';
+    }
+
     function isAllowed() {
-      return isSignedIn() &&
+      return isBootstrapAdmin() || (isSignedIn() &&
         exists(/databases/$(database)/documents/allowedEmails/$(userEmail())) &&
-        get(/databases/$(database)/documents/allowedEmails/$(userEmail())).data.active == true;
+        get(/databases/$(database)/documents/allowedEmails/$(userEmail())).data.active == true);
     }
 
     function isAdmin() {
-      return isAllowed() &&
-        get(/databases/$(database)/documents/allowedEmails/$(userEmail())).data.role == 'admin';
+      return isBootstrapAdmin() || (isAllowed() &&
+        get(/databases/$(database)/documents/allowedEmails/$(userEmail())).data.role == 'admin');
     }
 
     // ───── 컬렉션별 규칙 ─────

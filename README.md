@@ -31,15 +31,19 @@ npm run preview   # 빌드 결과 미리보기
 
 ## Firebase 설정
 
-1. Firebase Console에서 프로젝트 생성 → Authentication(Google), Firestore(asia-northeast3), Storage 활성화
-2. 웹 앱 추가 후 config 값을 `.env.local` 및 GitHub Actions secrets에 등록
-3. Authentication → Authorized domains에 `<github-username>.github.io` 추가
-4. Google Cloud Console에서 API Key HTTP referrer 제한 설정
-5. **부트스트랩**: `allowedEmails` 컬렉션에 첫 관리자 이메일 문서를 수동 등록
-   (문서 ID = 이메일 lowercase, `{ role: "admin", active: true, addedBy: "system" }`)
+기존 개인 프로젝트 **`hosing-5913f`** 를 재사용한다 (travel 프로젝트와 동일). config 는
+`src/firebase/config.js` 에 기본값으로 내장되어 있어 별도 `.env` 없이 바로 동작한다.
+웹 API key 는 비밀이 아니며 Authorized domains + Firestore Rules 로 보호된다.
+
+- **Authorized domains**: `hoseong-lee.github.io` 가 이미 등록되어 있어(같은 도메인에 travel 배포) Google 로그인이 바로 동작한다.
+- **부트스트랩 관리자**: `3hosungo@gmail.com` 이 `auth.js`(BOOTSTRAP_ADMINS) 와 `firestore.rules`(isBootstrapAdmin) 양쪽에 하드코딩되어 있어, `allowedEmails` 컬렉션이 비어 있어도 즉시 관리자로 로그인된다. 첫 로그인 시 본인 화이트리스트 문서가 자동 생성되며, 이후 다른 멤버는 `/admin/allowed-emails` 에서 추가한다.
+- 다른 Firebase 프로젝트로 바꾸려면 `.env.local`(또는 GitHub secrets)에 `VITE_FIREBASE_*` 를 채우고, `firestore.rules` 의 부트스트랩 이메일을 교체한다.
+
+Firestore Database(asia-northeast3 권장)와 Storage 가 활성화되어 있어야 하며,
+Rules / 인덱스는 한 번 배포해야 한다:
 
 ```bash
-# Firebase Rules / 인덱스 배포 (firebase-tools 설치 시)
+# firebase-tools 설치 시
 firebase deploy --only firestore:rules
 firebase deploy --only storage:rules
 firebase deploy --only firestore:indexes
