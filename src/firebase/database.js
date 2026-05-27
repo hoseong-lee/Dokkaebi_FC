@@ -126,6 +126,8 @@ export async function createMatch(data) {
     lineup: data.lineup || [],
     events: [],
     momPlayerId: null,
+    formation: data.formation || null,
+    positions: data.positions || {},
     status: 'scheduled',
     createdBy: auth.currentUser?.uid || null,
     createdAt: serverTimestamp(),
@@ -183,6 +185,8 @@ export async function submitMatchResult(matchId, result) {
   updates[nsPath(`matches/${matchId}/lineup`)] = result.lineup || []
   updates[nsPath(`matches/${matchId}/momPlayerId`)] = result.momPlayerId ?? null
   updates[nsPath(`matches/${matchId}/notes`)] = result.notes ?? data.notes ?? ''
+  updates[nsPath(`matches/${matchId}/formation`)] = result.formation ?? data.formation ?? null
+  updates[nsPath(`matches/${matchId}/positions`)] = result.positions ?? data.positions ?? {}
   updates[nsPath(`matches/${matchId}/status`)] = 'finished'
   updates[nsPath(`matches/${matchId}/updatedAt`)] = serverTimestamp()
 

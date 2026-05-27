@@ -20,6 +20,7 @@ import EmptyState from '@/components/common/EmptyState.vue'
 import MatchEventTimeline from '@/components/match/MatchEventTimeline.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
+import FormationPitch from '@/components/match/FormationPitch.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -117,6 +118,18 @@ watch(() => route.params.id, load)
     </section>
 
     <RsvpSection :match-id="match.id" />
+
+    <section v-if="match.formation" class="bg-white rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-navy">포메이션</h2>
+        <span class="text-sm font-bold text-dokkaebi">{{ match.formation }}</span>
+      </div>
+      <FormationPitch
+        :formation="match.formation"
+        :positions="match.positions || {}"
+        :players="playersStore.players"
+      />
+    </section>
 
     <section v-if="isFinished" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">경기 이벤트</h2>
