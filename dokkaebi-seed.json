@@ -1,0 +1,1115 @@
+{
+  "seasons": {
+    "s2526": {
+      "name": "2025-2026 시즌",
+      "startDate": 1759276800000,
+      "endDate": 1798675200000,
+      "active": true
+    }
+  },
+  "players": {
+    "p01": {
+      "name": "유희창",
+      "number": 1,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 5,
+        "goals": 8,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 5,
+          "goals": 8,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p02": {
+      "name": "마진섭",
+      "number": 2,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p03": {
+      "name": "윤범관",
+      "number": 3,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p04": {
+      "name": "홍성현",
+      "number": 4,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p05": {
+      "name": "김진오",
+      "number": 5,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 2,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p06": {
+      "name": "김세욱",
+      "number": 6,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 3,
+        "goals": 3,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 3,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p07": {
+      "name": "권순찬",
+      "number": 7,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 2,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p08": {
+      "name": "임상범",
+      "number": 8,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p09": {
+      "name": "박한주",
+      "number": 9,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p10": {
+      "name": "신승민",
+      "number": 10,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p11": {
+      "name": "김청수",
+      "number": 11,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p12": {
+      "name": "박재익",
+      "number": 12,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p13": {
+      "name": "김산이",
+      "number": 13,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p14": {
+      "name": "김영우",
+      "number": 14,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p15": {
+      "name": "정순인",
+      "number": 15,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 3,
+        "goals": 4,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 4,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p16": {
+      "name": "김동민",
+      "number": 16,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 2,
+        "goals": 3,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 3,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p17": {
+      "name": "강상섭",
+      "number": 17,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 2,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p18": {
+      "name": "우재",
+      "number": 18,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p19": {
+      "name": "김성민",
+      "number": 19,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p20": {
+      "name": "김지웅",
+      "number": 20,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p21": {
+      "name": "김주현",
+      "number": 21,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p22": {
+      "name": "채재현",
+      "number": 22,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p23": {
+      "name": "한지민",
+      "number": 23,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p24": {
+      "name": "이수아",
+      "number": 24,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p25": {
+      "name": "문종일",
+      "number": 25,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p26": {
+      "name": "박준희",
+      "number": 26,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p27": {
+      "name": "이호성",
+      "number": 27,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": true,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p28": {
+      "name": "김성일",
+      "number": 28,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p29": {
+      "name": "빅토르안",
+      "number": 29,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p30": {
+      "name": "이재석",
+      "number": 30,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p31": {
+      "name": "정희수",
+      "number": 31,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p32": {
+      "name": "정병진",
+      "number": 32,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p33": {
+      "name": "태원",
+      "number": 33,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p34": {
+      "name": "김준우",
+      "number": 34,
+      "position": "MF",
+      "preferredFoot": "R",
+      "active": false,
+      "joinedAt": 1760140800000,
+      "stats": {
+        "appearances": 0,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    }
+  },
+  "matches": {
+    "m01": {
+      "seasonId": "s2526",
+      "opponent": "삼미FC",
+      "date": 1761955200000,
+      "location": "창골축구장",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 1,
+        "opponent": 5
+      },
+      "lineup": [
+        "p06",
+        "p07",
+        "p01",
+        "p02",
+        "p05",
+        "p17",
+        "p03",
+        "p10",
+        "p26",
+        "p11"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null
+        }
+      ],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1761955200000,
+      "updatedAt": 1761955200000
+    },
+    "m02": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1764414000000,
+      "location": "수락스포츠타운",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 15,
+        "opponent": 4
+      },
+      "lineup": [
+        "p05",
+        "p14",
+        "p15",
+        "p07",
+        "p01",
+        "p17",
+        "p04"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p14",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p15",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p15",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p07",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p17",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p17",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p04",
+          "assistPlayerId": null
+        }
+      ],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1764414000000,
+      "updatedAt": 1764414000000
+    },
+    "m03": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1768640400000,
+      "location": "불암산스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 8,
+        "opponent": 1
+      },
+      "lineup": [],
+      "events": [],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1768640400000,
+      "updatedAt": 1768640400000
+    },
+    "m04": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1776502800000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 9,
+        "opponent": 3
+      },
+      "lineup": [
+        "p01",
+        "p09",
+        "p06",
+        "p16"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null
+        }
+      ],
+      "momPlayerId": null,
+      "formation": "4-3-3",
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1776502800000,
+      "updatedAt": 1776502800000
+    },
+    "m05": {
+      "seasonId": "s2526",
+      "opponent": "원스FC",
+      "date": 1777107600000,
+      "location": "수락산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 3,
+        "opponent": 12
+      },
+      "lineup": [
+        "p15",
+        "p01"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p15",
+          "assistPlayerId": "p01"
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": "p15"
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        }
+      ],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1777107600000,
+      "updatedAt": 1777107600000
+    },
+    "m06": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1778925600000,
+      "location": "다락원체육공원축구장",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 5,
+        "opponent": 8
+      },
+      "lineup": [
+        "p16",
+        "p06",
+        "p01",
+        "p15"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p15",
+          "assistPlayerId": null
+        }
+      ],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1778925600000,
+      "updatedAt": 1778925600000
+    },
+    "m07": {
+      "seasonId": "s2526",
+      "opponent": "덕선FC",
+      "date": 1779498000000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "scheduled",
+      "score": {
+        "dokkaebi": null,
+        "opponent": null
+      },
+      "lineup": [],
+      "events": [],
+      "momPlayerId": null,
+      "formation": null,
+      "positions": {},
+      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1779498000000,
+      "updatedAt": 1779498000000
+    }
+  }
+}
