@@ -11,6 +11,13 @@ import {
 import { rtdb, auth } from './config'
 import { emptyStats, tallyEvents } from '@/utils/stats'
 
+// 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
+// (travel/calendar 와 동일하게 앱별 네임스페이스 분리).
+export const NS = 'dokkaebi'
+export function nsPath(p) {
+  return `${NS}/${p}`
+}
+
 // RTDB 키에는 '.' 를 쓸 수 없으므로 이메일은 '.' → ',' 로 인코딩한다.
 export function encodeEmailKey(email) {
   return (email || '').toLowerCase().trim().replace(/\./g, ',')
@@ -27,7 +34,7 @@ export async function logAudit(action, target, diff = null) {
   const user = auth.currentUser
   if (!user) return
   try {
-    await push(ref(rtdb, 'auditLogs'), {
+    await push(ref(rtdb, nsPath('auditLogs')), {
       uid: user.uid,
       userDisplayName: user.displayName || user.email,
       action,
@@ -41,7 +48,7 @@ export async function logAudit(action, target, diff = null) {
 }
 
 export async function listAuditLogs(max = 100) {
-  const snap = await get(ref(rtdb, 'auditLogs'))
+  const snap = await get(ref(rtdb, nsPath('auditLogs')))
   return toList(snap)
     .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
     .slice(0, max)
@@ -49,7 +56,7 @@ export async function listAuditLogs(max = 100) {
 
 // ───────────── 시즌 ─────────────
 export async function listSeasons() {
-  const snap = await get(ref(rtdb, 'seasons'))
+  const snap = await get(ref(rtdb, nsPath('seasons')))
   return toList(snap).sort((a, b) => (b.startDate || 0) - (a.startDate || 0))
 }
 
@@ -59,7 +66,7 @@ export async function getActiveSeason() {
 }
 
 export async function createSeason(data) {
-  const r = push(ref(rtdb, 'seasons'))
+  const r = push(ref(rtdb, nsPath('seasons')))
   await set(r, data)
   await logAudit('create', `seasons/${r.key}`)
   return r.key
@@ -67,17 +74,17 @@ export async function createSeason(data) {
 
 // ───────────── 선수 ─────────────
 export async function listPlayers() {
-  const snap = await get(ref(rtdb, 'players'))
+  const snap = await get(ref(rtdb, nsPath('players')))
   return toList(snap).sort((a, b) => (a.number || 0) - (b.number || 0))
 }
 
 export async function getPlayer(id) {
-  const snap = await get(ref(rtdb, `players/${id}`))
+  const snap = await get(ref(rtdb, nsPath(`players/${id}`)))
   return snap.exists() ? { id, ...snap.val() } : null
 }
 
 export async function createPlayer(data) {
-  const r = push(ref(rtdb, 'players'))
+  const r = push(ref(rtdb, nsPath('players')))
   await set(r, {
     ...data,
     stats: emptyStats(),
@@ -89,30 +96,30 @@ export async function createPlayer(data) {
 }
 
 export async function updatePlayer(id, data) {
-  await update(ref(rtdb, `players/${id}`), data)
+  await update(ref(rtdb, nsPath(`players/${id}`)), data)
   await logAudit('update', `players/${id}`, data)
 }
 
 export async function deletePlayer(id) {
-  await remove(ref(rtdb, `players/${id}`))
+  await remove(ref(rtdb, nsPath(`players/${id}`)))
   await logAudit('delete', `players/${id}`)
 }
 
 // ───────────── 경기 ─────────────
 export async function listMatches({ seasonId } = {}) {
-  const snap = await get(ref(rtdb, 'matches'))
+  const snap = await get(ref(rtdb, nsPath('matches')))
   let list = toList(snap)
   if (seasonId) list = list.filter((m) => m.seasonId === seasonId)
   return list.sort((a, b) => (b.date || 0) - (a.date || 0))
 }
 
 export async function getMatch(id) {
-  const snap = await get(ref(rtdb, `matches/${id}`))
+  const snap = await get(ref(rtdb, nsPath(`matches/${id}`)))
   return snap.exists() ? { id, ...snap.val() } : null
 }
 
 export async function createMatch(data) {
-  const r = push(ref(rtdb, 'matches'))
+  const r = push(ref(rtdb, nsPath('matches')))
   await set(r, {
     ...data,
     score: { dokkaebi: null, opponent: null },
@@ -129,24 +136,24 @@ export async function createMatch(data) {
 }
 
 export async function updateMatch(id, data) {
-  await update(ref(rtdb, `matches/${id}`), { ...data, updatedAt: serverTimestamp() })
+  await update(ref(rtdb, nsPath(`matches/${id}`)), { ...data, updatedAt: serverTimestamp() })
   await logAudit('update', `matches/${id}`, data)
 }
 
 export async function deleteMatch(id) {
-  await remove(ref(rtdb, `matches/${id}`))
+  await remove(ref(rtdb, nsPath(`matches/${id}`)))
   await logAudit('delete', `matches/${id}`)
 }
 
 function bump(updates, playerId, seasonId, field, delta) {
   if (!delta) return
-  updates[`players/${playerId}/stats/${field}`] = increment(delta)
-  if (seasonId) updates[`players/${playerId}/seasonStats/${seasonId}/${field}`] = increment(delta)
+  updates[nsPath(`players/${playerId}/stats/${field}`)] = increment(delta)
+  if (seasonId) updates[nsPath(`players/${playerId}/seasonStats/${seasonId}/${field}`)] = increment(delta)
 }
 
 // 경기 결과 입력/수정: 이전 통계 대비 net diff 만 멀티패스 update 로 원자 반영.
 export async function submitMatchResult(matchId, result) {
-  const snap = await get(ref(rtdb, `matches/${matchId}`))
+  const snap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
   if (!snap.exists()) throw new Error('경기를 찾을 수 없습니다.')
   const data = snap.val()
   const seasonId = data.seasonId
@@ -171,13 +178,13 @@ export async function submitMatchResult(matchId, result) {
     if (result.momPlayerId) bump(updates, result.momPlayerId, seasonId, 'momCount', 1)
   }
 
-  updates[`matches/${matchId}/score`] = result.score
-  updates[`matches/${matchId}/events`] = result.events || []
-  updates[`matches/${matchId}/lineup`] = result.lineup || []
-  updates[`matches/${matchId}/momPlayerId`] = result.momPlayerId ?? null
-  updates[`matches/${matchId}/notes`] = result.notes ?? data.notes ?? ''
-  updates[`matches/${matchId}/status`] = 'finished'
-  updates[`matches/${matchId}/updatedAt`] = serverTimestamp()
+  updates[nsPath(`matches/${matchId}/score`)] = result.score
+  updates[nsPath(`matches/${matchId}/events`)] = result.events || []
+  updates[nsPath(`matches/${matchId}/lineup`)] = result.lineup || []
+  updates[nsPath(`matches/${matchId}/momPlayerId`)] = result.momPlayerId ?? null
+  updates[nsPath(`matches/${matchId}/notes`)] = result.notes ?? data.notes ?? ''
+  updates[nsPath(`matches/${matchId}/status`)] = 'finished'
+  updates[nsPath(`matches/${matchId}/updatedAt`)] = serverTimestamp()
 
   await update(ref(rtdb), updates)
   await logAudit('update', `matches/${matchId}`, { result: 'submitted' })
@@ -185,15 +192,15 @@ export async function submitMatchResult(matchId, result) {
 
 // ───────────── RSVP ─────────────
 export async function listRsvps(matchId) {
-  const snap = await get(ref(rtdb, `matches/${matchId}/rsvps`))
+  const snap = await get(ref(rtdb, nsPath(`matches/${matchId}/rsvps`)))
   return toList(snap)
 }
 
 export async function setRsvp(matchId, status, note = '') {
   const uid = auth.currentUser.uid
-  const userSnap = await get(ref(rtdb, `users/${uid}`))
+  const userSnap = await get(ref(rtdb, nsPath(`users/${uid}`)))
   const u = userSnap.val() || {}
-  await set(ref(rtdb, `matches/${matchId}/rsvps/${uid}`), {
+  await set(ref(rtdb, nsPath(`matches/${matchId}/rsvps/${uid}`)), {
     uid,
     playerId: u.playerId || null,
     displayName: u.displayName || auth.currentUser.displayName,
@@ -205,20 +212,20 @@ export async function setRsvp(matchId, status, note = '') {
 
 // ───────────── 화이트리스트 ─────────────
 export async function listAllowedEmails() {
-  const snap = await get(ref(rtdb, 'allowedEmails'))
+  const snap = await get(ref(rtdb, nsPath('allowedEmails')))
   const v = snap.val() || {}
   // 표시는 저장된 email 필드 기준 (키는 인코딩되어 있음)
   return Object.values(v)
 }
 
 export async function getAllowedEmail(email) {
-  const snap = await get(ref(rtdb, `allowedEmails/${encodeEmailKey(email)}`))
+  const snap = await get(ref(rtdb, nsPath(`allowedEmails/${encodeEmailKey(email)}`)))
   return snap.exists() ? snap.val() : null
 }
 
 export async function addAllowedEmail(email, role, note = '') {
   const lower = email.toLowerCase().trim()
-  await set(ref(rtdb, `allowedEmails/${encodeEmailKey(lower)}`), {
+  await set(ref(rtdb, nsPath(`allowedEmails/${encodeEmailKey(lower)}`)), {
     email: lower,
     role,
     active: true,
@@ -230,16 +237,16 @@ export async function addAllowedEmail(email, role, note = '') {
 }
 
 export async function updateAllowedEmail(email, patch) {
-  await update(ref(rtdb, `allowedEmails/${encodeEmailKey(email)}`), patch)
+  await update(ref(rtdb, nsPath(`allowedEmails/${encodeEmailKey(email)}`)), patch)
   await logAudit('update', `allowedEmails/${email}`, patch)
 }
 
 export async function removeAllowedEmail(email) {
-  await remove(ref(rtdb, `allowedEmails/${encodeEmailKey(email)}`))
+  await remove(ref(rtdb, nsPath(`allowedEmails/${encodeEmailKey(email)}`)))
   await logAudit('delete', `allowedEmails/${email}`)
 }
 
 // ───────────── 사용자 ─────────────
 export async function upsertUser(uid, data) {
-  await update(ref(rtdb, `users/${uid}`), data)
+  await update(ref(rtdb, nsPath(`users/${uid}`)), data)
 }

@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { ref as dbRef, get, set, serverTimestamp } from 'firebase/database'
 import { rtdb, auth } from './config'
-import { encodeEmailKey, upsertUser } from './database'
+import { encodeEmailKey, upsertUser, nsPath } from './database'
 
 // 부트스트랩 관리자: allowedEmails 가 비어 있어도 항상 로그인/관리 가능.
 export const BOOTSTRAP_ADMINS = ['3hosungo@gmail.com']
@@ -26,7 +26,7 @@ function isBootstrapAdmin(email) {
 // 부트스트랩 관리자의 allowedEmails 노드를 보장 (없으면 생성)
 async function ensureBootstrapDoc(email) {
   const lower = email.toLowerCase()
-  const r = dbRef(rtdb, `allowedEmails/${encodeEmailKey(lower)}`)
+  const r = dbRef(rtdb, nsPath(`allowedEmails/${encodeEmailKey(lower)}`))
   const snap = await get(r)
   if (!snap.exists()) {
     await set(r, {
@@ -43,7 +43,7 @@ async function ensureBootstrapDoc(email) {
 // 이메일 → role 결정. allowedEmails 우선, 없으면 부트스트랩 관리자 검사.
 async function resolveRole(email) {
   const lower = email.toLowerCase()
-  const snap = await get(dbRef(rtdb, `allowedEmails/${encodeEmailKey(lower)}`))
+  const snap = await get(dbRef(rtdb, nsPath(`allowedEmails/${encodeEmailKey(lower)}`)))
   if (snap.exists() && snap.val().active) return snap.val().role
   if (isBootstrapAdmin(lower)) return 'admin'
   return null

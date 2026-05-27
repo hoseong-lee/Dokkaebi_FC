@@ -1,15 +1,25 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
-    "matches": {
-      ".indexOn": ["seasonId", "status", "date"]
+    "travel": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     },
-    "seasons": {
-      ".indexOn": ["active"]
+    "calendar": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     },
-    "players": {
-      ".indexOn": ["number"]
+    "dokkaebi": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "matches": {
+        ".indexOn": ["seasonId", "status", "date"]
+      },
+      "seasons": {
+        ".indexOn": ["active"]
+      },
+      "players": {
+        ".indexOn": ["number"]
+      }
     }
   }
 }

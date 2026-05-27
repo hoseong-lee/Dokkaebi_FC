@@ -49,6 +49,8 @@ Realtime Database 가 활성화되어 있어야 하며, 보안 규칙은 한 번
 firebase deploy --only database
 ```
 
+> **네임스페이스**: 이 앱의 모든 데이터는 RTDB 의 **`dokkaebi/`** 노드 아래에 저장된다(travel/calendar 와 분리). 보안 규칙도 `dokkaebi` 블록 하나로 관리한다.
+>
 > **데이터 키 주의**: RTDB 키에 `.` 를 쓸 수 없어 `allowedEmails` 는 이메일의 `.` 를 `,` 로 인코딩해 키로 쓴다(`encodeEmailKey`). 표시는 노드 안의 `email` 필드를 사용한다.
 
 ## 권한 모델
