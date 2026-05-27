@@ -1,22 +1,86 @@
 <script setup>
+import { computed, onMounted, toRef } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useMatchesStore } from '@/stores/matches'
+import { usePlayersStore } from '@/stores/players'
+import { useSeasonStore } from '@/stores/season'
+import { useRankings } from '@/composables/useRankings'
+import MatchCard from '@/components/match/MatchCard.vue'
+import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 
-const authStore = useAuthStore()
+const auth = useAuthStore()
+const matchesStore = useMatchesStore()
+const playersStore = usePlayersStore()
+const seasonStore = useSeasonStore()
+
+const playersRef = toRef(playersStore, 'players')
+const seasonIdRef = computed(() => seasonStore.activeId)
+const { topPoints } = useRankings(playersRef, seasonIdRef)
+
+const recentFinished = computed(() => matchesStore.finished.slice(0, 3))
+const top3 = computed(() => topPoints.value.slice(0, 3))
+const loading = computed(() => matchesStore.loading || playersStore.loading)
+
+onMounted(async () => {
+  await seasonStore.ensure()
+  matchesStore.fetchAll()
+  playersStore.fetchAll()
+})
 </script>
 
 <template>
-  <div>
-    <section class="bg-white rounded-2xl shadow p-6">
-      <h1 class="text-xl font-bold text-navy">
-        환영합니다, {{ authStore.user?.displayName }}님 👋
-      </h1>
-      <p class="text-sm text-gray-500 mt-1">
-        도깨비 FC 경기 일정과 기록을 확인하세요.
-      </p>
+  <div class="space-y-5">
+    <section class="bg-gradient-to-br from-navy to-navy/80 text-white rounded-2xl shadow p-6">
+      <h1 class="text-lg font-bold">안녕하세요, {{ auth.user?.displayName }}님 👋</h1>
+      <p class="text-sm text-white/70 mt-1">도깨비 FC</p>
     </section>
 
-    <p class="text-center text-gray-400 text-sm mt-10">
-      다가오는 경기 · 최근 결과 · 랭킹 TOP 3는 다음 단계에서 구현됩니다.
-    </p>
+    <LoadingSpinner v-if="loading" />
+
+    <template v-else>
+      <!-- 다가오는 경기 -->
+      <section>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-bold text-navy">다가오는 경기</h2>
+          <RouterLink to="/matches" class="text-xs text-gray-400 hover:text-navy">전체 보기</RouterLink>
+        </div>
+        <MatchCard v-if="matchesStore.nextMatch" :match="matchesStore.nextMatch" />
+        <p v-else class="text-sm text-gray-400 bg-white rounded-xl p-4 text-center">
+          예정된 경기가 없습니다.
+        </p>
+      </section>
+
+      <!-- 최근 결과 -->
+      <section v-if="recentFinished.length">
+        <h2 class="font-bold text-navy mb-2">최근 결과</h2>
+        <div class="space-y-2">
+          <MatchCard v-for="m in recentFinished" :key="m.id" :match="m" />
+        </div>
+      </section>
+
+      <!-- 랭킹 TOP 3 -->
+      <section v-if="top3.length">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-bold text-navy">공격포인트 TOP 3</h2>
+          <RouterLink to="/rankings" class="text-xs text-gray-400 hover:text-navy">랭킹 보기</RouterLink>
+        </div>
+        <ol class="bg-white rounded-xl shadow-sm divide-y">
+          <li
+            v-for="(r, i) in top3"
+            :key="r.player.id"
+            class="flex items-center gap-3 p-3"
+          >
+            <span class="w-6 text-center">{{ ['🥇', '🥈', '🥉'][i] }}</span>
+            <PlayerAvatar :player="r.player" :size="36" />
+            <RouterLink :to="`/players/${r.player.id}`" class="flex-1 font-medium truncate hover:underline">
+              {{ r.player.name }}
+            </RouterLink>
+            <span class="font-bold text-navy">{{ r.value }}P</span>
+          </li>
+        </ol>
+      </section>
+    </template>
   </div>
 </template>

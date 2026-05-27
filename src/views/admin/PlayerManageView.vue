@@ -1,10 +1,222 @@
 <script setup>
-// 선수 관리 — 후속 Phase에서 구현 예정
+import { ref, reactive, onMounted } from 'vue'
+import { usePlayersStore } from '@/stores/players'
+import { uploadPlayerPhoto } from '@/firebase/storage'
+import { POSITION_ORDER, POSITION_LABEL, FOOT_LABEL } from '@/utils/stats'
+import { required, isPositiveInt } from '@/utils/validators'
+import { confirm } from '@/composables/useConfirm'
+import { useToast } from '@/composables/useToast'
+import BaseButton from '@/components/common/BaseButton.vue'
+import BaseModal from '@/components/common/BaseModal.vue'
+import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+
+const store = usePlayersStore()
+const toast = useToast()
+
+const modalOpen = ref(false)
+const editingId = ref(null)
+const saving = ref(false)
+const photoFile = ref(null)
+const photoPreview = ref('')
+
+const form = reactive({
+  name: '',
+  number: '',
+  position: 'FW',
+  preferredFoot: 'R',
+  photoURL: '',
+  active: true
+})
+
+function resetForm() {
+  Object.assign(form, {
+    name: '',
+    number: '',
+    position: 'FW',
+    preferredFoot: 'R',
+    photoURL: '',
+    active: true
+  })
+  photoFile.value = null
+  photoPreview.value = ''
+}
+
+function openCreate() {
+  editingId.value = null
+  resetForm()
+  modalOpen.value = true
+}
+
+function openEdit(p) {
+  editingId.value = p.id
+  Object.assign(form, {
+    name: p.name,
+    number: p.number ?? '',
+    position: p.position || 'FW',
+    preferredFoot: p.preferredFoot || 'R',
+    photoURL: p.photoURL || '',
+    active: p.active !== false
+  })
+  photoFile.value = null
+  photoPreview.value = p.photoURL || ''
+  modalOpen.value = true
+}
+
+function onPhotoPick(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  photoFile.value = file
+  photoPreview.value = URL.createObjectURL(file)
+}
+
+async function save() {
+  if (!required(form.name)) return toast.error('이름을 입력하세요.')
+  if (form.number !== '' && !isPositiveInt(form.number)) return toast.error('등번호는 0 이상 정수여야 합니다.')
+
+  saving.value = true
+  try {
+    const payload = {
+      name: form.name.trim(),
+      number: form.number === '' ? null : Number(form.number),
+      position: form.position,
+      preferredFoot: form.preferredFoot,
+      photoURL: form.photoURL,
+      active: form.active
+    }
+
+    let id = editingId.value
+    if (id) {
+      await store.update(id, payload)
+    } else {
+      id = await store.add(payload)
+    }
+
+    // 사진 업로드 (id 확보 후)
+    if (photoFile.value) {
+      const url = await uploadPlayerPhoto(id, photoFile.value)
+      await store.update(id, { photoURL: url })
+    }
+
+    toast.success(editingId.value ? '선수 정보를 수정했습니다.' : '선수를 등록했습니다.')
+    modalOpen.value = false
+  } catch (e) {
+    console.error(e)
+    toast.error('저장 중 오류가 발생했습니다.')
+  } finally {
+    saving.value = false
+  }
+}
+
+async function remove(p) {
+  const ok = await confirm({
+    title: '선수 삭제',
+    message: `'${p.name}' 선수를 삭제할까요?\n관련 경기 기록은 남지만 통계 집계에서 빠질 수 있습니다.`,
+    confirmText: '삭제'
+  })
+  if (!ok) return
+  try {
+    await store.remove(p.id)
+    toast.success('삭제했습니다.')
+  } catch {
+    toast.error('삭제 중 오류가 발생했습니다.')
+  }
+}
+
+onMounted(() => store.fetchAll())
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow p-6">
-    <h1 class="text-xl font-bold text-navy">선수 관리</h1>
-    <p class="text-sm text-gray-400 mt-2">Phase 2에서 구현됩니다.</p>
+  <div>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="font-bold text-navy">선수 관리</h2>
+      <BaseButton size="sm" @click="openCreate">+ 선수 등록</BaseButton>
+    </div>
+
+    <LoadingSpinner v-if="store.loading" label="불러오는 중..." />
+    <EmptyState
+      v-else-if="store.players.length === 0"
+      icon="👥"
+      title="등록된 선수가 없습니다"
+    >
+      <BaseButton size="sm" @click="openCreate">첫 선수 등록</BaseButton>
+    </EmptyState>
+
+    <ul v-else class="space-y-2">
+      <li
+        v-for="p in store.sortedByPosition()"
+        :key="p.id"
+        class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3"
+      >
+        <PlayerAvatar :player="p" :size="44" />
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold truncate">
+            {{ p.name }}
+            <span class="text-xs text-gray-400">#{{ p.number ?? '-' }}</span>
+            <span v-if="p.active === false" class="text-xs text-gray-400">(은퇴)</span>
+          </p>
+          <p class="text-xs text-gray-500">{{ POSITION_LABEL[p.position] }}</p>
+        </div>
+        <BaseButton variant="ghost" size="sm" @click="openEdit(p)">수정</BaseButton>
+        <BaseButton variant="ghost" size="sm" @click="remove(p)">삭제</BaseButton>
+      </li>
+    </ul>
+
+    <BaseModal v-model="modalOpen" :title="editingId ? '선수 수정' : '선수 등록'">
+      <div class="space-y-4">
+        <div class="flex justify-center">
+          <label class="cursor-pointer text-center">
+            <PlayerAvatar :player="{ name: form.name, photoURL: photoPreview }" :size="72" />
+            <span class="block text-xs text-navy mt-1">사진 변경</span>
+            <input type="file" accept="image/*" class="hidden" @change="onPhotoPick" />
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">이름</label>
+          <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">등번호</label>
+            <input v-model="form.number" type="number" min="0" class="w-full border rounded-lg px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">주발</label>
+            <select v-model="form.preferredFoot" class="w-full border rounded-lg px-3 py-2 text-sm">
+              <option v-for="(l, k) in FOOT_LABEL" :key="k" :value="k">{{ l }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">포지션</label>
+          <div class="flex gap-1.5">
+            <button
+              v-for="pos in POSITION_ORDER"
+              :key="pos"
+              type="button"
+              class="flex-1 py-2 rounded-lg text-sm transition-colors"
+              :class="form.position === pos ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
+              @click="form.position = pos"
+            >
+              {{ POSITION_LABEL[pos] }}
+            </button>
+          </div>
+        </div>
+
+        <label class="flex items-center gap-2 text-sm">
+          <input v-model="form.active" type="checkbox" class="rounded" />
+          현역 (은퇴 시 체크 해제)
+        </label>
+      </div>
+
+      <template #footer>
+        <BaseButton variant="secondary" @click="modalOpen = false">취소</BaseButton>
+        <BaseButton :loading="saving" @click="save">저장</BaseButton>
+      </template>
+    </BaseModal>
   </div>
 </template>

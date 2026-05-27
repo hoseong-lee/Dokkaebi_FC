@@ -1,10 +1,134 @@
 <script setup>
-// 화이트리스트 관리 — 후속 Phase에서 구현 예정
+import { ref, reactive, onMounted } from 'vue'
+import { useAllowedEmailsStore } from '@/stores/allowedEmails'
+import { useAuthStore } from '@/stores/auth'
+import { isValidEmail } from '@/utils/validators'
+import { confirm } from '@/composables/useConfirm'
+import { useToast } from '@/composables/useToast'
+import BaseButton from '@/components/common/BaseButton.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+
+const store = useAllowedEmailsStore()
+const auth = useAuthStore()
+const toast = useToast()
+
+const adding = ref(false)
+const form = reactive({ email: '', role: 'member', note: '' })
+
+async function add() {
+  if (!isValidEmail(form.email)) return toast.error('올바른 이메일을 입력하세요.')
+  if (store.emails.some((e) => e.email === form.email.toLowerCase().trim())) {
+    return toast.error('이미 등록된 이메일입니다.')
+  }
+  adding.value = true
+  try {
+    await store.add(form.email, form.role, form.note)
+    toast.success('화이트리스트에 추가했습니다.')
+    Object.assign(form, { email: '', role: 'member', note: '' })
+  } catch {
+    toast.error('추가 중 오류가 발생했습니다.')
+  } finally {
+    adding.value = false
+  }
+}
+
+function isSelf(item) {
+  return auth.user?.email?.toLowerCase() === item.email
+}
+
+async function toggle(item) {
+  if (isSelf(item)) return toast.error('본인 계정은 비활성화할 수 없습니다.')
+  await store.toggleActive(item)
+  toast.success(item.active ? '비활성화했습니다.' : '활성화했습니다.')
+}
+
+async function changeRole(item, role) {
+  if (isSelf(item) && role !== 'admin') {
+    return toast.error('본인 관리자 권한은 해제할 수 없습니다.')
+  }
+  await store.setRole(item, role)
+}
+
+async function remove(item) {
+  if (isSelf(item)) return toast.error('본인 계정은 삭제할 수 없습니다.')
+  const ok = await confirm({
+    title: '이메일 삭제',
+    message: `'${item.email}'을(를) 화이트리스트에서 제거할까요?\n해당 사용자는 더 이상 로그인할 수 없습니다.`,
+    confirmText: '삭제'
+  })
+  if (!ok) return
+  await store.remove(item.email)
+  toast.success('삭제했습니다.')
+}
+
+onMounted(() => store.fetchAll())
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow p-6">
-    <h1 class="text-xl font-bold text-navy">화이트리스트 관리</h1>
-    <p class="text-sm text-gray-400 mt-2">Phase 5에서 구현됩니다.</p>
+  <div>
+    <h2 class="font-bold text-navy mb-4">화이트리스트 관리</h2>
+
+    <form class="bg-white rounded-2xl shadow p-4 mb-4 space-y-3" @submit.prevent="add">
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input
+          v-model="form.email"
+          type="email"
+          placeholder="이메일 주소"
+          class="flex-1 border rounded-lg px-3 py-2 text-sm"
+        />
+        <select v-model="form.role" class="border rounded-lg px-3 py-2 text-sm">
+          <option value="member">멤버</option>
+          <option value="admin">관리자</option>
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <input
+          v-model="form.note"
+          type="text"
+          placeholder="메모 (선택)"
+          class="flex-1 border rounded-lg px-3 py-2 text-sm"
+        />
+        <BaseButton type="submit" :loading="adding">추가</BaseButton>
+      </div>
+    </form>
+
+    <LoadingSpinner v-if="store.loading" />
+    <EmptyState v-else-if="store.emails.length === 0" icon="📧" title="등록된 이메일이 없습니다" />
+    <ul v-else class="space-y-2">
+      <li
+        v-for="item in store.emails"
+        :key="item.email"
+        class="bg-white rounded-xl shadow-sm p-3 flex items-center gap-3"
+        :class="{ 'opacity-50': !item.active }"
+      >
+        <div class="flex-1 min-w-0">
+          <p class="font-medium truncate">
+            {{ item.email }}
+            <span v-if="isSelf(item)" class="text-xs text-navy">(나)</span>
+          </p>
+          <p v-if="item.note" class="text-xs text-gray-400 truncate">{{ item.note }}</p>
+        </div>
+
+        <select
+          :value="item.role"
+          class="border rounded-lg px-2 py-1 text-xs"
+          @change="changeRole(item, $event.target.value)"
+        >
+          <option value="member">멤버</option>
+          <option value="admin">관리자</option>
+        </select>
+
+        <button
+          class="text-xs px-2 py-1 rounded-full"
+          :class="item.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
+          @click="toggle(item)"
+        >
+          {{ item.active ? '활성' : '비활성' }}
+        </button>
+
+        <button class="text-gray-300 hover:text-dokkaebi px-1" @click="remove(item)">×</button>
+      </li>
+    </ul>
   </div>
 </template>

@@ -55,8 +55,15 @@ firebase deploy --only firestore:indexes
 
 - [x] **Phase 0** 프로젝트 셋업 (Vite · Tailwind · Pinia · Router · Firebase SDK · GitHub Actions)
 - [x] **Phase 1** 인증 (Google 로그인 · 화이트리스트 검증 · Auth store · 라우터 가드 · Security Rules)
-- [ ] Phase 2 선수 관리
-- [ ] Phase 3 경기 관리
-- [ ] Phase 4 결과 입력 + 통계
-- [ ] Phase 5 RSVP + 화이트리스트 관리
-- [ ] Phase 6 마무리
+- [x] **Phase 2** 선수 관리 (CRUD · 사진 업로드 · 명단/프로필 · 통계 차트)
+- [x] **Phase 3** 경기 관리 (시즌 · 경기 등록/수정 · 목록/상세 · 이벤트 타임라인)
+- [x] **Phase 4** 결과 입력 + 통계 (QuickResultInput · 트랜잭션 통계 갱신 · 랭킹 · 홈 대시보드)
+- [x] **Phase 5** RSVP + 화이트리스트 (실시간 RSVP · 참석자 명단 · 이메일 관리)
+- [x] **Phase 6** 마무리 (관리자 대시보드 · 감사 이력 · 토스트/모달/빈상태 UX · 모바일 반응형)
+
+### 구현 메모
+
+- **랭킹 집계**: `players.stats` / `seasonStats` 비정규화 값을 클라이언트에서 정렬한다.
+  스펙에서 우려한 `seasonStats.{seasonId}.goals` 동적 필드 인덱스 문제를 회피하기 위함.
+- **시즌 부트스트랩**: 활성 시즌이 없으면 관리자 대시보드에서 "올해 시즌 생성" 버튼으로 생성.
+- **결과 통계**: `submitMatchResult` 트랜잭션이 이전 events 와 비교해 골/도움/출전/MOM 의 net diff 만 반영(재입력 시 자동 롤백).

@@ -1,0 +1,34 @@
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+
+const links = [
+  { to: '/admin', label: '대시보드', exact: true },
+  { to: '/admin/players', label: '선수 관리' },
+  { to: '/admin/matches/new', label: '경기 등록' },
+  { to: '/admin/allowed-emails', label: '화이트리스트' },
+  { to: '/admin/audit-logs', label: '변경 이력' }
+]
+</script>
+
+<template>
+  <div>
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-dokkaebi font-bold">●</span>
+      <h1 class="font-bold text-navy">관리자</h1>
+    </div>
+
+    <nav class="flex gap-1 overflow-x-auto pb-2 mb-4 border-b">
+      <RouterLink
+        v-for="l in links"
+        :key="l.to"
+        :to="l.to"
+        class="whitespace-nowrap px-3 py-1.5 rounded-t text-sm text-gray-500 hover:text-navy"
+        :class="{ 'text-navy font-semibold border-b-2 border-dokkaebi': l.exact ? $route.path === l.to : $route.path.startsWith(l.to) }"
+      >
+        {{ l.label }}
+      </RouterLink>
+    </nav>
+
+    <RouterView />
+  </div>
+</template>
