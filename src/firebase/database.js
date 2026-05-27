@@ -254,3 +254,17 @@ export async function removeAllowedEmail(email) {
 export async function upsertUser(uid, data) {
   await update(ref(rtdb, nsPath(`users/${uid}`)), data)
 }
+
+// ───────────── 초기 데이터 가져오기 ─────────────
+// seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
+// allowedEmails/users 는 건드리지 않는다.
+export async function importSeed(seed) {
+  if (seed.seasons) await set(ref(rtdb, nsPath('seasons')), seed.seasons)
+  if (seed.players) await set(ref(rtdb, nsPath('players')), seed.players)
+  if (seed.matches) await set(ref(rtdb, nsPath('matches')), seed.matches)
+  await logAudit('create', 'seed/import', {
+    seasons: Object.keys(seed.seasons || {}).length,
+    players: Object.keys(seed.players || {}).length,
+    matches: Object.keys(seed.matches || {}).length
+  })
+}

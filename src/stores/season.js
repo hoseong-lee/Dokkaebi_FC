@@ -16,6 +16,12 @@ export const useSeasonStore = defineStore('season', () => {
     return activeSeason.value
   }
 
+  async function refresh() {
+    activeSeason.value = await getActiveSeason()
+    loaded.value = true
+    return activeSeason.value
+  }
+
   async function fetchSeasons() {
     seasons.value = await listSeasons()
     return seasons.value
@@ -30,5 +36,5 @@ export const useSeasonStore = defineStore('season', () => {
     return id
   }
 
-  return { activeSeason, seasons, activeId, ensure, fetchSeasons, create }
+  return { activeSeason, seasons, activeId, ensure, refresh, fetchSeasons, create }
 })

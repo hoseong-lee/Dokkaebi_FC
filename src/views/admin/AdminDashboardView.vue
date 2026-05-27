@@ -7,6 +7,9 @@ import { useSeasonStore } from '@/stores/season'
 import { dayjs } from '@/utils/date'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
+import { confirm } from '@/composables/useConfirm'
+import { importSeed } from '@/firebase/database'
+import seedData from '@/data/seed.json'
 import BaseButton from '@/components/common/BaseButton.vue'
 
 const matchesStore = useMatchesStore()
@@ -15,6 +18,7 @@ const seasonStore = useSeasonStore()
 const toast = useToast()
 
 const creatingSeason = ref(false)
+const importing = ref(false)
 
 // 결과 미입력: 경기 일시가 지났는데 아직 scheduled 인 경기
 const pendingResults = computed(() =>
@@ -46,6 +50,36 @@ async function createSeason() {
   }
 }
 
+const seedCounts = {
+  players: Object.keys(seedData.players || {}).length,
+  matches: Object.keys(seedData.matches || {}).length
+}
+
+async function runImport() {
+  const ok = await confirm({
+    title: '초기 데이터 가져오기',
+    message: `카카오톡 기록 기반 선수 ${seedCounts.players}명 · 경기 ${seedCounts.matches}건을 가져옵니다.\n기존 선수/경기/시즌 데이터를 덮어씁니다. 계속할까요?`,
+    confirmText: '가져오기',
+    variant: 'primary'
+  })
+  if (!ok) return
+  importing.value = true
+  try {
+    await importSeed(seedData)
+    await Promise.all([
+      seasonStore.refresh(),
+      playersStore.fetchAll(true),
+      matchesStore.fetchAll({}, true)
+    ])
+    toast.success('초기 데이터를 가져왔습니다.')
+  } catch (e) {
+    console.error(e)
+    toast.error(`가져오기 실패: ${e?.code || e?.message || e}`)
+  } finally {
+    importing.value = false
+  }
+}
+
 onMounted(async () => {
   await seasonStore.ensure()
   matchesStore.fetchAll()
@@ -64,6 +98,20 @@ onMounted(async () => {
       <p class="text-amber-700 mt-1">통계 집계를 위해 시즌을 먼저 생성하세요.</p>
       <BaseButton size="sm" class="mt-2" :loading="creatingSeason" @click="createSeason">
         올해 시즌 생성
+      </BaseButton>
+    </div>
+
+    <!-- 초기 데이터 가져오기 (선수가 없을 때) -->
+    <div
+      v-if="playersStore.loaded && playersStore.players.length === 0"
+      class="bg-navy/5 border border-navy/20 rounded-xl p-4 text-sm"
+    >
+      <p class="font-medium text-navy">초기 데이터 가져오기</p>
+      <p class="text-gray-500 mt-1">
+        카카오톡 기록 기반 선수 {{ seedCounts.players }}명 · 경기 {{ seedCounts.matches }}건을 한 번에 등록합니다.
+      </p>
+      <BaseButton size="sm" class="mt-2" :loading="importing" @click="runImport">
+        데이터 가져오기
       </BaseButton>
     </div>
 
