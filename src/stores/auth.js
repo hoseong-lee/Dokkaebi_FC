@@ -55,12 +55,15 @@ export const useAuthStore = defineStore('auth', () => {
       role.value = r
       return true
     } catch (e) {
+      console.error('login error', e)
       if (e instanceof NotAllowedError) {
         error.value = e.message
       } else if (e?.code === 'auth/popup-closed-by-user') {
         error.value = ''
       } else {
-        error.value = '로그인 중 오류가 발생했습니다. 다시 시도해 주세요.'
+        // 원인 코드를 노출해 진단을 돕는다 (예: PERMISSION_DENIED = RTDB 규칙 미배포)
+        const detail = e?.code || e?.message || String(e)
+        error.value = `로그인 중 오류가 발생했습니다: ${detail}`
       }
       return false
     }
