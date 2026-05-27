@@ -37,6 +37,16 @@ export function isUpcoming(value) {
   return d ? d.isAfter(dayjs()) : false
 }
 
+// D-day 라벨: D-3 / D-DAY / 종료
+export function dDay(value) {
+  const d = toDay(value)
+  if (!d) return ''
+  const diff = d.startOf('day').diff(dayjs().startOf('day'), 'day')
+  if (diff > 0) return `D-${diff}`
+  if (diff === 0) return 'D-DAY'
+  return '종료'
+}
+
 // <input type="datetime-local"> 용 (YYYY-MM-DDTHH:mm)
 export function toInputDateTime(value) {
   const d = toDay(value)

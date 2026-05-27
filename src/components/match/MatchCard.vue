@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { formatDateTime } from '@/utils/date'
+import { formatDateTime, dDay } from '@/utils/date'
 import {
   MATCH_TYPE_LABEL,
   matchResult,
@@ -16,6 +16,7 @@ const props = defineProps({
 const result = computed(() => matchResult(props.match))
 const isFinished = computed(() => props.match.status === 'finished')
 const isCancelled = computed(() => props.match.status === 'cancelled')
+const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.match.date) : ''))
 </script>
 
 <template>
@@ -25,8 +26,16 @@ const isCancelled = computed(() => props.match.status === 'cancelled')
     :class="{ 'opacity-60': isCancelled }"
   >
     <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-      <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
-        {{ MATCH_TYPE_LABEL[match.type] || match.type }}
+      <span class="flex items-center gap-1.5">
+        <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+          {{ MATCH_TYPE_LABEL[match.type] || match.type }}
+        </span>
+        <span
+          v-if="dday && dday !== '종료'"
+          class="px-2 py-0.5 rounded-full bg-dokkaebi/10 text-dokkaebi font-bold"
+        >
+          {{ dday }}
+        </span>
       </span>
       <span>{{ formatDateTime(match.date) }}</span>
     </div>
