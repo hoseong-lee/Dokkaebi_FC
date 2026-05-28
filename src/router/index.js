@@ -88,6 +88,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/hall-of-fame',
+    name: 'hall-of-fame',
+    component: () => import('@/views/public/HallOfFameView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/more',
     name: 'more',
     component: () => import('@/views/public/MoreView.vue'),
