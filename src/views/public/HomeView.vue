@@ -46,7 +46,9 @@ onMounted(async () => {
         <h1 class="text-lg font-bold mt-1">
           안녕하세요, <span class="text-gold">{{ auth.user?.displayName }}</span>님 👋
         </h1>
-        <p class="text-sm text-white/70 mt-1">도깨비 FC · 2025-2026 시즌</p>
+        <p class="text-sm text-white/70 mt-1">
+          도깨비 FC<span v-if="seasonStore.activeSeason"> · {{ seasonStore.activeSeason.name }}</span>
+        </p>
       </div>
     </section>
 
