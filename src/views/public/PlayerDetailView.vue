@@ -39,6 +39,43 @@ const currentLabel = computed(() => {
   return seasonStore.seasons.find((s) => s.id === scope.value)?.name || scope.value
 })
 
+// 시즌별 비교 (최신 시즌부터 좌→우) + 통산 열
+const COMPARE_ROWS = [
+  { key: 'appearances', label: '출전', unit: '경기' },
+  { key: 'goals', label: '골', unit: 'G' },
+  { key: 'assists', label: '도움', unit: 'A' },
+  { key: 'momCount', label: 'MOM', unit: '회' },
+  { key: 'points', label: '공격 포인트', unit: 'P' }
+]
+function readMetric(stats, key) {
+  return key === 'points' ? attackPoints(stats) : (stats?.[key] || 0)
+}
+const seasonsForCompare = computed(() =>
+  // 기록이 1건이라도 있는 시즌만 노출 (없는 시즌은 비교 의미 X)
+  seasonStore.list.filter((s) => {
+    if (!player.value) return false
+    const st = seasonStatsOf(player.value, s.id)
+    return ((st.appearances || 0) + (st.goals || 0) + (st.assists || 0) + (st.momCount || 0)) > 0
+  })
+)
+const compareTable = computed(() => {
+  if (!player.value) return []
+  const seasons = seasonsForCompare.value
+  return COMPARE_ROWS.map((r) => {
+    const cells = seasons.map((s) => ({
+      seasonId: s.id,
+      value: readMetric(seasonStatsOf(player.value, s.id), r.key)
+    }))
+    const total = readMetric(player.value.stats || {}, r.key)
+    let trend = null
+    if (cells.length >= 2) {
+      const diff = cells[0].value - cells[1].value
+      if (diff !== 0) trend = diff
+    }
+    return { ...r, cells, total, trend }
+  })
+})
+
 async function load() {
   loading.value = true
   player.value = await store.fetchOne(route.params.id)
@@ -95,6 +132,59 @@ watch(() => route.params.id, load)
     <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
       <PlayerMonthlyChart :series="series" />
+    </section>
+
+    <!-- 시즌별 비교 -->
+    <section v-if="seasonsForCompare.length >= 2" class="bg-white rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy mb-3">시즌별 비교</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b">
+              <th class="text-left py-2 text-xs text-gray-500 font-medium">지표</th>
+              <th
+                v-for="s in seasonsForCompare"
+                :key="s.id"
+                class="text-center py-2 text-xs font-bold"
+                :class="s.active ? 'text-dokkaebi' : 'text-gray-700'"
+              >
+                {{ s.name }}
+                <span v-if="s.active" class="text-[9px] align-middle bg-dokkaebi text-white rounded px-1 ml-0.5">진행</span>
+              </th>
+              <th class="text-center py-2 text-xs text-gray-400 font-medium">통산</th>
+              <th class="text-right py-2 text-xs text-gray-400 font-medium">추세</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="r in compareTable" :key="r.key" class="border-b last:border-b-0">
+              <td class="py-2 text-gray-600">{{ r.label }}</td>
+              <td
+                v-for="(c, i) in r.cells"
+                :key="c.seasonId"
+                class="text-center py-2 tabular-nums"
+                :class="i === 0 ? 'font-bold text-navy text-base' : 'text-gray-700'"
+              >
+                {{ c.value }}<span class="text-[10px] text-gray-400 ml-0.5">{{ r.unit }}</span>
+              </td>
+              <td class="text-center py-2 tabular-nums text-gray-500">{{ r.total }}</td>
+              <td class="text-right py-2 text-xs tabular-nums">
+                <span
+                  v-if="r.trend && r.trend > 0"
+                  class="text-green-600 font-semibold"
+                >↑ +{{ r.trend }}</span>
+                <span
+                  v-else-if="r.trend && r.trend < 0"
+                  class="text-dokkaebi font-semibold"
+                >↓ {{ r.trend }}</span>
+                <span v-else class="text-gray-300">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-[11px] text-gray-400 mt-2">
+        추세 = 최신 시즌({{ seasonsForCompare[0]?.name }}) − 직전({{ seasonsForCompare[1]?.name }})
+      </p>
     </section>
   </div>
 </template>
