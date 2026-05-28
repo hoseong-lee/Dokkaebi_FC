@@ -452,6 +452,33 @@ export async function deletePhoto(id) {
   await logAudit('delete', `photos/${id}`)
 }
 
+// ───────────── 매치비 / 회비 ─────────────
+const DEFAULT_MATCH_FEE = 4000
+
+export async function listMatchFees(matchId) {
+  const snap = await get(ref(rtdb, nsPath(`matchFees/${matchId}`)))
+  return snap.val() || {}
+}
+export async function setMatchFee(matchId, playerId, payment) {
+  const r = ref(rtdb, nsPath(`matchFees/${matchId}/${playerId}`))
+  if (!payment) await remove(r)
+  else await set(r, { ...payment })
+  await logAudit('update', `matchFees/${matchId}/${playerId}`, payment)
+}
+
+export async function listMonthlyDues(yyyymm) {
+  const snap = await get(ref(rtdb, nsPath(`monthlyDues/${yyyymm}`)))
+  return snap.val() || {}
+}
+export async function setMonthlyDues(yyyymm, playerId, payment) {
+  const r = ref(rtdb, nsPath(`monthlyDues/${yyyymm}/${playerId}`))
+  if (!payment) await remove(r)
+  else await set(r, { ...payment })
+  await logAudit('update', `monthlyDues/${yyyymm}/${playerId}`, payment)
+}
+
+export { DEFAULT_MATCH_FEE }
+
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
 // allowedEmails/users 는 건드리지 않는다.

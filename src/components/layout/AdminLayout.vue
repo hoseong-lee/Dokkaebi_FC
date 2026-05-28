@@ -5,6 +5,7 @@ const links = [
   { to: '/admin', label: '대시보드', exact: true },
   { to: '/admin/players', label: '선수 관리' },
   { to: '/admin/matches/new', label: '경기 등록' },
+  { to: '/admin/fees', label: '회비 관리' },
   { to: '/admin/allowed-emails', label: '화이트리스트' },
   { to: '/admin/audit-logs', label: '변경 이력' }
 ]
