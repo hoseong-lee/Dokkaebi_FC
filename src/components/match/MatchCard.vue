@@ -4,16 +4,16 @@ import { RouterLink } from 'vue-router'
 import { formatDateTime, dDay } from '@/utils/date'
 import {
   MATCH_TYPE_LABEL,
-  matchResult,
-  RESULT_LABEL,
-  RESULT_COLOR
+  matchIntensity,
+  INTENSITY_LABEL,
+  INTENSITY_COLOR
 } from '@/utils/match'
 
 const props = defineProps({
   match: { type: Object, required: true }
 })
 
-const result = computed(() => matchResult(props.match))
+const intensity = computed(() => matchIntensity(props.match))
 const isFinished = computed(() => props.match.status === 'finished')
 const isCancelled = computed(() => props.match.status === 'cancelled')
 const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.match.date) : ''))
@@ -52,12 +52,17 @@ const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.mat
 
     <div class="flex items-center justify-between mt-2 text-xs">
       <span class="text-gray-400 truncate">📍 {{ match.location || '장소 미정' }}</span>
-      <span
-        v-if="result"
-        class="px-2 py-0.5 rounded-full font-bold"
-        :class="RESULT_COLOR[result]"
-      >
-        {{ RESULT_LABEL[result] }}
+      <span v-if="intensity" class="flex items-center gap-1">
+        <span
+          v-if="intensity.close"
+          class="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"
+        >접전</span>
+        <span
+          class="px-2 py-0.5 rounded-full font-bold text-[11px]"
+          :class="INTENSITY_COLOR[intensity.key]"
+        >
+          {{ INTENSITY_LABEL[intensity.key] }}
+        </span>
       </span>
     </div>
   </RouterLink>

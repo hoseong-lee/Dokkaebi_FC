@@ -6,7 +6,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { useRankings } from '@/composables/useRankings'
 import { teamSummary, headToHead } from '@/utils/teamStats'
 import { pickBestEleven } from '@/utils/bestEleven'
-import { RESULT_LABEL, RESULT_COLOR } from '@/utils/match'
+import { RESULT_LABEL, RESULT_COLOR, h2hTier, TIER_LABEL, TIER_COLOR } from '@/utils/match'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -188,12 +188,24 @@ onMounted(async () => {
     <section v-if="h2h.length">
       <h2 class="font-bold text-navy mb-2">상대 전적</h2>
       <div class="bg-white rounded-xl shadow-sm divide-y">
-        <div v-for="h in h2h" :key="h.opponent" class="flex items-center gap-3 p-3 text-sm">
+        <div
+          v-for="h in h2h"
+          :key="h.opponent"
+          class="flex items-center gap-3 p-3 text-sm"
+        >
           <span class="flex-1 font-medium truncate">{{ h.opponent }}</span>
+          <span
+            v-if="h2hTier(h)"
+            class="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+            :class="TIER_COLOR[h2hTier(h)]"
+          >{{ TIER_LABEL[h2hTier(h)] }}</span>
           <span class="text-xs text-gray-500">{{ h.win }}승 {{ h.draw }}무 {{ h.loss }}패</span>
           <span class="text-xs text-gray-400 tabular-nums">{{ h.gf }}-{{ h.ga }}</span>
         </div>
       </div>
+      <p class="text-[11px] text-gray-400 mt-2">
+        🟢 우세(승률 ≥ 60%) · ⚪ 백중 · 🔴 약세 (2경기 이상)
+      </p>
     </section>
   </div>
 </template>
