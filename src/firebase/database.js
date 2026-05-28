@@ -303,6 +303,50 @@ export async function upsertUser(uid, data) {
   await update(ref(rtdb, nsPath(`users/${uid}`)), data)
 }
 
+export async function getUserProfile(uid) {
+  const snap = await get(ref(rtdb, nsPath(`users/${uid}`)))
+  return snap.exists() ? { uid, ...snap.val() } : null
+}
+
+export async function linkUserToPlayer(uid, playerId) {
+  await update(ref(rtdb, nsPath(`users/${uid}`)), { playerId: playerId || null })
+  await logAudit('update', `users/${uid}`, { playerId })
+}
+
+// ───────────── MOM 투표 ─────────────
+export async function castMomVote(matchId, candidatePlayerId) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const r = ref(rtdb, nsPath(`matches/${matchId}/votes/${uid}`))
+  if (!candidatePlayerId) await remove(r)
+  else await set(r, candidatePlayerId)
+}
+
+// 관리자: 투표 마감 + MOM 확정. 통계 diff 반영(이전 MOM 차감, 신규 가산).
+export async function finalizeMomVoting(matchId, winnerId) {
+  const snap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
+  if (!snap.exists()) throw new Error('경기를 찾을 수 없습니다.')
+  const data = snap.val()
+  const seasonId = data.seasonId
+  const prev = data.momPlayerId || null
+  const updates = {}
+  if (prev !== winnerId) {
+    if (prev) {
+      updates[nsPath(`players/${prev}/stats/momCount`)] = increment(-1)
+      if (seasonId) updates[nsPath(`players/${prev}/seasonStats/${seasonId}/momCount`)] = increment(-1)
+    }
+    if (winnerId) {
+      updates[nsPath(`players/${winnerId}/stats/momCount`)] = increment(1)
+      if (seasonId) updates[nsPath(`players/${winnerId}/seasonStats/${seasonId}/momCount`)] = increment(1)
+    }
+  }
+  updates[nsPath(`matches/${matchId}/momPlayerId`)] = winnerId || null
+  updates[nsPath(`matches/${matchId}/votingClosed`)] = true
+  updates[nsPath(`matches/${matchId}/updatedAt`)] = serverTimestamp()
+  await update(ref(rtdb), updates)
+  await logAudit('update', `matches/${matchId}`, { momFinalized: winnerId })
+}
+
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
 // allowedEmails/users 는 건드리지 않는다.

@@ -1,9 +1,14 @@
-import { matchResult } from './match'
+import { matchResult, TEAM_STATS_EXCLUDE_TYPES } from './match'
 
-// 완료 경기 → 팀 전적 요약
+const isCountable = (m) =>
+  m.status === 'finished' &&
+  m.score?.dokkaebi != null &&
+  !TEAM_STATS_EXCLUDE_TYPES.includes(m.type)
+
+// 완료 경기 → 팀 전적 요약 (풋살 등 제외)
 export function teamSummary(matches = []) {
   const finished = matches
-    .filter((m) => m.status === 'finished' && m.score?.dokkaebi != null)
+    .filter(isCountable)
     .sort((a, b) => (a.date || 0) - (b.date || 0))
 
   const s = { played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0 }
@@ -23,11 +28,11 @@ export function teamSummary(matches = []) {
   return s
 }
 
-// 상대팀별 전적
+// 상대팀별 전적 (풋살 등 제외)
 export function headToHead(matches = []) {
   const map = {}
   for (const m of matches) {
-    if (m.status !== 'finished' || m.score?.dokkaebi == null) continue
+    if (!isCountable(m)) continue
     const key = m.opponent || '미상'
     if (!map[key]) map[key] = { opponent: key, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0 }
     const h = map[key]

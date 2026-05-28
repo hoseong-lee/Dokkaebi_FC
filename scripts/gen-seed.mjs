@@ -2,8 +2,13 @@
 // 출력: dokkaebi-seed.json (CLI 가져오기용) + src/data/seed.json (앱 번들).
 import { writeFileSync } from 'node:fs'
 
-const SEASON_ID = 's2526'
 const ms = (s) => new Date(s).getTime()
+// 연도별 시즌
+const SEASONS = {
+  s2025: { name: '2025 시즌', startDate: ms('2025-01-01'), endDate: ms('2025-12-31'), active: false },
+  s2026: { name: '2026 시즌', startDate: ms('2026-01-01'), endDate: ms('2026-12-31'), active: true }
+}
+const seasonOf = (dateStr) => 's' + String(new Date(dateStr).getFullYear())
 
 // ── 1) 정식 로스터 (포지션명단.png · isRegular: true) ──
 const ROSTER = [
@@ -57,7 +62,9 @@ function addPlayer({ name, isRegular = false, number = null, mainPosition = null
     active: true,
     joinedAt: ms('2025-01-01'),
     stats: { appearances: 0, goals: 0, assists: 0, momCount: 0 },
-    seasonStats: { [SEASON_ID]: { appearances: 0, goals: 0, assists: 0, momCount: 0 } }
+    seasonStats: Object.fromEntries(
+      Object.keys(SEASONS).map((sid) => [sid, { appearances: 0, goals: 0, assists: 0, momCount: 0 }])
+    )
   }
   return key
 }
@@ -98,7 +105,7 @@ const MATCHES = [
   { id: 'm03', date: '2025-02-08T16:00', opp: '국대FC', loc: '초안산',
     att: att('김진오 박재익 마진섭 박한주 윤범관 강상섭 김성민 김태원 김산이 김우재 문종일 한지민 홍성현'),
     quarters: [q(1, [['상섭']]), q(0), q(2), q(3, [['박재익', '한주']])] },
-  { id: 'm04', date: '2025-02-15T12:00', opp: '권용재팀', loc: '미상', type: 'friendly',
+  { id: 'm04', date: '2025-02-15T12:00', opp: '권용재팀', loc: '미상', type: 'futsal',
     att: att('김세욱 신승민 강상섭 김진오 윤범관 정도현 조하영 도현친구'),
     quarters: [q(1), q(3), q(1), q(2), q(1), q(0)] },
   { id: 'm05', date: '2025-02-22T16:00', opp: '국대FC', loc: '불암산',
@@ -133,7 +140,7 @@ const MATCHES = [
   { id: 'm14', date: '2025-05-24T16:00', opp: '국대FC', loc: '초안산',
     att: att('이승엽 마진섭 강상섭 박한주 김세욱 김주성 홍성현 김진오 임상범 문종일 박재익 김광현 김우재 김동민'),
     quarters: [q(1), q(1, [['동민']]), q(3), q(2)] },
-  { id: 'm15', date: '2025-06-07T17:00', opp: '박한주와친구들', loc: '창골풋살장', type: 'friendly',
+  { id: 'm15', date: '2025-06-07T17:00', opp: '박한주와친구들', loc: '창골풋살장', type: 'futsal',
     att: att('강상섭 마진섭 김세욱 김지웅 이수아 문종일 홍성현'),
     quarters: [q(1, [['종일'], ['성현'], ['세욱'], ['세욱']]), q(3), q(3, [['마진섭']]), q(0, [['마진섭']]), q(2, [['세욱'], ['이수아']]), q(2, [['이수아']])] },
   { id: 'm16', date: '2025-06-28T16:00', opp: '국대FC', loc: '초안산',
@@ -198,9 +205,10 @@ for (const m of MATCHES) {
   // 출석 이름 → 선수 등록
   const lineupKeys = m.att.map((n) => playerKey(n))
 
+  const sid = seasonOf(m.date)
   if (m.scheduled) {
     matches[m.id] = {
-      seasonId: SEASON_ID, opponent: m.opp, date: ms(m.date), location: m.loc,
+      seasonId: sid, opponent: m.opp, date: ms(m.date), location: m.loc,
       locationUrl: '', type: m.type || 'league', status: 'scheduled',
       score: { dokkaebi: null, opponent: null },
       lineup: lineupKeys, events: [], quarters: [],
@@ -232,7 +240,7 @@ for (const m of MATCHES) {
   const momPlayerId = m.mvp ? playerKey(m.mvp) : null
 
   matches[m.id] = {
-    seasonId: SEASON_ID, opponent: m.opp, date: ms(m.date), location: m.loc,
+    seasonId: sid, opponent: m.opp, date: ms(m.date), location: m.loc,
     locationUrl: '', type: m.type || 'league', status: 'finished',
     score: { dokkaebi: dok, opponent: opp },
     lineup: lineupKeys, events: aggEvents, quarters,
@@ -240,32 +248,26 @@ for (const m of MATCHES) {
     createdBy: 'system', createdAt: ms(m.date), updatedAt: ms(m.date)
   }
 
-  // 통계 집계
+  // 통계 집계 (해당 연도 시즌에 누적)
   for (const k of lineupKeys) {
     players[k].stats.appearances++
-    players[k].seasonStats[SEASON_ID].appearances++
+    players[k].seasonStats[sid].appearances++
   }
   for (const e of aggEvents) {
     players[e.playerId].stats.goals++
-    players[e.playerId].seasonStats[SEASON_ID].goals++
+    players[e.playerId].seasonStats[sid].goals++
     if (e.assistPlayerId) {
       players[e.assistPlayerId].stats.assists++
-      players[e.assistPlayerId].seasonStats[SEASON_ID].assists++
+      players[e.assistPlayerId].seasonStats[sid].assists++
     }
   }
   if (momPlayerId) {
     players[momPlayerId].stats.momCount++
-    players[momPlayerId].seasonStats[SEASON_ID].momCount++
+    players[momPlayerId].seasonStats[sid].momCount++
   }
 }
 
-const seed = {
-  seasons: {
-    [SEASON_ID]: { name: '2025-2026 시즌', startDate: ms('2025-01-01'), endDate: ms('2026-12-31'), active: true }
-  },
-  players,
-  matches
-}
+const seed = { seasons: SEASONS, players, matches }
 
 const json = JSON.stringify(seed, null, 2)
 writeFileSync('/home/user/git/dokkaebi-fc/dokkaebi-seed.json', json)

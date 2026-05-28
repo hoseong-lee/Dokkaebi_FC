@@ -1,12 +1,12 @@
 import { computed, unref } from 'vue'
 import { seasonStatsOf, attackPoints } from '@/utils/stats'
 
-// 클라이언트 집계 방식: players 컬렉션의 비정규화 stats/seasonStats 를 정렬.
-// 스펙의 동적 필드 인덱스 문제(seasonStats.{id}.goals)를 회피하기 위함.
-export function useRankings(playersRef, seasonIdRef, scopeRef) {
+// useRankings(playersRef, seasonRef)
+//   seasonRef: null/'' → 통산 / 'sXXXX' → 해당 시즌
+export function useRankings(playersRef, seasonRef) {
   function rank(metric) {
     const players = unref(playersRef) || []
-    const seasonId = scopeRef && unref(scopeRef) === 'season' ? unref(seasonIdRef) : null
+    const seasonId = unref(seasonRef) || null
 
     return players
       .map((p) => {

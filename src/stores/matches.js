@@ -8,24 +8,25 @@ import {
   deleteMatch,
   submitMatchResult
 } from '@/firebase/database'
-import { isUpcoming } from '@/utils/date'
 
 export const useMatchesStore = defineStore('matches', () => {
   const matches = ref([])
   const loading = ref(false)
   const loaded = ref(false)
 
-  const upcoming = computed(() =>
-    matches.value
-      .filter((m) => m.status === 'scheduled')
+  // 다가오는 경기 = 예정 상태이면서 일시가 지나지 않은 것만
+  const upcoming = computed(() => {
+    const now = Date.now()
+    return matches.value
+      .filter((m) => m.status === 'scheduled' && dateVal(m.date) >= now)
       .sort((a, b) => dateVal(a.date) - dateVal(b.date))
-  )
+  })
 
   const finished = computed(() =>
     matches.value.filter((m) => m.status === 'finished')
   )
 
-  const nextMatch = computed(() => upcoming.value.find((m) => isUpcoming(m.date)) || upcoming.value[0] || null)
+  const nextMatch = computed(() => upcoming.value[0] || null)
 
   function dateVal(d) {
     if (!d) return 0

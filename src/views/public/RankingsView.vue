@@ -15,15 +15,25 @@ const seasonStore = useSeasonStore()
 const matchesStore = useMatchesStore()
 
 const tab = ref('goals')
+// scope: 'total' | seasonId
 const scope = ref('total')
 
 const playersRef = toRef(store, 'players')
-const seasonIdRef = computed(() => seasonStore.activeId)
+const seasonRef = computed(() => (scope.value === 'total' ? null : scope.value))
 const { topScorers, topAssists, topPoints, topAppearances, topMom } = useRankings(
   playersRef,
-  seasonIdRef,
-  scope
+  seasonRef
 )
+
+// 올해의 선수: 선택된 시즌의 MOM 1위 (없으면 공격포인트 1위로 폴백)
+const playerOfSeason = computed(() => {
+  if (scope.value === 'total') return null
+  return topMom.value[0]?.player || topPoints.value[0]?.player || null
+})
+const currentSeasonName = computed(() => {
+  if (scope.value === 'total') return '통산'
+  return seasonStore.seasons.find((s) => s.id === scope.value)?.name || scope.value
+})
 
 const tabs = [
   { key: 'goals', label: '득점', unit: '골' },
@@ -91,6 +101,24 @@ onMounted(async () => {
       </div>
     </section>
 
+    <!-- 올해의 선수 (시즌 선택 시) -->
+    <section
+      v-if="playerOfSeason"
+      class="bg-gradient-to-br from-gold/90 to-gold/70 text-onyx rounded-2xl shadow p-5 flex items-center gap-4"
+    >
+      <div class="text-3xl">🏅</div>
+      <div class="flex-1">
+        <p class="text-[10px] font-semibold tracking-[0.3em] opacity-70">PLAYER OF THE SEASON</p>
+        <p class="text-xs opacity-80">{{ currentSeasonName }}</p>
+        <RouterLink :to="`/players/${playerOfSeason.id}`" class="text-xl font-bold hover:underline">
+          {{ playerOfSeason.name }}
+        </RouterLink>
+        <p class="text-xs mt-0.5 opacity-80">
+          {{ topMom[0]?.value || 0 }} MOM · {{ topPoints[0]?.player?.id === playerOfSeason.id ? topPoints[0].value : '' }}{{ topPoints[0]?.player?.id === playerOfSeason.id ? 'P' : '' }}
+        </p>
+      </div>
+    </section>
+
     <!-- 선수 랭킹 -->
     <section>
       <div class="flex bg-white rounded-xl p-1 shadow-sm mb-3 overflow-x-auto">
@@ -106,22 +134,13 @@ onMounted(async () => {
       </div>
 
       <div class="flex justify-end mb-3">
-        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
-          <button
-            class="px-3 py-1 rounded-md"
-            :class="scope === 'total' ? 'bg-white shadow font-semibold' : 'text-gray-500'"
-            @click="scope = 'total'"
-          >
-            통산
-          </button>
-          <button
-            class="px-3 py-1 rounded-md"
-            :class="scope === 'season' ? 'bg-white shadow font-semibold' : 'text-gray-500'"
-            @click="scope = 'season'"
-          >
-            {{ seasonStore.activeSeason?.name || '이번 시즌' }}
-          </button>
-        </div>
+        <select
+          v-model="scope"
+          class="border rounded-lg px-3 py-1.5 text-xs bg-white"
+        >
+          <option value="total">통산</option>
+          <option v-for="s in seasonStore.list" :key="s.id" :value="s.id">{{ s.name }}</option>
+        </select>
       </div>
 
       <LoadingSpinner v-if="store.loading" label="집계 중..." />

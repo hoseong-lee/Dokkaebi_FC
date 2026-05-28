@@ -1,10 +1,13 @@
 <script setup>
+import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import LinkPlayerModal from './LinkPlayerModal.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
+const linkOpen = ref(false)
 
 const navLinks = [
   { to: '/', label: '홈' },
@@ -50,8 +53,16 @@ async function handleLogout() {
         </RouterLink>
       </nav>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
         <template v-if="authStore.isAuthed">
+          <button
+            class="text-xs px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            :title="authStore.myPlayerId ? '내 선수 연결됨' : '내 선수 연결'"
+            @click="linkOpen = true"
+          >
+            <span v-if="authStore.myPlayerId" class="text-gold">★ 내 선수</span>
+            <span v-else>내 선수 연결</span>
+          </button>
           <img
             v-if="authStore.user?.photoURL"
             :src="authStore.user.photoURL"
@@ -68,5 +79,6 @@ async function handleLogout() {
         </template>
       </div>
     </div>
+    <LinkPlayerModal v-model="linkOpen" />
   </header>
 </template>

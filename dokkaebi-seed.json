@@ -1,8 +1,14 @@
 {
   "seasons": {
-    "s2526": {
-      "name": "2025-2026 시즌",
+    "s2025": {
+      "name": "2025 시즌",
       "startDate": 1735689600000,
+      "endDate": 1767139200000,
+      "active": false
+    },
+    "s2026": {
+      "name": "2026 시즌",
+      "startDate": 1767225600000,
       "endDate": 1798675200000,
       "active": true
     }
@@ -26,10 +32,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 16,
+        "s2025": {
+          "appearances": 10,
           "goals": 1,
           "assists": 2,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -52,9 +64,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 10,
+        "s2025": {
+          "appearances": 9,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -78,9 +96,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 16,
+        "s2025": {
+          "appearances": 10,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -104,8 +128,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -130,9 +160,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 4,
-          "goals": 5,
+        "s2025": {
+          "appearances": 3,
+          "goals": 4,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
+          "goals": 1,
           "assists": 0,
           "momCount": 0
         }
@@ -156,10 +192,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 16,
-          "goals": 20,
+        "s2025": {
+          "appearances": 13,
+          "goals": 17,
           "assists": 2,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 3,
+          "goals": 3,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -182,9 +224,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 12,
+        "s2025": {
+          "appearances": 6,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -208,9 +256,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 24,
-          "goals": 8,
+        "s2025": {
+          "appearances": 17,
+          "goals": 7,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 7,
+          "goals": 1,
           "assists": 0,
           "momCount": 0
         }
@@ -234,10 +288,16 @@
         "momCount": 1
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 21,
-          "goals": 6,
+        "s2025": {
+          "appearances": 15,
+          "goals": 3,
           "assists": 2,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 3,
+          "assists": 0,
           "momCount": 1
         }
       }
@@ -260,10 +320,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 19,
-          "goals": 9,
-          "assists": 2,
+        "s2025": {
+          "appearances": 12,
+          "goals": 1,
+          "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 7,
+          "goals": 8,
+          "assists": 1,
           "momCount": 0
         }
       }
@@ -286,9 +352,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 20,
-          "goals": 5,
+        "s2025": {
+          "appearances": 15,
+          "goals": 4,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 5,
+          "goals": 1,
           "assists": 0,
           "momCount": 0
         }
@@ -312,11 +384,17 @@
         "momCount": 1
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 5,
-          "goals": 10,
+        "s2025": {
+          "appearances": 4,
+          "goals": 7,
           "assists": 0,
           "momCount": 1
+        },
+        "s2026": {
+          "appearances": 1,
+          "goals": 3,
+          "assists": 0,
+          "momCount": 0
         }
       }
     },
@@ -338,8 +416,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 5,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -364,10 +448,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 9,
           "goals": 3,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -390,8 +480,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 8,
+        "s2025": {
+          "appearances": 7,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -416,10 +512,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 21,
-          "goals": 6,
+        "s2025": {
+          "appearances": 15,
+          "goals": 3,
           "assists": 3,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 3,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -442,10 +544,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 11,
+        "s2025": {
+          "appearances": 9,
           "goals": 0,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -468,10 +576,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 7,
+        "s2025": {
+          "appearances": 4,
           "goals": 1,
           "assists": 2,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -494,10 +608,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 25,
+        "s2025": {
+          "appearances": 19,
           "goals": 3,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -520,8 +640,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 7,
+        "s2025": {
+          "appearances": 6,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -546,9 +672,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 7,
-          "goals": 4,
+        "s2025": {
+          "appearances": 5,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 2,
+          "goals": 2,
           "assists": 1,
           "momCount": 0
         }
@@ -572,9 +704,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 26,
+        "s2025": {
+          "appearances": 20,
           "goals": 6,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 6,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -598,9 +736,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
           "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -624,8 +768,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -650,8 +800,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -676,9 +832,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 6,
           "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -702,8 +864,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -728,8 +896,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -754,8 +928,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -780,8 +960,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -806,8 +992,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -832,10 +1024,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 3,
           "goals": 0,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -858,10 +1056,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
           "goals": 0,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -884,8 +1088,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 3,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -910,8 +1120,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -936,9 +1152,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
           "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -962,8 +1184,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -988,8 +1216,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1014,8 +1248,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 7,
+        "s2025": {
+          "appearances": 6,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1040,10 +1280,16 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 6,
-          "goals": 6,
+        "s2025": {
+          "appearances": 3,
+          "goals": 1,
           "assists": 1,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 3,
+          "goals": 5,
+          "assists": 0,
           "momCount": 0
         }
       }
@@ -1066,9 +1312,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 4,
           "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -1092,9 +1344,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -1118,8 +1376,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 4,
+        "s2025": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 2,
           "goals": 1,
           "assists": 0,
           "momCount": 0
@@ -1144,8 +1408,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1170,8 +1440,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1196,8 +1472,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1222,9 +1504,15 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
+          "goals": 0,
           "assists": 0,
           "momCount": 0
         }
@@ -1248,8 +1536,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1274,8 +1568,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1300,8 +1600,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1326,8 +1632,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1352,8 +1664,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 3,
+        "s2025": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 2,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1378,8 +1696,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1404,8 +1728,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1430,8 +1760,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1456,8 +1792,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
-          "appearances": 2,
+        "s2025": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 1,
           "goals": 3,
           "assists": 0,
           "momCount": 0
@@ -1482,8 +1824,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1508,8 +1856,14 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
           "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
+          "appearances": 0,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -1534,7 +1888,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 4,
           "assists": 0,
@@ -1560,7 +1920,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 0,
           "goals": 1,
           "assists": 0,
@@ -1586,7 +1952,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1612,7 +1984,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1638,7 +2016,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1664,7 +2048,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 0,
           "goals": 0,
           "assists": 0,
@@ -1690,7 +2080,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 3,
           "goals": 0,
           "assists": 0,
@@ -1716,7 +2112,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 0,
           "goals": 0,
           "assists": 0,
@@ -1742,7 +2144,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 3,
           "goals": 0,
           "assists": 0,
@@ -1768,7 +2176,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 0,
           "goals": 0,
           "assists": 0,
@@ -1794,7 +2208,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 2,
           "goals": 0,
           "assists": 0,
@@ -1820,7 +2240,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1846,7 +2272,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1872,7 +2304,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1898,7 +2336,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1924,7 +2368,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1950,7 +2400,13 @@
         "momCount": 0
       },
       "seasonStats": {
-        "s2526": {
+        "s2025": {
+          "appearances": 0,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        },
+        "s2026": {
           "appearances": 1,
           "goals": 0,
           "assists": 0,
@@ -1961,7 +2417,7 @@
   },
   "matches": {
     "m01": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1737788400000,
       "location": "초안산축구장",
@@ -2166,7 +2622,7 @@
       "updatedAt": 1737788400000
     },
     "m02": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "로랜드FC",
       "date": 1738393200000,
       "location": "마들스타디움",
@@ -2297,7 +2753,7 @@
       "updatedAt": 1738393200000
     },
     "m03": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1738998000000,
       "location": "초안산",
@@ -2462,12 +2918,12 @@
       "updatedAt": 1738998000000
     },
     "m04": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "권용재팀",
       "date": 1739588400000,
       "location": "미상",
       "locationUrl": "",
-      "type": "friendly",
+      "type": "futsal",
       "status": "finished",
       "score": {
         "dokkaebi": 0,
@@ -2613,7 +3069,7 @@
       "updatedAt": 1739588400000
     },
     "m05": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1740207600000,
       "location": "불암산",
@@ -2831,7 +3287,7 @@
       "updatedAt": 1740207600000
     },
     "m06": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1740812400000,
       "location": "불암산",
@@ -3068,7 +3524,7 @@
       "updatedAt": 1740812400000
     },
     "m07": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1742022000000,
       "location": "초안산",
@@ -3246,7 +3702,7 @@
       "updatedAt": 1742022000000
     },
     "m08": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "EXFC",
       "date": 1742713200000,
       "location": "초안산",
@@ -3429,7 +3885,7 @@
       "updatedAt": 1742713200000
     },
     "m09": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1743231600000,
       "location": "초안산",
@@ -3580,7 +4036,7 @@
       "updatedAt": 1743231600000
     },
     "m10": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "클릭FC",
       "date": 1745056800000,
       "location": "다락원",
@@ -3744,7 +4200,7 @@
       "updatedAt": 1745056800000
     },
     "m11": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1745650800000,
       "location": "초안산",
@@ -3900,7 +4356,7 @@
       "updatedAt": 1745650800000
     },
     "m12": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1746241200000,
       "location": "불암산",
@@ -4128,7 +4584,7 @@
       "updatedAt": 1746241200000
     },
     "m14": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1748070000000,
       "location": "초안산",
@@ -4284,12 +4740,12 @@
       "updatedAt": 1748070000000
     },
     "m15": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "박한주와친구들",
       "date": 1749283200000,
       "location": "창골풋살장",
       "locationUrl": "",
-      "type": "friendly",
+      "type": "futsal",
       "status": "finished",
       "score": {
         "dokkaebi": 9,
@@ -4551,7 +5007,7 @@
       "updatedAt": 1749283200000
     },
     "m16": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1751094000000,
       "location": "초안산",
@@ -4743,7 +5199,7 @@
       "updatedAt": 1751094000000
     },
     "m17": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1757142000000,
       "location": "불암산",
@@ -4935,7 +5391,7 @@
       "updatedAt": 1757142000000
     },
     "m19": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1759561200000,
       "location": "수락산",
@@ -5147,7 +5603,7 @@
       "updatedAt": 1759561200000
     },
     "m20": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "삼미FC",
       "date": 1761955200000,
       "location": "창골운동장",
@@ -5303,7 +5759,7 @@
       "updatedAt": 1761955200000
     },
     "m21": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "삼미FC",
       "date": 1762563600000,
       "location": "마들스타디움",
@@ -5454,7 +5910,7 @@
       "updatedAt": 1762563600000
     },
     "m22": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1763197200000,
       "location": "불암산스타디움",
@@ -5638,7 +6094,7 @@
       "updatedAt": 1763197200000
     },
     "m23": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "국대FC",
       "date": 1764414000000,
       "location": "수락스포츠타운",
@@ -5895,7 +6351,7 @@
       "updatedAt": 1764414000000
     },
     "m24": {
-      "seasonId": "s2526",
+      "seasonId": "s2025",
       "opponent": "EX FC",
       "date": 1766919600000,
       "location": "미상",
@@ -6047,7 +6503,7 @@
       "updatedAt": 1766919600000
     },
     "m25": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "국대FC",
       "date": 1768633200000,
       "location": "불암산스타디움",
@@ -6245,7 +6701,7 @@
       "updatedAt": 1768633200000
     },
     "m26": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "국대FC",
       "date": 1769842800000,
       "location": "불암산스타디움",
@@ -6279,7 +6735,7 @@
       "updatedAt": 1769842800000
     },
     "m27": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "RC FC",
       "date": 1772262000000,
       "location": "미상",
@@ -6420,7 +6876,7 @@
       "updatedAt": 1772262000000
     },
     "m28": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "덕선FC",
       "date": 1773450000000,
       "location": "불암산",
@@ -6456,7 +6912,7 @@
       "updatedAt": 1773450000000
     },
     "m29": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "한아름축구단",
       "date": 1774742400000,
       "location": "번동중학교",
@@ -6699,7 +7155,7 @@
       "updatedAt": 1774742400000
     },
     "m30": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "삼미FC",
       "date": 1775260800000,
       "location": "창골운동장",
@@ -6874,7 +7330,7 @@
       "updatedAt": 1775260800000
     },
     "m31": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "FC국대",
       "date": 1776502800000,
       "location": "초안산",
@@ -7132,7 +7588,7 @@
       "updatedAt": 1776502800000
     },
     "m32": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "원스FC",
       "date": 1777107600000,
       "location": "수락산",
@@ -7255,7 +7711,7 @@
       "updatedAt": 1777107600000
     },
     "m33": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "FK리버스",
       "date": 1778284800000,
       "location": "창골축구장",
@@ -7318,7 +7774,7 @@
       "updatedAt": 1778284800000
     },
     "m34": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "국대FC",
       "date": 1778925600000,
       "location": "다락원체육공원",
@@ -7528,7 +7984,7 @@
       "updatedAt": 1778925600000
     },
     "m35": {
-      "seasonId": "s2526",
+      "seasonId": "s2026",
       "opponent": "덕선FC",
       "date": 1779498000000,
       "location": "불암산스포츠타운",

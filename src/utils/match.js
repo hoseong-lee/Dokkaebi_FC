@@ -1,8 +1,12 @@
 export const MATCH_TYPE_LABEL = {
   league: '리그',
   cup: '컵',
-  friendly: '친선'
+  friendly: '친선',
+  futsal: '풋살'
 }
+
+// 팀 통계(골득실/상대전적)에서 제외할 타입 (축구 외)
+export const TEAM_STATS_EXCLUDE_TYPES = ['futsal']
 
 export const MATCH_STATUS_LABEL = {
   scheduled: '예정',

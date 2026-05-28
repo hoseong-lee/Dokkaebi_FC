@@ -21,6 +21,7 @@ import MatchEventTimeline from '@/components/match/MatchEventTimeline.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
+import MomVotingSection from '@/components/match/MomVotingSection.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -119,6 +120,8 @@ watch(() => route.params.id, load)
     </section>
 
     <RsvpSection :match-id="match.id" />
+
+    <MomVotingSection v-if="isFinished" :match="match" />
 
     <!-- 쿼터별 기록 -->
     <section v-if="quarters.length" class="bg-white rounded-2xl shadow p-6 space-y-5">

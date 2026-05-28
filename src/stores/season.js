@@ -5,21 +5,41 @@ import { getActiveSeason, listSeasons, createSeason } from '@/firebase/database'
 export const useSeasonStore = defineStore('season', () => {
   const activeSeason = ref(null)
   const seasons = ref([])
+  const selectedId = ref(null)
   const loaded = ref(false)
 
   const activeId = computed(() => activeSeason.value?.id || null)
+  const selectedSeason = computed(
+    () => seasons.value.find((s) => s.id === selectedId.value) || activeSeason.value || null
+  )
+  // 최신순 정렬된 목록 (드롭다운용)
+  const list = computed(() =>
+    [...seasons.value].sort((a, b) => (b.startDate || 0) - (a.startDate || 0))
+  )
 
   async function ensure() {
     if (loaded.value) return activeSeason.value
-    activeSeason.value = await getActiveSeason()
+    const [active, all] = await Promise.all([getActiveSeason(), listSeasons()])
+    activeSeason.value = active
+    seasons.value = all
+    if (!selectedId.value) selectedId.value = active?.id || all[0]?.id || null
     loaded.value = true
-    return activeSeason.value
+    return active
   }
 
   async function refresh() {
-    activeSeason.value = await getActiveSeason()
+    const [active, all] = await Promise.all([getActiveSeason(), listSeasons()])
+    activeSeason.value = active
+    seasons.value = all
+    if (!selectedId.value || !all.find((s) => s.id === selectedId.value)) {
+      selectedId.value = active?.id || all[0]?.id || null
+    }
     loaded.value = true
-    return activeSeason.value
+    return active
+  }
+
+  function setSelected(id) {
+    if (seasons.value.find((s) => s.id === id)) selectedId.value = id
   }
 
   async function fetchSeasons() {
@@ -29,12 +49,13 @@ export const useSeasonStore = defineStore('season', () => {
 
   async function create(data) {
     const id = await createSeason(data)
-    await fetchSeasons()
-    if (data.active) {
-      activeSeason.value = { id, ...data }
-    }
+    await refresh()
     return id
   }
 
-  return { activeSeason, seasons, activeId, ensure, refresh, fetchSeasons, create }
+  return {
+    activeSeason, seasons, selectedId, list,
+    activeId, selectedSeason,
+    ensure, refresh, setSelected, fetchSeasons, create
+  }
 })

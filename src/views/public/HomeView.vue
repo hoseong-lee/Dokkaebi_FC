@@ -17,8 +17,8 @@ const seasonStore = useSeasonStore()
 const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
 
 const playersRef = toRef(playersStore, 'players')
-const seasonIdRef = computed(() => seasonStore.activeId)
-const { topPoints } = useRankings(playersRef, seasonIdRef)
+const seasonRef = computed(() => seasonStore.activeId)
+const { topPoints } = useRankings(playersRef, seasonRef)
 
 const recentFinished = computed(() => matchesStore.finished.slice(0, 3))
 const top3 = computed(() => topPoints.value.slice(0, 3))
