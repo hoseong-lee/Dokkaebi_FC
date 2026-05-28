@@ -20,6 +20,24 @@ const toast = useToast()
 
 const regulars = computed(() => props.players.filter((p) => p.isRegular))
 
+const search = ref('')
+const filterMode = ref('all')
+const filteredPlayers = computed(() => {
+  const qStr = search.value.trim().toLowerCase()
+  let list = props.players
+  if (filterMode.value === 'regular') list = list.filter((p) => p.isRegular)
+  else if (filterMode.value === 'guest') list = list.filter((p) => !p.isRegular)
+  if (qStr) {
+    list = list.filter(
+      (p) =>
+        p.name.toLowerCase().includes(qStr) ||
+        String(p.number ?? '').includes(qStr) ||
+        (p.mainPosition || '').toLowerCase().includes(qStr)
+    )
+  }
+  return list
+})
+
 const lineupPlayers = computed(() =>
   (q.lineup || []).map((id) => props.players.find((p) => p.id === id)).filter(Boolean)
 )
@@ -154,9 +172,39 @@ function onFormationChange() {
           </button>
         </div>
       </div>
-      <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+      <div class="flex gap-2 items-center mb-2">
+        <div class="relative flex-1">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="이름·등번호·포지션 검색"
+            class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
+          />
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <button
+            v-if="search"
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-dokkaebi text-sm"
+            @click="search = ''"
+          >×</button>
+        </div>
+        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
+          <button
+            v-for="f in [{k:'all',l:'전체'},{k:'regular',l:'★'},{k:'guest',l:'용병'}]"
+            :key="f.k"
+            type="button"
+            class="px-2 py-1 rounded-md"
+            :class="filterMode === f.k ? 'bg-white shadow font-semibold' : 'text-gray-500'"
+            @click="filterMode = f.k"
+          >{{ f.l }}</button>
+        </div>
+      </div>
+      <p v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 py-3 text-center">
+        검색 결과가 없습니다.
+      </p>
+      <div v-else class="grid grid-cols-4 sm:grid-cols-6 gap-2">
         <button
-          v-for="p in players"
+          v-for="p in filteredPlayers"
           :key="p.id"
           type="button"
           class="relative flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"

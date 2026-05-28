@@ -9,30 +9,15 @@ function fmtName(p) {
   return p.number != null ? `${p.name} #${p.number}` : p.name
 }
 
-// 카카오톡/단톡 공지용 텍스트 생성
-export function buildSquadShareText({ match, squad, players }) {
+function isEmptySquad(s) {
+  return !s || (!s.lineup?.length && !s.formation)
+}
+
+function buildSquadBlock(squad, playerMap) {
   const lines = []
-  const opp = match?.opponent || '상대 미정'
-  let dateStr = ''
-  if (match?.date) {
-    const d = dayjs(match.date)
-    if (d.isValid()) dateStr = d.format('M/D(ddd) HH:mm')
-  }
-  const loc = match?.location ? ` · ${match.location}` : ''
-
-  lines.push(`⚽ [도깨비FC] ${dateStr} vs ${opp}${loc}`)
-  lines.push(
-    squad.formation
-      ? `📋 ${squad.formation} (총 ${squad.lineup.length}명)`
-      : `📋 명단 (총 ${squad.lineup.length}명)`
-  )
-  lines.push('')
-
-  const playerMap = new Map(players.map((p) => [p.id, p]))
   const slots = squad.formation ? getSlots(squad.formation) : []
   const byRole = { GK: [], DF: [], MF: [], FW: [] }
   const placed = new Set()
-
   for (const slot of slots) {
     const pid = squad.positions?.[slot.id]
     if (!pid) continue
@@ -41,22 +26,56 @@ export function buildSquadShareText({ match, squad, players }) {
     if (byRole[slot.role]) byRole[slot.role].push(p)
     placed.add(pid)
   }
-
   for (const role of ROLE_ORDER) {
     if (!byRole[role].length) continue
     lines.push(`${ICONS[role]} ${role} ${byRole[role].map(fmtName).join(' · ')}`)
   }
-
   const unassigned = (squad.lineup || [])
     .filter((pid) => !placed.has(pid))
     .map((pid) => playerMap.get(pid))
     .filter(Boolean)
   if (unassigned.length) {
-    lines.push('')
     lines.push(`📝 미배치: ${unassigned.map(fmtName).join(', ')}`)
   }
+  return lines
+}
 
-  return lines.join('\n')
+// 단일 또는 다중 쿼터 스쿼드 공유 텍스트
+// args: { match, squad?, squads?, players }
+export function buildSquadShareText({ match, squad, squads, players }) {
+  const playerMap = new Map(players.map((p) => [p.id, p]))
+  const opp = match?.opponent || '상대 미정'
+  let dateStr = ''
+  if (match?.date) {
+    const d = dayjs(match.date)
+    if (d.isValid()) dateStr = d.format('M/D(ddd) HH:mm')
+  }
+  const loc = match?.location ? ` · ${match.location}` : ''
+
+  const lines = [`⚽ [도깨비FC] ${dateStr} vs ${opp}${loc}`, '']
+
+  const list = Array.isArray(squads) ? squads : squad ? [squad] : []
+  const used = list.filter((sq) => !isEmptySquad(sq))
+
+  if (used.length === 0) {
+    lines.push('(스쿼드 미작성)')
+    return lines.join('\n')
+  }
+
+  // 모든 쿼터가 동일하면 한 블록으로
+  const single = used.length === 1
+  list.forEach((sq, i) => {
+    if (isEmptySquad(sq)) return
+    if (!single) {
+      lines.push(`▣ ${i + 1}쿼터${sq.formation ? ` · ${sq.formation}` : ''} (${sq.lineup?.length || 0}명)`)
+    } else {
+      lines.push(sq.formation ? `📋 ${sq.formation} (${sq.lineup?.length || 0}명)` : `📋 명단 (${sq.lineup?.length || 0}명)`)
+    }
+    lines.push(...buildSquadBlock(sq, playerMap))
+    lines.push('')
+  })
+
+  return lines.join('\n').trimEnd()
 }
 
 export async function copyToClipboard(text) {
@@ -71,9 +90,5 @@ export async function copyToClipboard(text) {
   document.body.appendChild(ta)
   ta.focus()
   ta.select()
-  try {
-    document.execCommand('copy')
-  } finally {
-    document.body.removeChild(ta)
-  }
+  try { document.execCommand('copy') } finally { document.body.removeChild(ta) }
 }

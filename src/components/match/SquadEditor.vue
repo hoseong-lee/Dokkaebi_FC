@@ -5,26 +5,43 @@ import FormationPitch from '@/components/match/FormationPitch.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import { FORMATION_NAMES, getSlots } from '@/utils/formations'
-
-// 빠른 선택 칩에 노출할 인기 포메이션 (좌→우)
-const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
-const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.includes(f))
 import { suggestFormation } from '@/utils/autoFormation'
-import { buildSquadShareText, copyToClipboard } from '@/utils/squadShare'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
 
+const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
+const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.includes(f))
+
 const props = defineProps({
   squad: { type: Object, required: true },
-  players: { type: Array, required: true },
-  match: { type: Object, default: null } // {opponent,date,location} — 공유 텍스트 생성용
+  players: { type: Array, required: true }
 })
 
 const s = props.squad
 const playersStore = usePlayersStore()
 const toast = useToast()
 
+const search = ref('')
+const filterMode = ref('all') // all | regular | guest
+
 const regulars = computed(() => props.players.filter((p) => p.isRegular))
+
+const filteredPlayers = computed(() => {
+  const q = search.value.trim().toLowerCase()
+  let list = props.players
+  if (filterMode.value === 'regular') list = list.filter((p) => p.isRegular)
+  else if (filterMode.value === 'guest') list = list.filter((p) => !p.isRegular)
+  if (q) {
+    list = list.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        String(p.number ?? '').includes(q) ||
+        (p.mainPosition || '').toLowerCase().includes(q)
+    )
+  }
+  return list
+})
+
 const lineupPlayers = computed(() =>
   (s.lineup || []).map((id) => props.players.find((p) => p.id === id)).filter(Boolean)
 )
@@ -77,7 +94,6 @@ async function addGuest() {
   }
 }
 
-// 자동 포메이션
 function autoFormation() {
   if (s.lineup.length === 0) return toast.error('출전 선수를 먼저 선택하세요.')
   const r = suggestFormation(s.lineup, props.players)
@@ -93,11 +109,19 @@ function onFormationChange() {
   }
 }
 
-// 포메이션 슬롯 클릭 → 선수 선택 모달
 const slotModalOpen = ref(false)
 const activeSlot = ref(null)
+const slotSearch = ref('')
+const slotCandidates = computed(() => {
+  const q = slotSearch.value.trim().toLowerCase()
+  if (!q) return lineupPlayers.value
+  return lineupPlayers.value.filter(
+    (p) => p.name.toLowerCase().includes(q) || String(p.number ?? '').includes(q)
+  )
+})
 function openSlot(slot) {
   activeSlot.value = slot
+  slotSearch.value = ''
   slotModalOpen.value = true
 }
 function assignToSlot(playerId) {
@@ -114,30 +138,14 @@ function clearSlot() {
   if (activeSlot.value && s.positions) delete s.positions[activeSlot.value.id]
   slotModalOpen.value = false
 }
-
-// 단톡 공유 텍스트 복사
-async function shareSquad() {
-  if (s.lineup.length === 0) return toast.error('출전 선수를 먼저 선택하세요.')
-  const text = buildSquadShareText({
-    match: props.match,
-    squad: { lineup: s.lineup, formation: s.formation, positions: s.positions || {} },
-    players: props.players
-  })
-  try {
-    await copyToClipboard(text)
-    toast.success('단톡 공유 텍스트를 복사했습니다.')
-  } catch (e) {
-    toast.error(`복사 실패: ${e?.message || e}`)
-  }
-}
 </script>
 
 <template>
   <div class="space-y-5">
     <!-- 출전 명단 -->
     <div>
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="text-sm font-bold text-navy">출전 예정 명단 ({{ lineupPlayers.length }})</h3>
+      <div class="flex items-center justify-between mb-2 gap-2 flex-wrap">
+        <h3 class="text-sm font-bold text-navy">출전 명단 ({{ lineupPlayers.length }})</h3>
         <div class="flex gap-1.5">
           <button
             type="button"
@@ -156,9 +164,42 @@ async function shareSquad() {
           >전체 해제</button>
         </div>
       </div>
-      <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+
+      <!-- 검색 + 필터 -->
+      <div class="flex gap-2 items-center mb-2">
+        <div class="relative flex-1">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="이름·등번호·포지션 검색"
+            class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
+          />
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <button
+            v-if="search"
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-dokkaebi text-sm"
+            @click="search = ''"
+          >×</button>
+        </div>
+        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
+          <button
+            v-for="f in [{k:'all',l:'전체'},{k:'regular',l:'★'},{k:'guest',l:'용병'}]"
+            :key="f.k"
+            type="button"
+            class="px-2 py-1 rounded-md"
+            :class="filterMode === f.k ? 'bg-white shadow font-semibold' : 'text-gray-500'"
+            @click="filterMode = f.k"
+          >{{ f.l }}</button>
+        </div>
+      </div>
+
+      <div v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 py-3 text-center">
+        검색 결과가 없습니다.
+      </div>
+      <div v-else class="grid grid-cols-4 sm:grid-cols-6 gap-2">
         <button
-          v-for="p in players"
+          v-for="p in filteredPlayers"
           :key="p.id"
           type="button"
           class="relative flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
@@ -168,7 +209,9 @@ async function shareSquad() {
           <span v-if="p.isRegular" class="absolute top-1 right-1 text-amber-500 text-[10px] leading-none">★</span>
           <span v-else class="absolute top-1 right-1 text-[9px] bg-gray-200 text-gray-600 rounded px-1 leading-tight">용병</span>
           <PlayerAvatar :player="p" :size="36" />
-          <span class="text-[11px] truncate w-full text-center">{{ p.name }}</span>
+          <span class="text-[11px] truncate w-full text-center">
+            {{ p.name }}<span v-if="p.number != null" class="text-gray-400"> #{{ p.number }}</span>
+          </span>
         </button>
       </div>
     </div>
@@ -187,7 +230,6 @@ async function shareSquad() {
         </button>
       </div>
 
-      <!-- 인기 포메이션 칩 -->
       <div class="flex flex-wrap gap-1.5 mb-2">
         <button
           v-for="f in POPULAR_FORMATIONS"
@@ -196,9 +238,7 @@ async function shareSquad() {
           class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
           :class="s.formation === f ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
           @click="() => { s.formation = f; onFormationChange() }"
-        >
-          {{ f }}
-        </button>
+        >{{ f }}</button>
         <select
           :value="OTHER_FORMATIONS.includes(s.formation) ? s.formation : ''"
           class="border rounded-full px-3 py-1 text-xs bg-white"
@@ -212,9 +252,7 @@ async function shareSquad() {
           type="button"
           class="px-3 py-1.5 rounded-full text-xs text-gray-400 hover:text-dokkaebi"
           @click="() => { s.formation = ''; s.positions = {} }"
-        >
-          해제
-        </button>
+        >해제</button>
       </div>
 
       <FormationPitch
@@ -230,25 +268,19 @@ async function shareSquad() {
       </p>
     </div>
 
-    <!-- 단톡 공유 -->
-    <div class="pt-3 border-t">
-      <button
-        type="button"
-        class="w-full text-sm px-4 py-2.5 rounded-lg bg-yellow-300 text-onyx font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-40"
-        :disabled="s.lineup.length === 0"
-        @click="shareSquad"
-      >
-        💬 단톡 공유 텍스트 복사
-      </button>
-      <p class="text-[11px] text-gray-400 mt-1.5">
-        포메이션·명단을 카카오톡 단톡방에 바로 붙여넣을 수 있는 형식으로 복사합니다.
-      </p>
-    </div>
-
     <BaseModal v-model="slotModalOpen" :title="`${activeSlot?.role || ''} 자리에 배치`">
-      <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+      <div class="relative mb-3">
+        <input
+          v-model="slotSearch"
+          type="text"
+          placeholder="이름·등번호 검색"
+          class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
+        />
+        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+      </div>
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-72 overflow-y-auto">
         <button
-          v-for="p in lineupPlayers"
+          v-for="p in slotCandidates"
           :key="p.id"
           type="button"
           class="flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50"
@@ -259,6 +291,9 @@ async function shareSquad() {
         </button>
         <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 py-2">
           명단에서 선수를 먼저 선택하세요.
+        </p>
+        <p v-else-if="slotCandidates.length === 0" class="col-span-full text-xs text-gray-400 py-2">
+          검색 결과 없음.
         </p>
       </div>
       <template #footer>

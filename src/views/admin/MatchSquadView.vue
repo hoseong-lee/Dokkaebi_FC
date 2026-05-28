@@ -8,7 +8,7 @@ import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-import SquadEditor from '@/components/match/SquadEditor.vue'
+import SquadMaker from '@/components/match/SquadMaker.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,16 +20,28 @@ const match = ref(null)
 const loading = ref(true)
 const saving = ref(false)
 
-const squad = reactive({ lineup: [], formation: '', positions: {} })
+function emptySquad() {
+  return { lineup: [], formation: '', positions: {} }
+}
+const squads = reactive([emptySquad(), emptySquad(), emptySquad(), emptySquad()])
+
+function loadInto(i, src) {
+  squads[i].lineup = [...(src?.lineup || [])]
+  squads[i].formation = src?.formation || ''
+  squads[i].positions = { ...(src?.positions || {}) }
+}
 
 async function load() {
   loading.value = true
   await playersStore.fetchAll()
   match.value = await store.fetchOne(route.params.id)
-  if (match.value?.plannedSquad) {
-    squad.lineup = [...(match.value.plannedSquad.lineup || [])]
-    squad.formation = match.value.plannedSquad.formation || ''
-    squad.positions = { ...(match.value.plannedSquad.positions || {}) }
+  if (match.value) {
+    if (Array.isArray(match.value.plannedSquads)) {
+      for (let i = 0; i < 4; i++) loadInto(i, match.value.plannedSquads[i])
+    } else if (match.value.plannedSquad) {
+      // legacy: 단일 plannedSquad → 1쿼터로
+      loadInto(0, match.value.plannedSquad)
+    }
   }
   loading.value = false
 }
@@ -39,11 +51,12 @@ async function save() {
   saving.value = true
   try {
     await updateMatch(match.value.id, {
-      plannedSquad: {
-        lineup: squad.lineup,
-        formation: squad.formation || null,
-        positions: squad.positions || {}
-      }
+      plannedSquads: squads.map((s) => ({
+        lineup: s.lineup,
+        formation: s.formation || null,
+        positions: s.positions || {}
+      })),
+      plannedSquad: null // legacy 정리
     })
     toast.success('스쿼드를 저장했습니다.')
     router.push(`/matches/${match.value.id}`)
@@ -65,7 +78,7 @@ async function save() {
     </div>
 
     <div class="bg-white rounded-2xl shadow p-5">
-      <SquadEditor :squad="squad" :players="playersStore.activePlayers" :match="match" />
+      <SquadMaker :squads="squads" :players="playersStore.activePlayers" :match="match" />
     </div>
 
     <div class="flex gap-2 mt-4">

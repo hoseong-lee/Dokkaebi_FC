@@ -10,7 +10,7 @@ import { required } from '@/utils/validators'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-import SquadEditor from '@/components/match/SquadEditor.vue'
+import SquadMaker from '@/components/match/SquadMaker.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -31,13 +31,25 @@ const form = reactive({
   locationUrl: '',
   type: 'friendly'
 })
-const squad = reactive({ lineup: [], formation: '', positions: {} })
+
+function emptySquad() {
+  return { lineup: [], formation: '', positions: {} }
+}
+const squads = reactive([emptySquad(), emptySquad(), emptySquad(), emptySquad()])
 
 const matchForShare = computed(() => ({
   opponent: form.opponent,
   date: form.date ? dayjs(form.date).valueOf() : null,
   location: form.location
 }))
+
+const squadCount = computed(() => squads.reduce((n, s) => n + (s.lineup?.length ? 1 : 0), 0))
+
+function loadSquad(i, src) {
+  squads[i].lineup = [...(src?.lineup || [])]
+  squads[i].formation = src?.formation || ''
+  squads[i].positions = { ...(src?.positions || {}) }
+}
 
 async function load() {
   await Promise.all([seasonStore.ensure(), playersStore.fetchAll()])
@@ -56,11 +68,12 @@ async function load() {
     locationUrl: m.locationUrl || '',
     type: m.type || 'friendly'
   })
-  if (m.plannedSquad) {
-    squad.lineup = [...(m.plannedSquad.lineup || [])]
-    squad.formation = m.plannedSquad.formation || ''
-    squad.positions = { ...(m.plannedSquad.positions || {}) }
-    if (squad.lineup.length) squadOpen.value = true
+  if (Array.isArray(m.plannedSquads)) {
+    for (let i = 0; i < 4; i++) loadSquad(i, m.plannedSquads[i])
+    if (m.plannedSquads.some((s) => s?.lineup?.length)) squadOpen.value = true
+  } else if (m.plannedSquad) {
+    loadSquad(0, m.plannedSquad)
+    if (m.plannedSquad.lineup?.length) squadOpen.value = true
   }
 }
 
@@ -70,15 +83,22 @@ async function save() {
 
   saving.value = true
   try {
+    const plannedSquads = squads.some((s) => s.lineup?.length)
+      ? squads.map((s) => ({
+          lineup: s.lineup,
+          formation: s.formation || null,
+          positions: s.positions || {}
+        }))
+      : null
+
     const payload = {
       opponent: form.opponent.trim(),
       date: fromInputDateTime(form.date),
       location: form.location.trim(),
       locationUrl: form.locationUrl.trim(),
       type: form.type,
-      plannedSquad: squad.lineup.length
-        ? { lineup: squad.lineup, formation: squad.formation || null, positions: squad.positions || {} }
-        : null
+      plannedSquads,
+      plannedSquad: null
     }
     if (isEdit.value) {
       await store.update(route.params.id, payload)
@@ -127,9 +147,7 @@ onMounted(load)
               class="flex-1 min-w-[4rem] py-2 rounded-lg text-sm transition-colors"
               :class="form.type === k ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
               @click="form.type = k"
-            >
-              {{ l }}
-            </button>
+            >{{ l }}</button>
           </div>
         </div>
         <div>
@@ -142,7 +160,7 @@ onMounted(load)
         </div>
       </div>
 
-      <!-- 스쿼드 메이커 (접이식) -->
+      <!-- 스쿼드 메이커 (접이식, 4쿼터) -->
       <div class="bg-white rounded-2xl shadow">
         <button
           type="button"
@@ -152,13 +170,13 @@ onMounted(load)
           <span>
             <span class="font-bold text-navy">스쿼드 메이커</span>
             <span class="text-xs text-gray-400 ml-2">
-              참석 명단 + 포메이션 자동 추천 ({{ squad.lineup.length }}명)
+              쿼터별 명단·포메이션 ({{ squadCount }}/4쿼터 작성됨)
             </span>
           </span>
           <span class="text-gray-400">{{ squadOpen ? '▾' : '▸' }}</span>
         </button>
         <div v-if="squadOpen" class="px-5 pb-5 border-t pt-4">
-          <SquadEditor :squad="squad" :players="playersStore.activePlayers" :match="matchForShare" />
+          <SquadMaker :squads="squads" :players="playersStore.activePlayers" :match="matchForShare" />
         </div>
       </div>
 

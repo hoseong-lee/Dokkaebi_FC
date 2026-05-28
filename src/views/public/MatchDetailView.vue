@@ -44,6 +44,21 @@ const lineupPlayers = computed(() =>
 )
 
 const quarters = computed(() => match.value?.quarters || [])
+
+// 예정 스쿼드 목록 (쿼터 배열 우선, legacy 단일 스쿼드 폴백)
+const plannedSquadList = computed(() => {
+  const m = match.value
+  if (!m) return []
+  if (Array.isArray(m.plannedSquads)) {
+    return m.plannedSquads
+      .map((s, i) => ({ idx: i, label: `${i + 1}쿼터`, ...(s || {}) }))
+      .filter((s) => s.lineup?.length)
+  }
+  if (m.plannedSquad?.lineup?.length) {
+    return [{ idx: 0, label: '명단', ...m.plannedSquad }]
+  }
+  return []
+})
 const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
 
@@ -126,33 +141,40 @@ watch(() => route.params.id, load)
 
     <MomVotingSection v-if="isFinished" :match="match" />
 
-    <!-- 예정 경기: 미리 짠 스쿼드 표시 -->
+    <!-- 예정 경기: 쿼터별 미리 짠 스쿼드 -->
     <section
-      v-if="!isFinished && match.plannedSquad && match.plannedSquad.lineup?.length"
-      class="bg-white rounded-2xl shadow p-6"
+      v-if="!isFinished && plannedSquadList.length"
+      class="bg-white rounded-2xl shadow p-6 space-y-5"
     >
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-navy">예정 스쿼드 <span class="text-xs text-gray-400">({{ match.plannedSquad.lineup.length }}명)</span></h2>
-        <span v-if="match.plannedSquad.formation" class="text-sm font-bold text-dokkaebi">
-          {{ match.plannedSquad.formation }}
-        </span>
-      </div>
-      <FormationPitch
-        v-if="match.plannedSquad.formation"
-        :formation="match.plannedSquad.formation"
-        :positions="match.plannedSquad.positions || {}"
-        :players="playersStore.players"
-      />
-      <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-3">
-        <RouterLink
-          v-for="pid in match.plannedSquad.lineup"
-          :key="pid"
-          :to="`/players/${pid}`"
-          class="flex flex-col items-center gap-1 text-center"
-        >
-          <PlayerAvatar :player="playersStore.getById(pid)" :size="40" />
-          <span class="text-xs truncate w-full">{{ playersStore.getById(pid)?.name }}</span>
-        </RouterLink>
+      <h2 class="font-bold text-navy">예정 스쿼드</h2>
+      <div
+        v-for="ps in plannedSquadList"
+        :key="ps.idx"
+        class="border-t first:border-t-0 pt-4 first:pt-0"
+      >
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-semibold text-sm text-gray-700">
+            {{ ps.label }} <span class="text-xs text-gray-400">({{ ps.lineup.length }}명)</span>
+          </span>
+          <span v-if="ps.formation" class="text-sm font-bold text-dokkaebi">{{ ps.formation }}</span>
+        </div>
+        <FormationPitch
+          v-if="ps.formation"
+          :formation="ps.formation"
+          :positions="ps.positions || {}"
+          :players="playersStore.players"
+        />
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 mt-3">
+          <RouterLink
+            v-for="pid in ps.lineup"
+            :key="pid"
+            :to="`/players/${pid}`"
+            class="flex flex-col items-center gap-1 text-center"
+          >
+            <PlayerAvatar :player="playersStore.getById(pid)" :size="36" />
+            <span class="text-[11px] truncate w-full">{{ playersStore.getById(pid)?.name }}</span>
+          </RouterLink>
+        </div>
       </div>
     </section>
 
