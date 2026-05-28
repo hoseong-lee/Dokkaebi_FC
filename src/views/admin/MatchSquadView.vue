@@ -65,7 +65,7 @@ async function save() {
     </div>
 
     <div class="bg-white rounded-2xl shadow p-5">
-      <SquadEditor :squad="squad" :players="playersStore.activePlayers" />
+      <SquadEditor :squad="squad" :players="playersStore.activePlayers" :match="match" />
     </div>
 
     <div class="flex gap-2 mt-4">

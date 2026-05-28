@@ -5,7 +5,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { useSeasonStore } from '@/stores/season'
 import { usePlayersStore } from '@/stores/players'
 import { MATCH_TYPE_LABEL } from '@/utils/match'
-import { toInputDateTime, fromInputDateTime } from '@/utils/date'
+import { toInputDateTime, fromInputDateTime, dayjs } from '@/utils/date'
 import { required } from '@/utils/validators'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -32,6 +32,12 @@ const form = reactive({
   type: 'friendly'
 })
 const squad = reactive({ lineup: [], formation: '', positions: {} })
+
+const matchForShare = computed(() => ({
+  opponent: form.opponent,
+  date: form.date ? dayjs(form.date).valueOf() : null,
+  location: form.location
+}))
 
 async function load() {
   await Promise.all([seasonStore.ensure(), playersStore.fetchAll()])
@@ -152,7 +158,7 @@ onMounted(load)
           <span class="text-gray-400">{{ squadOpen ? '▾' : '▸' }}</span>
         </button>
         <div v-if="squadOpen" class="px-5 pb-5 border-t pt-4">
-          <SquadEditor :squad="squad" :players="playersStore.activePlayers" />
+          <SquadEditor :squad="squad" :players="playersStore.activePlayers" :match="matchForShare" />
         </div>
       </div>
 

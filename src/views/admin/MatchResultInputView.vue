@@ -46,6 +46,19 @@ function copyFromPrev() {
   toast.success(`${activeQ.value}쿼터 명단을 복사했습니다.`)
 }
 
+// 미리 짠 스쿼드(plannedSquad) 를 현재 쿼터로 가져오기
+function copyFromPlanned() {
+  const planned = match.value?.plannedSquad
+  if (!planned || !planned.lineup?.length) {
+    return toast.error('미리 짠 스쿼드가 없습니다.')
+  }
+  const dst = quarters[activeQ.value]
+  dst.lineup = [...planned.lineup]
+  dst.formation = planned.formation || ''
+  dst.positions = { ...(planned.positions || {}) }
+  toast.success(`${activeQ.value + 1}쿼터에 예정 스쿼드를 가져왔습니다.`)
+}
+
 // MOM 후보 = 전 쿼터 출전 명단 합집합
 const lineupUnion = computed(() => {
   const set = new Set()
@@ -140,8 +153,17 @@ onMounted(load)
       </button>
     </div>
 
-    <div v-if="activeQ > 0" class="mb-3">
+    <div class="flex flex-wrap gap-1.5 mb-3">
       <button
+        v-if="match.plannedSquad && match.plannedSquad.lineup?.length"
+        type="button"
+        class="text-xs px-3 py-1.5 rounded-full bg-gold/20 text-onyx font-semibold hover:bg-gold/30"
+        @click="copyFromPlanned"
+      >
+        📋 예정 스쿼드 가져오기
+      </button>
+      <button
+        v-if="activeQ > 0"
         type="button"
         class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy font-medium hover:bg-navy/20"
         @click="copyFromPrev"

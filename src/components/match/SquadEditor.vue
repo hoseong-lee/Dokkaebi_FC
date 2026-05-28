@@ -10,12 +10,14 @@ import { FORMATION_NAMES, getSlots } from '@/utils/formations'
 const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
 const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.includes(f))
 import { suggestFormation } from '@/utils/autoFormation'
+import { buildSquadShareText, copyToClipboard } from '@/utils/squadShare'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
 
 const props = defineProps({
-  squad: { type: Object, required: true }, // { lineup: [], formation: '', positions: {} }
-  players: { type: Array, required: true }
+  squad: { type: Object, required: true },
+  players: { type: Array, required: true },
+  match: { type: Object, default: null } // {opponent,date,location} — 공유 텍스트 생성용
 })
 
 const s = props.squad
@@ -111,6 +113,22 @@ function assignToSlot(playerId) {
 function clearSlot() {
   if (activeSlot.value && s.positions) delete s.positions[activeSlot.value.id]
   slotModalOpen.value = false
+}
+
+// 단톡 공유 텍스트 복사
+async function shareSquad() {
+  if (s.lineup.length === 0) return toast.error('출전 선수를 먼저 선택하세요.')
+  const text = buildSquadShareText({
+    match: props.match,
+    squad: { lineup: s.lineup, formation: s.formation, positions: s.positions || {} },
+    players: props.players
+  })
+  try {
+    await copyToClipboard(text)
+    toast.success('단톡 공유 텍스트를 복사했습니다.')
+  } catch (e) {
+    toast.error(`복사 실패: ${e?.message || e}`)
+  }
 }
 </script>
 
@@ -209,6 +227,21 @@ function clearSlot() {
       />
       <p v-else class="text-xs text-gray-400">
         포메이션 칩을 누르거나 명단 선택 후 ⚡ 자동 추천을 눌러보세요.
+      </p>
+    </div>
+
+    <!-- 단톡 공유 -->
+    <div class="pt-3 border-t">
+      <button
+        type="button"
+        class="w-full text-sm px-4 py-2.5 rounded-lg bg-yellow-300 text-onyx font-semibold hover:bg-yellow-400 transition-colors disabled:opacity-40"
+        :disabled="s.lineup.length === 0"
+        @click="shareSquad"
+      >
+        💬 단톡 공유 텍스트 복사
+      </button>
+      <p class="text-[11px] text-gray-400 mt-1.5">
+        포메이션·명단을 카카오톡 단톡방에 바로 붙여넣을 수 있는 형식으로 복사합니다.
       </p>
     </div>
 
