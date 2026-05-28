@@ -32,9 +32,20 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-5">
-    <section class="bg-gradient-to-br from-navy to-navy/80 text-white rounded-2xl shadow p-6">
-      <h1 class="text-lg font-bold">안녕하세요, {{ auth.user?.displayName }}님 👋</h1>
-      <p class="text-sm text-white/70 mt-1">도깨비 FC</p>
+    <section class="relative overflow-hidden bg-gradient-to-br from-onyx via-onyx to-onyx/90 text-white rounded-2xl shadow p-6">
+      <img
+        src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+        alt=""
+        aria-hidden="true"
+        class="absolute -right-6 -bottom-6 w-40 h-40 opacity-20 pointer-events-none"
+      />
+      <div class="relative">
+        <p class="text-[10px] text-gold font-semibold tracking-[0.35em]">DOKKEBY FOOTBALL CLUB</p>
+        <h1 class="text-lg font-bold mt-1">
+          안녕하세요, <span class="text-gold">{{ auth.user?.displayName }}</span>님 👋
+        </h1>
+        <p class="text-sm text-white/70 mt-1">도깨비 FC · 2025-2026 시즌</p>
+      </div>
     </section>
 
     <LoadingSpinner v-if="loading" />

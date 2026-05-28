@@ -2,117 +2,137 @@
   "seasons": {
     "s2526": {
       "name": "2025-2026 시즌",
-      "startDate": 1759276800000,
+      "startDate": 1735689600000,
       "endDate": 1798675200000,
       "active": true
     }
   },
   "players": {
     "p01": {
-      "name": "유희창",
-      "number": 1,
-      "position": "MF",
+      "name": "신승민",
+      "number": 2,
+      "mark": "신승민",
+      "mainPosition": "RB",
+      "subPosition": "LB",
+      "position": "DF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 5,
-        "goals": 8,
-        "assists": 1,
+        "appearances": 16,
+        "goals": 1,
+        "assists": 2,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 5,
-          "goals": 8,
-          "assists": 1,
+          "appearances": 16,
+          "goals": 1,
+          "assists": 2,
           "momCount": 0
         }
       }
     },
     "p02": {
-      "name": "마진섭",
-      "number": 2,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 1,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 1,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p03": {
-      "name": "윤범관",
+      "name": "박재익",
       "number": 3,
-      "position": "MF",
+      "mark": "박재익",
+      "mainPosition": "ST",
+      "subPosition": "CB",
+      "position": "FW",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 1,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 1,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p04": {
-      "name": "홍성현",
-      "number": 4,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 1,
-        "goals": 1,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 1,
-          "goals": 1,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p05": {
-      "name": "김진오",
-      "number": 5,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 2,
+        "appearances": 10,
         "goals": 2,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 2,
+          "appearances": 10,
           "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p03": {
+      "name": "홍성현",
+      "number": 4,
+      "mark": "홍성현",
+      "mainPosition": "LB",
+      "subPosition": "CB",
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 16,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 16,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p04": {
+      "name": "김주현",
+      "number": 5,
+      "mark": "김주현",
+      "mainPosition": "LB",
+      "subPosition": null,
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p05": {
+      "name": "김산이",
+      "number": 6,
+      "mark": "김산이",
+      "mainPosition": "ST",
+      "subPosition": "CAM",
+      "position": "FW",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 4,
+        "goals": 5,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 4,
+          "goals": 5,
           "assists": 0,
           "momCount": 0
         }
@@ -120,65 +140,77 @@
     },
     "p06": {
       "name": "김세욱",
-      "number": 6,
-      "position": "MF",
+      "number": 7,
+      "mark": "엔젤스헤이븐",
+      "mainPosition": "CB",
+      "subPosition": "LW",
+      "position": "DF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 3,
-        "goals": 3,
-        "assists": 0,
+        "appearances": 16,
+        "goals": 20,
+        "assists": 2,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 3,
-          "goals": 3,
-          "assists": 0,
+          "appearances": 16,
+          "goals": 20,
+          "assists": 2,
           "momCount": 0
         }
       }
     },
     "p07": {
       "name": "권순찬",
-      "number": 7,
+      "number": 8,
+      "mark": "권순찬",
+      "mainPosition": "CAM",
+      "subPosition": "CDM",
       "position": "MF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 2,
-        "goals": 1,
+        "appearances": 12,
+        "goals": 2,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 2,
-          "goals": 1,
+          "appearances": 12,
+          "goals": 2,
           "assists": 0,
           "momCount": 0
         }
       }
     },
     "p08": {
-      "name": "임상범",
-      "number": 8,
-      "position": "MF",
+      "name": "김진오",
+      "number": 9,
+      "mark": "김진오",
+      "mainPosition": "ST",
+      "subPosition": "LB",
+      "position": "FW",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
-        "goals": 0,
+        "appearances": 24,
+        "goals": 8,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
-          "goals": 0,
+          "appearances": 24,
+          "goals": 8,
           "assists": 0,
           "momCount": 0
         }
@@ -186,108 +218,128 @@
     },
     "p09": {
       "name": "박한주",
-      "number": 9,
+      "number": 10,
+      "mark": "박한주",
+      "mainPosition": "CDM",
+      "subPosition": "RW",
       "position": "MF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 1,
-        "goals": 2,
-        "assists": 0,
-        "momCount": 0
+        "appearances": 21,
+        "goals": 6,
+        "assists": 2,
+        "momCount": 1
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 1,
-          "goals": 2,
-          "assists": 0,
-          "momCount": 0
+          "appearances": 21,
+          "goals": 6,
+          "assists": 2,
+          "momCount": 1
         }
       }
     },
     "p10": {
-      "name": "신승민",
-      "number": 10,
-      "position": "MF",
+      "name": "유희창",
+      "number": 11,
+      "mark": "유희창",
+      "mainPosition": "CB",
+      "subPosition": "ST",
+      "position": "DF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 1,
-        "goals": 0,
-        "assists": 0,
+        "appearances": 19,
+        "goals": 9,
+        "assists": 2,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 1,
-          "goals": 0,
-          "assists": 0,
+          "appearances": 19,
+          "goals": 9,
+          "assists": 2,
           "momCount": 0
         }
       }
     },
     "p11": {
-      "name": "김청수",
-      "number": 11,
-      "position": "MF",
+      "name": "문종일",
+      "number": 12,
+      "mark": "문종일",
+      "mainPosition": "LW",
+      "subPosition": "RW",
+      "position": "FW",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 1,
-        "goals": 0,
+        "appearances": 20,
+        "goals": 5,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 1,
-          "goals": 0,
+          "appearances": 20,
+          "goals": 5,
           "assists": 0,
           "momCount": 0
         }
       }
     },
     "p12": {
-      "name": "박재익",
-      "number": 12,
-      "position": "MF",
+      "name": "김영우",
+      "number": 14,
+      "mark": "김영우",
+      "mainPosition": "LW",
+      "subPosition": "CAM",
+      "position": "FW",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
-        "goals": 0,
+        "appearances": 5,
+        "goals": 10,
         "assists": 0,
-        "momCount": 0
+        "momCount": 1
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
-          "goals": 0,
+          "appearances": 5,
+          "goals": 10,
           "assists": 0,
-          "momCount": 0
+          "momCount": 1
         }
       }
     },
     "p13": {
-      "name": "김산이",
-      "number": 13,
-      "position": "MF",
+      "name": "임상범",
+      "number": 15,
+      "mark": "S.B",
+      "mainPosition": "GK",
+      "subPosition": null,
+      "position": "GK",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 5,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 5,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -295,12 +347,588 @@
       }
     },
     "p14": {
-      "name": "김영우",
-      "number": 14,
+      "name": "김청수",
+      "number": 17,
+      "mark": "김청수",
+      "mainPosition": "CDM",
+      "subPosition": "CAM",
       "position": "MF",
       "preferredFoot": "R",
+      "isRegular": true,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 9,
+        "goals": 3,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 9,
+          "goals": 3,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p15": {
+      "name": "김성민",
+      "number": 19,
+      "mark": "김성민",
+      "mainPosition": "RB",
+      "subPosition": "CB",
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 8,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 8,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p16": {
+      "name": "윤범관",
+      "number": 21,
+      "mark": "윤범관",
+      "mainPosition": "CB",
+      "subPosition": "LW",
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 21,
+        "goals": 6,
+        "assists": 3,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 21,
+          "goals": 6,
+          "assists": 3,
+          "momCount": 0
+        }
+      }
+    },
+    "p17": {
+      "name": "한지민",
+      "number": 26,
+      "mark": "한지민",
+      "mainPosition": "CB",
+      "subPosition": null,
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 11,
+        "goals": 0,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 11,
+          "goals": 0,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p18": {
+      "name": "이호성",
+      "number": 28,
+      "mark": "이호성",
+      "mainPosition": "RB",
+      "subPosition": "LB",
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 7,
+        "goals": 1,
+        "assists": 2,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 7,
+          "goals": 1,
+          "assists": 2,
+          "momCount": 0
+        }
+      }
+    },
+    "p19": {
+      "name": "마진섭",
+      "number": 29,
+      "mark": "마진섭",
+      "mainPosition": "CDM",
+      "subPosition": "RB",
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 25,
+        "goals": 3,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 25,
+          "goals": 3,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p20": {
+      "name": "채재현",
+      "number": 52,
+      "mark": "채재현",
+      "mainPosition": "GK",
+      "subPosition": "LB",
+      "position": "GK",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 7,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 7,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p21": {
+      "name": "정순인",
+      "number": 77,
+      "mark": "정순인",
+      "mainPosition": "RW",
+      "subPosition": "LW",
+      "position": "FW",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 7,
+        "goals": 4,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 7,
+          "goals": 4,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p22": {
+      "name": "강상섭",
+      "number": 99,
+      "mark": "강상섭",
+      "mainPosition": "LB",
+      "subPosition": "RB",
+      "position": "DF",
+      "preferredFoot": "R",
+      "isRegular": true,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 26,
+        "goals": 6,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 26,
+          "goals": 6,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p23": {
+      "name": "권용재",
+      "number": null,
+      "mark": "권용재",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p24": {
+      "name": "이충환",
+      "number": null,
+      "mark": "이충환",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p25": {
+      "name": "안현수",
+      "number": null,
+      "mark": "안현수",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p26": {
+      "name": "김우재",
+      "number": null,
+      "mark": "김우재",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 6,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 6,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p27": {
+      "name": "정병진",
+      "number": null,
+      "mark": "정병진",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p28": {
+      "name": "김태원",
+      "number": null,
+      "mark": "김태원",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p29": {
+      "name": "정도현",
+      "number": null,
+      "mark": "정도현",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p30": {
+      "name": "조하영",
+      "number": null,
+      "mark": "조하영",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p31": {
+      "name": "도현친구",
+      "number": null,
+      "mark": "도현친구",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p32": {
+      "name": "이정윤",
+      "number": null,
+      "mark": "이정윤",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 3,
+        "goals": 0,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p33": {
+      "name": "이종주",
+      "number": null,
+      "mark": "이종주",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 0,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p34": {
+      "name": "김지웅",
+      "number": null,
+      "mark": "김지웅",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 3,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p35": {
+      "name": "한친윙",
+      "number": null,
+      "mark": "한친윙",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p36": {
+      "name": "한주친구",
+      "number": null,
+      "mark": "한주친구",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
         "appearances": 1,
         "goals": 1,
@@ -316,255 +944,17 @@
         }
       }
     },
-    "p15": {
-      "name": "정순인",
-      "number": 15,
+    "p37": {
+      "name": "진오친구",
+      "number": null,
+      "mark": "진오친구",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
+      "isRegular": false,
       "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 3,
-        "goals": 4,
-        "assists": 1,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 3,
-          "goals": 4,
-          "assists": 1,
-          "momCount": 0
-        }
-      }
-    },
-    "p16": {
-      "name": "김동민",
-      "number": 16,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 2,
-        "goals": 3,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 2,
-          "goals": 3,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p17": {
-      "name": "강상섭",
-      "number": 17,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 2,
-        "goals": 2,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 2,
-          "goals": 2,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p18": {
-      "name": "우재",
-      "number": 18,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p19": {
-      "name": "김성민",
-      "number": 19,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p20": {
-      "name": "김지웅",
-      "number": 20,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p21": {
-      "name": "김주현",
-      "number": 21,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p22": {
-      "name": "채재현",
-      "number": 22,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p23": {
-      "name": "한지민",
-      "number": 23,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p24": {
-      "name": "이수아",
-      "number": 24,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p25": {
-      "name": "문종일",
-      "number": 25,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
-      "stats": {
-        "appearances": 0,
-        "goals": 0,
-        "assists": 0,
-        "momCount": 0
-      },
-      "seasonStats": {
-        "s2526": {
-          "appearances": 0,
-          "goals": 0,
-          "assists": 0,
-          "momCount": 0
-        }
-      }
-    },
-    "p26": {
-      "name": "박준희",
-      "number": 26,
-      "position": "MF",
-      "preferredFoot": "R",
-      "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
       "stats": {
         "appearances": 1,
         "goals": 0,
@@ -580,13 +970,693 @@
         }
       }
     },
-    "p27": {
-      "name": "이호성",
-      "number": 27,
+    "p38": {
+      "name": "진오친구2",
+      "number": null,
+      "mark": "진오친구2",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
+      "isRegular": false,
       "active": true,
-      "joinedAt": 1760140800000,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p39": {
+      "name": "김주성",
+      "number": null,
+      "mark": "김주성",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 7,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 7,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p40": {
+      "name": "김동민",
+      "number": null,
+      "mark": "김동민",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 6,
+        "goals": 6,
+        "assists": 1,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 6,
+          "goals": 6,
+          "assists": 1,
+          "momCount": 0
+        }
+      }
+    },
+    "p41": {
+      "name": "유영진",
+      "number": null,
+      "mark": "유영진",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 4,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 4,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p42": {
+      "name": "김동희",
+      "number": null,
+      "mark": "김동희",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p43": {
+      "name": "박준희",
+      "number": null,
+      "mark": "박준희",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 4,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 4,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p44": {
+      "name": "고경철",
+      "number": null,
+      "mark": "고경철",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p45": {
+      "name": "이승엽",
+      "number": null,
+      "mark": "이승엽",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p46": {
+      "name": "김광현",
+      "number": null,
+      "mark": "김광현",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p47": {
+      "name": "이수아",
+      "number": null,
+      "mark": "이수아",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 2,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 2,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p48": {
+      "name": "남승재",
+      "number": null,
+      "mark": "남승재",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p49": {
+      "name": "이승욱",
+      "number": null,
+      "mark": "이승욱",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p50": {
+      "name": "오동석",
+      "number": null,
+      "mark": "오동석",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p51": {
+      "name": "오동석2",
+      "number": null,
+      "mark": "오동석2",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p52": {
+      "name": "키퍼용병",
+      "number": null,
+      "mark": "키퍼용병",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 3,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p53": {
+      "name": "이근우",
+      "number": null,
+      "mark": "이근우",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p54": {
+      "name": "송영희",
+      "number": null,
+      "mark": "송영희",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p55": {
+      "name": "장현민",
+      "number": null,
+      "mark": "장현민",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p56": {
+      "name": "강현구",
+      "number": null,
+      "mark": "강현구",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 2,
+        "goals": 3,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 2,
+          "goals": 3,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p57": {
+      "name": "한주승",
+      "number": null,
+      "mark": "한주승",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p58": {
+      "name": "송승우",
+      "number": null,
+      "mark": "송승우",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p59": {
+      "name": "김다원",
+      "number": null,
+      "mark": "김다원",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 4,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 4,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p60": {
+      "name": "진윤현",
+      "number": null,
+      "mark": "진윤현",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 0,
+        "goals": 1,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 0,
+          "goals": 1,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p61": {
+      "name": "준희형",
+      "number": null,
+      "mark": "준희형",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p62": {
+      "name": "종일용병",
+      "number": null,
+      "mark": "종일용병",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p63": {
+      "name": "한주지인",
+      "number": null,
+      "mark": "한주지인",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p64": {
+      "name": "도현이형",
+      "number": null,
+      "mark": "도현이형",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
         "appearances": 0,
         "goals": 0,
@@ -602,13 +1672,43 @@
         }
       }
     },
-    "p28": {
-      "name": "김성일",
-      "number": 28,
+    "p65": {
+      "name": "이제우",
+      "number": null,
+      "mark": "이제우",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 3,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p66": {
+      "name": "서건하",
+      "number": null,
+      "mark": "서건하",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
         "appearances": 0,
         "goals": 0,
@@ -624,13 +1724,43 @@
         }
       }
     },
-    "p29": {
-      "name": "빅토르안",
-      "number": 29,
+    "p67": {
+      "name": "김가빈",
+      "number": null,
+      "mark": "김가빈",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 3,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 3,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p68": {
+      "name": "임성훈",
+      "number": null,
+      "mark": "임성훈",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
         "appearances": 0,
         "goals": 0,
@@ -646,110 +1776,182 @@
         }
       }
     },
-    "p30": {
-      "name": "이재석",
-      "number": 30,
+    "p69": {
+      "name": "채경훈",
+      "number": null,
+      "mark": "채경훈",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 2,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 2,
           "goals": 0,
           "assists": 0,
           "momCount": 0
         }
       }
     },
-    "p31": {
-      "name": "정희수",
-      "number": 31,
+    "p70": {
+      "name": "정환교",
+      "number": null,
+      "mark": "정환교",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 1,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
         }
       }
     },
-    "p32": {
-      "name": "정병진",
-      "number": 32,
+    "p71": {
+      "name": "안윤태",
+      "number": null,
+      "mark": "안윤태",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 1,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
         }
       }
     },
-    "p33": {
-      "name": "태원",
-      "number": 33,
+    "p72": {
+      "name": "천희",
+      "number": null,
+      "mark": "천희",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 1,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
         }
       }
     },
-    "p34": {
-      "name": "김준우",
-      "number": 34,
+    "p73": {
+      "name": "이현진",
+      "number": null,
+      "mark": "이현진",
+      "mainPosition": null,
+      "subPosition": null,
       "position": "MF",
       "preferredFoot": "R",
-      "active": false,
-      "joinedAt": 1760140800000,
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
       "stats": {
-        "appearances": 0,
+        "appearances": 1,
         "goals": 0,
         "assists": 0,
         "momCount": 0
       },
       "seasonStats": {
         "s2526": {
-          "appearances": 0,
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p74": {
+      "name": "강순범",
+      "number": null,
+      "mark": "강순범",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
+          "goals": 0,
+          "assists": 0,
+          "momCount": 0
+        }
+      }
+    },
+    "p75": {
+      "name": "김성묵",
+      "number": null,
+      "mark": "김성묵",
+      "mainPosition": null,
+      "subPosition": null,
+      "position": "MF",
+      "preferredFoot": "R",
+      "isRegular": false,
+      "active": true,
+      "joinedAt": 1735689600000,
+      "stats": {
+        "appearances": 1,
+        "goals": 0,
+        "assists": 0,
+        "momCount": 0
+      },
+      "seasonStats": {
+        "s2526": {
+          "appearances": 1,
           "goals": 0,
           "assists": 0,
           "momCount": 0
@@ -760,9 +1962,3195 @@
   "matches": {
     "m01": {
       "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1737788400000,
+      "location": "초안산축구장",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 5,
+        "opponent": 3
+      },
+      "lineup": [
+        "p19",
+        "p16",
+        "p02",
+        "p06",
+        "p08",
+        "p03",
+        "p11",
+        "p17",
+        "p23",
+        "p07",
+        "p24",
+        "p09",
+        "p25"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": "p16",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": "p17",
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p07",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p23",
+          "assistPlayerId": "p06",
+          "quarter": 3
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p02",
+            "p06",
+            "p08",
+            "p03",
+            "p11",
+            "p17",
+            "p23",
+            "p07",
+            "p24",
+            "p09",
+            "p25"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": "p16"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p02",
+            "p06",
+            "p08",
+            "p03",
+            "p11",
+            "p17",
+            "p23",
+            "p07",
+            "p24",
+            "p09",
+            "p25"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": "p17"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p07",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p02",
+            "p06",
+            "p08",
+            "p03",
+            "p11",
+            "p17",
+            "p23",
+            "p07",
+            "p24",
+            "p09",
+            "p25"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p23",
+              "assistPlayerId": "p06"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p02",
+            "p06",
+            "p08",
+            "p03",
+            "p11",
+            "p17",
+            "p23",
+            "p07",
+            "p24",
+            "p09",
+            "p25"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1737788400000,
+      "updatedAt": 1737788400000
+    },
+    "m02": {
+      "seasonId": "s2526",
+      "opponent": "로랜드FC",
+      "date": 1738393200000,
+      "location": "마들스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 0,
+        "opponent": 4
+      },
+      "lineup": [
+        "p13",
+        "p26",
+        "p19",
+        "p02",
+        "p08",
+        "p16",
+        "p11",
+        "p22",
+        "p27",
+        "p14",
+        "p01",
+        "p09"
+      ],
+      "events": [],
+      "quarters": [
+        {
+          "lineup": [
+            "p13",
+            "p26",
+            "p19",
+            "p02",
+            "p08",
+            "p16",
+            "p11",
+            "p22",
+            "p27",
+            "p14",
+            "p01",
+            "p09"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p13",
+            "p26",
+            "p19",
+            "p02",
+            "p08",
+            "p16",
+            "p11",
+            "p22",
+            "p27",
+            "p14",
+            "p01",
+            "p09"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p13",
+            "p26",
+            "p19",
+            "p02",
+            "p08",
+            "p16",
+            "p11",
+            "p22",
+            "p27",
+            "p14",
+            "p01",
+            "p09"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p13",
+            "p26",
+            "p19",
+            "p02",
+            "p08",
+            "p16",
+            "p11",
+            "p22",
+            "p27",
+            "p14",
+            "p01",
+            "p09"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1738393200000,
+      "updatedAt": 1738393200000
+    },
+    "m03": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1738998000000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 2,
+        "opponent": 6
+      },
+      "lineup": [
+        "p08",
+        "p02",
+        "p19",
+        "p09",
+        "p16",
+        "p22",
+        "p15",
+        "p28",
+        "p05",
+        "p26",
+        "p11",
+        "p17",
+        "p03"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p22",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p02",
+          "assistPlayerId": "p09",
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p08",
+            "p02",
+            "p19",
+            "p09",
+            "p16",
+            "p22",
+            "p15",
+            "p28",
+            "p05",
+            "p26",
+            "p11",
+            "p17",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p08",
+            "p02",
+            "p19",
+            "p09",
+            "p16",
+            "p22",
+            "p15",
+            "p28",
+            "p05",
+            "p26",
+            "p11",
+            "p17",
+            "p03"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p08",
+            "p02",
+            "p19",
+            "p09",
+            "p16",
+            "p22",
+            "p15",
+            "p28",
+            "p05",
+            "p26",
+            "p11",
+            "p17",
+            "p03"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p08",
+            "p02",
+            "p19",
+            "p09",
+            "p16",
+            "p22",
+            "p15",
+            "p28",
+            "p05",
+            "p26",
+            "p11",
+            "p17",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p02",
+              "assistPlayerId": "p09"
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1738998000000,
+      "updatedAt": 1738998000000
+    },
+    "m04": {
+      "seasonId": "s2526",
+      "opponent": "권용재팀",
+      "date": 1739588400000,
+      "location": "미상",
+      "locationUrl": "",
+      "type": "friendly",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 0,
+        "opponent": 8
+      },
+      "lineup": [
+        "p06",
+        "p01",
+        "p22",
+        "p08",
+        "p16",
+        "p29",
+        "p30",
+        "p31"
+      ],
+      "events": [],
+      "quarters": [
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p01",
+            "p22",
+            "p08",
+            "p16",
+            "p29",
+            "p30",
+            "p31"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1739588400000,
+      "updatedAt": 1739588400000
+    },
+    "m05": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1740207600000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 6,
+        "opponent": 3
+      },
+      "lineup": [
+        "p05",
+        "p19",
+        "p16",
+        "p22",
+        "p02",
+        "p18",
+        "p17",
+        "p11",
+        "p01",
+        "p03",
+        "p09",
+        "p32",
+        "p33"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": "p01",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p22",
+          "assistPlayerId": "p19",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": "p01",
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": "p32",
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p22",
+          "assistPlayerId": "p33",
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p05",
+            "p19",
+            "p16",
+            "p22",
+            "p02",
+            "p18",
+            "p17",
+            "p11",
+            "p01",
+            "p03",
+            "p09",
+            "p32",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p09",
+              "assistPlayerId": "p01"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
+              "assistPlayerId": "p19"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p05",
+            "p19",
+            "p16",
+            "p22",
+            "p02",
+            "p18",
+            "p17",
+            "p11",
+            "p01",
+            "p03",
+            "p09",
+            "p32",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p05",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p05",
+              "assistPlayerId": "p01"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p05",
+            "p19",
+            "p16",
+            "p22",
+            "p02",
+            "p18",
+            "p17",
+            "p11",
+            "p01",
+            "p03",
+            "p09",
+            "p32",
+            "p33"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p05",
+            "p19",
+            "p16",
+            "p22",
+            "p02",
+            "p18",
+            "p17",
+            "p11",
+            "p01",
+            "p03",
+            "p09",
+            "p32",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p09",
+              "assistPlayerId": "p32"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
+              "assistPlayerId": "p33"
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1740207600000,
+      "updatedAt": 1740207600000
+    },
+    "m06": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1740812400000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 7,
+        "opponent": 6
+      },
+      "lineup": [
+        "p19",
+        "p10",
+        "p22",
+        "p13",
+        "p24",
+        "p06",
+        "p09",
+        "p02",
+        "p08",
+        "p14",
+        "p11",
+        "p01",
+        "p12",
+        "p15"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p02",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p10",
+            "p22",
+            "p13",
+            "p24",
+            "p06",
+            "p09",
+            "p02",
+            "p08",
+            "p14",
+            "p11",
+            "p01",
+            "p12",
+            "p15"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p10",
+            "p22",
+            "p13",
+            "p24",
+            "p06",
+            "p09",
+            "p02",
+            "p08",
+            "p14",
+            "p11",
+            "p01",
+            "p12",
+            "p15"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p10",
+            "p22",
+            "p13",
+            "p24",
+            "p06",
+            "p09",
+            "p02",
+            "p08",
+            "p14",
+            "p11",
+            "p01",
+            "p12",
+            "p15"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p10",
+            "p22",
+            "p13",
+            "p24",
+            "p06",
+            "p09",
+            "p02",
+            "p08",
+            "p14",
+            "p11",
+            "p01",
+            "p12",
+            "p15"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p08",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p02",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1740812400000,
+      "updatedAt": 1740812400000
+    },
+    "m07": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1742022000000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 3,
+        "opponent": 7
+      },
+      "lineup": [
+        "p19",
+        "p22",
+        "p06",
+        "p09",
+        "p34",
+        "p08",
+        "p01",
+        "p11",
+        "p17",
+        "p14",
+        "p02",
+        "p15",
+        "p35"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p14",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p09",
+            "p34",
+            "p08",
+            "p01",
+            "p11",
+            "p17",
+            "p14",
+            "p02",
+            "p15",
+            "p35"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p09",
+            "p34",
+            "p08",
+            "p01",
+            "p11",
+            "p17",
+            "p14",
+            "p02",
+            "p15",
+            "p35"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p09",
+            "p34",
+            "p08",
+            "p01",
+            "p11",
+            "p17",
+            "p14",
+            "p02",
+            "p15",
+            "p35"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p09",
+            "p34",
+            "p08",
+            "p01",
+            "p11",
+            "p17",
+            "p14",
+            "p02",
+            "p15",
+            "p35"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p14",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1742022000000,
+      "updatedAt": 1742022000000
+    },
+    "m08": {
+      "seasonId": "s2526",
+      "opponent": "EXFC",
+      "date": 1742713200000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 3,
+        "opponent": 4
+      },
+      "lineup": [
+        "p19",
+        "p22",
+        "p08",
+        "p11",
+        "p01",
+        "p16",
+        "p18",
+        "p17",
+        "p03",
+        "p32",
+        "p15",
+        "p02",
+        "p12",
+        "p28"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p01",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null,
+          "quarter": 3
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p08",
+            "p11",
+            "p01",
+            "p16",
+            "p18",
+            "p17",
+            "p03",
+            "p32",
+            "p15",
+            "p02",
+            "p12",
+            "p28"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p08",
+            "p11",
+            "p01",
+            "p16",
+            "p18",
+            "p17",
+            "p03",
+            "p32",
+            "p15",
+            "p02",
+            "p12",
+            "p28"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p01",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p08",
+            "p11",
+            "p01",
+            "p16",
+            "p18",
+            "p17",
+            "p03",
+            "p32",
+            "p15",
+            "p02",
+            "p12",
+            "p28"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p16",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p16",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p08",
+            "p11",
+            "p01",
+            "p16",
+            "p18",
+            "p17",
+            "p03",
+            "p32",
+            "p15",
+            "p02",
+            "p12",
+            "p28"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1742713200000,
+      "updatedAt": 1742713200000
+    },
+    "m09": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1743231600000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 1,
+        "opponent": 8
+      },
+      "lineup": [
+        "p22",
+        "p10",
+        "p19",
+        "p09",
+        "p08",
+        "p02",
+        "p14",
+        "p11",
+        "p17",
+        "p07",
+        "p36",
+        "p37",
+        "p38"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p36",
+          "assistPlayerId": null,
+          "quarter": 3
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p22",
+            "p10",
+            "p19",
+            "p09",
+            "p08",
+            "p02",
+            "p14",
+            "p11",
+            "p17",
+            "p07",
+            "p36",
+            "p37",
+            "p38"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p10",
+            "p19",
+            "p09",
+            "p08",
+            "p02",
+            "p14",
+            "p11",
+            "p17",
+            "p07",
+            "p36",
+            "p37",
+            "p38"
+          ],
+          "events": [],
+          "opponentScore": 4,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 4
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p10",
+            "p19",
+            "p09",
+            "p08",
+            "p02",
+            "p14",
+            "p11",
+            "p17",
+            "p07",
+            "p36",
+            "p37",
+            "p38"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p36",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p10",
+            "p19",
+            "p09",
+            "p08",
+            "p02",
+            "p14",
+            "p11",
+            "p17",
+            "p07",
+            "p36",
+            "p37",
+            "p38"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1743231600000,
+      "updatedAt": 1743231600000
+    },
+    "m10": {
+      "seasonId": "s2526",
+      "opponent": "클릭FC",
+      "date": 1745056800000,
+      "location": "다락원",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 2,
+        "opponent": 11
+      },
+      "lineup": [
+        "p19",
+        "p09",
+        "p10",
+        "p15",
+        "p08",
+        "p16",
+        "p14",
+        "p03",
+        "p20",
+        "p39",
+        "p40",
+        "p12",
+        "p11"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": "p14",
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": "p40",
+          "quarter": 2
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p09",
+            "p10",
+            "p15",
+            "p08",
+            "p16",
+            "p14",
+            "p03",
+            "p20",
+            "p39",
+            "p40",
+            "p12",
+            "p11"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p09",
+            "p10",
+            "p15",
+            "p08",
+            "p16",
+            "p14",
+            "p03",
+            "p20",
+            "p39",
+            "p40",
+            "p12",
+            "p11"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": "p14"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": "p40"
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p09",
+            "p10",
+            "p15",
+            "p08",
+            "p16",
+            "p14",
+            "p03",
+            "p20",
+            "p39",
+            "p40",
+            "p12",
+            "p11"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p09",
+            "p10",
+            "p15",
+            "p08",
+            "p16",
+            "p14",
+            "p03",
+            "p20",
+            "p39",
+            "p40",
+            "p12",
+            "p11"
+          ],
+          "events": [],
+          "opponentScore": 4,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 4
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1745056800000,
+      "updatedAt": 1745056800000
+    },
+    "m11": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1745650800000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 1,
+        "opponent": 8
+      },
+      "lineup": [
+        "p19",
+        "p22",
+        "p06",
+        "p26",
+        "p09",
+        "p10",
+        "p14",
+        "p17",
+        "p41",
+        "p39",
+        "p23",
+        "p08",
+        "p16",
+        "p20"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 3
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p26",
+            "p09",
+            "p10",
+            "p14",
+            "p17",
+            "p41",
+            "p39",
+            "p23",
+            "p08",
+            "p16",
+            "p20"
+          ],
+          "events": [],
+          "opponentScore": 4,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 4
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p26",
+            "p09",
+            "p10",
+            "p14",
+            "p17",
+            "p41",
+            "p39",
+            "p23",
+            "p08",
+            "p16",
+            "p20"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p26",
+            "p09",
+            "p10",
+            "p14",
+            "p17",
+            "p41",
+            "p39",
+            "p23",
+            "p08",
+            "p16",
+            "p20"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p26",
+            "p09",
+            "p10",
+            "p14",
+            "p17",
+            "p41",
+            "p39",
+            "p23",
+            "p08",
+            "p16",
+            "p20"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1745650800000,
+      "updatedAt": 1745650800000
+    },
+    "m12": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1746241200000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 6,
+        "opponent": 5
+      },
+      "lineup": [
+        "p06",
+        "p22",
+        "p14",
+        "p09",
+        "p03",
+        "p29",
+        "p10",
+        "p42",
+        "p39",
+        "p07",
+        "p16",
+        "p08",
+        "p43",
+        "p13",
+        "p44"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p42",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p42",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p14",
+          "assistPlayerId": "p10",
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p14",
+          "assistPlayerId": "p09",
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p06",
+            "p22",
+            "p14",
+            "p09",
+            "p03",
+            "p29",
+            "p10",
+            "p42",
+            "p39",
+            "p07",
+            "p16",
+            "p08",
+            "p43",
+            "p13",
+            "p44"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p22",
+            "p14",
+            "p09",
+            "p03",
+            "p29",
+            "p10",
+            "p42",
+            "p39",
+            "p07",
+            "p16",
+            "p08",
+            "p43",
+            "p13",
+            "p44"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p42",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p42",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p22",
+            "p14",
+            "p09",
+            "p03",
+            "p29",
+            "p10",
+            "p42",
+            "p39",
+            "p07",
+            "p16",
+            "p08",
+            "p43",
+            "p13",
+            "p44"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p14",
+              "assistPlayerId": "p10"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p14",
+              "assistPlayerId": "p09"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p06",
+            "p22",
+            "p14",
+            "p09",
+            "p03",
+            "p29",
+            "p10",
+            "p42",
+            "p39",
+            "p07",
+            "p16",
+            "p08",
+            "p43",
+            "p13",
+            "p44"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p09",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1746241200000,
+      "updatedAt": 1746241200000
+    },
+    "m14": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1748070000000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 1,
+        "opponent": 7
+      },
+      "lineup": [
+        "p45",
+        "p19",
+        "p22",
+        "p09",
+        "p06",
+        "p39",
+        "p03",
+        "p08",
+        "p13",
+        "p11",
+        "p02",
+        "p46",
+        "p26",
+        "p40"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p40",
+          "assistPlayerId": null,
+          "quarter": 2
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p45",
+            "p19",
+            "p22",
+            "p09",
+            "p06",
+            "p39",
+            "p03",
+            "p08",
+            "p13",
+            "p11",
+            "p02",
+            "p46",
+            "p26",
+            "p40"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p45",
+            "p19",
+            "p22",
+            "p09",
+            "p06",
+            "p39",
+            "p03",
+            "p08",
+            "p13",
+            "p11",
+            "p02",
+            "p46",
+            "p26",
+            "p40"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p40",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p45",
+            "p19",
+            "p22",
+            "p09",
+            "p06",
+            "p39",
+            "p03",
+            "p08",
+            "p13",
+            "p11",
+            "p02",
+            "p46",
+            "p26",
+            "p40"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p45",
+            "p19",
+            "p22",
+            "p09",
+            "p06",
+            "p39",
+            "p03",
+            "p08",
+            "p13",
+            "p11",
+            "p02",
+            "p46",
+            "p26",
+            "p40"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1748070000000,
+      "updatedAt": 1748070000000
+    },
+    "m15": {
+      "seasonId": "s2526",
+      "opponent": "박한주와친구들",
+      "date": 1749283200000,
+      "location": "창골풋살장",
+      "locationUrl": "",
+      "type": "friendly",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 9,
+        "opponent": 11
+      },
+      "lineup": [
+        "p22",
+        "p19",
+        "p06",
+        "p34",
+        "p47",
+        "p11",
+        "p03"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p11",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p03",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p19",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p19",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 5
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p47",
+          "assistPlayerId": null,
+          "quarter": 5
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p47",
+          "assistPlayerId": null,
+          "quarter": 6
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p11",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p03",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 4,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p19",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p19",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p47",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p06",
+            "p34",
+            "p47",
+            "p11",
+            "p03"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p47",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1749283200000,
+      "updatedAt": 1749283200000
+    },
+    "m16": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1751094000000,
+      "location": "초안산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 4,
+        "opponent": 8
+      },
+      "lineup": [
+        "p22",
+        "p19",
+        "p18",
+        "p16",
+        "p15",
+        "p17",
+        "p14",
+        "p11",
+        "p10",
+        "p20",
+        "p26",
+        "p46",
+        "p33"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p26",
+          "assistPlayerId": "p18",
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p11",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p11",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p18",
+            "p16",
+            "p15",
+            "p17",
+            "p14",
+            "p11",
+            "p10",
+            "p20",
+            "p26",
+            "p46",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p16",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p18",
+            "p16",
+            "p15",
+            "p17",
+            "p14",
+            "p11",
+            "p10",
+            "p20",
+            "p26",
+            "p46",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p26",
+              "assistPlayerId": "p18"
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p18",
+            "p16",
+            "p15",
+            "p17",
+            "p14",
+            "p11",
+            "p10",
+            "p20",
+            "p26",
+            "p46",
+            "p33"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p19",
+            "p18",
+            "p16",
+            "p15",
+            "p17",
+            "p14",
+            "p11",
+            "p10",
+            "p20",
+            "p26",
+            "p46",
+            "p33"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p11",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p11",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1751094000000,
+      "updatedAt": 1751094000000
+    },
+    "m17": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1757142000000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 4,
+        "opponent": 7
+      },
+      "lineup": [
+        "p19",
+        "p06",
+        "p41",
+        "p11",
+        "p17",
+        "p22",
+        "p01",
+        "p10",
+        "p20",
+        "p21",
+        "p39",
+        "p16",
+        "p48"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p19",
+          "assistPlayerId": "p06",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": "p18",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p41",
+          "assistPlayerId": "p16",
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p41",
+            "p11",
+            "p17",
+            "p22",
+            "p01",
+            "p10",
+            "p20",
+            "p21",
+            "p39",
+            "p16",
+            "p48"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p19",
+              "assistPlayerId": "p06"
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": "p18"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p41",
+            "p11",
+            "p17",
+            "p22",
+            "p01",
+            "p10",
+            "p20",
+            "p21",
+            "p39",
+            "p16",
+            "p48"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p41",
+            "p11",
+            "p17",
+            "p22",
+            "p01",
+            "p10",
+            "p20",
+            "p21",
+            "p39",
+            "p16",
+            "p48"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p41",
+            "p11",
+            "p17",
+            "p22",
+            "p01",
+            "p10",
+            "p20",
+            "p21",
+            "p39",
+            "p16",
+            "p48"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p41",
+              "assistPlayerId": "p16"
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1757142000000,
+      "updatedAt": 1757142000000
+    },
+    "m19": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1759561200000,
+      "location": "수락산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 6,
+        "opponent": 2
+      },
+      "lineup": [
+        "p19",
+        "p06",
+        "p09",
+        "p41",
+        "p13",
+        "p01",
+        "p10",
+        "p22",
+        "p18",
+        "p11",
+        "p21",
+        "p04"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p18",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p06",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p09",
+            "p41",
+            "p13",
+            "p01",
+            "p10",
+            "p22",
+            "p18",
+            "p11",
+            "p21",
+            "p04"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p18",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p06",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 5,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p09",
+            "p41",
+            "p13",
+            "p01",
+            "p10",
+            "p22",
+            "p18",
+            "p11",
+            "p21",
+            "p04"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p09",
+            "p41",
+            "p13",
+            "p01",
+            "p10",
+            "p22",
+            "p18",
+            "p11",
+            "p21",
+            "p04"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p06",
+            "p09",
+            "p41",
+            "p13",
+            "p01",
+            "p10",
+            "p22",
+            "p18",
+            "p11",
+            "p21",
+            "p04"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p08",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1759561200000,
+      "updatedAt": 1759561200000
+    },
+    "m20": {
+      "seasonId": "s2526",
       "opponent": "삼미FC",
       "date": 1761955200000,
-      "location": "창골축구장",
+      "location": "창골운동장",
       "locationUrl": "",
       "type": "league",
       "status": "finished",
@@ -773,20 +5161,24 @@
       "lineup": [
         "p06",
         "p07",
-        "p01",
-        "p02",
-        "p05",
-        "p17",
-        "p03",
         "p10",
-        "p26",
-        "p11"
+        "p19",
+        "p08",
+        "p22",
+        "p16",
+        "p01",
+        "p43",
+        "p14",
+        "p49",
+        "p50",
+        "p51",
+        "p52"
       ],
       "events": [
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p05",
+          "playerId": "p08",
           "assistPlayerId": null,
           "quarter": 4
         }
@@ -796,14 +5188,18 @@
           "lineup": [
             "p06",
             "p07",
-            "p01",
-            "p02",
-            "p05",
-            "p17",
-            "p03",
             "p10",
-            "p26",
-            "p11"
+            "p19",
+            "p08",
+            "p22",
+            "p16",
+            "p01",
+            "p43",
+            "p14",
+            "p49",
+            "p50",
+            "p51",
+            "p52"
           ],
           "events": [],
           "opponentScore": 2,
@@ -818,14 +5214,18 @@
           "lineup": [
             "p06",
             "p07",
-            "p01",
-            "p02",
-            "p05",
-            "p17",
-            "p03",
             "p10",
-            "p26",
-            "p11"
+            "p19",
+            "p08",
+            "p22",
+            "p16",
+            "p01",
+            "p43",
+            "p14",
+            "p49",
+            "p50",
+            "p51",
+            "p52"
           ],
           "events": [],
           "opponentScore": 1,
@@ -840,14 +5240,18 @@
           "lineup": [
             "p06",
             "p07",
-            "p01",
-            "p02",
-            "p05",
-            "p17",
-            "p03",
             "p10",
-            "p26",
-            "p11"
+            "p19",
+            "p08",
+            "p22",
+            "p16",
+            "p01",
+            "p43",
+            "p14",
+            "p49",
+            "p50",
+            "p51",
+            "p52"
           ],
           "events": [],
           "opponentScore": 1,
@@ -862,20 +5266,24 @@
           "lineup": [
             "p06",
             "p07",
-            "p01",
-            "p02",
-            "p05",
-            "p17",
-            "p03",
             "p10",
-            "p26",
-            "p11"
+            "p19",
+            "p08",
+            "p22",
+            "p16",
+            "p01",
+            "p43",
+            "p14",
+            "p49",
+            "p50",
+            "p51",
+            "p52"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p05",
+              "playerId": "p08",
               "assistPlayerId": null
             }
           ],
@@ -889,12 +5297,347 @@
         }
       ],
       "momPlayerId": null,
-      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
       "createdAt": 1761955200000,
       "updatedAt": 1761955200000
     },
-    "m02": {
+    "m21": {
+      "seasonId": "s2526",
+      "opponent": "삼미FC",
+      "date": 1762563600000,
+      "location": "마들스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 0,
+        "opponent": 5
+      },
+      "lineup": [
+        "p07",
+        "p10",
+        "p19",
+        "p08",
+        "p09",
+        "p20",
+        "p16",
+        "p34",
+        "p15",
+        "p21",
+        "p03",
+        "p22",
+        "p53",
+        "p54",
+        "p55",
+        "p56"
+      ],
+      "events": [],
+      "quarters": [
+        {
+          "lineup": [
+            "p07",
+            "p10",
+            "p19",
+            "p08",
+            "p09",
+            "p20",
+            "p16",
+            "p34",
+            "p15",
+            "p21",
+            "p03",
+            "p22",
+            "p53",
+            "p54",
+            "p55",
+            "p56"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p07",
+            "p10",
+            "p19",
+            "p08",
+            "p09",
+            "p20",
+            "p16",
+            "p34",
+            "p15",
+            "p21",
+            "p03",
+            "p22",
+            "p53",
+            "p54",
+            "p55",
+            "p56"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p07",
+            "p10",
+            "p19",
+            "p08",
+            "p09",
+            "p20",
+            "p16",
+            "p34",
+            "p15",
+            "p21",
+            "p03",
+            "p22",
+            "p53",
+            "p54",
+            "p55",
+            "p56"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p07",
+            "p10",
+            "p19",
+            "p08",
+            "p09",
+            "p20",
+            "p16",
+            "p34",
+            "p15",
+            "p21",
+            "p03",
+            "p22",
+            "p53",
+            "p54",
+            "p55",
+            "p56"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1762563600000,
+      "updatedAt": 1762563600000
+    },
+    "m22": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1763197200000,
+      "location": "불암산스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 3,
+        "opponent": 6
+      },
+      "lineup": [
+        "p19",
+        "p22",
+        "p06",
+        "p10",
+        "p16",
+        "p08",
+        "p11",
+        "p09",
+        "p21",
+        "p57",
+        "p41",
+        "p39",
+        "p40",
+        "p58"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p11",
+          "assistPlayerId": "p16",
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p11",
+            "p09",
+            "p21",
+            "p57",
+            "p41",
+            "p39",
+            "p40",
+            "p58"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p11",
+              "assistPlayerId": "p16"
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p11",
+            "p09",
+            "p21",
+            "p57",
+            "p41",
+            "p39",
+            "p40",
+            "p58"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p11",
+            "p09",
+            "p21",
+            "p57",
+            "p41",
+            "p39",
+            "p40",
+            "p58"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p08",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p11",
+            "p09",
+            "p21",
+            "p57",
+            "p41",
+            "p39",
+            "p40",
+            "p58"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p08",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1763197200000,
+      "updatedAt": 1763197200000
+    },
+    "m23": {
       "seasonId": "s2526",
       "opponent": "국대FC",
       "date": 1764414000000,
@@ -904,43 +5647,49 @@
       "status": "finished",
       "score": {
         "dokkaebi": 9,
-        "opponent": 4
+        "opponent": 9
       },
       "lineup": [
-        "p05",
-        "p14",
-        "p15",
+        "p19",
+        "p22",
+        "p06",
+        "p10",
+        "p16",
+        "p08",
+        "p09",
+        "p21",
         "p07",
+        "p03",
+        "p12",
         "p01",
-        "p17",
-        "p04"
+        "p20"
       ],
       "events": [
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p05",
+          "playerId": "p08",
           "assistPlayerId": null,
           "quarter": 1
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p14",
+          "playerId": "p12",
           "assistPlayerId": null,
           "quarter": 1
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p15",
+          "playerId": "p21",
           "assistPlayerId": null,
           "quarter": 1
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p15",
+          "playerId": "p21",
           "assistPlayerId": null,
           "quarter": 1
         },
@@ -954,28 +5703,28 @@
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 2
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p17",
+          "playerId": "p22",
           "assistPlayerId": null,
           "quarter": 3
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p17",
+          "playerId": "p22",
           "assistPlayerId": null,
           "quarter": 3
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p04",
+          "playerId": "p03",
           "assistPlayerId": null,
           "quarter": 3
         }
@@ -983,34 +5732,43 @@
       "quarters": [
         {
           "lineup": [
-            "p05",
-            "p14",
-            "p15",
-            "p07"
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p09",
+            "p21",
+            "p07",
+            "p03",
+            "p12",
+            "p01",
+            "p20"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p05",
+              "playerId": "p08",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p14",
+              "playerId": "p12",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p15",
+              "playerId": "p21",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p15",
+              "playerId": "p21",
               "assistPlayerId": null
             },
             {
@@ -1030,13 +5788,222 @@
         },
         {
           "lineup": [
-            "p01"
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p09",
+            "p21",
+            "p07",
+            "p03",
+            "p12",
+            "p01",
+            "p20"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p09",
+            "p21",
+            "p07",
+            "p03",
+            "p12",
+            "p01",
+            "p20"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p03",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 3,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p06",
+            "p10",
+            "p16",
+            "p08",
+            "p09",
+            "p21",
+            "p07",
+            "p03",
+            "p12",
+            "p01",
+            "p20"
+          ],
+          "events": [],
+          "opponentScore": 4,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 4
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": "p12",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1764414000000,
+      "updatedAt": 1764414000000
+    },
+    "m24": {
+      "seasonId": "s2526",
+      "opponent": "EX FC",
+      "date": 1766919600000,
+      "location": "미상",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 4,
+        "opponent": 5
+      },
+      "lineup": [
+        "p05",
+        "p22",
+        "p26",
+        "p08",
+        "p32"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p22",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p05",
+            "p22",
+            "p26",
+            "p08",
+            "p32"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p05",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p05",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p05",
+            "p22",
+            "p26",
+            "p08",
+            "p32"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p05",
+            "p22",
+            "p26",
+            "p08",
+            "p32"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p22",
               "assistPlayerId": null
             }
           ],
@@ -1050,39 +6017,217 @@
         },
         {
           "lineup": [
-            "p17",
-            "p04"
+            "p05",
+            "p22",
+            "p26",
+            "p08",
+            "p32"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p17",
-              "assistPlayerId": null
-            },
-            {
-              "minute": 0,
-              "type": "goal",
-              "playerId": "p17",
-              "assistPlayerId": null
-            },
-            {
-              "minute": 0,
-              "type": "goal",
-              "playerId": "p04",
+              "playerId": "p08",
               "assistPlayerId": null
             }
           ],
-          "opponentScore": 2,
+          "opponentScore": 1,
           "score": {
-            "dokkaebi": 3,
-            "opponent": 2
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1766919600000,
+      "updatedAt": 1766919600000
+    },
+    "m25": {
+      "seasonId": "s2526",
+      "opponent": "국대FC",
+      "date": 1768633200000,
+      "location": "불암산스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 8,
+        "opponent": 1
+      },
+      "lineup": [
+        "p16",
+        "p11",
+        "p08",
+        "p59"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p11",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p59",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p59",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p59",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p59",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p08",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p60",
+          "assistPlayerId": null,
+          "quarter": 3
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p16",
+            "p11",
+            "p08",
+            "p59"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p16",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p11",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
           },
           "formation": null,
           "positions": {}
         },
         {
-          "lineup": [],
+          "lineup": [
+            "p16",
+            "p11",
+            "p08",
+            "p59"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p16",
+            "p11",
+            "p08",
+            "p59"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p59",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p59",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p59",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p59",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p08",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p60",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 6,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p16",
+            "p11",
+            "p08",
+            "p59"
+          ],
           "events": [],
           "opponentScore": 1,
           "score": {
@@ -1094,14 +6239,643 @@
         }
       ],
       "momPlayerId": null,
-      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
-      "createdAt": 1764414000000,
-      "updatedAt": 1764414000000
+      "createdAt": 1768633200000,
+      "updatedAt": 1768633200000
     },
-    "m03": {
+    "m26": {
       "seasonId": "s2526",
       "opponent": "국대FC",
+      "date": 1769842800000,
+      "location": "불암산스타디움",
+      "locationUrl": "",
+      "type": "league",
+      "status": "scheduled",
+      "score": {
+        "dokkaebi": null,
+        "opponent": null
+      },
+      "lineup": [
+        "p10",
+        "p08",
+        "p11",
+        "p22",
+        "p16",
+        "p01",
+        "p18",
+        "p27",
+        "p19",
+        "p20",
+        "p17",
+        "p53"
+      ],
+      "events": [],
+      "quarters": [],
+      "momPlayerId": null,
+      "notes": "",
+      "createdBy": "system",
+      "createdAt": 1769842800000,
+      "updatedAt": 1769842800000
+    },
+    "m27": {
+      "seasonId": "s2526",
+      "opponent": "RC FC",
+      "date": 1772262000000,
+      "location": "미상",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 0,
+        "opponent": 3
+      },
+      "lineup": [
+        "p19",
+        "p16",
+        "p10",
+        "p18",
+        "p22",
+        "p11",
+        "p07",
+        "p08",
+        "p09",
+        "p03",
+        "p02",
+        "p61",
+        "p62",
+        "p63"
+      ],
+      "events": [],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p10",
+            "p18",
+            "p22",
+            "p11",
+            "p07",
+            "p08",
+            "p09",
+            "p03",
+            "p02",
+            "p61",
+            "p62",
+            "p63"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p10",
+            "p18",
+            "p22",
+            "p11",
+            "p07",
+            "p08",
+            "p09",
+            "p03",
+            "p02",
+            "p61",
+            "p62",
+            "p63"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p10",
+            "p18",
+            "p22",
+            "p11",
+            "p07",
+            "p08",
+            "p09",
+            "p03",
+            "p02",
+            "p61",
+            "p62",
+            "p63"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p16",
+            "p10",
+            "p18",
+            "p22",
+            "p11",
+            "p07",
+            "p08",
+            "p09",
+            "p03",
+            "p02",
+            "p61",
+            "p62",
+            "p63"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": "p09",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1772262000000,
+      "updatedAt": 1772262000000
+    },
+    "m28": {
+      "seasonId": "s2526",
+      "opponent": "덕선FC",
+      "date": 1773450000000,
+      "location": "불암산",
+      "locationUrl": "",
+      "type": "league",
+      "status": "scheduled",
+      "score": {
+        "dokkaebi": null,
+        "opponent": null
+      },
+      "lineup": [
+        "p19",
+        "p16",
+        "p10",
+        "p07",
+        "p22",
+        "p01",
+        "p08",
+        "p03",
+        "p64",
+        "p61",
+        "p65",
+        "p66",
+        "p67",
+        "p68"
+      ],
+      "events": [],
+      "quarters": [],
+      "momPlayerId": null,
+      "notes": "",
+      "createdBy": "system",
+      "createdAt": 1773450000000,
+      "updatedAt": 1773450000000
+    },
+    "m29": {
+      "seasonId": "s2526",
+      "opponent": "한아름축구단",
+      "date": 1774742400000,
+      "location": "번동중학교",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 6,
+        "opponent": 7
+      },
+      "lineup": [
+        "p22",
+        "p07",
+        "p10",
+        "p19",
+        "p03",
+        "p15",
+        "p12",
+        "p08",
+        "p16",
+        "p11",
+        "p17",
+        "p40",
+        "p01"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p40",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p40",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p10",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 5
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p12",
+          "assistPlayerId": null,
+          "quarter": 5
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p22",
+            "p07",
+            "p10",
+            "p19",
+            "p03",
+            "p15",
+            "p12",
+            "p08",
+            "p16",
+            "p11",
+            "p17",
+            "p40",
+            "p01"
+          ],
+          "events": [],
+          "opponentScore": 4,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 4
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p07",
+            "p10",
+            "p19",
+            "p03",
+            "p15",
+            "p12",
+            "p08",
+            "p16",
+            "p11",
+            "p17",
+            "p40",
+            "p01"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p40",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p07",
+            "p10",
+            "p19",
+            "p03",
+            "p15",
+            "p12",
+            "p08",
+            "p16",
+            "p11",
+            "p17",
+            "p40",
+            "p01"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p40",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p10",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 3,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p07",
+            "p10",
+            "p19",
+            "p03",
+            "p15",
+            "p12",
+            "p08",
+            "p16",
+            "p11",
+            "p17",
+            "p40",
+            "p01"
+          ],
+          "events": [],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p22",
+            "p07",
+            "p10",
+            "p19",
+            "p03",
+            "p15",
+            "p12",
+            "p08",
+            "p16",
+            "p11",
+            "p17",
+            "p40",
+            "p01"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p12",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1774742400000,
+      "updatedAt": 1774742400000
+    },
+    "m30": {
+      "seasonId": "s2526",
+      "opponent": "삼미FC",
+      "date": 1775260800000,
+      "location": "창골운동장",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 2,
+        "opponent": 7
+      },
+      "lineup": [
+        "p19",
+        "p22",
+        "p18",
+        "p06",
+        "p09",
+        "p08",
+        "p07",
+        "p01",
+        "p05",
+        "p69",
+        "p67",
+        "p65",
+        "p70",
+        "p71",
+        "p52"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p05",
+          "assistPlayerId": null,
+          "quarter": 1
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p18",
+            "p06",
+            "p09",
+            "p08",
+            "p07",
+            "p01",
+            "p05",
+            "p69",
+            "p67",
+            "p65",
+            "p70",
+            "p71",
+            "p52"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p05",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p18",
+            "p06",
+            "p09",
+            "p08",
+            "p07",
+            "p01",
+            "p05",
+            "p69",
+            "p67",
+            "p65",
+            "p70",
+            "p71",
+            "p52"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p18",
+            "p06",
+            "p09",
+            "p08",
+            "p07",
+            "p01",
+            "p05",
+            "p69",
+            "p67",
+            "p65",
+            "p70",
+            "p71",
+            "p52"
+          ],
+          "events": [],
+          "opponentScore": 3,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 3
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p19",
+            "p22",
+            "p18",
+            "p06",
+            "p09",
+            "p08",
+            "p07",
+            "p01",
+            "p05",
+            "p69",
+            "p67",
+            "p65",
+            "p70",
+            "p71",
+            "p52"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p09",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1775260800000,
+      "updatedAt": 1775260800000
+    },
+    "m31": {
+      "seasonId": "s2526",
+      "opponent": "FC국대",
       "date": 1776502800000,
       "location": "초안산",
       "locationUrl": "",
@@ -1112,16 +6886,25 @@
         "opponent": 3
       },
       "lineup": [
-        "p01",
+        "p07",
+        "p10",
         "p09",
+        "p16",
+        "p03",
+        "p01",
         "p06",
-        "p16"
+        "p22",
+        "p40",
+        "p39",
+        "p65",
+        "p67",
+        "p43"
       ],
       "events": [
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 1
         },
@@ -1142,14 +6925,21 @@
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 2
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p40",
           "assistPlayerId": null,
           "quarter": 2
         },
@@ -1157,27 +6947,20 @@
           "minute": 0,
           "type": "goal",
           "playerId": "p16",
-          "assistPlayerId": null,
-          "quarter": 2
-        },
-        {
-          "minute": 0,
-          "type": "goal",
-          "playerId": "p09",
           "assistPlayerId": null,
           "quarter": 3
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 4
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p16",
+          "playerId": "p40",
           "assistPlayerId": null,
           "quarter": 4
         }
@@ -1185,15 +6968,25 @@
       "quarters": [
         {
           "lineup": [
-            "p01",
+            "p07",
+            "p10",
             "p09",
-            "p06"
+            "p16",
+            "p03",
+            "p01",
+            "p06",
+            "p22",
+            "p40",
+            "p39",
+            "p65",
+            "p67",
+            "p43"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             },
             {
@@ -1219,26 +7012,37 @@
         },
         {
           "lineup": [
+            "p07",
+            "p10",
+            "p09",
+            "p16",
+            "p03",
             "p01",
-            "p16"
+            "p06",
+            "p22",
+            "p40",
+            "p39",
+            "p65",
+            "p67",
+            "p43"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p16",
+              "playerId": "p40",
               "assistPlayerId": null
             }
           ],
@@ -1252,13 +7056,25 @@
         },
         {
           "lineup": [
-            "p09"
+            "p07",
+            "p10",
+            "p09",
+            "p16",
+            "p03",
+            "p01",
+            "p06",
+            "p22",
+            "p40",
+            "p39",
+            "p65",
+            "p67",
+            "p43"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p09",
+              "playerId": "p16",
               "assistPlayerId": null
             }
           ],
@@ -1272,20 +7088,31 @@
         },
         {
           "lineup": [
+            "p07",
+            "p10",
+            "p09",
+            "p16",
+            "p03",
             "p01",
-            "p16"
+            "p06",
+            "p22",
+            "p40",
+            "p39",
+            "p65",
+            "p67",
+            "p43"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p16",
+              "playerId": "p40",
               "assistPlayerId": null
             }
           ],
@@ -1299,12 +7126,12 @@
         }
       ],
       "momPlayerId": null,
-      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
       "createdAt": 1776502800000,
       "updatedAt": 1776502800000
     },
-    "m04": {
+    "m32": {
       "seasonId": "s2526",
       "opponent": "원스FC",
       "date": 1777107600000,
@@ -1317,35 +7144,38 @@
         "opponent": 12
       },
       "lineup": [
-        "p15",
-        "p01"
+        "p10",
+        "p21"
       ],
       "events": [
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p15",
-          "assistPlayerId": "p01",
+          "playerId": "p21",
+          "assistPlayerId": "p10",
           "quarter": 2
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
-          "assistPlayerId": "p15",
+          "playerId": "p10",
+          "assistPlayerId": "p21",
           "quarter": 2
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 4
         }
       ],
       "quarters": [
         {
-          "lineup": [],
+          "lineup": [
+            "p10",
+            "p21"
+          ],
           "events": [],
           "opponentScore": 2,
           "score": {
@@ -1357,21 +7187,21 @@
         },
         {
           "lineup": [
-            "p15",
-            "p01"
+            "p10",
+            "p21"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p15",
-              "assistPlayerId": "p01"
+              "playerId": "p21",
+              "assistPlayerId": "p10"
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
-              "assistPlayerId": "p15"
+              "playerId": "p10",
+              "assistPlayerId": "p21"
             }
           ],
           "opponentScore": 6,
@@ -1383,7 +7213,10 @@
           "positions": {}
         },
         {
-          "lineup": [],
+          "lineup": [
+            "p10",
+            "p21"
+          ],
           "events": [],
           "opponentScore": 2,
           "score": {
@@ -1395,13 +7228,14 @@
         },
         {
           "lineup": [
-            "p01"
+            "p10",
+            "p21"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             }
           ],
@@ -1415,16 +7249,79 @@
         }
       ],
       "momPlayerId": null,
-      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
       "createdAt": 1777107600000,
       "updatedAt": 1777107600000
     },
-    "m05": {
+    "m33": {
+      "seasonId": "s2526",
+      "opponent": "FK리버스",
+      "date": 1778284800000,
+      "location": "창골축구장",
+      "locationUrl": "",
+      "type": "league",
+      "status": "finished",
+      "score": {
+        "dokkaebi": 0,
+        "opponent": 2
+      },
+      "lineup": [
+        "p10",
+        "p22",
+        "p07",
+        "p09",
+        "p03",
+        "p01",
+        "p08",
+        "p17",
+        "p19",
+        "p11",
+        "p72",
+        "p65",
+        "p67",
+        "p69"
+      ],
+      "events": [],
+      "quarters": [
+        {
+          "lineup": [
+            "p10",
+            "p22",
+            "p07",
+            "p09",
+            "p03",
+            "p01",
+            "p08",
+            "p17",
+            "p19",
+            "p11",
+            "p72",
+            "p65",
+            "p67",
+            "p69"
+          ],
+          "events": [],
+          "opponentScore": 2,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 2
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
+      "momPlayerId": null,
+      "notes": "카카오/인스타 기록 기반 자동 등록",
+      "createdBy": "system",
+      "createdAt": 1778284800000,
+      "updatedAt": 1778284800000
+    },
+    "m34": {
       "seasonId": "s2526",
       "opponent": "국대FC",
       "date": 1778925600000,
-      "location": "다락원체육공원축구장",
+      "location": "다락원체육공원",
       "locationUrl": "",
       "type": "league",
       "status": "finished",
@@ -1433,16 +7330,26 @@
         "opponent": 8
       },
       "lineup": [
-        "p16",
+        "p10",
         "p06",
+        "p19",
+        "p22",
+        "p11",
         "p01",
-        "p15"
+        "p09",
+        "p18",
+        "p03",
+        "p21",
+        "p08",
+        "p73",
+        "p40",
+        "p16"
       ],
       "events": [
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p16",
+          "playerId": "p40",
           "assistPlayerId": null,
           "quarter": 1
         },
@@ -1463,14 +7370,14 @@
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p01",
+          "playerId": "p10",
           "assistPlayerId": null,
           "quarter": 3
         },
         {
           "minute": 0,
           "type": "goal",
-          "playerId": "p15",
+          "playerId": "p21",
           "assistPlayerId": null,
           "quarter": 3
         }
@@ -1478,13 +7385,26 @@
       "quarters": [
         {
           "lineup": [
+            "p10",
+            "p06",
+            "p19",
+            "p22",
+            "p11",
+            "p01",
+            "p09",
+            "p18",
+            "p03",
+            "p21",
+            "p08",
+            "p73",
+            "p40",
             "p16"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p16",
+              "playerId": "p40",
               "assistPlayerId": null
             }
           ],
@@ -1498,7 +7418,20 @@
         },
         {
           "lineup": [
-            "p06"
+            "p10",
+            "p06",
+            "p19",
+            "p22",
+            "p11",
+            "p01",
+            "p09",
+            "p18",
+            "p03",
+            "p21",
+            "p08",
+            "p73",
+            "p40",
+            "p16"
           ],
           "events": [
             {
@@ -1524,20 +7457,32 @@
         },
         {
           "lineup": [
+            "p10",
+            "p06",
+            "p19",
+            "p22",
+            "p11",
             "p01",
-            "p15"
+            "p09",
+            "p18",
+            "p03",
+            "p21",
+            "p08",
+            "p73",
+            "p40",
+            "p16"
           ],
           "events": [
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p01",
+              "playerId": "p10",
               "assistPlayerId": null
             },
             {
               "minute": 0,
               "type": "goal",
-              "playerId": "p15",
+              "playerId": "p21",
               "assistPlayerId": null
             }
           ],
@@ -1550,7 +7495,22 @@
           "positions": {}
         },
         {
-          "lineup": [],
+          "lineup": [
+            "p10",
+            "p06",
+            "p19",
+            "p22",
+            "p11",
+            "p01",
+            "p09",
+            "p18",
+            "p03",
+            "p21",
+            "p08",
+            "p73",
+            "p40",
+            "p16"
+          ],
           "events": [],
           "opponentScore": 3,
           "score": {
@@ -1562,28 +7522,230 @@
         }
       ],
       "momPlayerId": null,
-      "notes": "카카오톡 채팅 기록 기반 자동 등록",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
       "createdAt": 1778925600000,
       "updatedAt": 1778925600000
     },
-    "m06": {
+    "m35": {
       "seasonId": "s2526",
       "opponent": "덕선FC",
       "date": 1779498000000,
-      "location": "불암산",
+      "location": "불암산스포츠타운",
       "locationUrl": "",
       "type": "league",
-      "status": "scheduled",
+      "status": "finished",
       "score": {
-        "dokkaebi": null,
-        "opponent": null
+        "dokkaebi": 6,
+        "opponent": 3
       },
-      "lineup": [],
-      "events": [],
-      "quarters": [],
+      "lineup": [
+        "p10",
+        "p07",
+        "p19",
+        "p09",
+        "p01",
+        "p16",
+        "p03",
+        "p08",
+        "p20",
+        "p56",
+        "p43",
+        "p74",
+        "p75",
+        "p52"
+      ],
+      "events": [
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p09",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p56",
+          "assistPlayerId": null,
+          "quarter": 2
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p56",
+          "assistPlayerId": null,
+          "quarter": 3
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p56",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p16",
+          "assistPlayerId": null,
+          "quarter": 4
+        },
+        {
+          "minute": 0,
+          "type": "goal",
+          "playerId": "p43",
+          "assistPlayerId": null,
+          "quarter": 4
+        }
+      ],
+      "quarters": [
+        {
+          "lineup": [
+            "p10",
+            "p07",
+            "p19",
+            "p09",
+            "p01",
+            "p16",
+            "p03",
+            "p08",
+            "p20",
+            "p56",
+            "p43",
+            "p74",
+            "p75",
+            "p52"
+          ],
+          "events": [],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 0,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p10",
+            "p07",
+            "p19",
+            "p09",
+            "p01",
+            "p16",
+            "p03",
+            "p08",
+            "p20",
+            "p56",
+            "p43",
+            "p74",
+            "p75",
+            "p52"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p09",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p56",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 2,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p10",
+            "p07",
+            "p19",
+            "p09",
+            "p01",
+            "p16",
+            "p03",
+            "p08",
+            "p20",
+            "p56",
+            "p43",
+            "p74",
+            "p75",
+            "p52"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p56",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 0,
+          "score": {
+            "dokkaebi": 1,
+            "opponent": 0
+          },
+          "formation": null,
+          "positions": {}
+        },
+        {
+          "lineup": [
+            "p10",
+            "p07",
+            "p19",
+            "p09",
+            "p01",
+            "p16",
+            "p03",
+            "p08",
+            "p20",
+            "p56",
+            "p43",
+            "p74",
+            "p75",
+            "p52"
+          ],
+          "events": [
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p56",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p16",
+              "assistPlayerId": null
+            },
+            {
+              "minute": 0,
+              "type": "goal",
+              "playerId": "p43",
+              "assistPlayerId": null
+            }
+          ],
+          "opponentScore": 1,
+          "score": {
+            "dokkaebi": 3,
+            "opponent": 1
+          },
+          "formation": null,
+          "positions": {}
+        }
+      ],
       "momPlayerId": null,
-      "notes": "",
+      "notes": "카카오/인스타 기록 기반 자동 등록",
       "createdBy": "system",
       "createdAt": 1779498000000,
       "updatedAt": 1779498000000

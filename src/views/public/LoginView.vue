@@ -22,9 +22,14 @@ async function handleLogin() {
 <template>
   <div class="min-h-[60vh] flex items-center justify-center">
     <div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 text-center">
-      <div class="text-5xl mb-3">⚽</div>
-      <h1 class="text-2xl font-bold text-navy">도깨비 FC</h1>
-      <p class="text-sm text-gray-500 mt-1 mb-8">
+      <img
+        src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+        alt="DOKKEBY FC"
+        class="w-24 h-24 mx-auto mb-3 rounded-full ring-2 ring-gold/60 shadow"
+      />
+      <h1 class="text-2xl font-bold text-onyx tracking-wide">도깨비 FC</h1>
+      <p class="text-xs text-gold font-semibold tracking-[0.3em] mt-1">DOKKEBY FOOTBALL CLUB</p>
+      <p class="text-sm text-gray-500 mt-3 mb-8">
         등록된 회원만 로그인할 수 있습니다.
       </p>
 

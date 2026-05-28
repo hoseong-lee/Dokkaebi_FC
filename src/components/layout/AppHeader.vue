@@ -19,11 +19,15 @@ async function handleLogout() {
 </script>
 
 <template>
-  <header class="bg-navy text-white shadow">
+  <header class="bg-onyx text-white shadow border-b border-gold/30">
     <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
       <RouterLink to="/" class="flex items-center gap-2 font-bold text-lg">
-        <span class="text-dokkaebi">⚽</span>
-        도깨비 FC
+        <img
+          src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+          alt="DOKKEBY FC"
+          class="w-8 h-8 rounded-full ring-1 ring-gold/40"
+        />
+        <span class="tracking-wide">도깨비 FC</span>
       </RouterLink>
 
       <nav v-if="authStore.isAuthed" class="hidden sm:flex items-center gap-1">
@@ -39,7 +43,7 @@ async function handleLogout() {
         <RouterLink
           v-if="authStore.isAdmin"
           to="/admin"
-          class="px-3 py-1.5 rounded text-sm bg-dokkaebi/90 hover:bg-dokkaebi transition-colors"
+          class="px-3 py-1.5 rounded text-sm bg-gold/90 text-onyx font-semibold hover:bg-gold transition-colors"
         >
           관리자
         </RouterLink>
