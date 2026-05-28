@@ -115,6 +115,11 @@ const routes = [
         component: () => import('@/views/admin/MatchResultInputView.vue')
       },
       {
+        path: 'matches/:id/squad',
+        name: 'admin-match-squad',
+        component: () => import('@/views/admin/MatchSquadView.vue')
+      },
+      {
         path: 'players',
         name: 'admin-players',
         component: () => import('@/views/admin/PlayerManageView.vue')

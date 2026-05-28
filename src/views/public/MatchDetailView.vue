@@ -108,11 +108,14 @@ watch(() => route.params.id, load)
         </p>
       </div>
 
-      <div v-if="auth.isAdmin" class="flex gap-2 mt-5 pt-4 border-t">
-        <RouterLink :to="`/admin/matches/${match.id}/result`" class="flex-1">
+      <div v-if="auth.isAdmin" class="flex flex-wrap gap-2 mt-5 pt-4 border-t">
+        <RouterLink :to="`/admin/matches/${match.id}/squad`" class="flex-1 min-w-[6rem]">
+          <BaseButton variant="primary" size="sm" block>스쿼드 짜기</BaseButton>
+        </RouterLink>
+        <RouterLink :to="`/admin/matches/${match.id}/result`" class="flex-1 min-w-[6rem]">
           <BaseButton variant="danger" size="sm" block>결과 입력</BaseButton>
         </RouterLink>
-        <RouterLink :to="`/admin/matches/${match.id}/edit`" class="flex-1">
+        <RouterLink :to="`/admin/matches/${match.id}/edit`" class="flex-1 min-w-[6rem]">
           <BaseButton variant="secondary" size="sm" block>수정</BaseButton>
         </RouterLink>
         <BaseButton variant="ghost" size="sm" @click="removeMatch">삭제</BaseButton>
@@ -122,6 +125,36 @@ watch(() => route.params.id, load)
     <RsvpSection :match-id="match.id" />
 
     <MomVotingSection v-if="isFinished" :match="match" />
+
+    <!-- 예정 경기: 미리 짠 스쿼드 표시 -->
+    <section
+      v-if="!isFinished && match.plannedSquad && match.plannedSquad.lineup?.length"
+      class="bg-white rounded-2xl shadow p-6"
+    >
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-navy">예정 스쿼드 <span class="text-xs text-gray-400">({{ match.plannedSquad.lineup.length }}명)</span></h2>
+        <span v-if="match.plannedSquad.formation" class="text-sm font-bold text-dokkaebi">
+          {{ match.plannedSquad.formation }}
+        </span>
+      </div>
+      <FormationPitch
+        v-if="match.plannedSquad.formation"
+        :formation="match.plannedSquad.formation"
+        :positions="match.plannedSquad.positions || {}"
+        :players="playersStore.players"
+      />
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mt-3">
+        <RouterLink
+          v-for="pid in match.plannedSquad.lineup"
+          :key="pid"
+          :to="`/players/${pid}`"
+          class="flex flex-col items-center gap-1 text-center"
+        >
+          <PlayerAvatar :player="playersStore.getById(pid)" :size="40" />
+          <span class="text-xs truncate w-full">{{ playersStore.getById(pid)?.name }}</span>
+        </RouterLink>
+      </div>
+    </section>
 
     <!-- 쿼터별 기록 -->
     <section v-if="quarters.length" class="bg-white rounded-2xl shadow p-6 space-y-5">
