@@ -28,13 +28,13 @@ async function handleLogout() {
 <template>
   <header class="bg-onyx text-white shadow border-b border-gold/30">
     <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-      <RouterLink to="/" class="flex items-center gap-2 font-bold text-lg">
+      <RouterLink to="/" class="flex items-center gap-2 font-bold text-lg leading-none">
         <img
           :src="emblemSrc"
           alt="DOKKEBY FC"
-          class="w-8 h-8 rounded-full ring-1 ring-gold/40"
+          class="w-8 h-8 rounded-full ring-1 ring-gold/40 block"
         />
-        <span class="tracking-wide">도깨비 FC</span>
+        <span class="tracking-wide leading-none">도깨비 FC</span>
       </RouterLink>
 
       <nav v-if="authStore.isAuthed" class="hidden sm:flex items-center gap-1">
