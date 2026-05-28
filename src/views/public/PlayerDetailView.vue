@@ -3,26 +3,40 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
+import { useMatchesStore } from '@/stores/matches'
 import { POSITION_LABEL, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
 import { formatDate } from '@/utils/date'
+import { playerMonthlySeries } from '@/utils/playerSeries'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import PlayerStatsChart from '@/components/player/PlayerStatsChart.vue'
+import PlayerMonthlyChart from '@/components/player/PlayerMonthlyChart.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
 const route = useRoute()
 const store = usePlayersStore()
 const seasonStore = useSeasonStore()
+const matchesStore = useMatchesStore()
 
 const player = ref(null)
 const loading = ref(true)
-const scope = ref('total') // total | season
+const scope = ref('total') // total | seasonId
 
 const stats = computed(() => {
   if (!player.value) return null
-  return scope.value === 'season'
-    ? seasonStatsOf(player.value, seasonStore.activeId)
-    : player.value.stats || {}
+  return scope.value === 'total'
+    ? player.value.stats || {}
+    : seasonStatsOf(player.value, scope.value)
+})
+
+const series = computed(() => {
+  if (!player.value || scope.value === 'total') return []
+  return playerMonthlySeries(player.value.id, matchesStore.matches, scope.value)
+})
+
+const currentLabel = computed(() => {
+  if (scope.value === 'total') return '통산'
+  return seasonStore.seasons.find((s) => s.id === scope.value)?.name || scope.value
 })
 
 async function load() {
@@ -33,6 +47,9 @@ async function load() {
 
 onMounted(async () => {
   await seasonStore.ensure()
+  matchesStore.fetchAll()
+  // 기본 = 활성 시즌
+  if (seasonStore.activeId) scope.value = seasonStore.activeId
   load()
 })
 watch(() => route.params.id, load)
@@ -48,9 +65,10 @@ watch(() => route.params.id, load)
         <div class="flex items-center gap-2">
           <h1 class="text-2xl font-bold text-navy">{{ player.name }}</h1>
           <span v-if="player.number != null" class="text-dokkaebi font-bold">#{{ player.number }}</span>
+          <span v-if="player.isRegular" class="text-amber-500 text-xs">★</span>
         </div>
         <p class="text-sm text-gray-500 mt-1">
-          {{ POSITION_LABEL[player.position] || player.position }}
+          {{ player.mainPosition || POSITION_LABEL[player.position] }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
           <span v-if="player.preferredFoot"> · {{ FOOT_LABEL[player.preferredFoot] }}</span>
         </p>
         <p v-if="player.joinedAt" class="text-xs text-gray-400 mt-1">
@@ -60,30 +78,23 @@ watch(() => route.params.id, load)
     </section>
 
     <section class="bg-white rounded-2xl shadow p-6">
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center justify-between mb-4 gap-2">
         <h2 class="font-bold text-navy">기록</h2>
-        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
-          <button
-            class="px-3 py-1 rounded-md transition-colors"
-            :class="scope === 'total' ? 'bg-white shadow font-semibold' : 'text-gray-500'"
-            @click="scope = 'total'"
-          >
-            통산
-          </button>
-          <button
-            class="px-3 py-1 rounded-md transition-colors"
-            :class="scope === 'season' ? 'bg-white shadow font-semibold' : 'text-gray-500'"
-            @click="scope = 'season'"
-          >
-            {{ seasonStore.activeSeason?.name || '이번 시즌' }}
-          </button>
-        </div>
+        <select v-model="scope" class="border rounded-lg px-3 py-1.5 text-xs bg-white">
+          <option value="total">통산</option>
+          <option v-for="s in seasonStore.list" :key="s.id" :value="s.id">{{ s.name }}</option>
+        </select>
       </div>
 
       <PlayerStatsChart :stats="stats" />
       <p class="text-center text-sm text-gray-500 mt-4">
         공격 포인트 <span class="font-bold text-navy text-base">{{ attackPoints(stats) }}</span>
       </p>
+    </section>
+
+    <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
+      <PlayerMonthlyChart :series="series" />
     </section>
   </div>
 </template>
