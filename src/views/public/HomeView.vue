@@ -38,7 +38,8 @@ onMounted(async () => {
         :src="emblemSrc"
         alt=""
         aria-hidden="true"
-        class="absolute -right-6 -bottom-6 w-40 h-40 opacity-20 pointer-events-none"
+        class="absolute -right-6 -bottom-6 w-40 h-40 opacity-30 pointer-events-none"
+        style="mix-blend-mode: luminosity"
       />
       <div class="relative">
         <p class="text-[10px] text-gold font-semibold tracking-[0.35em]">DOKKEBY FOOTBALL CLUB</p>
