@@ -5,8 +5,8 @@ import { writeFileSync } from 'node:fs'
 const ms = (s) => new Date(s).getTime()
 // 연도별 시즌
 const SEASONS = {
-  s2025: { name: '2025 시즌', startDate: ms('2025-01-01'), endDate: ms('2025-12-31'), active: false },
-  s2026: { name: '2026 시즌', startDate: ms('2026-01-01'), endDate: ms('2026-12-31'), active: true }
+  s2025: { name: '2025년', startDate: ms('2025-01-01'), endDate: ms('2025-12-31'), active: false },
+  s2026: { name: '2026년', startDate: ms('2026-01-01'), endDate: ms('2026-12-31'), active: true }
 }
 const seasonOf = (dateStr) => 's' + String(new Date(dateStr).getFullYear())
 

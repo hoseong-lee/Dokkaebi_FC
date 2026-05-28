@@ -1,13 +1,13 @@
 {
   "seasons": {
     "s2025": {
-      "name": "2025 시즌",
+      "name": "2025년",
       "startDate": 1735689600000,
       "endDate": 1767139200000,
       "active": false
     },
     "s2026": {
-      "name": "2026 시즌",
+      "name": "2026년",
       "startDate": 1767225600000,
       "endDate": 1798675200000,
       "active": true
