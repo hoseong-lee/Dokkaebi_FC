@@ -5,8 +5,10 @@ import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
 import { useRankings } from '@/composables/useRankings'
 import { teamSummary, headToHead } from '@/utils/teamStats'
+import { pickBestEleven } from '@/utils/bestEleven'
 import { RESULT_LABEL, RESULT_COLOR } from '@/utils/match'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import FormationPitch from '@/components/match/FormationPitch.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
@@ -56,6 +58,9 @@ const current = computed(() => {
 
 const summary = computed(() => teamSummary(matchesStore.matches))
 const h2h = computed(() => headToHead(matchesStore.matches))
+const bestEleven = computed(() =>
+  scope.value === 'total' ? null : pickBestEleven(store.players, scope.value)
+)
 const medal = ['🥇', '🥈', '🥉']
 
 onMounted(async () => {
@@ -99,6 +104,22 @@ onMounted(async () => {
           </span>
         </span>
       </div>
+    </section>
+
+    <!-- 시즌 베스트 11 -->
+    <section v-if="bestEleven" class="bg-white rounded-2xl shadow p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-navy">🏆 시즌 베스트 11</h2>
+        <span class="text-sm font-bold text-dokkaebi">{{ bestEleven.formation }}</span>
+      </div>
+      <FormationPitch
+        :formation="bestEleven.formation"
+        :positions="bestEleven.positions"
+        :players="store.players"
+      />
+      <p class="text-[11px] text-gray-400 mt-2">
+        가중치: 골×3 + 어시×2 + MOM×5 + 출석×0.5 (포지션별 자동 배치)
+      </p>
     </section>
 
     <!-- 올해의 선수 (시즌 선택 시) -->
