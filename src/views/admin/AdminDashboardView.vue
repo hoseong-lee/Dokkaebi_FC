@@ -8,7 +8,7 @@ import { dayjs } from '@/utils/date'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
 import { confirm } from '@/composables/useConfirm'
-import { importSeed } from '@/firebase/database'
+import { importSeed, migrateSeasonsByYear } from '@/firebase/database'
 import seedData from '@/data/seed.json'
 import BaseButton from '@/components/common/BaseButton.vue'
 
@@ -19,6 +19,41 @@ const toast = useToast()
 
 const creatingSeason = ref(false)
 const importing = ref(false)
+const migrating = ref(false)
+
+// 옛 시즌(s{YYYY} 패턴이 아닌 것 — 예: s2526)이 있으면 분리 마이그레이션 권장
+const legacySeasons = computed(() =>
+  seasonStore.seasons.filter((s) => !/^s\d{4}$/.test(s.id))
+)
+const needsMigration = computed(() => legacySeasons.value.length > 0)
+
+async function runMigration() {
+  const ok = await confirm({
+    title: '시즌 연도별 분리',
+    message:
+      '옛 단일 시즌을 일시 연도 기준으로 분리합니다.\n경기·선수 데이터는 그대로 두고 seasonId 와 시즌별 통계만 재계산됩니다.\n진행할까요?',
+    confirmText: '분리 실행',
+    variant: 'primary'
+  })
+  if (!ok) return
+  migrating.value = true
+  try {
+    const res = await migrateSeasonsByYear()
+    await Promise.all([
+      seasonStore.refresh(),
+      playersStore.fetchAll(true),
+      matchesStore.fetchAll({}, true)
+    ])
+    toast.success(
+      `시즌을 ${res.years.join(', ')}년으로 분리했습니다.${res.legacyRemoved.length ? ` (옛 시즌 ${res.legacyRemoved.length}개 정리)` : ''}`
+    )
+  } catch (e) {
+    console.error(e)
+    toast.error(`마이그레이션 실패: ${e?.code || e?.message || e}`)
+  } finally {
+    migrating.value = false
+  }
+}
 
 // 결과 미입력: 경기 일시가 지났는데 아직 scheduled 인 경기
 const pendingResults = computed(() =>
@@ -89,6 +124,23 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-5">
+    <!-- 시즌 연도별 분리 안내 (옛 시즌 감지 시) -->
+    <div
+      v-if="needsMigration"
+      class="bg-dokkaebi/10 border-2 border-dokkaebi/40 rounded-xl p-4 text-sm"
+    >
+      <p class="font-bold text-dokkaebi">⚠ 시즌 분리 필요</p>
+      <p class="text-gray-700 mt-1">
+        옛 단일 시즌(<span class="font-mono text-xs">{{ legacySeasons.map(s => s.name).join(', ') }}</span>)이
+        남아 있어 시즌 드롭다운에 한 옵션만 보입니다.
+        연도별(2025년·2026년)로 분리하면 각 연도만 따로 볼 수 있게 됩니다.
+        <br>경기·선수 데이터는 그대로 두고 시즌 정보·통계만 재계산됩니다.
+      </p>
+      <BaseButton size="sm" variant="danger" class="mt-3" :loading="migrating" @click="runMigration">
+        시즌 연도별 분리 실행
+      </BaseButton>
+    </div>
+
     <!-- 시즌 부트스트랩 -->
     <div
       v-if="!seasonStore.activeSeason"

@@ -10,6 +10,7 @@ import {
 } from 'firebase/database'
 import { rtdb, auth } from './config'
 import { emptyStats, tallyEvents } from '@/utils/stats'
+import { dayjs } from '@/utils/date'
 
 // 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
 // (travel/calendar 와 동일하게 앱별 네임스페이스 분리).
@@ -478,6 +479,114 @@ export async function setMonthlyDues(yyyymm, playerId, payment) {
 }
 
 export { DEFAULT_MATCH_FEE }
+
+// ───────────── 시즌 마이그레이션 (연도 단위 분리) ─────────────
+// 옛 데이터(예: s2526 "2025-2026 시즌")가 남아 있으면 시즌 드롭다운에
+// 한 옵션만 보임. 일시 연도 기준으로 시즌을 새로 만들고 각 경기·선수 통계를 재계산.
+export async function migrateSeasonsByYear() {
+  const [matchesSnap, playersSnap, seasonsSnap] = await Promise.all([
+    get(ref(rtdb, nsPath('matches'))),
+    get(ref(rtdb, nsPath('players'))),
+    get(ref(rtdb, nsPath('seasons')))
+  ])
+  const matches = matchesSnap.val() || {}
+  const players = playersSnap.val() || {}
+  const seasons = seasonsSnap.val() || {}
+
+  // 연도 수집
+  const years = new Set()
+  for (const m of Object.values(matches)) {
+    if (!m.date) continue
+    const y = dayjs(m.date).year()
+    if (y) years.add(y)
+  }
+  if (!years.size) throw new Error('경기가 없습니다 — 마이그레이션 불필요')
+
+  const updates = {}
+  const currentYear = dayjs().year()
+
+  // 1) 새 시즌 노드 보장 (이름 'YYYY년')
+  for (const y of years) {
+    const sid = `s${y}`
+    updates[nsPath(`seasons/${sid}`)] = {
+      name: `${y}년`,
+      startDate: dayjs(`${y}-01-01`).valueOf(),
+      endDate: dayjs(`${y}-12-31`).valueOf(),
+      active: y === currentYear
+    }
+  }
+
+  // 2) 각 경기 seasonId 재배정
+  for (const [mid, m] of Object.entries(matches)) {
+    if (!m.date) continue
+    const newSid = `s${dayjs(m.date).year()}`
+    if (m.seasonId !== newSid) {
+      updates[nsPath(`matches/${mid}/seasonId`)] = newSid
+    }
+  }
+
+  // 3) 선수 통계 재계산 (finished 경기 + events + lineup + momPlayerId)
+  const totals = {}      // playerId → totalStats
+  const seasonal = {}    // playerId → { sid → stats }
+  function bumpT(pid, key, n = 1) {
+    if (!totals[pid]) totals[pid] = emptyStats()
+    totals[pid][key] += n
+  }
+  function bumpS(pid, sid, key, n = 1) {
+    if (!seasonal[pid]) seasonal[pid] = {}
+    if (!seasonal[pid][sid]) seasonal[pid][sid] = emptyStats()
+    seasonal[pid][sid][key] += n
+  }
+  for (const m of Object.values(matches)) {
+    if (m.status !== 'finished' || !m.date) continue
+    const sid = `s${dayjs(m.date).year()}`
+    for (const pid of m.lineup || []) {
+      bumpT(pid, 'appearances')
+      bumpS(pid, sid, 'appearances')
+    }
+    for (const e of m.events || []) {
+      if (e.type !== 'goal') continue
+      bumpT(e.playerId, 'goals')
+      bumpS(e.playerId, sid, 'goals')
+      if (e.assistPlayerId) {
+        bumpT(e.assistPlayerId, 'assists')
+        bumpS(e.assistPlayerId, sid, 'assists')
+      }
+    }
+    if (m.momPlayerId) {
+      bumpT(m.momPlayerId, 'momCount')
+      bumpS(m.momPlayerId, sid, 'momCount')
+    }
+  }
+
+  for (const pid of Object.keys(players)) {
+    // total
+    updates[nsPath(`players/${pid}/stats`)] = totals[pid] || emptyStats()
+    // 시즌별 — 빈 시즌도 0으로 채워 드롭다운에서 빠지지 않게
+    const seasonStats = seasonal[pid] || {}
+    for (const y of years) {
+      const sid = `s${y}`
+      if (!seasonStats[sid]) seasonStats[sid] = emptyStats()
+    }
+    updates[nsPath(`players/${pid}/seasonStats`)] = seasonStats
+  }
+
+  await update(ref(rtdb), updates)
+
+  // 4) 유효하지 않은 옛 시즌 노드 제거 (s{YYYY} 패턴 외)
+  const validSids = new Set([...years].map((y) => `s${y}`))
+  const legacy = Object.keys(seasons).filter((sid) => !validSids.has(sid))
+  for (const sid of legacy) {
+    await remove(ref(rtdb, nsPath(`seasons/${sid}`)))
+  }
+
+  await logAudit('update', 'seasons/migrate-by-year', {
+    years: [...years],
+    matches: Object.keys(matches).length,
+    legacyRemoved: legacy
+  })
+  return { years: [...years], legacyRemoved: legacy }
+}
 
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
