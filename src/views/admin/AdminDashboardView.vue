@@ -101,17 +101,20 @@ onMounted(async () => {
       </BaseButton>
     </div>
 
-    <!-- 초기 데이터 가져오기 (선수가 없을 때) -->
+    <!-- 초기 데이터 가져오기 / 다시 가져오기 -->
     <div
-      v-if="playersStore.loaded && playersStore.players.length === 0"
+      v-if="playersStore.loaded"
       class="bg-navy/5 border border-navy/20 rounded-xl p-4 text-sm"
     >
-      <p class="font-medium text-navy">초기 데이터 가져오기</p>
+      <p class="font-medium text-navy">
+        {{ playersStore.players.length === 0 ? '초기 데이터 가져오기' : '데이터 다시 가져오기' }}
+      </p>
       <p class="text-gray-500 mt-1">
-        카카오톡 기록 기반 선수 {{ seedCounts.players }}명 · 경기 {{ seedCounts.matches }}건을 한 번에 등록합니다.
+        카카오톡 기록 기반 선수 {{ seedCounts.players }}명 · 경기 {{ seedCounts.matches }}건(4쿼터 기록 포함)을 등록합니다.
+        <span v-if="playersStore.players.length > 0" class="text-dokkaebi">기존 선수·경기·시즌을 덮어씁니다.</span>
       </p>
       <BaseButton size="sm" class="mt-2" :loading="importing" @click="runImport">
-        데이터 가져오기
+        {{ playersStore.players.length === 0 ? '데이터 가져오기' : '다시 가져오기' }}
       </BaseButton>
     </div>
 

@@ -35,6 +35,17 @@ function qDok(i) {
 const totalDok = computed(() => quarters.reduce((s, q) => s + q.events.filter((e) => e.type === 'goal').length, 0))
 const totalOpp = computed(() => quarters.reduce((s, q) => s + (Number(q.opponentScore) || 0), 0))
 
+// 직전 쿼터 명단을 현재 쿼터로 복사 (포메이션/포지션도 함께)
+function copyFromPrev() {
+  if (activeQ.value === 0) return
+  const src = quarters[activeQ.value - 1]
+  const dst = quarters[activeQ.value]
+  dst.lineup = [...src.lineup]
+  dst.formation = src.formation
+  dst.positions = { ...src.positions }
+  toast.success(`${activeQ.value}쿼터 명단을 복사했습니다.`)
+}
+
 // MOM 후보 = 전 쿼터 출전 명단 합집합
 const lineupUnion = computed(() => {
   const set = new Set()
@@ -126,6 +137,16 @@ onMounted(load)
       >
         {{ i + 1 }}쿼터
         <span class="text-xs opacity-70">({{ qDok(i) }}:{{ q.opponentScore || 0 }})</span>
+      </button>
+    </div>
+
+    <div v-if="activeQ > 0" class="mb-3">
+      <button
+        type="button"
+        class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy font-medium hover:bg-navy/20"
+        @click="copyFromPrev"
+      >
+        ↻ {{ activeQ }}쿼터 명단 복사
       </button>
     </div>
 
