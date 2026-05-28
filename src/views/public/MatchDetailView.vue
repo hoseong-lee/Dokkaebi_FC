@@ -22,6 +22,7 @@ import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
 import MomVotingSection from '@/components/match/MomVotingSection.vue'
+import ResultCardModal from '@/components/match/ResultCardModal.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -44,6 +45,7 @@ const lineupPlayers = computed(() =>
 )
 
 const quarters = computed(() => match.value?.quarters || [])
+const resultCardOpen = ref(false)
 
 // 예정 스쿼드 목록 (쿼터 배열 우선, legacy 단일 스쿼드 폴백)
 const plannedSquadList = computed(() => {
@@ -121,6 +123,12 @@ watch(() => route.params.id, load)
           </a>
           <span v-else>{{ match.location || '장소 미정' }}</span>
         </p>
+      </div>
+
+      <div v-if="isFinished" class="mt-5 pt-4 border-t">
+        <BaseButton variant="ghost" size="sm" @click="resultCardOpen = true">
+          📸 결과 카드 만들기
+        </BaseButton>
       </div>
 
       <div v-if="auth.isAdmin" class="flex flex-wrap gap-2 mt-5 pt-4 border-t">
@@ -231,5 +239,7 @@ watch(() => route.params.id, load)
     <p v-if="match.notes" class="bg-white rounded-2xl shadow p-6 text-sm text-gray-700 whitespace-pre-line">
       <span class="font-bold text-navy block mb-2">경기 후기</span>{{ match.notes }}
     </p>
+
+    <ResultCardModal v-if="isFinished" v-model="resultCardOpen" :match="match" />
   </div>
 </template>
