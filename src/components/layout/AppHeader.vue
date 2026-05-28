@@ -14,6 +14,7 @@ const navLinks = [
   { to: '/matches', label: '경기' },
   { to: '/players', label: '선수' },
   { to: '/rankings', label: '랭킹' },
+  { to: '/calendar', label: '달력' },
   { to: '/announcements', label: '공지' },
   { to: '/board', label: '게시판' },
   { to: '/photos', label: '사진첩' }

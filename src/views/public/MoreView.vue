@@ -7,7 +7,8 @@ const auth = useAuthStore()
 const tiles = [
   { to: '/announcements', label: '공지사항', icon: '📢', desc: '팀 공지·일정 안내' },
   { to: '/board', label: '자유게시판', icon: '💬', desc: '회원 소통' },
-  { to: '/photos', label: '사진첩', icon: '📷', desc: '경기·일상 사진 공유' }
+  { to: '/photos', label: '사진첩', icon: '📷', desc: '경기·일상 사진 공유' },
+  { to: '/calendar', label: '달력', icon: '📅', desc: '월간 경기 일정 한눈에' }
 ]
 </script>
 
