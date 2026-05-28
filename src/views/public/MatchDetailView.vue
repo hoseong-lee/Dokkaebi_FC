@@ -110,7 +110,7 @@ watch(() => route.params.id, load)
 
       <div v-if="auth.isAdmin" class="flex flex-wrap gap-2 mt-5 pt-4 border-t">
         <RouterLink :to="`/admin/matches/${match.id}/squad`" class="flex-1 min-w-[6rem]">
-          <BaseButton variant="primary" size="sm" block>스쿼드 짜기</BaseButton>
+          <BaseButton variant="primary" size="sm" block>스쿼드 메이커</BaseButton>
         </RouterLink>
         <RouterLink :to="`/admin/matches/${match.id}/result`" class="flex-1 min-w-[6rem]">
           <BaseButton variant="danger" size="sm" block>결과 입력</BaseButton>

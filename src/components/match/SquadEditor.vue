@@ -5,6 +5,10 @@ import FormationPitch from '@/components/match/FormationPitch.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import { FORMATION_NAMES, getSlots } from '@/utils/formations'
+
+// 빠른 선택 칩에 노출할 인기 포메이션 (좌→우)
+const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
+const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.includes(f))
 import { suggestFormation } from '@/utils/autoFormation'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
@@ -155,18 +159,46 @@ function clearSlot() {
     <div>
       <div class="flex items-center justify-between mb-2 gap-2">
         <h3 class="text-sm font-bold text-navy">포메이션</h3>
-        <div class="flex items-center gap-1.5">
-          <button
-            type="button"
-            class="text-xs px-2.5 py-1 rounded-full bg-dokkaebi/10 text-dokkaebi hover:bg-dokkaebi/20"
-            @click="autoFormation"
-          >⚡ 자동 추천</button>
-          <select v-model="s.formation" class="border rounded-lg px-2 py-1 text-xs" @change="onFormationChange">
-            <option value="">없음</option>
-            <option v-for="f in FORMATION_NAMES" :key="f" :value="f">{{ f }}</option>
-          </select>
-        </div>
+        <button
+          type="button"
+          class="text-xs px-3 py-1.5 rounded-full bg-dokkaebi text-white font-semibold hover:bg-dokkaebi/90 disabled:opacity-40"
+          :disabled="s.lineup.length === 0"
+          @click="autoFormation"
+        >
+          ⚡ 참석 인원 기반 자동 추천
+        </button>
       </div>
+
+      <!-- 인기 포메이션 칩 -->
+      <div class="flex flex-wrap gap-1.5 mb-2">
+        <button
+          v-for="f in POPULAR_FORMATIONS"
+          :key="f"
+          type="button"
+          class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+          :class="s.formation === f ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="() => { s.formation = f; onFormationChange() }"
+        >
+          {{ f }}
+        </button>
+        <select
+          :value="OTHER_FORMATIONS.includes(s.formation) ? s.formation : ''"
+          class="border rounded-full px-3 py-1 text-xs bg-white"
+          @change="(e) => { s.formation = e.target.value; onFormationChange() }"
+        >
+          <option value="">기타…</option>
+          <option v-for="f in OTHER_FORMATIONS" :key="f" :value="f">{{ f }}</option>
+        </select>
+        <button
+          v-if="s.formation"
+          type="button"
+          class="px-3 py-1.5 rounded-full text-xs text-gray-400 hover:text-dokkaebi"
+          @click="() => { s.formation = ''; s.positions = {} }"
+        >
+          해제
+        </button>
+      </div>
+
       <FormationPitch
         v-if="s.formation"
         :formation="s.formation"
@@ -175,7 +207,9 @@ function clearSlot() {
         editable
         @slot-click="openSlot"
       />
-      <p v-else class="text-xs text-gray-400">포메이션을 선택하거나 ⚡ 자동 추천 버튼을 누르세요.</p>
+      <p v-else class="text-xs text-gray-400">
+        포메이션 칩을 누르거나 명단 선택 후 ⚡ 자동 추천을 눌러보세요.
+      </p>
     </div>
 
     <BaseModal v-model="slotModalOpen" :title="`${activeSlot?.role || ''} 자리에 배치`">

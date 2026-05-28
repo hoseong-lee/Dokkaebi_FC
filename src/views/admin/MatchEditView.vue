@@ -3,22 +3,26 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
 import { useSeasonStore } from '@/stores/season'
+import { usePlayersStore } from '@/stores/players'
 import { MATCH_TYPE_LABEL } from '@/utils/match'
 import { toInputDateTime, fromInputDateTime } from '@/utils/date'
 import { required } from '@/utils/validators'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import SquadEditor from '@/components/match/SquadEditor.vue'
 
 const route = useRoute()
 const router = useRouter()
 const store = useMatchesStore()
 const seasonStore = useSeasonStore()
+const playersStore = usePlayersStore()
 const toast = useToast()
 
 const isEdit = computed(() => !!route.params.id)
 const loading = ref(false)
 const saving = ref(false)
+const squadOpen = ref(false)
 
 const form = reactive({
   opponent: '',
@@ -27,9 +31,10 @@ const form = reactive({
   locationUrl: '',
   type: 'friendly'
 })
+const squad = reactive({ lineup: [], formation: '', positions: {} })
 
 async function load() {
-  await seasonStore.ensure()
+  await Promise.all([seasonStore.ensure(), playersStore.fetchAll()])
   if (!isEdit.value) return
   loading.value = true
   const m = await store.fetchOne(route.params.id)
@@ -45,6 +50,12 @@ async function load() {
     locationUrl: m.locationUrl || '',
     type: m.type || 'friendly'
   })
+  if (m.plannedSquad) {
+    squad.lineup = [...(m.plannedSquad.lineup || [])]
+    squad.formation = m.plannedSquad.formation || ''
+    squad.positions = { ...(m.plannedSquad.positions || {}) }
+    if (squad.lineup.length) squadOpen.value = true
+  }
 }
 
 async function save() {
@@ -58,7 +69,10 @@ async function save() {
       date: fromInputDateTime(form.date),
       location: form.location.trim(),
       locationUrl: form.locationUrl.trim(),
-      type: form.type
+      type: form.type,
+      plannedSquad: squad.lineup.length
+        ? { lineup: squad.lineup, formation: squad.formation || null, positions: squad.positions || {} }
+        : null
     }
     if (isEdit.value) {
       await store.update(route.params.id, payload)
@@ -72,7 +86,7 @@ async function save() {
     }
   } catch (e) {
     console.error(e)
-    toast.error('저장 중 오류가 발생했습니다.')
+    toast.error(`저장 중 오류: ${e?.code || e?.message || e}`)
   } finally {
     saving.value = false
   }
@@ -86,41 +100,60 @@ onMounted(load)
     <h2 class="font-bold text-navy mb-4">{{ isEdit ? '경기 수정' : '경기 등록' }}</h2>
 
     <LoadingSpinner v-if="loading" />
-    <form v-else class="bg-white rounded-2xl shadow p-5 space-y-4" @submit.prevent="save">
-      <div>
-        <label class="block text-xs text-gray-500 mb-1">상대팀</label>
-        <input v-model="form.opponent" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="상대팀 이름" />
-      </div>
-
-      <div>
-        <label class="block text-xs text-gray-500 mb-1">경기 일시</label>
-        <input v-model="form.date" type="datetime-local" class="w-full border rounded-lg px-3 py-2 text-sm" />
-      </div>
-
-      <div>
-        <label class="block text-xs text-gray-500 mb-1">경기 종류</label>
-        <div class="flex gap-1.5">
-          <button
-            v-for="(l, k) in MATCH_TYPE_LABEL"
-            :key="k"
-            type="button"
-            class="flex-1 py-2 rounded-lg text-sm transition-colors"
-            :class="form.type === k ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
-            @click="form.type = k"
-          >
-            {{ l }}
-          </button>
+    <form v-else class="space-y-4" @submit.prevent="save">
+      <!-- 기본 정보 -->
+      <div class="bg-white rounded-2xl shadow p-5 space-y-4">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">상대팀</label>
+          <input v-model="form.opponent" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="상대팀 이름" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">경기 일시</label>
+          <input v-model="form.date" type="datetime-local" class="w-full border rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">경기 종류</label>
+          <div class="flex gap-1.5 flex-wrap">
+            <button
+              v-for="(l, k) in MATCH_TYPE_LABEL"
+              :key="k"
+              type="button"
+              class="flex-1 min-w-[4rem] py-2 rounded-lg text-sm transition-colors"
+              :class="form.type === k ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
+              @click="form.type = k"
+            >
+              {{ l }}
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">경기장</label>
+          <input v-model="form.location" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="경기장 이름" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">지도 링크 (선택)</label>
+          <input v-model="form.locationUrl" type="url" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="https://map..." />
         </div>
       </div>
 
-      <div>
-        <label class="block text-xs text-gray-500 mb-1">경기장</label>
-        <input v-model="form.location" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="경기장 이름" />
-      </div>
-
-      <div>
-        <label class="block text-xs text-gray-500 mb-1">지도 링크 (선택)</label>
-        <input v-model="form.locationUrl" type="url" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="https://map..." />
+      <!-- 스쿼드 메이커 (접이식) -->
+      <div class="bg-white rounded-2xl shadow">
+        <button
+          type="button"
+          class="w-full flex items-center justify-between p-5 text-left"
+          @click="squadOpen = !squadOpen"
+        >
+          <span>
+            <span class="font-bold text-navy">스쿼드 메이커</span>
+            <span class="text-xs text-gray-400 ml-2">
+              참석 명단 + 포메이션 자동 추천 ({{ squad.lineup.length }}명)
+            </span>
+          </span>
+          <span class="text-gray-400">{{ squadOpen ? '▾' : '▸' }}</span>
+        </button>
+        <div v-if="squadOpen" class="px-5 pb-5 border-t pt-4">
+          <SquadEditor :squad="squad" :players="playersStore.activePlayers" />
+        </div>
       </div>
 
       <div class="flex gap-2 pt-2">
