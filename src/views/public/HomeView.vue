@@ -14,6 +14,7 @@ const auth = useAuthStore()
 const matchesStore = useMatchesStore()
 const playersStore = usePlayersStore()
 const seasonStore = useSeasonStore()
+const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
 
 const playersRef = toRef(playersStore, 'players')
 const seasonIdRef = computed(() => seasonStore.activeId)
@@ -34,7 +35,7 @@ onMounted(async () => {
   <div class="space-y-5">
     <section class="relative overflow-hidden bg-gradient-to-br from-onyx via-onyx to-onyx/90 text-white rounded-2xl shadow p-6">
       <img
-        src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+        :src="emblemSrc"
         alt=""
         aria-hidden="true"
         class="absolute -right-6 -bottom-6 w-40 h-40 opacity-20 pointer-events-none"

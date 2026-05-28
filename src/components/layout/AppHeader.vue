@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
 
 const navLinks = [
   { to: '/', label: '홈' },
@@ -23,7 +24,7 @@ async function handleLogout() {
     <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
       <RouterLink to="/" class="flex items-center gap-2 font-bold text-lg">
         <img
-          src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+          :src="emblemSrc"
           alt="DOKKEBY FC"
           class="w-8 h-8 rounded-full ring-1 ring-gold/40"
         />

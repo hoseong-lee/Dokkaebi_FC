@@ -7,6 +7,7 @@ const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const loading = ref(false)
+const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
 
 async function handleLogin() {
   loading.value = true
@@ -23,7 +24,7 @@ async function handleLogin() {
   <div class="min-h-[60vh] flex items-center justify-center">
     <div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 text-center">
       <img
-        src="/Dokkaebi_FC/dokkaebi-emblem-192.png"
+        :src="emblemSrc"
         alt="DOKKEBY FC"
         class="w-24 h-24 mx-auto mb-3 rounded-full ring-2 ring-gold/60 shadow"
       />
