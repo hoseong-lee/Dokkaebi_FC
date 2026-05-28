@@ -53,6 +53,26 @@ firebase deploy --only database
 >
 > **데이터 키 주의**: RTDB 키에 `.` 를 쓸 수 없어 `allowedEmails` 는 이메일의 `.` 를 `,` 로 인코딩해 키로 쓴다(`encodeEmailKey`). 표시는 노드 안의 `email` 필드를 사용한다.
 
+## Cloudinary 설정 (사진첩)
+
+사진 업로드는 Cloudinary 의 **unsigned upload preset** 으로 동작한다 (서버 불필요).
+
+1. [cloudinary.com](https://cloudinary.com) 무료 가입 (Free 플랜: 25GB)
+2. 대시보드에서 **Cloud name** 확인 (예: `dxxxx1234`)
+3. **Settings → Upload → "Add upload preset"**
+   - Signing Mode: **Unsigned**
+   - Folder (선택): `dokkaebi`
+   - Save → preset 이름 메모 (예: `dokkaebi_unsigned`)
+4. `.env.local` 또는 GitHub Actions secrets 에 추가:
+   ```
+   VITE_CLOUDINARY_CLOUD_NAME=dxxxx1234
+   VITE_CLOUDINARY_UPLOAD_PRESET=dokkaebi_unsigned
+   ```
+5. 다시 빌드/배포 (GitHub Actions secrets 변경 시 자동 재배포)
+
+미설정 상태에서는 사진첩에 "Cloudinary 설정 필요" 안내가 노출되고 업로드가 비활성화된다.
+사진 삭제 시 RTDB 의 메타데이터만 제거되며 Cloudinary 원본은 그대로 남는다(필요 시 Cloudinary 대시보드에서 별도 삭제).
+
 ## 권한 모델
 
 - Google OAuth 로그인 + `allowedEmails` 화이트리스트 검증 (미등록 시 즉시 로그아웃)

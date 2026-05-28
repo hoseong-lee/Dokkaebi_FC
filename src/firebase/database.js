@@ -347,6 +347,111 @@ export async function finalizeMomVoting(matchId, winnerId) {
   await logAudit('update', `matches/${matchId}`, { momFinalized: winnerId })
 }
 
+// ───────────── 공지사항 ─────────────
+function authorMeta() {
+  const u = auth.currentUser
+  return { authorUid: u?.uid || null, authorName: u?.displayName || u?.email || '익명' }
+}
+
+export async function listAnnouncements() {
+  const snap = await get(ref(rtdb, nsPath('announcements')))
+  return toList(snap).sort(
+    (a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.createdAt || 0) - (a.createdAt || 0)
+  )
+}
+export async function createAnnouncement(data) {
+  const r = push(ref(rtdb, nsPath('announcements')))
+  await set(r, {
+    title: data.title,
+    body: data.body,
+    pinned: !!data.pinned,
+    ...authorMeta(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('create', `announcements/${r.key}`)
+  return r.key
+}
+export async function updateAnnouncement(id, data) {
+  await update(ref(rtdb, nsPath(`announcements/${id}`)), {
+    ...data,
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('update', `announcements/${id}`)
+}
+export async function deleteAnnouncement(id) {
+  await remove(ref(rtdb, nsPath(`announcements/${id}`)))
+  await logAudit('delete', `announcements/${id}`)
+}
+
+// ───────────── 자유게시판 ─────────────
+export async function listPosts() {
+  const snap = await get(ref(rtdb, nsPath('posts')))
+  return toList(snap).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+}
+export async function getPost(id) {
+  const snap = await get(ref(rtdb, nsPath(`posts/${id}`)))
+  return snap.exists() ? { id, ...snap.val() } : null
+}
+export async function createPost(data) {
+  const r = push(ref(rtdb, nsPath('posts')))
+  await set(r, {
+    title: data.title,
+    body: data.body,
+    ...authorMeta(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('create', `posts/${r.key}`)
+  return r.key
+}
+export async function updatePost(id, data) {
+  await update(ref(rtdb, nsPath(`posts/${id}`)), { ...data, updatedAt: serverTimestamp() })
+  await logAudit('update', `posts/${id}`)
+}
+export async function deletePost(id) {
+  await remove(ref(rtdb, nsPath(`posts/${id}`)))
+  await logAudit('delete', `posts/${id}`)
+}
+export async function listComments(postId) {
+  const snap = await get(ref(rtdb, nsPath(`posts/${postId}/comments`)))
+  return toList(snap).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
+}
+export async function addComment(postId, body) {
+  const r = push(ref(rtdb, nsPath(`posts/${postId}/comments`)))
+  await set(r, { body, ...authorMeta(), createdAt: serverTimestamp() })
+  return r.key
+}
+export async function deleteComment(postId, commentId) {
+  await remove(ref(rtdb, nsPath(`posts/${postId}/comments/${commentId}`)))
+}
+
+// ───────────── 사진첩 ─────────────
+export async function listPhotos({ matchId } = {}) {
+  const snap = await get(ref(rtdb, nsPath('photos')))
+  let list = toList(snap)
+  if (matchId) list = list.filter((p) => p.matchId === matchId)
+  return list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+}
+export async function createPhoto(data) {
+  const r = push(ref(rtdb, nsPath('photos')))
+  await set(r, {
+    url: data.url,
+    publicId: data.publicId || null,
+    width: data.width || null,
+    height: data.height || null,
+    caption: data.caption || '',
+    matchId: data.matchId || null,
+    ...authorMeta(),
+    createdAt: serverTimestamp()
+  })
+  return r.key
+}
+export async function deletePhoto(id) {
+  await remove(ref(rtdb, nsPath(`photos/${id}`)))
+  await logAudit('delete', `photos/${id}`)
+}
+
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
 // allowedEmails/users 는 건드리지 않는다.

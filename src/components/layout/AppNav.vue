@@ -8,7 +8,8 @@ const items = [
   { to: '/', label: '홈', icon: '🏠', exact: true },
   { to: '/matches', label: '경기', icon: '📅' },
   { to: '/players', label: '선수', icon: '👥' },
-  { to: '/rankings', label: '랭킹', icon: '🏆' }
+  { to: '/rankings', label: '랭킹', icon: '🏆' },
+  { to: '/more', label: '더보기', icon: '⋯' }
 ]
 </script>
 
@@ -26,15 +27,6 @@ const items = [
     >
       <span class="text-lg leading-none">{{ item.icon }}</span>
       {{ item.label }}
-    </RouterLink>
-    <RouterLink
-      v-if="auth.isAdmin"
-      to="/admin"
-      class="flex-1 flex flex-col items-center gap-0.5 py-2 text-[11px] text-gray-400"
-      :class="{ 'text-dokkaebi font-semibold': $route.path.startsWith('/admin') }"
-    >
-      <span class="text-lg leading-none">⚙️</span>
-      관리
     </RouterLink>
   </nav>
 </template>

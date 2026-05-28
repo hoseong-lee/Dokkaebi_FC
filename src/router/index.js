@@ -45,6 +45,48 @@ const routes = [
     component: () => import('@/views/public/RankingsView.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/announcements',
+    name: 'announcements',
+    component: () => import('@/views/public/AnnouncementsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: () => import('@/views/public/BoardView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/board/new',
+    name: 'board-new',
+    component: () => import('@/views/public/BoardEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/board/:id',
+    name: 'board-detail',
+    component: () => import('@/views/public/BoardDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/board/:id/edit',
+    name: 'board-edit',
+    component: () => import('@/views/public/BoardEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/photos',
+    name: 'photos',
+    component: () => import('@/views/public/PhotosView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/more',
+    name: 'more',
+    component: () => import('@/views/public/MoreView.vue'),
+    meta: { requiresAuth: true }
+  },
 
   // ───── 관리자 라우트 (requiresAdmin) ─────
   {
