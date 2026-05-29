@@ -543,3 +543,169 @@ export const CLUB_RULES = [
   { n: 5, rule: '포지셔닝 약속 3개만: ① CB 둘 사이 5m ② 풀백 한쪽만 전진 ③ ST는 박스 안 머무름 — 이 셋만 지켜도 실점 절반.' },
   { n: 6, rule: '트렌드 차용 우선순위: ① 반대발 윙어(즉효) ② 6번 1명 고정 ③ CB 중 1명만 빌드업 carrying ④ 인버티드 풀백·박스 미드필드는 자제.' }
 ]
+
+// 항목별 유튜브 검색 링크 (한국어 + 영어). 검색 결과 페이지라 깨진 링크 위험 0.
+// UI 에서 https://www.youtube.com/results?search_query={q} 로 변환.
+export const VIDEOS = {
+  // ─── 포지션 (code) ───
+  GK: [
+    { label: '🇰🇷 스위퍼 키퍼 역할', q: '스위퍼 키퍼 역할 골키퍼' },
+    { label: '🌍 Modern Goalkeeper (Tifo)', q: 'modern goalkeeper sweeper keeper Tifo Football' }
+  ],
+  CB: [
+    { label: '🇰🇷 센터백 빌드업', q: '센터백 빌드업 역할 현대축구' },
+    { label: '🌍 Ball-Playing Centre Back', q: 'ball playing centre back van dijk analysis' }
+  ],
+  FB: [
+    { label: '🇰🇷 인버티드 풀백 설명', q: '인버티드 풀백 설명' },
+    { label: '🌍 Inverted Fullback (Tifo)', q: 'inverted fullback Tifo Football explained' }
+  ],
+  DM: [
+    { label: '🇰🇷 레지스타 수비형미드필더', q: '레지스타 수비형 미드필더 역할' },
+    { label: '🌍 Rodri Analysis (Ballon d\'Or)', q: 'Rodri analysis defensive midfielder Ballon d Or' }
+  ],
+  CM: [
+    { label: '🇰🇷 박스투박스 미드필더', q: '박스투박스 미드필더 역할' },
+    { label: '🌍 Box-to-Box Bellingham', q: 'box to box midfielder bellingham analysis' }
+  ],
+  AM: [
+    { label: '🇰🇷 공격형 미드필더 10번', q: '공격형 미드필더 10번 역할' },
+    { label: '🌍 De Bruyne Masterclass', q: 'Kevin De Bruyne attacking midfielder masterclass' }
+  ],
+  WG: [
+    { label: '🇰🇷 인버티드 윙어 컷인', q: '인버티드 윙어 컷인 슛' },
+    { label: '🌍 Inverted Winger (Salah)', q: 'inverted winger Salah Vinicius cut inside analysis' }
+  ],
+  ST: [
+    { label: '🇰🇷 스트라이커 움직임', q: '스트라이커 박스 움직임 골 위치선정' },
+    { label: '🌍 Haaland Movement', q: 'Erling Haaland off ball movement striker analysis' }
+  ],
+  F9: [
+    { label: '🇰🇷 폴스나인 설명', q: '폴스나인 false 9 설명' },
+    { label: '🌍 False 9 (Messi/Firmino)', q: 'false 9 Messi Firmino tactical analysis' }
+  ],
+
+  // ─── 포메이션 (name) ───
+  '4-3-3': [
+    { label: '🇰🇷 4-3-3 전술 분석', q: '4-3-3 포메이션 전술 분석' },
+    { label: '🌍 4-3-3 Explained (Tifo)', q: '4-3-3 formation tactics explained Tifo' }
+  ],
+  '4-2-3-1': [
+    { label: '🇰🇷 4-2-3-1 포메이션', q: '4-2-3-1 포메이션 분석' },
+    { label: '🌍 4-2-3-1 Mourinho', q: '4-2-3-1 formation Mourinho tactical analysis' }
+  ],
+  '4-4-2': [
+    { label: '🇰🇷 4-4-2 시메오네', q: '4-4-2 시메오네 아틀레티코' },
+    { label: '🌍 4-4-2 Simeone Two Banks', q: '4-4-2 Simeone two banks of four' }
+  ],
+  '4-1-4-1': [
+    { label: '🇰🇷 4-1-4-1 수비전술', q: '4-1-4-1 수비형 포메이션' },
+    { label: '🌍 4-1-4-1 Ancelotti', q: '4-1-4-1 Ancelotti tactical analysis' }
+  ],
+  '3-5-2 / 3-4-3': [
+    { label: '🇰🇷 3-5-2 윙백 활용', q: '3-5-2 윙백 콘테 전술' },
+    { label: '🌍 Gasperini Atalanta 3-4-3', q: 'Gasperini Atalanta 3-4-3 tactical analysis' }
+  ],
+  '5-3-2 / 5-4-1': [
+    { label: '🇰🇷 5-3-2 수비전술', q: '5-3-2 수비 포메이션 카운터' },
+    { label: '🌍 Leicester 15/16 Tactics', q: 'Leicester 2015/16 Premier League tactics counter' }
+  ],
+  '3-2-2-3': [
+    { label: '🇰🇷 펩 박스미드필드', q: '펩 과르디올라 3-2-2-3 박스 미드필드' },
+    { label: '🌍 Pep Box Midfield (Tifo)', q: 'Pep Guardiola box midfield 3-2-2-3 Tifo' }
+  ],
+
+  // ─── 모던 컨셉 (name) ───
+  '인버티드 풀백': [
+    { label: '🇰🇷 인버티드 풀백 트렌드', q: '인버티드 풀백 트렌드 펩' },
+    { label: '🌍 John Stones Inverted Role', q: 'John Stones inverted fullback role analysis' }
+  ],
+  '게겐프레싱': [
+    { label: '🇰🇷 게겐프레싱 5초룰', q: '게겐프레싱 5초 룰 클롭' },
+    { label: '🌍 Gegenpressing (Tifo)', q: 'gegenpressing 5 second rule Klopp Tifo' }
+  ],
+  'False 9': [
+    { label: '🇰🇷 폴스나인 메시', q: '폴스나인 메시 펩 바르샤' },
+    { label: '🌍 False 9 Tactical Analysis', q: 'false 9 Messi Pep Barcelona tactical' }
+  ],
+  '만마킹 압박': [
+    { label: '🇰🇷 가스페리니 만마킹', q: '가스페리니 아탈란타 만마킹' },
+    { label: '🌍 Gasperini Man Marking', q: 'Gasperini Atalanta man marking analysis' }
+  ],
+  'Box Midfield': [
+    { label: '🇰🇷 박스미드필드 설명', q: '박스 미드필드 펩 시티 트레블' },
+    { label: '🌍 Box Midfield Treble', q: 'Manchester City box midfield treble analysis' }
+  ],
+  '티키타카': [
+    { label: '🇰🇷 티키타카 펩 바르샤', q: '티키타카 펩 바르샤 점유율' },
+    { label: '🌍 Tiki-Taka Origins', q: 'tiki taka Pep Barcelona origins tactical' }
+  ],
+  'PPDA': [
+    { label: '🇰🇷 PPDA 압박 지표', q: 'PPDA 압박 지표 설명' },
+    { label: '🌍 PPDA Explained', q: 'PPDA passes per defensive action explained statsbomb' }
+  ],
+  '카타나치오 현대화': [
+    { label: '🇰🇷 카타나치오 시메오네', q: '카타나치오 시메오네 빗장수비' },
+    { label: '🌍 Modern Catenaccio', q: 'modern catenaccio Simeone Italy tactical' }
+  ],
+
+  // ─── 기본 규칙 (code) ───
+  offside: [
+    { label: '🇰🇷 오프사이드 룰 설명', q: '오프사이드 룰 설명' },
+    { label: '🌍 Offside Rule Explained', q: 'offside rule explained 2024 IFAB' }
+  ],
+  throwin: [
+    { label: '🇰🇷 스로인 던지는 법', q: '축구 스로인 던지는 법 자세' },
+    { label: '🌍 Throw-in Technique', q: 'football throw in technique proper form' }
+  ],
+  goalkick: [
+    { label: '🇰🇷 골킥 룰 2019 개정', q: '골킥 룰 2019 개정 박스 안' },
+    { label: '🌍 Goal Kick Rule Change', q: 'goal kick rule change 2019 IFAB' }
+  ],
+  corner: [
+    { label: '🇰🇷 코너킥 세트피스', q: '코너킥 세트피스 작전' },
+    { label: '🌍 Corner Kick Set Piece', q: 'best corner kick set piece routines' }
+  ],
+  freekick: [
+    { label: '🇰🇷 프리킥 직접 간접', q: '프리킥 직접 간접 차이' },
+    { label: '🌍 Free Kick Technique', q: 'free kick technique direct indirect explained' }
+  ],
+  penalty: [
+    { label: '🇰🇷 페널티킥 룰', q: '페널티킥 룰 페인트' },
+    { label: '🌍 Penalty Kick Rules VAR', q: 'penalty kick rules VAR stutter step IFAB' }
+  ],
+  handball: [
+    { label: '🇰🇷 핸드볼 룰 2024', q: '핸드볼 룰 2024 개정' },
+    { label: '🌍 Handball Rule 2024', q: 'handball rule 2024 IFAB clarification' }
+  ],
+  cards: [
+    { label: '🇰🇷 옐로 레드카드 기준', q: '옐로카드 레드카드 기준' },
+    { label: '🌍 Yellow Red Card SFP DOGSO', q: 'yellow red card SFP DOGSO explained' }
+  ],
+  advantage: [
+    { label: '🇰🇷 어드밴티지 룰', q: '축구 어드밴티지 룰 적용' },
+    { label: '🌍 Advantage Rule Explained', q: 'football advantage rule explained law 5' }
+  ],
+  backpass: [
+    { label: '🇰🇷 백패스 룰 1992', q: '백패스 룰 골키퍼 핸드' },
+    { label: '🌍 Back-pass Rule History', q: 'back pass rule 1992 history goalkeeper' }
+  ],
+  gkholdtime: [
+    { label: '🇰🇷 GK 8초 룰 2024', q: '골키퍼 8초 룰 2024 IFAB' },
+    { label: '🌍 GK 8 Second Rule', q: 'goalkeeper 8 second rule IFAB 2024' }
+  ],
+  tackle: [
+    { label: '🇰🇷 슬라이딩 태클 기준', q: '슬라이딩 태클 반칙 기준' },
+    { label: '🌍 Slide Tackle Legal', q: 'slide tackle legal vs foul SFP analysis' }
+  ],
+  subs: [
+    { label: '🇰🇷 선수 교체 5명 룰', q: '선수 교체 5명 룰 코로나' },
+    { label: '🌍 5 Substitutions Rule', q: 'football 5 substitutions rule IFAB COVID' }
+  ],
+  time: [
+    { label: '🇰🇷 추가시간 카타르', q: '추가시간 카타르 월드컵 기준' },
+    { label: '🌍 Added Time World Cup', q: 'added time World Cup Qatar referee policy' }
+  ]
+}
+
+export const YT_BASE = 'https://www.youtube.com/results?search_query='
