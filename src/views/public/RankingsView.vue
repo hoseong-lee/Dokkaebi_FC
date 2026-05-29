@@ -65,6 +65,8 @@ const medal = ['🥇', '🥈', '🥉']
 
 onMounted(async () => {
   await seasonStore.ensure()
+  // 기본 보기를 활성 시즌으로 맞춰 홈의 TOP3 와 일관성 유지
+  if (seasonStore.activeId) scope.value = seasonStore.activeId
   store.fetchAll()
   matchesStore.fetchAll()
 })
