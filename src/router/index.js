@@ -112,6 +112,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/guide',
+    name: 'soccer-guide',
+    component: () => import('@/views/public/SoccerGuideView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/more',
     name: 'more',
     component: () => import('@/views/public/MoreView.vue'),
