@@ -8,6 +8,7 @@ import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attac
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
+import { findClub } from '@/utils/clubs'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import PlayerStatsChart from '@/components/player/PlayerStatsChart.vue'
@@ -142,6 +143,24 @@ watch(() => route.params.id, load)
       >
         💬 {{ player.bio }}
       </p>
+      <div
+        v-if="player.favoriteClub || player.favoritePlayer"
+        class="flex flex-wrap gap-1.5 mt-3"
+      >
+        <span
+          v-if="player.favoriteClub"
+          class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold"
+          :class="findClub(player.favoriteClub)?.color || 'bg-gray-100 text-gray-700'"
+        >
+          ⚽ {{ player.favoriteClub }}
+        </span>
+        <span
+          v-if="player.favoritePlayer"
+          class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold bg-amber-100 text-amber-800"
+        >
+          ⭐ {{ player.favoritePlayer }}
+        </span>
+      </div>
     </section>
 
     <section class="bg-white rounded-2xl shadow p-6">

@@ -8,6 +8,7 @@ import { useToast } from '@/composables/useToast'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
 import { personalPartners } from '@/utils/duos'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
+import { CLUBS } from '@/utils/clubs'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
@@ -25,6 +26,8 @@ const loading = ref(true)
 const saving = ref(false)
 const bio = ref('')
 const photoURL = ref('')
+const favoriteClub = ref('')
+const favoritePlayer = ref('')
 const linkModalOpen = ref(false)
 
 const myPlayer = computed(() =>
@@ -66,6 +69,8 @@ async function load() {
   if (myPlayer.value) {
     bio.value = myPlayer.value.bio || ''
     photoURL.value = myPlayer.value.photoURL || ''
+    favoriteClub.value = myPlayer.value.favoriteClub || ''
+    favoritePlayer.value = myPlayer.value.favoritePlayer || ''
   }
   loading.value = false
 }
@@ -78,7 +83,9 @@ async function save() {
   try {
     await playersStore.update(myPlayer.value.id, {
       bio: bio.value.trim() || null,
-      photoURL: photoURL.value || null
+      photoURL: photoURL.value || null,
+      favoriteClub: favoriteClub.value.trim() || null,
+      favoritePlayer: favoritePlayer.value.trim() || null
     })
     toast.success('내 정보를 저장했습니다.')
   } catch (e) {
@@ -230,6 +237,33 @@ function onAvatarSelect(url) {
             class="w-full border rounded-lg px-3 py-2 text-sm"
           ></textarea>
           <p class="text-[11px] text-gray-400 mt-1 text-right">{{ bio.length }}/80</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <h2 class="font-bold text-navy mb-2">⚽ 좋아하는 클럽</h2>
+            <input
+              v-model="favoriteClub"
+              type="text"
+              list="club-suggest"
+              maxlength="30"
+              placeholder="예: FC 바르셀로나"
+              class="w-full border rounded-lg px-3 py-2 text-sm"
+            />
+            <datalist id="club-suggest">
+              <option v-for="c in CLUBS" :key="c.name" :value="c.name">{{ c.short }}</option>
+            </datalist>
+          </div>
+          <div>
+            <h2 class="font-bold text-navy mb-2">⭐ 최애 선수</h2>
+            <input
+              v-model="favoritePlayer"
+              type="text"
+              maxlength="30"
+              placeholder="예: 메시"
+              class="w-full border rounded-lg px-3 py-2 text-sm"
+            />
+          </div>
         </div>
 
         <BaseButton :loading="saving" block @click="save">저장</BaseButton>
