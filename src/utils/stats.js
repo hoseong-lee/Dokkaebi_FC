@@ -38,4 +38,19 @@ export const POSITION_LABEL = {
 
 export const POSITION_ORDER = ['GK', 'DF', 'MF', 'FW']
 
+// 컬러 라벨 (광역 카테고리 기준)
+export const POSITION_BADGE = {
+  GK: 'bg-amber-100 text-amber-800',
+  DF: 'bg-sky-100 text-sky-800',
+  MF: 'bg-emerald-100 text-emerald-800',
+  FW: 'bg-rose-100 text-rose-700'
+}
+// 강조형 (선수 상세 헤더 등)
+export const POSITION_BADGE_STRONG = {
+  GK: 'bg-amber-500 text-white',
+  DF: 'bg-sky-500 text-white',
+  MF: 'bg-emerald-500 text-white',
+  FW: 'bg-rose-500 text-white'
+}
+
 export const FOOT_LABEL = { L: '왼발', R: '오른발', B: '양발' }

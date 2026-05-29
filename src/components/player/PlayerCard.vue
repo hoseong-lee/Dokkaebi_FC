@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import PlayerAvatar from './PlayerAvatar.vue'
-import { POSITION_LABEL, attackPoints } from '@/utils/stats'
+import { POSITION_LABEL, POSITION_BADGE, attackPoints } from '@/utils/stats'
 
 const props = defineProps({
   player: { type: Object, required: true },
@@ -30,7 +30,17 @@ const props = defineProps({
         {{ player.name }}
         <span v-if="player.active === false" class="text-xs text-gray-400">(은퇴)</span>
       </p>
-      <p class="text-xs text-gray-500">{{ POSITION_LABEL[player.position] || player.position }}</p>
+      <div class="flex items-center gap-1.5 mt-0.5">
+        <span
+          class="text-[10px] px-1.5 py-0.5 rounded font-semibold"
+          :class="POSITION_BADGE[player.position] || 'bg-gray-100 text-gray-600'"
+        >
+          {{ POSITION_LABEL[player.position] || player.position }}
+        </span>
+        <span v-if="player.mainPosition" class="text-[10px] text-gray-400">
+          {{ player.mainPosition }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
+        </span>
+      </div>
     </div>
     <div class="text-right text-xs text-gray-500">
       <p><span class="font-bold text-navy">{{ player.stats?.goals || 0 }}</span> 골</p>

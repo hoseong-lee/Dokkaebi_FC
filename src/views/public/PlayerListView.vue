@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { usePlayersStore } from '@/stores/players'
-import { POSITION_ORDER, POSITION_LABEL } from '@/utils/stats'
+import { POSITION_ORDER, POSITION_LABEL, POSITION_BADGE, POSITION_BADGE_STRONG } from '@/utils/stats'
 import PlayerCard from '@/components/player/PlayerCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
@@ -31,8 +31,12 @@ onMounted(() => store.fetchAll())
       <button
         v-for="f in filters"
         :key="f"
-        class="px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors"
-        :class="filter === f ? 'bg-navy text-white' : 'bg-white text-gray-600 hover:bg-gray-100'"
+        class="px-3 py-1.5 rounded-full text-sm whitespace-nowrap font-semibold transition-colors"
+        :class="
+          f === 'ALL'
+            ? (filter === f ? 'bg-navy text-white' : 'bg-white text-gray-600 hover:bg-gray-100')
+            : (filter === f ? POSITION_BADGE_STRONG[f] : POSITION_BADGE[f] + ' hover:opacity-80')
+        "
         @click="filter = f"
       >
         {{ label(f) }}

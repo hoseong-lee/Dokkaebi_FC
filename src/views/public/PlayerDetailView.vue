@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
-import { POSITION_LABEL, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
+import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
@@ -104,10 +104,20 @@ watch(() => route.params.id, load)
           <span v-if="player.number != null" class="text-dokkaebi font-bold">#{{ player.number }}</span>
           <span v-if="player.isRegular" class="text-amber-500 text-xs">★</span>
         </div>
-        <p class="text-sm text-gray-500 mt-1">
-          {{ player.mainPosition || POSITION_LABEL[player.position] }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
-          <span v-if="player.preferredFoot"> · {{ FOOT_LABEL[player.preferredFoot] }}</span>
-        </p>
+        <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
+          <span
+            class="text-[11px] px-2 py-0.5 rounded font-semibold"
+            :class="POSITION_BADGE_STRONG[player.position] || 'bg-gray-300 text-white'"
+          >
+            {{ POSITION_LABEL[player.position] || player.position }}
+          </span>
+          <span v-if="player.mainPosition" class="text-xs text-gray-600">
+            {{ player.mainPosition }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
+          </span>
+          <span v-if="player.preferredFoot" class="text-xs text-gray-500">
+            · {{ FOOT_LABEL[player.preferredFoot] }}
+          </span>
+        </div>
         <p v-if="player.joinedAt" class="text-xs text-gray-400 mt-1">
           가입 {{ formatDate(player.joinedAt, 'YYYY.MM.DD') }}
         </p>

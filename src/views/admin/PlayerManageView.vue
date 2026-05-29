@@ -10,6 +10,7 @@ import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import AvatarPicker from '@/components/player/AvatarPicker.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
@@ -27,6 +28,7 @@ const form = reactive({
   mainPosition: 'CM',
   subPosition: '',
   preferredFoot: 'R',
+  photoURL: '',
   isRegular: true,
   active: true
 })
@@ -38,6 +40,7 @@ function resetForm() {
     mainPosition: 'CM',
     subPosition: '',
     preferredFoot: 'R',
+    photoURL: '',
     isRegular: true,
     active: true
   })
@@ -57,6 +60,7 @@ function openEdit(p) {
     mainPosition: p.mainPosition || 'CM',
     subPosition: p.subPosition || '',
     preferredFoot: p.preferredFoot || 'R',
+    photoURL: p.photoURL || '',
     isRegular: p.isRegular !== false,
     active: p.active !== false
   })
@@ -76,6 +80,7 @@ async function save() {
       subPosition: form.subPosition || null,
       position: categoryOf(form.mainPosition) || 'MF',
       preferredFoot: form.preferredFoot,
+      photoURL: form.photoURL || null,
       isRegular: form.isRegular,
       active: form.active
     }
@@ -168,6 +173,15 @@ onMounted(() => store.fetchAll())
 
     <BaseModal v-model="modalOpen" :title="editingId ? '선수 수정' : '선수 등록'">
       <div class="space-y-4">
+        <div>
+          <label class="block text-xs text-gray-500 mb-2">프로필 사진</label>
+          <AvatarPicker
+            :current="form.photoURL"
+            :name="form.name"
+            @select="(url) => (form.photoURL = url)"
+          />
+        </div>
+
         <div>
           <label class="block text-xs text-gray-500 mb-1">이름</label>
           <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" />
