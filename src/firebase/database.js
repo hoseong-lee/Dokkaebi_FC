@@ -427,7 +427,72 @@ export async function deleteComment(postId, commentId) {
   await remove(ref(rtdb, nsPath(`posts/${postId}/comments/${commentId}`)))
 }
 
-// ───────────── 사진첩 ─────────────
+// ───────────── 사진 게시물 (title/body/tags/images + likes + comments) ─────────────
+export async function listPhotoPosts({ tag, matchId } = {}) {
+  const snap = await get(ref(rtdb, nsPath('photoPosts')))
+  let list = toList(snap)
+  if (matchId) list = list.filter((p) => p.matchId === matchId)
+  if (tag) list = list.filter((p) => Array.isArray(p.tags) && p.tags.includes(tag))
+  return list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+}
+export async function getPhotoPost(id) {
+  const snap = await get(ref(rtdb, nsPath(`photoPosts/${id}`)))
+  return snap.exists() ? { id, ...snap.val() } : null
+}
+export async function createPhotoPost(data) {
+  const r = push(ref(rtdb, nsPath('photoPosts')))
+  await set(r, {
+    title: data.title || '',
+    body: data.body || '',
+    tags: data.tags || [],
+    imageUrls: data.imageUrls || [],
+    imagePublicIds: data.imagePublicIds || [],
+    matchId: data.matchId || null,
+    ...authorMeta(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('create', `photoPosts/${r.key}`)
+  return r.key
+}
+export async function updatePhotoPost(id, data) {
+  await update(ref(rtdb, nsPath(`photoPosts/${id}`)), { ...data, updatedAt: serverTimestamp() })
+  await logAudit('update', `photoPosts/${id}`)
+}
+export async function deletePhotoPost(id) {
+  await remove(ref(rtdb, nsPath(`photoPosts/${id}`)))
+  await logAudit('delete', `photoPosts/${id}`)
+}
+
+// 좋아요 (사용자당 1개)
+export async function togglePhotoLike(postId) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const r = ref(rtdb, nsPath(`photoPosts/${postId}/likes/${uid}`))
+  const snap = await get(r)
+  if (snap.exists()) {
+    await remove(r)
+    return false
+  }
+  await set(r, true)
+  return true
+}
+
+// 댓글
+export async function listPhotoComments(postId) {
+  const snap = await get(ref(rtdb, nsPath(`photoPosts/${postId}/comments`)))
+  return toList(snap).sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
+}
+export async function addPhotoComment(postId, body) {
+  const r = push(ref(rtdb, nsPath(`photoPosts/${postId}/comments`)))
+  await set(r, { body, ...authorMeta(), createdAt: serverTimestamp() })
+  return r.key
+}
+export async function deletePhotoComment(postId, commentId) {
+  await remove(ref(rtdb, nsPath(`photoPosts/${postId}/comments/${commentId}`)))
+}
+
+// ───────────── (legacy) 단일 사진 ─────────────
 export async function listPhotos({ matchId } = {}) {
   const snap = await get(ref(rtdb, nsPath('photos')))
   let list = toList(snap)

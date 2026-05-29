@@ -1,35 +1,19 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { RouterLink } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
-import { listPhotos, createPhoto, deletePhoto } from '@/firebase/database'
-import { uploadToCloudinary, isCloudinaryConfigured, cldThumb } from '@/utils/cloudinary'
-import { formatDate, fromNow } from '@/utils/date'
-import { confirm } from '@/composables/useConfirm'
-import { useToast } from '@/composables/useToast'
+import { listPhotoPosts } from '@/firebase/database'
+import { cldThumb } from '@/utils/cloudinary'
+import { fromNow, formatDate } from '@/utils/date'
 import BaseButton from '@/components/common/BaseButton.vue'
-import BaseModal from '@/components/common/BaseModal.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
-const auth = useAuthStore()
 const matchesStore = useMatchesStore()
-const toast = useToast()
-
-const photos = ref([])
+const posts = ref([])
 const loading = ref(true)
-const uploading = ref(false)
-const filter = ref('')
-const matchIdForUpload = ref('')
-const fileInput = ref(null)
-
-const lightbox = ref(null)
-const lightboxOpen = computed({
-  get: () => !!lightbox.value,
-  set: (v) => { if (!v) lightbox.value = null }
-})
-
-const configured = isCloudinaryConfigured()
+const tagFilter = ref('')
+const matchFilter = ref('')
 
 const matchOptions = computed(() =>
   [...matchesStore.matches]
@@ -37,137 +21,130 @@ const matchOptions = computed(() =>
     .map((m) => ({ id: m.id, label: `${formatDate(m.date, 'YYYY.MM.DD')} vs ${m.opponent}` }))
 )
 
-const visible = computed(() =>
-  filter.value ? photos.value.filter((p) => p.matchId === filter.value) : photos.value
-)
+const allTags = computed(() => {
+  const set = new Set()
+  for (const p of posts.value) (p.tags || []).forEach((t) => set.add(t))
+  return [...set].sort()
+})
+
+const visible = computed(() => {
+  return posts.value.filter((p) => {
+    if (matchFilter.value && p.matchId !== matchFilter.value) return false
+    if (tagFilter.value && !(p.tags || []).includes(tagFilter.value)) return false
+    return true
+  })
+})
 
 async function load() {
   loading.value = true
-  try { photos.value = await listPhotos() } finally { loading.value = false }
-}
-onMounted(async () => {
-  matchesStore.fetchAll()
-  await load()
-})
-
-function triggerPick() {
-  fileInput.value?.click()
-}
-
-async function onPick(e) {
-  const files = Array.from(e.target.files || [])
-  if (files.length === 0) return
-  if (!configured) {
-    toast.error('Cloudinary 설정이 필요합니다.')
-    e.target.value = ''
-    return
-  }
-  uploading.value = true
-  let ok = 0, fail = 0
-  for (const f of files) {
-    try {
-      const up = await uploadToCloudinary(f, { folder: 'dokkaebi' })
-      await createPhoto({
-        url: up.url, publicId: up.publicId, width: up.width, height: up.height,
-        caption: '', matchId: matchIdForUpload.value || null
-      })
-      ok++
-    } catch (err) { console.error(err); fail++ }
-  }
-  uploading.value = false
-  e.target.value = ''
-  await load()
-  if (ok) toast.success(`${ok}장 업로드 완료${fail ? ` · ${fail}장 실패` : ''}`)
-  else toast.error('업로드 실패')
-}
-
-async function remove(p) {
-  const ok = await confirm({
-    title: '사진 삭제',
-    message: '목록에서 삭제할까요? (Cloudinary 원본은 그대로 남습니다)',
-    confirmText: '삭제'
-  })
-  if (!ok) return
-  await deletePhoto(p.id)
-  photos.value = photos.value.filter((x) => x.id !== p.id)
+  try { posts.value = await listPhotoPosts() } finally { loading.value = false }
 }
 
 function matchLabel(id) {
   const m = matchesStore.getById(id)
   return m ? `${formatDate(m.date, 'YYYY.MM.DD')} vs ${m.opponent}` : ''
 }
+
+function likeCount(p) {
+  return p.likes ? Object.keys(p.likes).length : 0
+}
+function commentCount(p) {
+  return p.comments ? Object.keys(p.comments).length : 0
+}
+
+onMounted(async () => {
+  matchesStore.fetchAll()
+  await load()
+})
 </script>
 
 <template>
   <div>
     <div class="flex items-center justify-between mb-4 gap-2">
-      <h1 class="text-xl font-bold text-navy">사진첩</h1>
-      <div>
-        <BaseButton size="sm" :loading="uploading" :disabled="!configured" @click="triggerPick">
-          + 사진 업로드
-        </BaseButton>
-        <input
-          ref="fileInput"
-          type="file"
-          accept="image/*"
-          multiple
-          class="hidden"
-          @change="onPick"
-        />
+      <h1 class="text-xl font-bold text-navy">📷 사진첩</h1>
+      <RouterLink to="/photos/new">
+        <BaseButton size="sm">+ 글쓰기</BaseButton>
+      </RouterLink>
+    </div>
+
+    <!-- 필터 -->
+    <div class="bg-white rounded-xl shadow-sm p-3 mb-4 space-y-2">
+      <div class="flex flex-wrap gap-1.5 items-center">
+        <span class="text-[11px] text-gray-500">태그</span>
+        <button
+          class="text-xs px-2.5 py-1 rounded-full"
+          :class="!tagFilter ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
+          @click="tagFilter = ''"
+        >전체</button>
+        <button
+          v-for="t in allTags"
+          :key="t"
+          class="text-xs px-2.5 py-1 rounded-full"
+          :class="tagFilter === t ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          @click="tagFilter = (tagFilter === t ? '' : t)"
+        >#{{ t }}</button>
       </div>
-    </div>
-
-    <div v-if="!configured" class="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl p-3 mb-4">
-      ⚠ Cloudinary 설정이 필요합니다.<br />
-      README "Cloudinary 설정"을 참고해
-      <code class="text-xs">VITE_CLOUDINARY_CLOUD_NAME</code> /
-      <code class="text-xs">VITE_CLOUDINARY_UPLOAD_PRESET</code>
-      을 등록한 뒤 다시 빌드하세요.
-    </div>
-
-    <div class="flex flex-wrap gap-2 items-center mb-4 text-xs">
-      <label class="text-gray-500">필터:</label>
-      <select v-model="filter" class="border rounded-lg px-2 py-1">
-        <option value="">전체</option>
-        <option v-for="m in matchOptions" :key="m.id" :value="m.id">{{ m.label }}</option>
-      </select>
-      <span v-if="configured" class="text-gray-400 ml-auto">업로드 시 경기 태그:</span>
-      <select v-if="configured" v-model="matchIdForUpload" class="border rounded-lg px-2 py-1">
-        <option value="">(없음)</option>
-        <option v-for="m in matchOptions" :key="m.id" :value="m.id">{{ m.label }}</option>
-      </select>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-gray-500">경기</span>
+        <select v-model="matchFilter" class="border rounded-lg px-2 py-1 flex-1">
+          <option value="">전체</option>
+          <option v-for="m in matchOptions" :key="m.id" :value="m.id">{{ m.label }}</option>
+        </select>
+      </div>
     </div>
 
     <LoadingSpinner v-if="loading" />
-    <EmptyState v-else-if="visible.length === 0" icon="📷" title="아직 사진이 없습니다" />
-    <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-      <div
-        v-for="p in visible"
-        :key="p.id"
-        class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 cursor-pointer group"
-        @click="lightbox = p"
-      >
-        <img :src="cldThumb(p.url, 400)" :alt="p.caption" class="w-full h-full object-cover" loading="lazy" />
-        <button
-          v-if="p.authorUid === auth.user?.uid || auth.isAdmin"
-          class="absolute top-1 right-1 bg-black/50 text-white text-xs w-6 h-6 rounded-full opacity-0 group-hover:opacity-100"
-          @click.stop="remove(p)"
-        >×</button>
-        <p
-          v-if="p.matchId"
-          class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent text-white text-[10px] px-2 py-1 truncate"
-        >
-          {{ matchLabel(p.matchId) }}
-        </p>
-      </div>
-    </div>
+    <EmptyState
+      v-else-if="visible.length === 0"
+      icon="📷"
+      :title="posts.length === 0 ? '아직 게시물이 없습니다' : '조건에 맞는 게시물이 없습니다'"
+    >
+      <RouterLink v-if="posts.length === 0" to="/photos/new">
+        <BaseButton size="sm">첫 게시물 올리기</BaseButton>
+      </RouterLink>
+    </EmptyState>
 
-    <BaseModal v-model="lightboxOpen" :title="lightbox ? (matchLabel(lightbox.matchId) || '사진') : ''">
-      <img v-if="lightbox" :src="lightbox.url" :alt="lightbox.caption" class="w-full rounded" />
-      <p v-if="lightbox?.caption" class="text-sm text-gray-600 mt-3">{{ lightbox.caption }}</p>
-      <p v-if="lightbox" class="text-xs text-gray-400 mt-2">
-        {{ lightbox.authorName }} · {{ fromNow(lightbox.createdAt) }}
-      </p>
-    </BaseModal>
+    <ul v-else class="space-y-4">
+      <li v-for="p in visible" :key="p.id" class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <RouterLink :to="`/photos/${p.id}`" class="block">
+          <div class="p-4 pb-2">
+            <p class="text-xs text-gray-400">
+              {{ p.authorName }} · {{ fromNow(p.createdAt) }}
+              <span v-if="p.matchId" class="ml-1 text-navy">· {{ matchLabel(p.matchId) }}</span>
+            </p>
+            <h2 class="font-bold text-navy mt-0.5">{{ p.title || '(제목 없음)' }}</h2>
+          </div>
+
+          <!-- 첫 이미지(있으면) -->
+          <div v-if="p.imageUrls?.length" class="relative bg-gray-100">
+            <img
+              :src="cldThumb(p.imageUrls[0], 800)"
+              :alt="p.title"
+              class="w-full aspect-[4/3] object-cover"
+              loading="lazy"
+            />
+            <span
+              v-if="p.imageUrls.length > 1"
+              class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full"
+            >+{{ p.imageUrls.length - 1 }}</span>
+          </div>
+
+          <div class="p-4 pt-3">
+            <p v-if="p.body" class="text-sm text-gray-700 line-clamp-2">{{ p.body }}</p>
+            <div v-if="p.tags?.length" class="flex flex-wrap gap-1 mt-2">
+              <span
+                v-for="t in p.tags"
+                :key="t"
+                class="text-[10px] text-navy bg-navy/5 px-1.5 py-0.5 rounded"
+              >#{{ t }}</span>
+            </div>
+            <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+              <span>❤️ {{ likeCount(p) }}</span>
+              <span>💬 {{ commentCount(p) }}</span>
+            </div>
+          </div>
+        </RouterLink>
+      </li>
+    </ul>
   </div>
 </template>

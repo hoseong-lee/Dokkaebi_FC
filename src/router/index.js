@@ -82,6 +82,24 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/photos/new',
+    name: 'photo-new',
+    component: () => import('@/views/public/PhotoPostEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/photos/:id',
+    name: 'photo-detail',
+    component: () => import('@/views/public/PhotoPostDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/photos/:id/edit',
+    name: 'photo-edit',
+    component: () => import('@/views/public/PhotoPostEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/calendar',
     name: 'calendar',
     component: () => import('@/views/public/CalendarView.vue'),
