@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { POSITIONS, FORMATIONS, CONCEPTS, RULES, CLUB_RULES, VIDEOS, YT_BASE } from '@/utils/soccerGuide'
+import VideoLinks from '@/components/guide/VideoLinks.vue'
 
 const tab = ref('position')
 
@@ -11,6 +12,8 @@ const activeRule = ref(RULES[0].code)
 const activeRuleObj = computed(() => RULES.find((r) => r.code === activeRule.value))
 
 function ytLink(q) { return YT_BASE + encodeURIComponent(q) }
+function videoUrl(v) { return v.videoId ? `https://www.youtube.com/watch?v=${v.videoId}` : ytLink(v.q) }
+function thumbUrl(v) { return v.videoId ? `https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg` : '' }
 
 function dots(rows) {
   const out = []
@@ -141,22 +144,7 @@ function dots(rows) {
             <p class="text-sm text-onyx leading-7">{{ activePosObj.tip }}</p>
           </section>
 
-          <!-- 관련 영상 -->
-          <section v-if="VIDEOS[activePosObj.code]" class="border-t border-gray-100 pt-4">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-1 h-4 rounded bg-red-500"></span>
-              <h3 class="text-xs font-bold text-navy">🎬 관련 영상</h3>
-            </div>
-            <div class="flex flex-col gap-1.5 pl-3">
-              <a v-for="v in VIDEOS[activePosObj.code]" :key="v.q"
-                :href="ytLink(v.q)" target="_blank" rel="noopener"
-                class="text-xs text-red-600 hover:bg-red-50 rounded px-2 py-1.5 flex items-center gap-2 transition-colors">
-                <span>▶</span>
-                <span class="font-medium">{{ v.label }}</span>
-                <span class="text-gray-400 text-[10px] ml-auto">↗ 유튜브</span>
-              </a>
-            </div>
-          </section>
+          <VideoLinks :videos="VIDEOS[activePosObj.code]" />
         </div>
       </article>
 
@@ -248,22 +236,7 @@ function dots(rows) {
             <p class="text-sm text-onyx leading-7">{{ f.tip }}</p>
           </div>
 
-          <!-- 관련 영상 -->
-          <div v-if="VIDEOS[f.name]" class="border-t border-gray-100 pt-3.5">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-1 h-4 rounded bg-red-500"></span>
-              <h3 class="text-xs font-bold text-navy">🎬 관련 영상</h3>
-            </div>
-            <div class="flex flex-col gap-1 pl-3">
-              <a v-for="v in VIDEOS[f.name]" :key="v.q"
-                :href="ytLink(v.q)" target="_blank" rel="noopener"
-                class="text-xs text-red-600 hover:bg-red-50 rounded px-2 py-1.5 flex items-center gap-2 transition-colors">
-                <span>▶</span>
-                <span class="font-medium">{{ v.label }}</span>
-                <span class="text-gray-400 text-[10px] ml-auto">↗</span>
-              </a>
-            </div>
-          </div>
+          <VideoLinks :videos="VIDEOS[f.name]" />
         </div>
       </article>
 
@@ -318,22 +291,7 @@ function dots(rows) {
             <p class="text-xs text-onyx leading-6">{{ c.limit }}</p>
           </div>
 
-          <!-- 관련 영상 -->
-          <div v-if="VIDEOS[c.name]" class="border-t border-gray-100 pt-3.5">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-1 h-4 rounded bg-red-500"></span>
-              <h3 class="text-xs font-bold text-navy">🎬 관련 영상</h3>
-            </div>
-            <div class="flex flex-col gap-1 pl-3">
-              <a v-for="v in VIDEOS[c.name]" :key="v.q"
-                :href="ytLink(v.q)" target="_blank" rel="noopener"
-                class="text-xs text-red-600 hover:bg-red-50 rounded px-2 py-1.5 flex items-center gap-2 transition-colors">
-                <span>▶</span>
-                <span class="font-medium">{{ v.label }}</span>
-                <span class="text-gray-400 text-[10px] ml-auto">↗</span>
-              </a>
-            </div>
-          </div>
+          <VideoLinks :videos="VIDEOS[c.name]" />
         </div>
       </article>
     </div>
@@ -381,22 +339,7 @@ function dots(rows) {
             <p class="text-sm text-onyx leading-7">{{ activeRuleObj.tip }}</p>
           </div>
 
-          <!-- 관련 영상 -->
-          <div v-if="VIDEOS[activeRuleObj.code]" class="border-t border-gray-100 pt-3.5">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="w-1 h-4 rounded bg-red-500"></span>
-              <h3 class="text-xs font-bold text-navy">🎬 관련 영상</h3>
-            </div>
-            <div class="flex flex-col gap-1 pl-3">
-              <a v-for="v in VIDEOS[activeRuleObj.code]" :key="v.q"
-                :href="ytLink(v.q)" target="_blank" rel="noopener"
-                class="text-xs text-red-600 hover:bg-red-50 rounded px-2 py-1.5 flex items-center gap-2 transition-colors">
-                <span>▶</span>
-                <span class="font-medium">{{ v.label }}</span>
-                <span class="text-gray-400 text-[10px] ml-auto">↗ 유튜브</span>
-              </a>
-            </div>
-          </div>
+          <VideoLinks :videos="VIDEOS[activeRuleObj.code]" />
         </div>
       </article>
 

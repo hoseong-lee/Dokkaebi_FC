@@ -544,8 +544,9 @@ export const CLUB_RULES = [
   { n: 6, rule: '트렌드 차용 우선순위: ① 반대발 윙어(즉효) ② 6번 1명 고정 ③ CB 중 1명만 빌드업 carrying ④ 인버티드 풀백·박스 미드필드는 자제.' }
 ]
 
-// 항목별 유튜브 검색 링크 (한국어 + 영어). 검색 결과 페이지라 깨진 링크 위험 0.
-// UI 에서 https://www.youtube.com/results?search_query={q} 로 변환.
+// 항목별 유튜브 영상 (한국어 + 영어).
+// videoId 있으면 → 단일 영상 URL + 썸네일 표시 (검증 완료)
+// videoId 없으면 → q 검색 결과 페이지 fallback (깨진 링크 위험 0)
 export const VIDEOS = {
   // ─── 포지션 (code) ───
   GK: [
@@ -581,18 +582,18 @@ export const VIDEOS = {
     { label: '🌍 Haaland Movement', q: 'Erling Haaland off ball movement striker analysis' }
   ],
   F9: [
-    { label: '🇰🇷 폴스나인 설명', q: '폴스나인 false 9 설명' },
-    { label: '🌍 False 9 (Messi/Firmino)', q: 'false 9 Messi Firmino tactical analysis' }
+    { label: '🇰🇷 풋볼리스트 - 폴스나인 (메시·피르미누)', videoId: '7EcojZihhWY' },
+    { label: '🌍 Tifo - How False 9 Changed Football', videoId: 'LTA1WudRfoY' }
   ],
 
   // ─── 포메이션 (name) ───
   '4-3-3': [
-    { label: '🇰🇷 4-3-3 전술 분석', q: '4-3-3 포메이션 전술 분석' },
-    { label: '🌍 4-3-3 Explained (Tifo)', q: '4-3-3 formation tactics explained Tifo' }
+    { label: '🇰🇷 뿅TV - 4-3-3 빌드업 전술', videoId: 'oHT6LLf3dv8' },
+    { label: '🌍 Tifo - Guide to 4-3-3', videoId: 'lvkkYJ2YW-A' }
   ],
   '4-2-3-1': [
-    { label: '🇰🇷 4-2-3-1 포메이션', q: '4-2-3-1 포메이션 분석' },
-    { label: '🌍 4-2-3-1 Mourinho', q: '4-2-3-1 formation Mourinho tactical analysis' }
+    { label: '🇰🇷 4-2-3-1 포메이션 분석', q: '4-2-3-1 포메이션 분석' },
+    { label: '🌍 Tifo - 4-4-2 Explained (참고)', videoId: 'kx-skM2qsWs' }
   ],
   '4-4-2': [
     { label: '🇰🇷 4-4-2 시메오네', q: '4-4-2 시메오네 아틀레티코' },
@@ -611,34 +612,34 @@ export const VIDEOS = {
     { label: '🌍 Leicester 15/16 Tactics', q: 'Leicester 2015/16 Premier League tactics counter' }
   ],
   '3-2-2-3': [
-    { label: '🇰🇷 펩 박스미드필드', q: '펩 과르디올라 3-2-2-3 박스 미드필드' },
-    { label: '🌍 Pep Box Midfield (Tifo)', q: 'Pep Guardiola box midfield 3-2-2-3 Tifo' }
+    { label: '🇰🇷 한준TV - 펩 3-2-4-1 트레블', videoId: 'mLlIzACTCN8' },
+    { label: '🌍 Pep Box Midfield Buildup', videoId: 'LlWLsSNPqVs' }
   ],
 
   // ─── 모던 컨셉 (name) ───
   '인버티드 풀백': [
-    { label: '🇰🇷 인버티드 풀백 트렌드', q: '인버티드 풀백 트렌드 펩' },
-    { label: '🌍 John Stones Inverted Role', q: 'John Stones inverted fullback role analysis' }
+    { label: '🇰🇷 한준TV - 인버티드 풀백 맨시티', videoId: 'rw8c3a0mX4c' },
+    { label: '🌍 Tifo - Inverted Fullbacks', videoId: 'ahCoFRvC_aM' }
   ],
   '게겐프레싱': [
-    { label: '🇰🇷 게겐프레싱 5초룰', q: '게겐프레싱 5초 룰 클롭' },
-    { label: '🌍 Gegenpressing (Tifo)', q: 'gegenpressing 5 second rule Klopp Tifo' }
+    { label: '🇰🇷 게겐프레싱 클롭 도르트문트', videoId: '2MHiJ36IucQ' },
+    { label: '🌍 Tifo - What is Gegenpressing?', videoId: '5QRWryN3okY' }
   ],
   'False 9': [
-    { label: '🇰🇷 폴스나인 메시', q: '폴스나인 메시 펩 바르샤' },
-    { label: '🌍 False 9 Tactical Analysis', q: 'false 9 Messi Pep Barcelona tactical' }
+    { label: '🇰🇷 풋볼리스트 - 폴스나인 (메시·피르미누)', videoId: '7EcojZihhWY' },
+    { label: '🌍 Tifo - How False 9 Changed Football', videoId: 'LTA1WudRfoY' }
   ],
   '만마킹 압박': [
     { label: '🇰🇷 가스페리니 만마킹', q: '가스페리니 아탈란타 만마킹' },
     { label: '🌍 Gasperini Man Marking', q: 'Gasperini Atalanta man marking analysis' }
   ],
   'Box Midfield': [
-    { label: '🇰🇷 박스미드필드 설명', q: '박스 미드필드 펩 시티 트레블' },
-    { label: '🌍 Box Midfield Treble', q: 'Manchester City box midfield treble analysis' }
+    { label: '🇰🇷 한준TV - 펩 3-2-4-1 트레블', videoId: 'mLlIzACTCN8' },
+    { label: '🌍 Pep Box Midfield Buildup', videoId: 'LlWLsSNPqVs' }
   ],
   '티키타카': [
-    { label: '🇰🇷 티키타카 펩 바르샤', q: '티키타카 펩 바르샤 점유율' },
-    { label: '🌍 Tiki-Taka Origins', q: 'tiki taka Pep Barcelona origins tactical' }
+    { label: '🇰🇷 펩 바르샤 티키타카 시대', videoId: 'mnrnAenxWm4' },
+    { label: '🌍 Tifo - What is Tiki-Taka?', videoId: 'sR67JvLNn9U' }
   ],
   'PPDA': [
     { label: '🇰🇷 PPDA 압박 지표', q: 'PPDA 압박 지표 설명' },
@@ -651,12 +652,12 @@ export const VIDEOS = {
 
   // ─── 기본 규칙 (code) ───
   offside: [
-    { label: '🇰🇷 오프사이드 룰 설명', q: '오프사이드 룰 설명' },
-    { label: '🌍 Offside Rule Explained', q: 'offside rule explained 2024 IFAB' }
+    { label: '🇰🇷 골닷컴 - 오프사이드 졸업', videoId: 'EMjnuxTejIo' },
+    { label: '🌍 Tifo - Football\'s new offside law', videoId: 'd7woFOryHPQ' }
   ],
   throwin: [
-    { label: '🇰🇷 스로인 던지는 법', q: '축구 스로인 던지는 법 자세' },
-    { label: '🌍 Throw-in Technique', q: 'football throw in technique proper form' }
+    { label: '🇰🇷 DKFC - 스로인 규칙·파울 안하는 법', videoId: 'TBLAg4-adZE' },
+    { label: '🌍 Tifo - What is a foul throw?', videoId: 'sGPe7cvcy0Q' }
   ],
   goalkick: [
     { label: '🇰🇷 골킥 룰 2019 개정', q: '골킥 룰 2019 개정 박스 안' },
@@ -671,32 +672,32 @@ export const VIDEOS = {
     { label: '🌍 Free Kick Technique', q: 'free kick technique direct indirect explained' }
   ],
   penalty: [
-    { label: '🇰🇷 페널티킥 룰', q: '페널티킥 룰 페인트' },
-    { label: '🌍 Penalty Kick Rules VAR', q: 'penalty kick rules VAR stutter step IFAB' }
+    { label: '🇰🇷 스포타임 - PK 규정 총정리', videoId: 'qbEu9vsggQ8' },
+    { label: '🌍 Stutter Step PK Technique', videoId: 'dft9bywB5gU' }
   ],
   handball: [
-    { label: '🇰🇷 핸드볼 룰 2024', q: '핸드볼 룰 2024 개정' },
-    { label: '🌍 Handball Rule 2024', q: 'handball rule 2024 IFAB clarification' }
+    { label: '🇰🇷 KFA - 2025시즌 규칙 변경 안내', videoId: '0b71NUyx_mE' },
+    { label: '🌍 Tifo - New Handball Law', videoId: 'Myg6n_JYq4c' }
   ],
   cards: [
-    { label: '🇰🇷 옐로 레드카드 기준', q: '옐로카드 레드카드 기준' },
-    { label: '🌍 Yellow Red Card SFP DOGSO', q: 'yellow red card SFP DOGSO explained' }
+    { label: '🇰🇷 연합뉴스 - 옐로카드·감독 퇴장', videoId: 'j0RrUIAUb44' },
+    { label: '🌍 MLS - DOGSO Red Card Debate', videoId: 'ineKmmliJmU' }
   ],
   advantage: [
     { label: '🇰🇷 어드밴티지 룰', q: '축구 어드밴티지 룰 적용' },
     { label: '🌍 Advantage Rule Explained', q: 'football advantage rule explained law 5' }
   ],
   backpass: [
-    { label: '🇰🇷 백패스 룰 1992', q: '백패스 룰 골키퍼 핸드' },
-    { label: '🌍 Back-pass Rule History', q: 'back pass rule 1992 history goalkeeper' }
+    { label: '🇰🇷 백패스 룰 (검색)', q: '백패스 룰 골키퍼 핸드 1992' },
+    { label: '🌍 AFC Finners - Blame Schmeichel', videoId: 'cx4lYXb0UKo' }
   ],
   gkholdtime: [
-    { label: '🇰🇷 GK 8초 룰 2024', q: '골키퍼 8초 룰 2024 IFAB' },
-    { label: '🌍 GK 8 Second Rule', q: 'goalkeeper 8 second rule IFAB 2024' }
+    { label: '🇰🇷 스포츠머그 - GK 8초 룰 도입', videoId: 'LJ_LssO5XY0' },
+    { label: '🌍 Referee 101 - 8 Sec GK Law 2025', videoId: '9HEnp0zLl8M' }
   ],
   tackle: [
-    { label: '🇰🇷 슬라이딩 태클 기준', q: '슬라이딩 태클 반칙 기준' },
-    { label: '🌍 Slide Tackle Legal', q: 'slide tackle legal vs foul SFP analysis' }
+    { label: '🇰🇷 슬라이딩 태클 (검색)', q: '슬라이딩 태클 반칙 기준' },
+    { label: '🌍 AllAttack - Slide Tackle Properly', videoId: 'SALSPIulfj0' }
   ],
   subs: [
     { label: '🇰🇷 선수 교체 5명 룰', q: '선수 교체 5명 룰 코로나' },
