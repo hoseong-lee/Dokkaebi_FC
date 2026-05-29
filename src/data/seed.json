@@ -3895,7 +3895,7 @@
     },
     "m08": {
       "seasonId": "s2025",
-      "opponent": "EXFC",
+      "opponent": "EX FC",
       "date": 1742713200000,
       "location": "초안산",
       "locationUrl": "",
@@ -4777,7 +4777,7 @@
     },
     "m13": {
       "seasonId": "s2025",
-      "opponent": "도깨비 자체전 (한마음 축구대회)",
+      "opponent": "도깨비 자체전",
       "date": 1747465200000,
       "location": "초안산",
       "locationUrl": "",
@@ -8052,7 +8052,7 @@
     },
     "m31": {
       "seasonId": "s2026",
-      "opponent": "FC국대",
+      "opponent": "국대FC",
       "date": 1776502800000,
       "location": "초안산",
       "locationUrl": "",

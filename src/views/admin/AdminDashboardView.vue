@@ -8,7 +8,8 @@ import { dayjs } from '@/utils/date'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
 import { confirm } from '@/composables/useConfirm'
-import { importSeed, migrateSeasonsByYear } from '@/firebase/database'
+import { importSeed, migrateSeasonsByYear, migrateOpponentNames } from '@/firebase/database'
+import { canonicalOpponent } from '@/utils/opponentNormalize'
 import seedData from '@/data/seed.json'
 import BaseButton from '@/components/common/BaseButton.vue'
 
@@ -20,6 +21,45 @@ const toast = useToast()
 const creatingSeason = ref(false)
 const importing = ref(false)
 const migrating = ref(false)
+const normalizing = ref(false)
+
+// 상대팀명 동의어(국대FC/FC국대 등) 자동 감지
+const opponentVariants = computed(() => {
+  const seen = new Map() // canonical → Set(variants)
+  for (const m of matchesStore.matches) {
+    if (!m.opponent) continue
+    const c = canonicalOpponent(m.opponent)
+    if (c !== m.opponent) {
+      if (!seen.has(c)) seen.set(c, new Set())
+      seen.get(c).add(m.opponent)
+    }
+  }
+  return [...seen.entries()].map(([canonical, variants]) => ({
+    canonical, variants: [...variants]
+  }))
+})
+const needsOpponentNormalize = computed(() => opponentVariants.value.length > 0)
+
+async function runNormalize() {
+  const ok = await confirm({
+    title: '상대팀명 정규화',
+    message:
+      '동의어로 분류된 상대팀명을 통일합니다.\n예: 국대FC / FC국대 → 국대FC.\n경기 데이터는 그대로 유지됩니다.',
+    confirmText: '정규화',
+    variant: 'primary'
+  })
+  if (!ok) return
+  normalizing.value = true
+  try {
+    const res = await migrateOpponentNames()
+    await matchesStore.fetchAll({}, true)
+    toast.success(`${res.changed}건의 상대팀명을 통일했습니다.`)
+  } catch (e) {
+    toast.error(`정규화 실패: ${e?.code || e?.message || e}`)
+  } finally {
+    normalizing.value = false
+  }
+}
 
 // 옛 시즌(s{YYYY} 패턴이 아닌 것 — 예: s2526)이 있으면 분리 마이그레이션 권장
 const legacySeasons = computed(() =>
@@ -124,6 +164,26 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-5">
+    <!-- 상대팀명 정규화 안내 -->
+    <div
+      v-if="needsOpponentNormalize"
+      class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-sm"
+    >
+      <p class="font-bold text-amber-800">🏷 상대팀명 정규화 필요</p>
+      <p class="text-gray-700 mt-1">
+        같은 팀이 다른 이름으로 분류된 경우가 있어요:
+      </p>
+      <ul class="text-xs text-gray-600 mt-1 ml-3 list-disc">
+        <li v-for="v in opponentVariants" :key="v.canonical">
+          <span class="font-semibold text-amber-700">{{ v.canonical }}</span>
+          ← {{ v.variants.join(', ') }}
+        </li>
+      </ul>
+      <BaseButton size="sm" variant="primary" class="mt-3" :loading="normalizing" @click="runNormalize">
+        상대팀명 통일 실행
+      </BaseButton>
+    </div>
+
     <!-- 시즌 연도별 분리 안내 (옛 시즌 감지 시) -->
     <div
       v-if="needsMigration"

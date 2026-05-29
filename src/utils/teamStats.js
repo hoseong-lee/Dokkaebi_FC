@@ -1,4 +1,5 @@
 import { matchResult, TEAM_STATS_EXCLUDE_TYPES } from './match'
+import { canonicalOpponent } from './opponentNormalize'
 
 const isCountable = (m) =>
   m.status === 'finished' &&
@@ -33,7 +34,7 @@ export function headToHead(matches = []) {
   const map = {}
   for (const m of matches) {
     if (!isCountable(m)) continue
-    const key = m.opponent || '미상'
+    const key = canonicalOpponent(m.opponent) || '미상'
     if (!map[key]) map[key] = { opponent: key, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0 }
     const h = map[key]
     h.played++

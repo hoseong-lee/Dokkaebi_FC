@@ -9,6 +9,7 @@ import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import PlayerStatsChart from '@/components/player/PlayerStatsChart.vue'
 import PlayerMonthlyChart from '@/components/player/PlayerMonthlyChart.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -152,8 +153,9 @@ watch(() => route.params.id, load)
         </select>
       </div>
 
+      <PlayerStatsCards :stats="stats" :footer="false" class="mb-4" />
       <PlayerStatsChart :stats="stats" />
-      <p class="text-center text-sm text-gray-500 mt-4">
+      <p class="text-center text-sm text-gray-500 mt-3">
         공격 포인트 <span class="font-bold text-navy text-base">{{ attackPoints(stats) }}</span>
       </p>
     </section>

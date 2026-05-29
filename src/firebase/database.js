@@ -11,6 +11,7 @@ import {
 import { rtdb, auth } from './config'
 import { emptyStats, tallyEvents } from '@/utils/stats'
 import { dayjs } from '@/utils/date'
+import { canonicalOpponent } from '@/utils/opponentNormalize'
 
 // 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
 // (travel/calendar 와 동일하게 앱별 네임스페이스 분리).
@@ -652,6 +653,27 @@ export async function migrateSeasonsByYear() {
     legacyRemoved: legacy
   })
   return { years: [...years], legacyRemoved: legacy }
+}
+
+// ───────────── 상대팀명 정규화 마이그레이션 ─────────────
+// 같은 팀의 다른 표기(국대FC/FC국대 등)를 캐노니컬 이름으로 통일.
+export async function migrateOpponentNames() {
+  const snap = await get(ref(rtdb, nsPath('matches')))
+  const matches = snap.val() || {}
+  const updates = {}
+  const changes = []
+  for (const [mid, m] of Object.entries(matches)) {
+    if (!m.opponent) continue
+    const c = canonicalOpponent(m.opponent)
+    if (c && c !== m.opponent) {
+      updates[nsPath(`matches/${mid}/opponent`)] = c
+      changes.push({ id: mid, from: m.opponent, to: c })
+    }
+  }
+  if (Object.keys(updates).length === 0) return { changed: 0, changes: [] }
+  await update(ref(rtdb), updates)
+  await logAudit('update', 'matches/opponent-normalize', { count: changes.length })
+  return { changed: changes.length, changes }
 }
 
 // ───────────── 초기 데이터 가져오기 ─────────────

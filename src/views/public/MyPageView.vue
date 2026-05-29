@@ -3,17 +3,22 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
+import { useMatchesStore } from '@/stores/matches'
 import { useToast } from '@/composables/useToast'
-import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf, attackPoints } from '@/utils/stats'
+import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
+import { personalPartners } from '@/utils/duos'
+import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import AvatarPicker from '@/components/player/AvatarPicker.vue'
 import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
 
 const auth = useAuthStore()
 const playersStore = usePlayersStore()
 const seasonStore = useSeasonStore()
+const matchesStore = useMatchesStore()
 const toast = useToast()
 
 const loading = ref(true)
@@ -34,11 +39,29 @@ const seasonStats = computed(() => {
 })
 const totalStats = computed(() => myPlayer.value?.stats || {})
 
+const topPartners = computed(() => {
+  if (!myPlayer.value) return []
+  return personalPartners(myPlayer.value.id, matchesStore.matches).slice(0, 2)
+    .map((p) => ({ ...p, player: playersStore.getById(p.partnerId) }))
+    .filter((p) => p.player)
+})
+
+const myBadges = computed(() => {
+  if (!myPlayer.value) return []
+  return computePlayerBadges(
+    myPlayer.value,
+    matchesStore.matches,
+    playersStore.players,
+    seasonStore.list
+  ).slice(0, 4)
+})
+
 async function load() {
   loading.value = true
   await Promise.all([
     seasonStore.ensure(),
-    playersStore.loaded ? Promise.resolve() : playersStore.fetchAll()
+    playersStore.loaded ? Promise.resolve() : playersStore.fetchAll(),
+    matchesStore.loaded ? Promise.resolve() : matchesStore.fetchAll()
   ])
   if (myPlayer.value) {
     bio.value = myPlayer.value.bio || ''
@@ -144,27 +167,46 @@ function onAvatarSelect(url) {
             전체 보기 →
           </RouterLink>
         </div>
-        <div class="grid grid-cols-4 gap-2">
-          <div class="bg-gray-50 rounded-xl p-3 text-center">
-            <p class="text-2xl font-bold text-navy tabular-nums">{{ seasonStats.appearances || 0 }}</p>
-            <p class="text-[10px] text-gray-500 mt-0.5">출전</p>
-          </div>
-          <div class="bg-rose-50 rounded-xl p-3 text-center">
-            <p class="text-2xl font-bold text-rose-700 tabular-nums">{{ seasonStats.goals || 0 }}</p>
-            <p class="text-[10px] text-gray-500 mt-0.5">골</p>
-          </div>
-          <div class="bg-sky-50 rounded-xl p-3 text-center">
-            <p class="text-2xl font-bold text-sky-700 tabular-nums">{{ seasonStats.assists || 0 }}</p>
-            <p class="text-[10px] text-gray-500 mt-0.5">도움</p>
-          </div>
-          <div class="bg-amber-50 rounded-xl p-3 text-center">
-            <p class="text-2xl font-bold text-amber-700 tabular-nums">{{ seasonStats.momCount || 0 }}</p>
-            <p class="text-[10px] text-gray-500 mt-0.5">MOM</p>
-          </div>
+        <PlayerStatsCards :stats="seasonStats" />
+        <p class="text-center text-xs text-gray-400 mt-2">
+          통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM
+        </p>
+      </section>
+
+      <!-- 내 단짝 + 뱃지 -->
+      <section v-if="myPlayer && (topPartners.length || myBadges.length)" class="bg-white rounded-2xl shadow p-5 space-y-4">
+        <div v-if="topPartners.length">
+          <h2 class="font-bold text-navy mb-2">⭐ 내 단짝</h2>
+          <ul class="space-y-1.5">
+            <li
+              v-for="p in topPartners"
+              :key="p.partnerId"
+              class="flex items-center gap-2 text-sm"
+            >
+              <PlayerAvatar :player="p.player" :size="32" />
+              <RouterLink :to="`/players/${p.partnerId}`" class="flex-1 font-medium hover:underline">
+                {{ p.player.name }}
+              </RouterLink>
+              <span class="text-xs text-gray-500">콤비 <span class="font-bold text-navy">{{ p.count }}</span>회</span>
+            </li>
+          </ul>
         </div>
-        <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
-          <span>공격 P <span class="font-bold text-navy">{{ attackPoints(seasonStats) }}</span></span>
-          <span>통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM</span>
+        <div v-if="myBadges.length">
+          <h2 class="font-bold text-navy mb-2">🏅 내 뱃지</h2>
+          <div class="flex flex-wrap gap-1.5">
+            <span
+              v-for="b in myBadges"
+              :key="b.id"
+              class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-xs font-semibold"
+              :class="BADGE_TONE[b.icon] || 'bg-gray-50 text-gray-700 border-gray-200'"
+              :title="b.desc"
+            >
+              <span>{{ b.icon }}</span>{{ b.label }}
+            </span>
+          </div>
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-[11px] text-navy hover:underline mt-2 inline-block">
+            전체 뱃지 보기 →
+          </RouterLink>
         </div>
       </section>
 
