@@ -33,7 +33,7 @@ async function handleLogout() {
         <img
           :src="emblemSrc"
           alt="DOKKEBY FC"
-          class="w-8 h-8 rounded-full ring-1 ring-gold/40 block"
+          class="w-8 h-8 rounded-full ring-2 ring-gold/80 block"
         />
         <span class="tracking-wide leading-none">도깨비 FC</span>
       </RouterLink>
