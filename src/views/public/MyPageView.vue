@@ -2,8 +2,9 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePlayersStore } from '@/stores/players'
+import { useSeasonStore } from '@/stores/season'
 import { useToast } from '@/composables/useToast'
-import { POSITION_LABEL, POSITION_BADGE_STRONG } from '@/utils/stats'
+import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf, attackPoints } from '@/utils/stats'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
@@ -12,6 +13,7 @@ import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
 
 const auth = useAuthStore()
 const playersStore = usePlayersStore()
+const seasonStore = useSeasonStore()
 const toast = useToast()
 
 const loading = ref(true)
@@ -24,9 +26,20 @@ const myPlayer = computed(() =>
   auth.myPlayerId ? playersStore.getById(auth.myPlayerId) : null
 )
 
+const seasonName = computed(() => seasonStore.activeSeason?.name || '이번 시즌')
+const seasonStats = computed(() => {
+  if (!myPlayer.value) return null
+  if (seasonStore.activeId) return seasonStatsOf(myPlayer.value, seasonStore.activeId)
+  return myPlayer.value.stats || {}
+})
+const totalStats = computed(() => myPlayer.value?.stats || {})
+
 async function load() {
   loading.value = true
-  if (!playersStore.loaded) await playersStore.fetchAll()
+  await Promise.all([
+    seasonStore.ensure(),
+    playersStore.loaded ? Promise.resolve() : playersStore.fetchAll()
+  ])
   if (myPlayer.value) {
     bio.value = myPlayer.value.bio || ''
     photoURL.value = myPlayer.value.photoURL || ''
@@ -120,6 +133,38 @@ function onAvatarSelect(url) {
             관리자가 화이트리스트 추가 시 선수를 지정하면 자동 연결됩니다.<br>
             없으면 위 [연결] 버튼으로 직접 골라주세요. MOM 투표·내 통계 표시에 필요합니다.
           </p>
+        </div>
+      </section>
+
+      <!-- 내 시즌 통계 (연결된 선수에만) -->
+      <section v-if="myPlayer && seasonStats" class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold text-navy">내 기록 · {{ seasonName }}</h2>
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy hover:underline">
+            전체 보기 →
+          </RouterLink>
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+          <div class="bg-gray-50 rounded-xl p-3 text-center">
+            <p class="text-2xl font-bold text-navy tabular-nums">{{ seasonStats.appearances || 0 }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5">출전</p>
+          </div>
+          <div class="bg-rose-50 rounded-xl p-3 text-center">
+            <p class="text-2xl font-bold text-rose-700 tabular-nums">{{ seasonStats.goals || 0 }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5">골</p>
+          </div>
+          <div class="bg-sky-50 rounded-xl p-3 text-center">
+            <p class="text-2xl font-bold text-sky-700 tabular-nums">{{ seasonStats.assists || 0 }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5">도움</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-3 text-center">
+            <p class="text-2xl font-bold text-amber-700 tabular-nums">{{ seasonStats.momCount || 0 }}</p>
+            <p class="text-[10px] text-gray-500 mt-0.5">MOM</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+          <span>공격 P <span class="font-bold text-navy">{{ attackPoints(seasonStats) }}</span></span>
+          <span>통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM</span>
         </div>
       </section>
 
