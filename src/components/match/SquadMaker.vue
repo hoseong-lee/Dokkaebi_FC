@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import SquadEditor from './SquadEditor.vue'
 import { buildSquadShareText, copyToClipboard } from '@/utils/squadShare'
 import { useToast } from '@/composables/useToast'
@@ -16,6 +16,27 @@ const activeQ = ref(0)
 function lineupCount(i) {
   return props.squads[i]?.lineup?.length || 0
 }
+
+// 선수별 배정된 쿼터 수 ({playerId: count})
+const playerQuarterCounts = computed(() => {
+  const counts = {}
+  for (const sq of props.squads) {
+    for (const pid of sq.lineup || []) {
+      counts[pid] = (counts[pid] || 0) + 1
+    }
+  }
+  return counts
+})
+
+// 분포 요약
+const distribution = computed(() => {
+  const dist = [0, 0, 0, 0, 0] // 0~4 쿼터
+  for (const cnt of Object.values(playerQuarterCounts.value)) {
+    if (cnt >= 0 && cnt <= 4) dist[cnt]++
+  }
+  const totalPlayers = Object.keys(playerQuarterCounts.value).length
+  return { dist, totalPlayers }
+})
 
 // 직전 쿼터 → 현재 쿼터 복사
 function copyFromPrev() {
@@ -103,8 +124,32 @@ async function shareAll() {
       >이 쿼터 비우기</button>
     </div>
 
+    <!-- 분포 요약: 쿼터 배정 횟수별 인원 수 -->
+    <div
+      v-if="distribution.totalPlayers"
+      class="bg-gradient-to-r from-navy/5 to-gold/10 rounded-xl p-3 text-xs space-y-1"
+    >
+      <div class="flex items-center justify-between font-medium">
+        <span class="text-navy">출전 후보 {{ distribution.totalPlayers }}명 · 쿼터 배정 분포</span>
+      </div>
+      <div class="grid grid-cols-4 gap-1.5">
+        <div
+          v-for="n in [1, 2, 3, 4]"
+          :key="n"
+          class="rounded-lg px-2 py-1.5 text-center"
+          :class="n === 1 ? 'bg-amber-100 text-amber-800' : n < 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-gold/30 text-onyx font-semibold'"
+        >
+          <p class="text-[10px] opacity-80">{{ n === 4 ? '풀쿼' : n + '쿼터' }}</p>
+          <p class="font-bold tabular-nums">{{ distribution.dist[n] }}명</p>
+        </div>
+      </div>
+      <p class="text-[10px] text-gray-500">
+        ⚠ 1쿼터만 뛰는 인원이 많으면 회전이 부족할 수 있어요 · 보통 2~3쿼터씩 배정 권장
+      </p>
+    </div>
+
     <!-- 현재 쿼터 에디터 -->
-    <SquadEditor :squad="squads[activeQ]" :players="players" />
+    <SquadEditor :squad="squads[activeQ]" :players="players" :quarter-counts="playerQuarterCounts" />
 
     <!-- 단톡 공유 -->
     <div class="pt-3 border-t">

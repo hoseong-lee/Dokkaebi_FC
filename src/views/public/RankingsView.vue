@@ -57,8 +57,14 @@ const current = computed(() => {
   return map[tab.value]
 })
 
-const summary = computed(() => teamSummary(matchesStore.matches))
-const h2h = computed(() => headToHead(matchesStore.matches))
+// 선택한 시즌에 해당하는 경기만 (통산이면 전체)
+const scopedMatches = computed(() =>
+  scope.value === 'total'
+    ? matchesStore.matches
+    : matchesStore.matches.filter((m) => m.seasonId === scope.value)
+)
+const summary = computed(() => teamSummary(scopedMatches.value))
+const h2h = computed(() => headToHead(scopedMatches.value))
 const bestEleven = computed(() =>
   scope.value === 'total' ? null : pickBestEleven(store.players, scope.value)
 )
@@ -86,7 +92,7 @@ onMounted(async () => {
     <!-- 팀 전적 요약 -->
     <section v-if="summary.played" class="bg-gradient-to-br from-navy to-navy/80 text-white rounded-2xl shadow p-5">
       <div class="flex items-center justify-between">
-        <h2 class="font-bold">시즌 전적</h2>
+        <h2 class="font-bold">{{ currentSeasonName }} 전적</h2>
         <span class="text-sm text-white/70">{{ summary.played }}경기</span>
       </div>
       <div class="flex items-end gap-4 mt-3">

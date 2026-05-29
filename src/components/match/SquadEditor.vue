@@ -15,8 +15,18 @@ const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.inclu
 
 const props = defineProps({
   squad: { type: Object, required: true },
-  players: { type: Array, required: true }
+  players: { type: Array, required: true },
+  // SquadMaker 가 전달하는 {playerId: 배정된 쿼터 수} 맵 (4쿼터 전체 기준)
+  quarterCounts: { type: Object, default: () => ({}) }
 })
+
+const QCOUNT_TONE = {
+  0: '',
+  1: 'bg-amber-400 text-white',     // 부족 — 1쿼터만
+  2: 'bg-emerald-500 text-white',   // 적정
+  3: 'bg-emerald-500 text-white',   // 적정
+  4: 'bg-gold text-onyx font-bold'  // 풀쿼
+}
 
 const s = props.squad
 const playersStore = usePlayersStore()
@@ -207,6 +217,13 @@ function clearSlot() {
           :class="s.lineup.includes(p.id) ? 'border-navy bg-navy/5' : 'border-transparent bg-gray-50'"
           @click="toggleLineup(p.id)"
         >
+          <!-- 쿼터 카운트 (좌상단) -->
+          <span
+            v-if="quarterCounts[p.id]"
+            class="absolute top-1 left-1 text-[9px] rounded-full w-5 h-5 flex items-center justify-center"
+            :class="QCOUNT_TONE[quarterCounts[p.id]] || 'bg-gray-300 text-white'"
+            :title="`${quarterCounts[p.id]}/4 쿼터 배정`"
+          >{{ quarterCounts[p.id] }}</span>
           <span v-if="p.isRegular" class="absolute top-1 right-1 text-amber-500 text-[10px] leading-none">★</span>
           <span v-else class="absolute top-1 right-1 text-[9px] bg-gray-200 text-gray-600 rounded px-1 leading-tight">용병</span>
           <PlayerAvatar :player="p" :size="36" />
