@@ -107,14 +107,15 @@ watch(() => route.params.id, load)
   <LoadingSpinner v-if="loading" label="불러오는 중..." />
   <EmptyState v-else-if="!player" icon="🔍" title="선수를 찾을 수 없습니다" />
   <div v-else class="space-y-4">
-    <section class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
-      <PlayerAvatar :player="player" :size="80" />
-      <div class="flex-1">
-        <div class="flex items-center gap-2">
-          <h1 class="text-2xl font-bold text-navy">{{ player.name }}</h1>
-          <span v-if="player.number != null" class="text-dokkaebi font-bold">#{{ player.number }}</span>
-          <span v-if="player.isRegular" class="text-amber-500 text-xs">★</span>
-        </div>
+    <section class="bg-white rounded-2xl shadow p-6">
+      <div class="flex items-center gap-4">
+        <PlayerAvatar :player="player" :size="80" />
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-bold text-navy">{{ player.name }}</h1>
+            <span v-if="player.number != null" class="text-dokkaebi font-bold">#{{ player.number }}</span>
+            <span v-if="player.isRegular" class="text-amber-500 text-xs">★</span>
+          </div>
         <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
           <span
             class="text-[11px] px-2 py-0.5 rounded font-semibold"
@@ -129,10 +130,17 @@ watch(() => route.params.id, load)
             · {{ FOOT_LABEL[player.preferredFoot] }}
           </span>
         </div>
-        <p v-if="player.joinedAt" class="text-xs text-gray-400 mt-1">
-          가입 {{ formatDate(player.joinedAt, 'YYYY.MM.DD') }}
-        </p>
+          <p v-if="player.joinedAt" class="text-xs text-gray-400 mt-1">
+            가입 {{ formatDate(player.joinedAt, 'YYYY.MM.DD') }}
+          </p>
+        </div>
       </div>
+      <p
+        v-if="player.bio"
+        class="text-sm text-gray-700 mt-3 bg-gray-50 rounded-lg px-3 py-2 italic"
+      >
+        💬 {{ player.bio }}
+      </p>
     </section>
 
     <section class="bg-white rounded-2xl shadow p-6">

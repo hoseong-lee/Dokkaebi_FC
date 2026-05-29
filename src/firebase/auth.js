@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { ref as dbRef, get, set, serverTimestamp } from 'firebase/database'
 import { rtdb, auth } from './config'
-import { encodeEmailKey, upsertUser, nsPath } from './database'
+import { encodeEmailKey, upsertUser, nsPath, getUserProfile } from './database'
 
 // 부트스트랩 관리자: allowedEmails 가 비어 있어도 항상 로그인/관리 가능.
 export const BOOTSTRAP_ADMINS = ['3hosungo@gmail.com']
@@ -74,12 +74,20 @@ export async function loginWithGoogle() {
 
   if (isBootstrapAdmin(email)) await ensureBootstrapDoc(email)
 
-  await upsertUser(user.uid, {
+  // 화이트리스트에 미리 연결된 선수가 있고, 사용자에 아직 연결이 없으면 자동 매칭
+  const allowedSnap = await get(dbRef(rtdb, nsPath(`allowedEmails/${encodeEmailKey(email)}`)))
+  const allowedPlayerId = allowedSnap.exists() ? allowedSnap.val().playerId || null : null
+  const existingProfile = await getUserProfile(user.uid)
+  const userPatch = {
     email,
     displayName: user.displayName,
     role,
     lastLoginAt: serverTimestamp()
-  })
+  }
+  if (!existingProfile?.playerId && allowedPlayerId) {
+    userPatch.playerId = allowedPlayerId
+  }
+  await upsertUser(user.uid, userPatch)
 
   return { user, role }
 }

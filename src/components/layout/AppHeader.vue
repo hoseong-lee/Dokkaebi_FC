@@ -1,13 +1,10 @@
 <script setup>
-import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import LinkPlayerModal from './LinkPlayerModal.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
-const linkOpen = ref(false)
 
 const navLinks = [
   { to: '/', label: '홈' },
@@ -59,21 +56,21 @@ async function handleLogout() {
 
       <div class="flex items-center gap-2">
         <template v-if="authStore.isAuthed">
-          <button
-            class="text-xs px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            :title="authStore.myPlayerId ? '내 선수 연결됨' : '내 선수 연결'"
-            @click="linkOpen = true"
+          <RouterLink
+            to="/me"
+            class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            title="내 정보"
           >
-            <span v-if="authStore.myPlayerId" class="text-gold">★ 내 선수</span>
-            <span v-else>내 선수 연결</span>
-          </button>
-          <img
-            v-if="authStore.user?.photoURL"
-            :src="authStore.user.photoURL"
-            alt="profile"
-            class="w-8 h-8 rounded-full border border-white/30"
-            referrerpolicy="no-referrer"
-          />
+            <img
+              v-if="authStore.user?.photoURL"
+              :src="authStore.user.photoURL"
+              alt=""
+              class="w-5 h-5 rounded-full"
+              referrerpolicy="no-referrer"
+            />
+            <span v-if="authStore.myPlayerId" class="text-gold">★ 내 정보</span>
+            <span v-else>내 정보</span>
+          </RouterLink>
           <button
             class="text-sm px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors"
             @click="handleLogout"
@@ -83,6 +80,5 @@ async function handleLogout() {
         </template>
       </div>
     </div>
-    <LinkPlayerModal v-model="linkOpen" />
   </header>
 </template>

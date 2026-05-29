@@ -117,6 +117,12 @@ const routes = [
     component: () => import('@/views/public/MoreView.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/me',
+    name: 'me',
+    component: () => import('@/views/public/MyPageView.vue'),
+    meta: { requiresAuth: true }
+  },
 
   // ───── 관리자 라우트 (requiresAdmin) ─────
   {

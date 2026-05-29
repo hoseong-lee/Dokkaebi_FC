@@ -21,8 +21,13 @@ export const useAllowedEmailsStore = defineStore('allowedEmails', () => {
     return emails.value
   }
 
-  async function add(email, role, note) {
-    await addAllowedEmail(email, role, note)
+  async function add(email, role, note, playerId = null) {
+    await addAllowedEmail(email, role, note, playerId)
+    await fetchAll()
+  }
+
+  async function setPlayerId(email, playerId) {
+    await updateAllowedEmail(email, { playerId: playerId || null })
     await fetchAll()
   }
 
@@ -41,5 +46,5 @@ export const useAllowedEmailsStore = defineStore('allowedEmails', () => {
     emails.value = emails.value.filter((e) => e.email !== email)
   }
 
-  return { emails, loading, fetchAll, add, toggleActive, setRole, remove }
+  return { emails, loading, fetchAll, add, toggleActive, setRole, setPlayerId, remove }
 })

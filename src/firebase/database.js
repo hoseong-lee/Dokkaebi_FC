@@ -276,17 +276,18 @@ export async function getAllowedEmail(email) {
   return snap.exists() ? snap.val() : null
 }
 
-export async function addAllowedEmail(email, role, note = '') {
+export async function addAllowedEmail(email, role, note = '', playerId = null) {
   const lower = email.toLowerCase().trim()
   await set(ref(rtdb, nsPath(`allowedEmails/${encodeEmailKey(lower)}`)), {
     email: lower,
     role,
     active: true,
     note,
+    playerId: playerId || null,
     addedBy: auth.currentUser?.uid || 'system',
     addedAt: serverTimestamp()
   })
-  await logAudit('create', `allowedEmails/${lower}`, { role })
+  await logAudit('create', `allowedEmails/${lower}`, { role, playerId })
 }
 
 export async function updateAllowedEmail(email, patch) {
