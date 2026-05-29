@@ -6,7 +6,10 @@
 //    VITE_CLOUDINARY_CLOUD_NAME=xxxxx
 //    VITE_CLOUDINARY_UPLOAD_PRESET=xxxxx
 
-const cloudName = () => import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+// 도깨비FC 전용 Cloudinary 계정 — cloud_name 은 공개 식별자라 박아둠.
+// upload preset 은 콘솔에서 직접 만든 unsigned preset 이름을 env 로 주입.
+const DEFAULT_CLOUD_NAME = 'dfjhrchwn'
+const cloudName = () => import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || DEFAULT_CLOUD_NAME
 const uploadPreset = () => import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
 export function isCloudinaryConfigured() {
