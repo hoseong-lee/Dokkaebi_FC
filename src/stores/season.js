@@ -54,7 +54,7 @@ export const useSeasonStore = defineStore('season', () => {
   }
 
   return {
-    activeSeason, seasons, selectedId, list,
+    activeSeason, seasons, selectedId, list, loaded,
     activeId, selectedSeason,
     ensure, refresh, setSelected, fetchSeasons, create
   }
