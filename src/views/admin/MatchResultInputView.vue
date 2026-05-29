@@ -188,7 +188,12 @@ onMounted(load)
     </div>
 
     <div class="bg-white rounded-2xl shadow p-5">
-      <QuarterEditor :quarter="quarters[activeQ]" :players="playersStore.activePlayers" />
+      <!-- :key 로 쿼터 전환 시 QuarterEditor 재생성 — const q = props.quarter 캐시 회피 -->
+      <QuarterEditor
+        :key="`rq${activeQ}`"
+        :quarter="quarters[activeQ]"
+        :players="playersStore.activePlayers"
+      />
     </div>
 
     <!-- 매치 레벨 -->

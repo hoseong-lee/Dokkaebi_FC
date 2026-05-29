@@ -149,7 +149,13 @@ async function shareAll() {
     </div>
 
     <!-- 현재 쿼터 에디터 -->
-    <SquadEditor :squad="squads[activeQ]" :players="players" :quarter-counts="playerQuarterCounts" />
+    <!-- :key 로 쿼터 전환 시 SquadEditor 재생성 — const s = props.squad 캐시 문제 회피 -->
+    <SquadEditor
+      :key="`q${activeQ}`"
+      :squad="squads[activeQ]"
+      :players="players"
+      :quarter-counts="playerQuarterCounts"
+    />
 
     <!-- 단톡 공유 -->
     <div class="pt-3 border-t">
