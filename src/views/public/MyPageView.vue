@@ -6,6 +6,7 @@ import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
 import { useToast } from '@/composables/useToast'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
+import { POSITION_OPTIONS, POSITION_LABEL as POS_DETAIL_LABEL, POSITION_CATEGORY } from '@/utils/positions'
 import { personalPartners } from '@/utils/duos'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -28,6 +29,8 @@ const bio = ref('')
 const photoURL = ref('')
 const favoriteClub = ref('')
 const favoritePlayer = ref('')
+const mainPos = ref('')
+const subPos = ref('')
 const linkModalOpen = ref(false)
 
 const myPlayer = computed(() =>
@@ -71,6 +74,8 @@ async function load() {
     photoURL.value = myPlayer.value.photoURL || ''
     favoriteClub.value = myPlayer.value.favoriteClub || ''
     favoritePlayer.value = myPlayer.value.favoritePlayer || ''
+    mainPos.value = myPlayer.value.mainPosition || ''
+    subPos.value = myPlayer.value.subPosition || ''
   }
   loading.value = false
 }
@@ -85,7 +90,9 @@ async function save() {
       bio: bio.value.trim() || null,
       photoURL: photoURL.value || null,
       favoriteClub: favoriteClub.value.trim() || null,
-      favoritePlayer: favoritePlayer.value.trim() || null
+      favoritePlayer: favoritePlayer.value.trim() || null,
+      mainPosition: mainPos.value || null,
+      subPosition: subPos.value || null
     })
     toast.success('내 정보를 저장했습니다.')
   } catch (e) {
@@ -253,6 +260,55 @@ function onAvatarSelect(url) {
               placeholder="예: 메시"
               class="w-full border rounded-lg px-3 py-2 text-sm"
             />
+          </div>
+        </div>
+
+        <!-- 선호 포지션 -->
+        <div>
+          <h2 class="font-bold text-navy mb-1">🎯 선호 포지션</h2>
+          <p class="text-[11px] text-gray-400 mb-3">자주 뛰는 자리를 표시하면 스쿼드 짤 때 참고됩니다.</p>
+
+          <p class="text-xs text-gray-600 font-semibold mb-1.5">주 포지션</p>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <button
+              type="button"
+              class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors"
+              :class="mainPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50'"
+              @click="mainPos = ''"
+            >미정</button>
+            <template v-for="grp in POSITION_OPTIONS" :key="grp.group">
+              <button
+                v-for="code in grp.items" :key="`m-${code}`"
+                type="button"
+                class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors font-semibold"
+                :class="mainPos === code
+                  ? POSITION_BADGE_STRONG[POSITION_CATEGORY[code]] + ' ring-current shadow-sm'
+                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50'"
+                @click="mainPos = code; if (subPos === code) subPos = ''"
+              >{{ code }} {{ POS_DETAIL_LABEL[code] }}</button>
+            </template>
+          </div>
+
+          <p class="text-xs text-gray-600 font-semibold mb-1.5">예비 포지션 (선택)</p>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors"
+              :class="subPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50'"
+              @click="subPos = ''"
+            >없음</button>
+            <template v-for="grp in POSITION_OPTIONS" :key="grp.group">
+              <button
+                v-for="code in grp.items" :key="`s-${code}`"
+                type="button"
+                :disabled="mainPos === code"
+                class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors font-semibold disabled:opacity-30 disabled:cursor-not-allowed"
+                :class="subPos === code
+                  ? POSITION_BADGE_STRONG[POSITION_CATEGORY[code]] + ' ring-current shadow-sm'
+                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50'"
+                @click="subPos = code"
+              >{{ code }} {{ POS_DETAIL_LABEL[code] }}</button>
+            </template>
           </div>
         </div>
 
