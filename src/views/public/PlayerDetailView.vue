@@ -7,6 +7,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
+import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import PlayerStatsChart from '@/components/player/PlayerStatsChart.vue'
 import PlayerMonthlyChart from '@/components/player/PlayerMonthlyChart.vue'
@@ -32,6 +33,16 @@ const stats = computed(() => {
 const series = computed(() => {
   if (!player.value || scope.value === 'total') return []
   return playerMonthlySeries(player.value.id, matchesStore.matches, scope.value)
+})
+
+const badges = computed(() => {
+  if (!player.value) return []
+  return computePlayerBadges(
+    player.value,
+    matchesStore.matches,
+    store.players,
+    seasonStore.list
+  )
 })
 
 const currentLabel = computed(() => {
@@ -142,6 +153,23 @@ watch(() => route.params.id, load)
     <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
       <PlayerMonthlyChart :series="series" />
+    </section>
+
+    <!-- 뱃지 -->
+    <section v-if="badges.length" class="bg-white rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy mb-3">🏅 획득 뱃지 ({{ badges.length }})</h2>
+      <div class="flex flex-wrap gap-2">
+        <div
+          v-for="b in badges"
+          :key="b.id"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold"
+          :class="BADGE_TONE[b.icon] || 'bg-gray-50 text-gray-700 border-gray-200'"
+          :title="b.desc"
+        >
+          <span>{{ b.icon }}</span>
+          {{ b.label }}
+        </div>
+      </div>
     </section>
 
     <!-- 시즌별 비교 -->

@@ -6,6 +6,7 @@ import BaseModal from '@/components/common/BaseModal.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import { FORMATION_NAMES, getSlots } from '@/utils/formations'
 import { suggestFormation } from '@/utils/autoFormation'
+import { matchesQuery } from '@/utils/choseong'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
 
@@ -27,16 +28,16 @@ const filterMode = ref('all') // all | regular | guest
 const regulars = computed(() => props.players.filter((p) => p.isRegular))
 
 const filteredPlayers = computed(() => {
-  const q = search.value.trim().toLowerCase()
+  const q = search.value
   let list = props.players
   if (filterMode.value === 'regular') list = list.filter((p) => p.isRegular)
   else if (filterMode.value === 'guest') list = list.filter((p) => !p.isRegular)
-  if (q) {
+  if (q.trim()) {
     list = list.filter(
       (p) =>
-        p.name.toLowerCase().includes(q) ||
-        String(p.number ?? '').includes(q) ||
-        (p.mainPosition || '').toLowerCase().includes(q)
+        matchesQuery(p.name, q) ||
+        String(p.number ?? '').includes(q.trim()) ||
+        matchesQuery(p.mainPosition || '', q)
     )
   }
   return list
@@ -113,10 +114,10 @@ const slotModalOpen = ref(false)
 const activeSlot = ref(null)
 const slotSearch = ref('')
 const slotCandidates = computed(() => {
-  const q = slotSearch.value.trim().toLowerCase()
-  if (!q) return lineupPlayers.value
+  const q = slotSearch.value
+  if (!q.trim()) return lineupPlayers.value
   return lineupPlayers.value.filter(
-    (p) => p.name.toLowerCase().includes(q) || String(p.number ?? '').includes(q)
+    (p) => matchesQuery(p.name, q) || String(p.number ?? '').includes(q.trim())
   )
 })
 function openSlot(slot) {
@@ -171,7 +172,7 @@ function clearSlot() {
           <input
             v-model="search"
             type="text"
-            placeholder="이름·등번호·포지션 검색"
+            placeholder="이름·초성(ㅇㅎㅊ)·등번호·포지션"
             class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
           />
           <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>

@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
+import { matchesQuery } from '@/utils/choseong'
 import BaseModal from '@/components/common/BaseModal.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
@@ -24,10 +25,10 @@ watch(model, (open) => {
 })
 
 const filtered = computed(() => {
-  const q = search.value.trim()
+  const q = search.value
   const list = playersStore.activePlayers
-  if (!q) return list
-  return list.filter((p) => p.name.includes(q))
+  if (!q.trim()) return list
+  return list.filter((p) => matchesQuery(p.name, q))
 })
 
 const linkedPlayer = computed(() =>

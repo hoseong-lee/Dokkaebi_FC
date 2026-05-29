@@ -6,6 +6,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { useRankings } from '@/composables/useRankings'
 import { teamSummary, headToHead } from '@/utils/teamStats'
 import { pickBestEleven } from '@/utils/bestEleven'
+import { bestDuos } from '@/utils/duos'
 import { RESULT_LABEL, RESULT_COLOR, h2hTier, TIER_LABEL, TIER_COLOR } from '@/utils/match'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
@@ -61,6 +62,12 @@ const h2h = computed(() => headToHead(matchesStore.matches))
 const bestEleven = computed(() =>
   scope.value === 'total' ? null : pickBestEleven(store.players, scope.value)
 )
+const duos = computed(() =>
+  bestDuos(matchesStore.matches, scope.value === 'total' ? null : scope.value).slice(0, 10)
+)
+function playerName(id) {
+  return store.getById(id)?.name || '?'
+}
 const medal = ['🥇', '🥈', '🥉']
 
 onMounted(async () => {
@@ -182,6 +189,25 @@ onMounted(async () => {
           </RouterLink>
           <span class="text-lg font-bold text-navy tabular-nums">{{ r.value }}</span>
           <span class="text-xs text-gray-400">{{ current.unit }}</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 베스트 콤비 -->
+    <section v-if="duos.length">
+      <h2 class="font-bold text-navy mb-2">⭐ 베스트 콤비 (어시 → 골)</h2>
+      <ol class="bg-white rounded-xl shadow-sm divide-y">
+        <li v-for="(d, i) in duos" :key="i" class="flex items-center gap-3 p-3 text-sm">
+          <span class="w-6 text-center text-xs font-bold text-gray-400">{{ i + 1 }}</span>
+          <RouterLink :to="`/players/${d.assister}`" class="font-medium hover:underline">
+            {{ playerName(d.assister) }}
+          </RouterLink>
+          <span class="text-gray-400">→</span>
+          <RouterLink :to="`/players/${d.scorer}`" class="flex-1 font-medium hover:underline">
+            {{ playerName(d.scorer) }}
+          </RouterLink>
+          <span class="text-lg font-bold text-navy tabular-nums">{{ d.count }}</span>
+          <span class="text-xs text-gray-400">회</span>
         </li>
       </ol>
     </section>
