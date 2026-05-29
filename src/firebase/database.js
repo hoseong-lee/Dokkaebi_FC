@@ -676,6 +676,49 @@ export async function migrateOpponentNames() {
   return { changed: changes.length, changes }
 }
 
+// ───────────── 저장된 스쿼드 (멤버가 만든 라인업, 재활용) ─────────────
+export async function listSavedSquads() {
+  const snap = await get(ref(rtdb, nsPath('savedSquads')))
+  return toList(snap).sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0))
+}
+export async function getSavedSquad(id) {
+  const snap = await get(ref(rtdb, nsPath(`savedSquads/${id}`)))
+  return snap.exists() ? { id, ...snap.val() } : null
+}
+export async function createSavedSquad(data) {
+  const r = push(ref(rtdb, nsPath('savedSquads')))
+  await set(r, {
+    name: (data.name || '이름 없는 스쿼드').slice(0, 40),
+    formation: data.formation || '',
+    lineup: data.lineup || [],
+    positions: data.positions || {},
+    notes: (data.notes || '').slice(0, 200) || null,
+    isPublic: data.isPublic !== false, // 기본 공개
+    ...authorMeta(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('create', `savedSquads/${r.key}`)
+  return r.key
+}
+export async function updateSavedSquad(id, data) {
+  const patch = {
+    updatedAt: serverTimestamp()
+  }
+  if (data.name !== undefined) patch.name = (data.name || '이름 없는 스쿼드').slice(0, 40)
+  if (data.formation !== undefined) patch.formation = data.formation || ''
+  if (data.lineup !== undefined) patch.lineup = data.lineup || []
+  if (data.positions !== undefined) patch.positions = data.positions || {}
+  if (data.notes !== undefined) patch.notes = (data.notes || '').slice(0, 200) || null
+  if (data.isPublic !== undefined) patch.isPublic = !!data.isPublic
+  await update(ref(rtdb, nsPath(`savedSquads/${id}`)), patch)
+  await logAudit('update', `savedSquads/${id}`)
+}
+export async function deleteSavedSquad(id) {
+  await remove(ref(rtdb, nsPath(`savedSquads/${id}`)))
+  await logAudit('delete', `savedSquads/${id}`)
+}
+
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
 // allowedEmails/users 는 건드리지 않는다.

@@ -118,6 +118,30 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/squads',
+    name: 'saved-squads',
+    component: () => import('@/views/public/SavedSquadsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/squads/new',
+    name: 'saved-squad-new',
+    component: () => import('@/views/public/SavedSquadEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/squads/:id',
+    name: 'saved-squad-detail',
+    component: () => import('@/views/public/SavedSquadDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/squads/:id/edit',
+    name: 'saved-squad-edit',
+    component: () => import('@/views/public/SavedSquadEditView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/more',
     name: 'more',
     component: () => import('@/views/public/MoreView.vue'),

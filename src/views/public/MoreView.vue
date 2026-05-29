@@ -10,7 +10,8 @@ const tiles = [
   { to: '/photos', label: '사진첩', icon: '📷', desc: '경기·일상 사진 공유' },
   { to: '/calendar', label: '달력', icon: '📅', desc: '월간 경기 일정 한눈에' },
   { to: '/hall-of-fame', label: '명예의 전당', icon: '🏆', desc: '시즌별 자동 시상' },
-  { to: '/guide', label: '축구 가이드', icon: '⚽', desc: '포지션·포메이션 한눈에' }
+  { to: '/guide', label: '축구 가이드', icon: '⚽', desc: '포지션·포메이션 한눈에' },
+  { to: '/squads', label: '스쿼드 메이커', icon: '⚔️', desc: '라인업 저장·재활용·이미지 공유' }
 ]
 </script>
 
