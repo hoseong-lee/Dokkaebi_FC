@@ -8,7 +8,7 @@ import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attac
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
-import { findClub } from '@/utils/clubs'
+import { findClub, clubLogo } from '@/utils/clubs'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import PlayerStatsChart from '@/components/player/PlayerStatsChart.vue'
@@ -149,10 +149,17 @@ watch(() => route.params.id, load)
       >
         <span
           v-if="player.favoriteClub"
-          class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold"
+          class="inline-flex items-center gap-1.5 text-xs pl-1 pr-2.5 py-1 rounded-full font-semibold"
           :class="findClub(player.favoriteClub)?.color || 'bg-gray-100 text-gray-700'"
         >
-          ⚽ {{ player.favoriteClub }}
+          <img
+            v-if="findClub(player.favoriteClub)"
+            :src="clubLogo(findClub(player.favoriteClub).id)"
+            :alt="player.favoriteClub"
+            class="w-5 h-5 object-contain bg-white rounded-full p-0.5"
+          />
+          <span v-else>⚽</span>
+          {{ player.favoriteClub }}
         </span>
         <span
           v-if="player.favoritePlayer"

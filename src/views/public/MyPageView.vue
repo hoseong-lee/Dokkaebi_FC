@@ -8,12 +8,12 @@ import { useToast } from '@/composables/useToast'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
 import { personalPartners } from '@/utils/duos'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
-import { CLUBS } from '@/utils/clubs'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import AvatarPicker from '@/components/player/AvatarPicker.vue'
+import ClubPicker from '@/components/player/ClubPicker.vue'
 import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
 
 const auth = useAuthStore()
@@ -242,17 +242,7 @@ function onAvatarSelect(url) {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <h2 class="font-bold text-navy mb-2">⚽ 좋아하는 클럽</h2>
-            <input
-              v-model="favoriteClub"
-              type="text"
-              list="club-suggest"
-              maxlength="30"
-              placeholder="예: FC 바르셀로나"
-              class="w-full border rounded-lg px-3 py-2 text-sm"
-            />
-            <datalist id="club-suggest">
-              <option v-for="c in CLUBS" :key="c.name" :value="c.name">{{ c.short }}</option>
-            </datalist>
+            <ClubPicker v-model="favoriteClub" />
           </div>
           <div>
             <h2 class="font-bold text-navy mb-2">⭐ 최애 선수</h2>
