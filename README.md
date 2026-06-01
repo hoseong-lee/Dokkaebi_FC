@@ -32,6 +32,29 @@ npm run preview   # 빌드 결과 미리보기
 `main` 브랜치 push 시 GitHub Actions(`.github/workflows/deploy.yml`)가 자동으로 GitHub Pages에 배포한다.
 저장소 이름이 `Dokkaebi_FC` 이므로 `vite.config.js`의 `base`는 `/Dokkaebi_FC/`로 설정되어 있다.
 
+## 📲 모바일 사용 (PWA + 푸시 알림)
+
+도깨비FC 는 **PWA(Progressive Web App)** 로 동작해 모바일에서 앱처럼 설치할 수 있다.
+
+### 홈 화면에 추가
+- **iOS Safari**: 공유 ↑ → **홈 화면에 추가**
+- **Android Chrome**: 우측 ⋮ → **앱 설치** (또는 자동 프롬프트)
+
+설치 후 도깨비 엠블렘 아이콘으로 실행되며, 오프라인에서도 캐싱된 화면을 볼 수 있다.
+
+### 푸시 알림 (선택)
+마이페이지 → **🔔 알림 → ON** 으로 활성화. 권한 허용 시 다음 알림을 받는다:
+
+- 📢 새 공지사항
+- 📅 새 경기 등록
+- 💬 본인 글에 달린 댓글 (게시판/사진)
+- ⚽ 매일 KST 18:00 — 내일 경기 D-1 알림
+
+> iOS 는 **홈 화면에 추가한 뒤에만** 푸시 알림이 작동한다 (Safari 16.4+).
+
+### 캘린더 연동
+경기 상세 → **📅 내 캘린더에 추가** → Google/네이버/.ics 중 선택. 등록 시 본인 캘린더 알림(기본 1일 전 + 1시간 전)이 자동으로 동작한다.
+
 ## Firebase 설정
 
 기존 개인 프로젝트 **`hosing-5913f`** 를 재사용한다 (travel 프로젝트와 동일, 같은 Realtime Database).
