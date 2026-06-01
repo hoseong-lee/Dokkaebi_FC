@@ -19,11 +19,13 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import MatchEventTimeline from '@/components/match/MatchEventTimeline.vue'
 import { ytEmbedUrl, ytWatchUrl, ytThumbUrl, formatTime } from '@/utils/youtube'
+import { downloadMatchICS, googleCalendarUrl, naverCalendarUrl } from '@/utils/calendar'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
 import MomVotingSection from '@/components/match/MomVotingSection.vue'
 import ResultCardModal from '@/components/match/ResultCardModal.vue'
+import BaseModal from '@/components/common/BaseModal.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -52,6 +54,15 @@ const resultCardOpen = ref(false)
 const videos = computed(() => Array.isArray(match.value?.videoUrls) ? match.value.videoUrls : [])
 const activeVideoIdx = ref(0)
 const activeVideo = computed(() => videos.value[activeVideoIdx.value] || null)
+
+// 캘린더 추가 모달
+const calendarOpen = ref(false)
+function downloadIcs() {
+  if (!match.value) return
+  downloadMatchICS(match.value)
+  toast.success('일정 파일을 다운로드했습니다.')
+  calendarOpen.value = false
+}
 
 // 예정 스쿼드 목록 (쿼터 배열 우선, legacy 단일 스쿼드 폴백)
 const plannedSquadList = computed(() => {
@@ -131,8 +142,11 @@ watch(() => route.params.id, load)
         </p>
       </div>
 
-      <div v-if="isFinished" class="mt-5 pt-4 border-t">
-        <BaseButton variant="ghost" size="sm" @click="resultCardOpen = true">
+      <div class="mt-5 pt-4 border-t flex flex-wrap gap-2">
+        <BaseButton variant="ghost" size="sm" @click="calendarOpen = true">
+          📅 내 캘린더에 추가
+        </BaseButton>
+        <BaseButton v-if="isFinished" variant="ghost" size="sm" @click="resultCardOpen = true">
           📸 결과 카드 만들기
         </BaseButton>
       </div>
@@ -293,5 +307,48 @@ watch(() => route.params.id, load)
     </p>
 
     <ResultCardModal v-if="isFinished" v-model="resultCardOpen" :match="match" />
+
+    <!-- 캘린더 추가 모달 -->
+    <BaseModal v-model="calendarOpen" title="📅 내 캘린더에 추가">
+      <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+        본인 캘린더에 추가하면 <span class="font-semibold text-navy">자동으로 일정 알림</span>이 옵니다.
+        <span class="block text-xs text-gray-400 mt-1">기본 알림: 1일 전 + 1시간 전 (캘린더 앱에서 변경 가능)</span>
+      </p>
+      <div class="space-y-2">
+        <a
+          :href="googleCalendarUrl(match)"
+          target="_blank" rel="noopener"
+          class="block w-full px-4 py-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors text-blue-700 font-semibold flex items-center justify-between"
+          @click="calendarOpen = false"
+        >
+          <span>📅 Google 캘린더에 추가</span>
+          <span class="text-xs opacity-60">↗ 새 탭</span>
+        </a>
+        <a
+          :href="naverCalendarUrl(match)"
+          target="_blank" rel="noopener"
+          class="block w-full px-4 py-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition-colors text-emerald-700 font-semibold flex items-center justify-between"
+          @click="calendarOpen = false"
+        >
+          <span>📅 네이버 캘린더에 추가</span>
+          <span class="text-xs opacity-60">↗ 새 탭</span>
+        </a>
+        <button
+          type="button"
+          class="block w-full px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 font-semibold flex items-center justify-between"
+          @click="downloadIcs"
+        >
+          <span>📥 .ics 파일 다운로드</span>
+          <span class="text-xs opacity-60">iOS · 아웃룩 등</span>
+        </button>
+      </div>
+      <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
+        💡 iOS 는 .ics 파일을 다운로드 후 캘린더 앱이 자동으로 열립니다.<br>
+        💡 알림이 안 오면 캘린더 앱 설정에서 "이벤트 알림" 권한 확인.
+      </p>
+      <template #footer>
+        <BaseButton variant="secondary" @click="calendarOpen = false">닫기</BaseButton>
+      </template>
+    </BaseModal>
   </div>
 </template>
