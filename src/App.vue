@@ -5,6 +5,7 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import AppNav from '@/components/layout/AppNav.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 import ToastHost from '@/components/common/ToastHost.vue'
+import InstallPrompt from '@/components/common/InstallPrompt.vue'
 
 const authStore = useAuthStore()
 
@@ -22,5 +23,6 @@ onMounted(() => {
     <AppNav />
     <ConfirmDialog />
     <ToastHost />
+    <InstallPrompt />
   </div>
 </template>
