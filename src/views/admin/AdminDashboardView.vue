@@ -8,7 +8,7 @@ import { dayjs } from '@/utils/date'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
 import { confirm } from '@/composables/useConfirm'
-import { importSeed, migrateSeasonsByYear, migrateOpponentNames } from '@/firebase/database'
+import { importSeed, migrateSeasonsByYear, migrateOpponentNames, recomputeAllStats } from '@/firebase/database'
 import { canonicalOpponent } from '@/utils/opponentNormalize'
 import seedData from '@/data/seed.json'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -22,6 +22,28 @@ const creatingSeason = ref(false)
 const importing = ref(false)
 const migrating = ref(false)
 const normalizing = ref(false)
+const recomputing = ref(false)
+
+async function runRecomputeStats() {
+  const ok = await confirm({
+    title: '전체 통계 재계산',
+    message:
+      '모든 선수의 출전·골·어시·MOM 통계를 전체 경기로부터 처음부터 다시 계산합니다.\n경기 데이터는 그대로 유지되며, 잘못 누적된 통계가 정정됩니다.\n진행할까요?',
+    confirmText: '재계산',
+    variant: 'primary'
+  })
+  if (!ok) return
+  recomputing.value = true
+  try {
+    const res = await recomputeAllStats()
+    await playersStore.fetchAll(true)
+    toast.success(`재계산 완료: 선수 ${res.players}명 · 경기 ${res.matches}개`)
+  } catch (e) {
+    toast.error(`재계산 실패: ${e?.code || e?.message || e}`)
+  } finally {
+    recomputing.value = false
+  }
+}
 
 // 상대팀명 동의어(국대FC/FC국대 등) 자동 감지
 const opponentVariants = computed(() => {
@@ -181,6 +203,19 @@ onMounted(async () => {
       </ul>
       <BaseButton size="sm" variant="primary" class="mt-3" :loading="normalizing" @click="runNormalize">
         상대팀명 통일 실행
+      </BaseButton>
+    </div>
+
+    <!-- 통계 재계산 (안전망 / 정정용) -->
+    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm">
+      <p class="font-bold text-emerald-800">📊 전체 통계 재계산</p>
+      <p class="text-gray-700 mt-1">
+        모든 선수의 <span class="font-semibold">출전·골·어시·MOM</span> 통계를 전체 경기로부터 처음부터 다시 계산합니다.
+        경기 삭제 후 통계가 안 맞거나, 누적된 수치에 의심이 들 때 실행하세요.
+      </p>
+      <p class="text-xs text-gray-500 mt-1">경기 데이터는 그대로 유지됩니다.</p>
+      <BaseButton size="sm" variant="primary" class="mt-3" :loading="recomputing" @click="runRecomputeStats">
+        🔁 통계 재계산 실행
       </BaseButton>
     </div>
 

@@ -144,8 +144,97 @@ export async function updateMatch(id, data) {
 }
 
 export async function deleteMatch(id) {
+  // 삭제 전 통계 차감 — 결과 입력된 경기면 골/어시/출전/MOM 모두 -1 처리
+  const snap = await get(ref(rtdb, nsPath(`matches/${id}`)))
+  if (snap.exists()) {
+    const data = snap.val()
+    const seasonId = data.seasonId
+    const agg = Array.isArray(data.quarters) && data.quarters.length
+      ? aggregateQuarters(data.quarters)
+      : { events: data.events || [], lineup: data.lineup || [] }
+    const tally = tallyEvents(agg.events)
+    const updates = {}
+    for (const [pid, t] of Object.entries(tally)) {
+      bump(updates, pid, seasonId, 'goals', -(t.goals || 0))
+      bump(updates, pid, seasonId, 'assists', -(t.assists || 0))
+    }
+    for (const pid of agg.lineup) {
+      bump(updates, pid, seasonId, 'appearances', -1)
+    }
+    if (data.momPlayerId) {
+      bump(updates, data.momPlayerId, seasonId, 'momCount', -1)
+    }
+    if (Object.keys(updates).length > 0) {
+      await update(ref(rtdb), updates)
+    }
+  }
   await remove(ref(rtdb, nsPath(`matches/${id}`)))
   await logAudit('delete', `matches/${id}`)
+}
+
+// 모든 선수의 stats / seasonStats 를 전체 경기로부터 처음부터 재계산.
+// 안전망 / 정정용 (관리자 도구 버튼). 도깨비FC 규모(멤버 ~30, 경기 ~수백)에선 1초 이내.
+export async function recomputeAllStats() {
+  const [playersSnap, matchesSnap] = await Promise.all([
+    get(ref(rtdb, nsPath('players'))),
+    get(ref(rtdb, nsPath('matches')))
+  ])
+  const players = playersSnap.val() || {}
+  const matches = matchesSnap.val() || {}
+
+  const acc = {}
+  const ensure = (pid) => {
+    if (!acc[pid]) acc[pid] = { total: emptyStats(), bySeason: {} }
+    return acc[pid]
+  }
+  const ensureSeason = (pid, sid) => {
+    const a = ensure(pid)
+    if (!a.bySeason[sid]) a.bySeason[sid] = emptyStats()
+    return a.bySeason[sid]
+  }
+
+  for (const pid of Object.keys(players)) ensure(pid)
+
+  for (const m of Object.values(matches)) {
+    const seasonId = m.seasonId || null
+    const agg = Array.isArray(m.quarters) && m.quarters.length
+      ? aggregateQuarters(m.quarters)
+      : { events: m.events || [], lineup: m.lineup || [] }
+    const tally = tallyEvents(agg.events)
+
+    for (const pid of agg.lineup) {
+      if (!players[pid]) continue
+      ensure(pid).total.appearances += 1
+      if (seasonId) ensureSeason(pid, seasonId).appearances += 1
+    }
+    for (const [pid, t] of Object.entries(tally)) {
+      if (!players[pid]) continue
+      const a = ensure(pid)
+      a.total.goals += t.goals
+      a.total.assists += t.assists
+      if (seasonId) {
+        const s = ensureSeason(pid, seasonId)
+        s.goals += t.goals
+        s.assists += t.assists
+      }
+    }
+    if (m.momPlayerId && players[m.momPlayerId]) {
+      ensure(m.momPlayerId).total.momCount += 1
+      if (seasonId) ensureSeason(m.momPlayerId, seasonId).momCount += 1
+    }
+  }
+
+  const updates = {}
+  for (const [pid, a] of Object.entries(acc)) {
+    updates[nsPath(`players/${pid}/stats`)] = a.total
+    updates[nsPath(`players/${pid}/seasonStats`)] = a.bySeason
+  }
+  await update(ref(rtdb), updates)
+  await logAudit('update', 'players/stats-recompute', {
+    players: Object.keys(acc).length,
+    matches: Object.keys(matches).length
+  })
+  return { players: Object.keys(acc).length, matches: Object.keys(matches).length }
 }
 
 function bump(updates, playerId, seasonId, field, delta) {
