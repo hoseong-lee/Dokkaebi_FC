@@ -12,6 +12,13 @@ import { rtdb, auth } from './config'
 import { emptyStats, tallyEvents } from '@/utils/stats'
 import { dayjs } from '@/utils/date'
 import { canonicalOpponent } from '@/utils/opponentNormalize'
+import {
+  COMPLIMENT_TAGS,
+  COMPLIMENT_TAG_IDS,
+  COMPLIMENT_MAX_PLAYERS,
+  tallyComplimentTotals
+} from '@/utils/compliments'
+export { COMPLIMENT_TAGS, COMPLIMENT_MAX_PLAYERS, tallyComplimentTotals as tallyCompliments }
 
 // 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
 // (travel/calendar 와 동일하게 앱별 네임스페이스 분리).
@@ -470,31 +477,28 @@ export async function finalizeMomVoting(matchId, winnerId) {
   await logAudit('update', `matches/${matchId}`, { momFinalized: winnerId })
 }
 
-// ───────────── 칭찬 (MOM 외) ─────────────
-// 한 사람당 최대 3명 칭찬. votes 와 동일하게 voter uid 키 사용.
-// match.compliments = { voterUid: [playerId1, playerId2, playerId3] }
-export const COMPLIMENT_MAX = 3
+// ───────────── 칭찬 (태그 기반, MOM 외) ─────────────
+// 한 사람당 최대 N 명 칭찬, 선수당 칭찬 태그는 자유.
+// match.compliments = { voterUid: { playerId: [tag1, tag2, ...] } }
+// 매너 점수 = 받은 태그 총 개수 (선수가 5개 태그 받으면 +5)
 
-export async function castCompliments(matchId, playerIds) {
+// 한 voter 의 칭찬을 한 번에 저장. picks = { playerId: [tagId, ...] }
+// 빈 배열인 선수는 자동 제거, 빈 객체면 전체 삭제.
+export async function castCompliments(matchId, picks) {
   const uid = auth.currentUser?.uid
   if (!uid) throw new Error('로그인이 필요합니다.')
-  const arr = Array.isArray(playerIds) ? [...new Set(playerIds.filter(Boolean))].slice(0, COMPLIMENT_MAX) : []
-  const r = ref(rtdb, nsPath(`matches/${matchId}/compliments/${uid}`))
-  if (!arr.length) await remove(r)
-  else await set(r, arr)
-}
 
-// match.compliments → { playerId: 칭찬받은_횟수 } 집계
-export function tallyCompliments(compliments = {}) {
-  const map = {}
-  for (const arr of Object.values(compliments)) {
-    if (!Array.isArray(arr)) continue
-    for (const pid of arr) {
-      if (!pid) continue
-      map[pid] = (map[pid] || 0) + 1
-    }
+  // sanitize: 알 수 없는 태그 제거 + 중복 제거 + max 인원 제한
+  const cleaned = {}
+  const entries = Object.entries(picks || {}).filter(([, tags]) => Array.isArray(tags) && tags.length)
+  for (const [pid, tags] of entries.slice(0, COMPLIMENT_MAX_PLAYERS)) {
+    const valid = [...new Set(tags.filter((t) => COMPLIMENT_TAG_IDS.includes(t)))]
+    if (valid.length) cleaned[pid] = valid
   }
-  return map
+
+  const r = ref(rtdb, nsPath(`matches/${matchId}/compliments/${uid}`))
+  if (!Object.keys(cleaned).length) await remove(r)
+  else await set(r, cleaned)
 }
 
 // ───────────── 공지사항 ─────────────
