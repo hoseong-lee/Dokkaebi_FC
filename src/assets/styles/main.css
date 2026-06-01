@@ -16,3 +16,26 @@ body,
 body {
   @apply bg-gray-50 text-gray-900;
 }
+
+/* iOS PWA 다이나믹 아일랜드 / 노치 / 홈 인디케이터 safe-area 처리.
+   AppHeader/AppNav 의 외부 컨테이너에 적용. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* iOS standalone 상태표시줄(다이나믹 아일랜드 영역)을 헤더 색과 일체화 */
+header {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* 하단 고정 네비 — 홈 인디케이터 영역 회피 */
+nav.fixed.bottom-0 {
+  padding-bottom: env(safe-area-inset-bottom);
+}
