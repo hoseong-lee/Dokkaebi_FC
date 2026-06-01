@@ -67,6 +67,13 @@ const goalDiff = computed(() => {
 const quarters = computed(() => match.value?.quarters || [])
 const resultCardOpen = ref(false)
 
+// 3탭 — 결과 입력된 경기는 개요, 그 외는 참석 기본
+const activeTab = ref('overview')
+watch(() => match.value?.status, (s) => {
+  if (s === 'finished') activeTab.value = 'overview'
+  else activeTab.value = 'rsvp'
+}, { immediate: true })
+
 // 영상 (videoUrls 배열)
 const videos = computed(() => Array.isArray(match.value?.videoUrls) ? match.value.videoUrls : [])
 const activeVideoIdx = ref(0)
@@ -201,10 +208,43 @@ watch(() => route.params.id, load)
       </div>
     </section>
 
-    <RsvpSection :match-id="match.id" />
+    <!-- ─── 3탭 ─── -->
+    <div class="grid grid-cols-3 gap-1 bg-white rounded-xl p-1 shadow-sm text-sm sticky top-0 z-10">
+      <button
+        type="button"
+        class="py-2.5 rounded-lg font-medium transition-colors"
+        :class="activeTab === 'overview' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        @click="activeTab = 'overview'"
+      >📊 개요</button>
+      <button
+        type="button"
+        class="py-2.5 rounded-lg font-medium transition-colors disabled:opacity-40"
+        :class="activeTab === 'vote' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        :disabled="!isFinished"
+        :title="!isFinished ? '결과 입력 후 활성' : ''"
+        @click="isFinished && (activeTab = 'vote')"
+      >⭐ 투표</button>
+      <button
+        type="button"
+        class="py-2.5 rounded-lg font-medium transition-colors"
+        :class="activeTab === 'rsvp' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        @click="activeTab = 'rsvp'"
+      >📅 참석</button>
+    </div>
 
-    <MomVotingSection v-if="isFinished" :match="match" />
-    <ComplimentSection v-if="isFinished" :match="match" />
+    <!-- ⭐ 투표 탭: MOM + 칭찬 -->
+    <template v-if="activeTab === 'vote' && isFinished">
+      <MomVotingSection :match="match" />
+      <ComplimentSection :match="match" />
+    </template>
+
+    <!-- 📅 참석 탭: RSVP -->
+    <template v-if="activeTab === 'rsvp'">
+      <RsvpSection :match-id="match.id" />
+    </template>
+
+    <!-- ─── 📊 개요 탭 본문 ─── -->
+    <template v-if="activeTab === 'overview'">
 
     <!-- 예정 경기: 쿼터별 미리 짠 스쿼드 -->
     <section
@@ -342,6 +382,9 @@ watch(() => route.params.id, load)
     <p v-if="match.notes" class="bg-white rounded-2xl shadow p-6 text-sm text-gray-700 whitespace-pre-line">
       <span class="font-bold text-navy block mb-2">경기 후기</span>{{ match.notes }}
     </p>
+
+    </template>
+    <!-- ─── 📊 개요 탭 본문 끝 ─── -->
 
     <ResultCardModal v-if="isFinished" v-model="resultCardOpen" :match="match" />
 
