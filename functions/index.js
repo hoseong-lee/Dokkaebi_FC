@@ -49,7 +49,11 @@ async function removeTokenEverywhere(token) {
 }
 
 async function sendToTokens(tokens, payload) {
-  if (!tokens.length) return { successCount: 0, failureCount: 0 }
+  console.log(`[sendToTokens] target tokens=${tokens.length} title="${payload.title}"`)
+  if (!tokens.length) {
+    console.warn('[sendToTokens] 발송할 토큰이 0개 — dokkaebi/fcmTokens 에 토큰 등록 안 됨')
+    return { successCount: 0, failureCount: 0 }
+  }
   const message = {
     tokens,
     notification: { title: payload.title, body: payload.body },
@@ -63,6 +67,12 @@ async function sendToTokens(tokens, payload) {
     }
   }
   const res = await admin.messaging().sendEachForMulticast(message)
+  console.log(`[sendToTokens] result success=${res.successCount} failure=${res.failureCount}`)
+  res.responses.forEach((r, i) => {
+    if (!r.success) {
+      console.warn(`[sendToTokens] token #${i} 실패 code=${r.error?.code} msg=${r.error?.message}`)
+    }
+  })
   await pruneInvalidTokens(res.responses, tokens)
   return res
 }
