@@ -3,6 +3,11 @@ import { ref, computed } from 'vue'
 import SquadEditor from './SquadEditor.vue'
 import { buildSquadShareText, copyToClipboard } from '@/utils/squadShare'
 import { useToast } from '@/composables/useToast'
+import { useMatchesStore } from '@/stores/matches'
+import { listRsvps, nsPath } from '@/firebase/database'
+import { ref as dbRef, get } from 'firebase/database'
+import { rtdb } from '@/firebase/config'
+import { generateAutoLineup, recommendFormation } from '@/utils/autoLineup'
 
 const props = defineProps({
   squads: { type: Array, required: true }, // 4쿼터 squad 객체 배열
@@ -10,8 +15,63 @@ const props = defineProps({
   match: { type: Object, default: null }
 })
 const toast = useToast()
+const matchesStore = useMatchesStore()
 
 const activeQ = ref(0)
+const autoBusy = ref(false)
+
+async function autoGenerate() {
+  if (autoBusy.value) return
+  autoBusy.value = true
+  try {
+    // 1. RSVP=yes 응답자 fetch (matchId 있을 때만)
+    let pool = props.players
+    let rsvpFiltered = false
+    if (props.match?.id) {
+      const [rsvps, usersSnap] = await Promise.all([
+        listRsvps(props.match.id),
+        get(dbRef(rtdb, nsPath('users')))
+      ])
+      const users = usersSnap.val() || {}
+      // uid → playerId 매핑
+      const uidToPlayerId = Object.fromEntries(
+        Object.entries(users).map(([uid, u]) => [uid, u?.playerId]).filter(([, pid]) => pid)
+      )
+      const yesPlayerIds = new Set(
+        rsvps.filter((r) => r.status === 'yes')
+          .map((r) => uidToPlayerId[r.id])
+          .filter(Boolean)
+      )
+      const yesPlayers = props.players.filter((p) => yesPlayerIds.has(p.id))
+      if (yesPlayers.length >= 7) {
+        pool = yesPlayers
+        rsvpFiltered = true
+      }
+    }
+
+    const formation = recommendFormation(pool.length)
+    const generated = generateAutoLineup({
+      availablePlayers: pool,
+      allMatches: matchesStore.matches,
+      formation
+    })
+    if (!generated) {
+      toast.error('자동 추천에 실패했습니다.')
+      return
+    }
+    for (let i = 0; i < 4; i++) {
+      props.squads[i].lineup = generated[i].lineup
+      props.squads[i].formation = formation
+      props.squads[i].positions = generated[i].positions
+    }
+    const src = rsvpFiltered ? `RSVP 참석 ${pool.length}명` : `전체 활성 ${pool.length}명`
+    toast.success(`🎲 ${formation} 자동 추천 완료 (${src} 풀)`)
+  } catch (e) {
+    toast.error(`자동 추천 실패: ${e?.message || e}`)
+  } finally {
+    autoBusy.value = false
+  }
+}
 
 function lineupCount(i) {
   return props.squads[i]?.lineup?.length || 0
@@ -105,6 +165,13 @@ async function shareAll() {
 
     <!-- 빠른 액션 -->
     <div class="flex flex-wrap gap-1.5">
+      <button
+        type="button"
+        class="text-xs px-3 py-1.5 rounded-full bg-emerald-500 text-white font-bold hover:bg-emerald-600 disabled:opacity-50"
+        :disabled="autoBusy"
+        @click="autoGenerate"
+        title="RSVP 참석 응답자 + 선호 포지션 + 단짝 점수로 4쿼터 자동 추천"
+      >🎲 {{ autoBusy ? '추천 중...' : '자동 추천' }}</button>
       <button
         v-if="activeQ > 0"
         type="button"
