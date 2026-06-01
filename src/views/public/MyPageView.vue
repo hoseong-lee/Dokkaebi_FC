@@ -257,7 +257,7 @@ function onAvatarSelect(url) {
         </div>
         <PlayerStatsCards :stats="seasonStats" />
         <p class="text-center text-xs text-gray-400 mt-2">
-          통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM
+          통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM · 💝 {{ totalStats.complimentCount || 0 }}
         </p>
       </section>
 

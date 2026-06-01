@@ -1,10 +1,15 @@
 export function emptyStats() {
-  return { appearances: 0, goals: 0, assists: 0, momCount: 0 }
+  return { appearances: 0, goals: 0, assists: 0, momCount: 0, complimentCount: 0 }
 }
 
 export function attackPoints(stats) {
   if (!stats) return 0
   return (stats.goals || 0) + (stats.assists || 0)
+}
+
+// 매너 점수 = 받은 칭찬 누적 횟수
+export function mannerScore(stats) {
+  return stats?.complimentCount || 0
 }
 
 export function seasonStatsOf(player, seasonId) {

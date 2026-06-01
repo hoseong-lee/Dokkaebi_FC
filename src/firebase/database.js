@@ -164,6 +164,13 @@ export async function deleteMatch(id) {
     if (data.momPlayerId) {
       bump(updates, data.momPlayerId, seasonId, 'momCount', -1)
     }
+    // 칭찬도 차감 (votingClosed=true 인 경우만, 미확정이면 누적 안 됐으므로 skip)
+    if (data.votingClosed) {
+      const cTally = tallyCompliments(data.compliments || {})
+      for (const [pid, count] of Object.entries(cTally)) {
+        bump(updates, pid, seasonId, 'complimentCount', -count)
+      }
+    }
     if (Object.keys(updates).length > 0) {
       await update(ref(rtdb), updates)
     }
@@ -221,6 +228,15 @@ export async function recomputeAllStats() {
     if (m.momPlayerId && players[m.momPlayerId]) {
       ensure(m.momPlayerId).total.momCount += 1
       if (seasonId) ensureSeason(m.momPlayerId, seasonId).momCount += 1
+    }
+    // 칭찬도 votingClosed=true 인 경기만 누적
+    if (m.votingClosed) {
+      const cTally = tallyCompliments(m.compliments || {})
+      for (const [pid, count] of Object.entries(cTally)) {
+        if (!players[pid]) continue
+        ensure(pid).total.complimentCount += count
+        if (seasonId) ensureSeason(pid, seasonId).complimentCount += count
+      }
     }
   }
 
@@ -414,7 +430,8 @@ export async function castMomVote(matchId, candidatePlayerId) {
   else await set(r, candidatePlayerId)
 }
 
-// 관리자: 투표 마감 + MOM 확정. 통계 diff 반영(이전 MOM 차감, 신규 가산).
+// 관리자: 투표 마감 + MOM 확정 + 칭찬 점수 확정.
+// 통계 diff 반영: 이전 MOM 차감/신규 가산 + 미확정 칭찬 누적
 export async function finalizeMomVoting(matchId, winnerId) {
   const snap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
   if (!snap.exists()) throw new Error('경기를 찾을 수 없습니다.')
@@ -422,6 +439,8 @@ export async function finalizeMomVoting(matchId, winnerId) {
   const seasonId = data.seasonId
   const prev = data.momPlayerId || null
   const updates = {}
+
+  // MOM diff
   if (prev !== winnerId) {
     if (prev) {
       updates[nsPath(`players/${prev}/stats/momCount`)] = increment(-1)
@@ -432,11 +451,50 @@ export async function finalizeMomVoting(matchId, winnerId) {
       if (seasonId) updates[nsPath(`players/${winnerId}/seasonStats/${seasonId}/momCount`)] = increment(1)
     }
   }
+
+  // 칭찬 확정 — votingClosed=false 였던 경기는 이번에 처음 누적
+  // votingClosed=true 였다면 이미 누적되어 있으므로 skip
+  if (!data.votingClosed) {
+    const tally = tallyCompliments(data.compliments || {})
+    for (const [pid, count] of Object.entries(tally)) {
+      if (!count) continue
+      updates[nsPath(`players/${pid}/stats/complimentCount`)] = increment(count)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentCount`)] = increment(count)
+    }
+  }
+
   updates[nsPath(`matches/${matchId}/momPlayerId`)] = winnerId || null
   updates[nsPath(`matches/${matchId}/votingClosed`)] = true
   updates[nsPath(`matches/${matchId}/updatedAt`)] = serverTimestamp()
   await update(ref(rtdb), updates)
   await logAudit('update', `matches/${matchId}`, { momFinalized: winnerId })
+}
+
+// ───────────── 칭찬 (MOM 외) ─────────────
+// 한 사람당 최대 3명 칭찬. votes 와 동일하게 voter uid 키 사용.
+// match.compliments = { voterUid: [playerId1, playerId2, playerId3] }
+export const COMPLIMENT_MAX = 3
+
+export async function castCompliments(matchId, playerIds) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const arr = Array.isArray(playerIds) ? [...new Set(playerIds.filter(Boolean))].slice(0, COMPLIMENT_MAX) : []
+  const r = ref(rtdb, nsPath(`matches/${matchId}/compliments/${uid}`))
+  if (!arr.length) await remove(r)
+  else await set(r, arr)
+}
+
+// match.compliments → { playerId: 칭찬받은_횟수 } 집계
+export function tallyCompliments(compliments = {}) {
+  const map = {}
+  for (const arr of Object.values(compliments)) {
+    if (!Array.isArray(arr)) continue
+    for (const pid of arr) {
+      if (!pid) continue
+      map[pid] = (map[pid] || 0) + 1
+    }
+  }
+  return map
 }
 
 // ───────────── 공지사항 ─────────────
