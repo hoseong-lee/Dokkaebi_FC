@@ -30,7 +30,8 @@ const seasonAwards = computed(() =>
     scorer: pickTop('goals', season.id),
     assister: pickTop('assists', season.id),
     appearance: pickTop('appearances', season.id),
-    points: pickTop('points', season.id)
+    points: pickTop('points', season.id),
+    manner: pickTop('complimentCount', season.id)
   }))
 )
 
@@ -39,7 +40,8 @@ const trophies = [
   { key: 'scorer', label: '득점왕', icon: '⚽', color: 'from-dokkaebi to-red-700' },
   { key: 'assister', label: '도움왕', icon: '🎯', color: 'from-blue-500 to-navy' },
   { key: 'appearance', label: '출석왕', icon: '🏃', color: 'from-emerald-500 to-emerald-700' },
-  { key: 'points', label: '공격 포인트', icon: '⚡', color: 'from-purple-500 to-purple-700' }
+  { key: 'points', label: '공격 포인트', icon: '⚡', color: 'from-purple-500 to-purple-700' },
+  { key: 'manner', label: '매너왕', icon: '💝', color: 'from-pink-500 to-rose-600' }
 ]
 
 const loading = computed(() => players.loading || (!seasons.loaded))
@@ -95,7 +97,7 @@ onMounted(() => {
                 </RouterLink>
                 <p class="text-xs opacity-80">
                   <span class="font-bold text-base">{{ sa[t.key].value }}</span>
-                  {{ t.key === 'appearance' ? '경기' : t.key === 'mvp' ? '회' : t.key === 'points' ? 'P' : t.key === 'scorer' ? '골' : '도움' }}
+                  {{ t.key === 'appearance' ? '경기' : t.key === 'mvp' ? '회' : t.key === 'points' ? 'P' : t.key === 'scorer' ? '골' : t.key === 'manner' ? '점' : '도움' }}
                 </p>
               </div>
             </div>

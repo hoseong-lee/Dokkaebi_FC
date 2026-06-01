@@ -33,13 +33,14 @@ function topInSeason(players, seasonId, metric) {
 
 // 전체 선수 대상 시즌 시상 캐시 (성능)
 function buildSeasonAwards(players, seasons) {
-  const map = {} // seasonId → { mvp:Set, scorer:Set, assister:Set, attendance:Set }
+  const map = {} // seasonId → { mvp:Set, scorer:Set, assister:Set, attendance:Set, manner:Set }
   for (const s of seasons) {
     map[s.id] = {
       mvp: topInSeason(players, s.id, 'momCount'),
       scorer: topInSeason(players, s.id, 'goals'),
       assister: topInSeason(players, s.id, 'assists'),
-      attendance: topInSeason(players, s.id, 'appearances')
+      attendance: topInSeason(players, s.id, 'appearances'),
+      manner: topInSeason(players, s.id, 'complimentCount')
     }
   }
   return map
@@ -131,6 +132,10 @@ export function computePlayerBadges(player, matches, players, seasons) {
     if (a.attendance.has(player.id)) badges.push({
       id: `season-attendance-${s.id}`, icon: '🏃', label: `${s.name} 출석왕`,
       desc: `${s.name} 시즌 출석 1위`
+    })
+    if (a.manner.has(player.id)) badges.push({
+      id: `season-manner-${s.id}`, icon: '💝', label: `${s.name} 매너왕`,
+      desc: `${s.name} 시즌 매너 점수 1위`
     })
   }
 

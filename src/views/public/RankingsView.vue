@@ -23,7 +23,7 @@ const scope = ref('total')
 
 const playersRef = toRef(store, 'players')
 const seasonRef = computed(() => (scope.value === 'total' ? null : scope.value))
-const { topScorers, topAssists, topPoints, topAppearances, topMom } = useRankings(
+const { topScorers, topAssists, topPoints, topAppearances, topMom, topCompliments } = useRankings(
   playersRef,
   seasonRef
 )
@@ -43,7 +43,8 @@ const tabs = [
   { key: 'assists', label: '도움', unit: '도움' },
   { key: 'points', label: '공격P', unit: 'P' },
   { key: 'appearances', label: '출석', unit: '경기' },
-  { key: 'mom', label: 'MOM', unit: '회' }
+  { key: 'mom', label: 'MOM', unit: '회' },
+  { key: 'manner', label: '💝 매너', unit: '점' }
 ]
 
 const current = computed(() => {
@@ -52,7 +53,8 @@ const current = computed(() => {
     assists: { rows: topAssists.value, unit: '도움' },
     points: { rows: topPoints.value, unit: 'P' },
     appearances: { rows: topAppearances.value, unit: '경기' },
-    mom: { rows: topMom.value, unit: '회' }
+    mom: { rows: topMom.value, unit: '회' },
+    manner: { rows: topCompliments.value, unit: '점' }
   }
   return map[tab.value]
 })

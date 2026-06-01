@@ -23,6 +23,7 @@ export function useRankings(playersRef, seasonRef) {
   const topPoints = computed(() => rank('points'))
   const topAppearances = computed(() => rank('appearances'))
   const topMom = computed(() => rank('momCount'))
+  const topCompliments = computed(() => rank('complimentCount'))
 
-  return { topScorers, topAssists, topPoints, topAppearances, topMom, rank }
+  return { topScorers, topAssists, topPoints, topAppearances, topMom, topCompliments, rank }
 }
