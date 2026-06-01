@@ -5,6 +5,7 @@ import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
+import { COMPLIMENT_TAGS, COMPLIMENT_TAG_MAP } from '@/utils/compliments'
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
@@ -31,6 +32,16 @@ const stats = computed(() => {
     ? player.value.stats || {}
     : seasonStatsOf(player.value, scope.value)
 })
+
+// 받은 칭찬 태그 분포 (현재 scope 기준)
+const complimentTagStats = computed(() => {
+  const tags = stats.value?.complimentTags || {}
+  return COMPLIMENT_TAGS.map((t) => ({
+    ...t,
+    count: tags[t.id] || 0
+  })).filter((t) => t.count > 0).sort((a, b) => b.count - a.count)
+})
+const topComplimentTag = computed(() => complimentTagStats.value[0] || null)
 
 const series = computed(() => {
   if (!player.value || scope.value === 'total') return []
@@ -189,6 +200,34 @@ watch(() => route.params.id, load)
     <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
       <PlayerMonthlyChart :series="series" />
+    </section>
+
+    <!-- 받은 칭찬 분포 -->
+    <section v-if="complimentTagStats.length" class="bg-white rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-bold text-navy">💝 받은 칭찬</h2>
+        <span v-if="topComplimentTag" class="text-xs text-rose-600 font-semibold">
+          대표 강점: {{ topComplimentTag.icon }} {{ topComplimentTag.label }}
+        </span>
+      </div>
+      <div class="space-y-2">
+        <div
+          v-for="t in complimentTagStats" :key="t.id"
+          class="flex items-center gap-3"
+        >
+          <span class="text-[11px] px-2 py-1 rounded-full ring-1 font-semibold shrink-0 w-44" :class="t.tone">
+            {{ t.icon }} {{ t.label }}
+          </span>
+          <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+            <div
+              class="h-full rounded-full transition-all"
+              :class="t.tone.split(' ').find(c => c.startsWith('ring-'))?.replace('ring-', 'bg-') || 'bg-rose-500'"
+              :style="{ width: Math.min(100, (t.count / (complimentTagStats[0]?.count || 1)) * 100) + '%' }"
+            ></div>
+          </div>
+          <span class="text-sm font-bold text-onyx tabular-nums shrink-0 w-8 text-right">{{ t.count }}</span>
+        </div>
+      </div>
     </section>
 
     <!-- 뱃지 -->

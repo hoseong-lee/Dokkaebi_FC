@@ -16,7 +16,8 @@ import {
   COMPLIMENT_TAGS,
   COMPLIMENT_TAG_IDS,
   COMPLIMENT_MAX_PLAYERS,
-  tallyComplimentTotals
+  tallyComplimentTotals,
+  tallyComplimentTags
 } from '@/utils/compliments'
 export { COMPLIMENT_TAGS, COMPLIMENT_MAX_PLAYERS, tallyComplimentTotals as tallyCompliments }
 
@@ -173,9 +174,17 @@ export async function deleteMatch(id) {
     }
     // 칭찬도 차감 (votingClosed=true 인 경우만, 미확정이면 누적 안 됐으므로 skip)
     if (data.votingClosed) {
-      const cTally = tallyCompliments(data.compliments || {})
+      const cTally = tallyComplimentTotals(data.compliments || {})
+      const cTagTally = tallyComplimentTags(data.compliments || {})
       for (const [pid, count] of Object.entries(cTally)) {
         bump(updates, pid, seasonId, 'complimentCount', -count)
+      }
+      // 태그별 차감
+      for (const [pid, tags] of Object.entries(cTagTally)) {
+        for (const [tag, count] of Object.entries(tags)) {
+          updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(-count)
+          if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(-count)
+        }
       }
     }
     if (Object.keys(updates).length > 0) {
@@ -238,11 +247,28 @@ export async function recomputeAllStats() {
     }
     // 칭찬도 votingClosed=true 인 경기만 누적
     if (m.votingClosed) {
-      const cTally = tallyCompliments(m.compliments || {})
+      const cTally = tallyComplimentTotals(m.compliments || {})
+      const cTagTally = tallyComplimentTags(m.compliments || {})
       for (const [pid, count] of Object.entries(cTally)) {
         if (!players[pid]) continue
         ensure(pid).total.complimentCount += count
         if (seasonId) ensureSeason(pid, seasonId).complimentCount += count
+      }
+      // 태그별 카운트 재계산
+      for (const [pid, tags] of Object.entries(cTagTally)) {
+        if (!players[pid]) continue
+        const a = ensure(pid)
+        if (!a.total.complimentTags) a.total.complimentTags = {}
+        for (const [tag, count] of Object.entries(tags)) {
+          a.total.complimentTags[tag] = (a.total.complimentTags[tag] || 0) + count
+        }
+        if (seasonId) {
+          const s = ensureSeason(pid, seasonId)
+          if (!s.complimentTags) s.complimentTags = {}
+          for (const [tag, count] of Object.entries(tags)) {
+            s.complimentTags[tag] = (s.complimentTags[tag] || 0) + count
+          }
+        }
       }
     }
   }
@@ -462,11 +488,20 @@ export async function finalizeMomVoting(matchId, winnerId) {
   // 칭찬 확정 — votingClosed=false 였던 경기는 이번에 처음 누적
   // votingClosed=true 였다면 이미 누적되어 있으므로 skip
   if (!data.votingClosed) {
-    const tally = tallyCompliments(data.compliments || {})
+    const tally = tallyComplimentTotals(data.compliments || {})
+    const tagTally = tallyComplimentTags(data.compliments || {})
     for (const [pid, count] of Object.entries(tally)) {
       if (!count) continue
       updates[nsPath(`players/${pid}/stats/complimentCount`)] = increment(count)
       if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentCount`)] = increment(count)
+    }
+    // 태그별 카운트도 increment
+    for (const [pid, tags] of Object.entries(tagTally)) {
+      for (const [tag, count] of Object.entries(tags)) {
+        if (!count) continue
+        updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(count)
+        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(count)
+      }
     }
   }
 

@@ -140,6 +140,40 @@ export function computePlayerBadges(player, matches, players, seasons) {
     desc: '정식 로스터'
   })
 
+  // 매너 점수 마일스톤 (받은 칭찬 태그 총합)
+  const compTotal = stats.complimentCount || 0
+  if (compTotal >= 100) badges.push({
+    id: 'manner-100', icon: '💝', label: '도깨비 매너왕',
+    desc: '누적 매너 점수 100+ — 모두가 인정하는 동료'
+  })
+  else if (compTotal >= 30) badges.push({
+    id: 'manner-30', icon: '💝', label: '매너 신사',
+    desc: '누적 매너 점수 30+'
+  })
+  else if (compTotal >= 10) badges.push({
+    id: 'manner-10', icon: '💝', label: '매너 새싹',
+    desc: '누적 매너 점수 10+'
+  })
+
+  // 태그별 특화 뱃지 — 같은 태그 5회 이상 받음
+  const tags = stats.complimentTags || {}
+  const TAG_BADGES = {
+    altruistic: { icon: '🤝', label: '이타파',     desc: '"이타적인 플레이를 해요" 5회+ 받음' },
+    effort:     { icon: '🔥', label: '열정 그 자체', desc: '"열심히 해요" 5회+ 받음' },
+    pass:       { icon: '⚽', label: '패스 마스터', desc: '"패스를 잘해요" 5회+ 받음' },
+    dribble:    { icon: '🏃', label: '드리블러',   desc: '"드리블을 잘해요" 5회+ 받음' },
+    stamina:    { icon: '💪', label: '체력왕',     desc: '"체력이 좋아요" 5회+ 받음' },
+    defense:    { icon: '🛡', label: '철벽 수비',   desc: '"수비를 잘해요" 5회+ 받음' },
+    vision:     { icon: '👁', label: '시야의 마법사', desc: '"시야가 좋아요" 5회+ 받음' },
+    shot:       { icon: '🎯', label: '저격수',     desc: '"슛이 좋아요" 5회+ 받음' },
+    leadership: { icon: '👑', label: '캡틴',       desc: '"리더십이 좋아요" 5회+ 받음' }
+  }
+  for (const [tag, meta] of Object.entries(TAG_BADGES)) {
+    if ((tags[tag] || 0) >= 5) {
+      badges.push({ id: `comp-tag-${tag}`, ...meta })
+    }
+  }
+
   return badges
 }
 
@@ -151,5 +185,11 @@ export const BADGE_TONE = {
   '🏃': 'bg-emerald-50 text-emerald-700 border-emerald-200',
   '🥅': 'bg-rose-50 text-rose-700 border-rose-200',
   '🎩': 'bg-purple-50 text-purple-700 border-purple-200',
-  '⭐': 'bg-yellow-50 text-yellow-700 border-yellow-200'
+  '⭐': 'bg-yellow-50 text-yellow-700 border-yellow-200',
+  '💝': 'bg-pink-50 text-pink-700 border-pink-200',
+  '🤝': 'bg-amber-50 text-amber-700 border-amber-200',
+  '🔥': 'bg-rose-50 text-rose-700 border-rose-200',
+  '💪': 'bg-violet-50 text-violet-700 border-violet-200',
+  '🛡': 'bg-sky-50 text-sky-700 border-sky-200',
+  '👁': 'bg-indigo-50 text-indigo-700 border-indigo-200'
 }
