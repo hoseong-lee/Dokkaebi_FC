@@ -206,6 +206,77 @@ exports.onComplimentCreate = onValueCreated(
   }
 )
 
+// ── 6-B. 경기 종료(일시+2시간) 직후 — 출전 멤버에게 투표 시작 알림 ──
+exports.notifyVotingStart = onSchedule(
+  { schedule: 'every 30 minutes', timeZone: 'Asia/Seoul' },
+  async () => {
+    const now = Date.now()
+    const POST_MATCH_MS = 2 * 60 * 60 * 1000  // 2시간
+    const WINDOW_MS = 30 * 60 * 1000          // 30분 윈도우 (다음 schedule 까지)
+
+    const snap = await admin.database().ref('dokkaebi/matches').get()
+    const matches = snap.val() || {}
+
+    // users 노드 한 번 fetch
+    const usersSnap = await admin.database().ref('dokkaebi/users').get()
+    const users = usersSnap.val() || {}
+    const uidByPid = {}
+    for (const [uid, u] of Object.entries(users)) {
+      if (u?.playerId) uidByPid[u.playerId] = uid
+    }
+
+    for (const [matchId, m] of Object.entries(matches)) {
+      if (!m.date) continue
+      const endTime = m.date + POST_MATCH_MS
+      if (now < endTime) continue                  // 아직 종료 안 됨
+      if (now > endTime + WINDOW_MS) continue       // 이미 30분 지남 (지나간 경기는 skip)
+      if (m.votingNotified) continue                // 이미 알림 보냄
+      if (m.votingClosed) continue                  // 이미 마감
+
+      // 출전 멤버 추출 (쿼터 lineup union)
+      const lineupSet = new Set()
+      for (const q of m.quarters || []) {
+        for (const pid of (q.lineup || [])) lineupSet.add(pid)
+      }
+      // 결과 미입력 경기: 쿼터 lineup 없으면 plannedSquads → 그것도 없으면 알림 skip
+      if (!lineupSet.size && Array.isArray(m.plannedSquads)) {
+        for (const ps of m.plannedSquads) {
+          for (const pid of (ps?.lineup || [])) lineupSet.add(pid)
+        }
+      }
+      if (!lineupSet.size) continue
+
+      // 토큰 수집
+      const tokens = []
+      for (const pid of lineupSet) {
+        const uid = uidByPid[pid]
+        if (uid) {
+          const userTokens = await getUserTokens(uid)
+          tokens.push(...userTokens)
+        }
+      }
+
+      // 마킹 먼저 (중복 알림 방지)
+      await admin.database().ref(`dokkaebi/matches/${matchId}/votingNotified`).set(true)
+
+      if (!tokens.length) {
+        console.log(`[notifyVotingStart] ${matchId}: 출전 멤버는 있지만 토큰 0건 (알림 켠 사람 없음)`)
+        continue
+      }
+
+      const isFinished = m.status === 'finished'
+      await sendToTokens(tokens, {
+        title: isFinished ? '⭐ MOM·칭찬 투표 시작!' : '⚽ 경기 종료',
+        body: isFinished
+          ? `vs ${m.opponent} · 출전 동료에게 투표/칭찬해주세요`
+          : `vs ${m.opponent} · 결과 입력 후 투표가 시작됩니다`,
+        link: `${APP_URL}/matches/${matchId}`
+      })
+      console.log(`[notifyVotingStart] ${matchId} → ${tokens.length} tokens (status=${m.status})`)
+    }
+  }
+)
+
 // ── 7. 매일 KST 03:00 — 2주 만료 경기 자동 MOM/칭찬 마감 + 통계 누적 ──
 exports.autoFinalizeExpiredVotes = onSchedule(
   { schedule: 'every day 03:00', timeZone: 'Asia/Seoul' },
