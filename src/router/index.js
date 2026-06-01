@@ -118,6 +118,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/analytics',
+    name: 'analytics',
+    component: () => import('@/views/public/AnalyticsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/squads',
     name: 'saved-squads',
     component: () => import('@/views/public/SavedSquadsView.vue'),
