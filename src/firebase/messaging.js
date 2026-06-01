@@ -2,7 +2,7 @@
 // 권한 요청 → 토큰 발급 → RTDB 저장 → 포그라운드 onMessage 리스너
 import app from './config'
 import { getMessaging, getToken, onMessage, deleteToken, isSupported } from 'firebase/messaging'
-import { ref as dbRef, set, remove, serverTimestamp } from 'firebase/database'
+import { ref as dbRef, set, remove, get, serverTimestamp } from 'firebase/database'
 import { rtdb, auth } from './config'
 
 // ⚠️ Firebase Console → 프로젝트 설정 → Cloud Messaging → 웹 푸시 인증서에서 발급
@@ -76,9 +76,31 @@ export async function enablePushForCurrentUser() {
     window.matchMedia?.('(display-mode: standalone)').matches ||
     window.navigator?.standalone === true ||
     document.referrer?.startsWith('android-app://')
+  const ua = navigator.userAgent.slice(0, 200)
+
+  // 같은 디바이스(=같은 userAgent + standalone) 의 옛 토큰 정리 — 중복 알림 방지
+  // 다른 디바이스(폰 vs PC) 토큰은 그대로 둔다
+  try {
+    const snap = await get(dbRef(rtdb, `dokkaebi/fcmTokens/${uid}`))
+    const existing = snap.val() || {}
+    const updates = {}
+    for (const [hash, t] of Object.entries(existing)) {
+      if (hash === tokenHash) continue
+      if (t?.userAgent === ua && (t?.standalone === standalone || t?.standalone === undefined)) {
+        updates[`dokkaebi/fcmTokens/${uid}/${hash}`] = null
+      }
+    }
+    if (Object.keys(updates).length) {
+      const { update } = await import('firebase/database')
+      await update(dbRef(rtdb), updates)
+    }
+  } catch {
+    // 정리 실패해도 새 토큰 저장은 진행
+  }
+
   await set(dbRef(rtdb, `dokkaebi/fcmTokens/${uid}/${tokenHash}`), {
     token,
-    userAgent: navigator.userAgent.slice(0, 200),
+    userAgent: ua,
     standalone: !!standalone,
     savedAt: serverTimestamp()
   })
