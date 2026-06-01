@@ -12,7 +12,8 @@ const tiles = [
   { to: '/hall-of-fame', label: '명예의 전당', icon: '🏆', desc: '시즌별 자동 시상' },
   { to: '/guide', label: '축구 가이드', icon: '⚽', desc: '포지션·포메이션 한눈에' },
   { to: '/squads', label: '스쿼드 메이커', icon: '⚔️', desc: '라인업 저장·재활용·이미지 공유' },
-  { to: '/analytics', label: '승률 분석', icon: '📊', desc: '포메이션·선수·상대팀별 인사이트' }
+  { to: '/analytics', label: '승률 분석', icon: '📊', desc: '포메이션·선수·상대팀별 인사이트' },
+  { to: '/highlights', label: '베스트 골 모음', icon: '🏅', desc: '시즌 명장면 영상 모아보기 + 단톡 공유' }
 ]
 </script>
 

@@ -33,9 +33,10 @@ const form = reactive({
   type: 'friendly'
 })
 
-// 영상 N개. { label, url, startStr, endStr } — start/end 는 "1:30" 같은 mm:ss 문자열로 입력받음
+// 영상 N개. { label, url, startStr, endStr, highlight }
+// highlight=true 면 "🏅 베스트 골 모음" 페이지에 자동 노출
 const videos = reactive([])
-function addVideo() { videos.push({ label: `${videos.length + 1}Q`, url: '', startStr: '', endStr: '' }) }
+function addVideo() { videos.push({ label: `${videos.length + 1}Q`, url: '', startStr: '', endStr: '', highlight: false }) }
 function removeVideo(i) { videos.splice(i, 1) }
 
 function emptySquad() {
@@ -80,7 +81,8 @@ async function load() {
       label: v.label || '',
       url: v.url || '',
       startStr: v.start != null ? formatTime(v.start) : '',
-      endStr: v.end != null ? formatTime(v.end) : ''
+      endStr: v.end != null ? formatTime(v.end) : '',
+      highlight: !!v.highlight
     }))
   }
   if (Array.isArray(m.plannedSquads)) {
@@ -114,15 +116,16 @@ async function save() {
           label: (v.label || '').trim(),
           url: (v.url || '').trim(),
           start: start != null ? start : null,
-          end: end != null ? end : null
+          end: end != null ? end : null,
+          highlight: !!v.highlight
         }
       })
       .filter((v) => v.url)
       .map((v) => {
-        // Firebase 는 undefined/null 키 일부 거부 — null 제거
         const out = { label: v.label, url: v.url }
         if (v.start != null) out.start = v.start
         if (v.end != null) out.end = v.end
+        if (v.highlight) out.highlight = true
         return out
       })
     const payload = {
@@ -215,6 +218,10 @@ onMounted(load)
             <input v-model="v.endStr" type="text" placeholder="끝 (2:45)" class="w-24 border rounded-lg px-2 py-1 text-xs font-mono" />
             <span class="text-[10px] text-gray-400">비워두면 전체 재생</span>
           </div>
+          <label class="flex items-center gap-2 pl-1 cursor-pointer">
+            <input type="checkbox" v-model="v.highlight" class="w-4 h-4 accent-amber-500" />
+            <span class="text-xs text-amber-700 font-semibold">🏅 베스트 골 모음에 노출</span>
+          </label>
         </div>
         <p v-if="videos.length > 0" class="text-[11px] text-gray-400">
           ✓ 지원 URL: youtube.com/watch?v= / youtu.be/ / shorts/ / embed/<br>

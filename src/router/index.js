@@ -124,6 +124,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/highlights',
+    name: 'highlights',
+    component: () => import('@/views/public/HighlightsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/squads',
     name: 'saved-squads',
     component: () => import('@/views/public/SavedSquadsView.vue'),
