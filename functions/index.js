@@ -92,7 +92,7 @@ exports.onAnnouncementCreate = onValueCreated(
   }
 )
 
-// ── 2. 새 경기 → 모든 멤버 ──
+// ── 2. 새 경기 → 모든 멤버 (RSVP 요청 포함) ──
 exports.onMatchCreate = onValueCreated(
   { ref: '/dokkaebi/matches/{id}', instance: RTDB_INSTANCE },
   async (event) => {
@@ -102,7 +102,7 @@ exports.onMatchCreate = onValueCreated(
     const tokens = await fetchAllTokens()
     await sendToTokens(tokens, {
       title: '📅 새 경기 등록',
-      body: `vs ${m.opponent}${dateStr ? ' · ' + dateStr : ''}`,
+      body: `vs ${m.opponent}${dateStr ? ' · ' + dateStr : ''} · 참석 여부 응답해주세요`,
       link: `${APP_URL}/matches/${event.params.id}`
     })
   }
@@ -150,7 +150,54 @@ async function getUserTokens(uid) {
   return Object.values(map).map((t) => t?.token).filter(Boolean)
 }
 
-// ── 5. 매일 정해진 시각 — 경기 D-1 알림 (KST 18:00) ──
+// ── 5-A. 매일 KST 9:00 — D-5 경기 RSVP 미응답자에게 리마인더 ──
+exports.rsvpReminderD5 = onSchedule(
+  { schedule: 'every day 09:00', timeZone: 'Asia/Seoul' },
+  async () => {
+    const now = Date.now()
+    // 4.5 ~ 5.5 일 후 사이 경기 (애매한 경계 케이스 회피)
+    const winStart = now + 4.5 * 24 * 60 * 60 * 1000
+    const winEnd = now + 5.5 * 24 * 60 * 60 * 1000
+
+    const snap = await admin.database().ref('dokkaebi/matches').get()
+    const matches = snap.val() || {}
+    const target = Object.entries(matches)
+      .map(([id, m]) => ({ id, ...m }))
+      .filter((m) => m.date && m.date >= winStart && m.date < winEnd && m.status !== 'cancelled')
+
+    if (!target.length) return
+
+    // 미응답/미정자 = users 노드의 모든 멤버 - 이미 yes/no 응답한 멤버
+    const usersSnap = await admin.database().ref('dokkaebi/users').get()
+    const allUids = Object.keys(usersSnap.val() || {})
+
+    for (const m of target) {
+      const responded = new Set()
+      for (const [uid, r] of Object.entries(m.rsvps || {})) {
+        if (r?.status === 'yes' || r?.status === 'no') responded.add(uid)
+      }
+      const pendingUids = allUids.filter((uid) => !responded.has(uid))
+      if (!pendingUids.length) continue
+
+      // 각 미응답자의 토큰 수집
+      const tokens = []
+      for (const uid of pendingUids) {
+        const userTokens = await getUserTokens(uid)
+        tokens.push(...userTokens)
+      }
+      if (!tokens.length) continue
+
+      const t = new Date(m.date).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      await sendToTokens(tokens, {
+        title: '📝 참석 여부 응답해주세요',
+        body: `5일 후 경기: vs ${m.opponent} · ${t}`,
+        link: `${APP_URL}/matches/${m.id}`
+      })
+    }
+  }
+)
+
+// ── 5-B. 매일 정해진 시각 — 경기 D-1 알림 (KST 18:00) ──
 exports.dailyMatchReminder = onSchedule(
   { schedule: 'every day 18:00', timeZone: 'Asia/Seoul' },
   async () => {
