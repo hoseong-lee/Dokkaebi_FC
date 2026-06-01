@@ -30,8 +30,9 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
-/* iOS standalone 상태표시줄(다이나믹 아일랜드 영역)을 헤더 색과 일체화 */
-header {
+/* iOS standalone 상태표시줄(다이나믹 아일랜드 영역)을 앱 헤더와 일체화.
+   글로벌 `header` 셀렉터는 위험(다른 컴포넌트 영향) → 명시적 클래스만 적용. */
+.app-header {
   padding-top: env(safe-area-inset-top);
 }
 

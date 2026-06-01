@@ -86,10 +86,11 @@ onMounted(() => {
 <template>
   <Teleport to="body">
     <Transition name="install">
+      <!-- 모바일은 하단 nav(56px) 위(bottom-20)에 띄움, 데스크탑은 일반 하단 -->
       <div
         v-if="show"
-        class="fixed inset-x-0 bottom-0 z-[80] px-4 pb-4 sm:px-6 sm:pb-6 pointer-events-none"
-        style="padding-bottom: calc(env(safe-area-inset-bottom) + 16px);"
+        class="fixed inset-x-0 bottom-20 sm:bottom-6 z-[80] px-4 sm:px-6 pointer-events-none"
+        style="padding-bottom: env(safe-area-inset-bottom);"
       >
         <div class="pointer-events-auto max-w-sm mx-auto bg-white rounded-2xl shadow-2xl ring-1 ring-gray-200 overflow-hidden">
           <!-- 헤더 -->

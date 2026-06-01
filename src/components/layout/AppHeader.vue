@@ -24,7 +24,7 @@ async function handleLogout() {
 </script>
 
 <template>
-  <header class="bg-onyx text-white shadow border-b border-gold/30">
+  <header class="app-header bg-onyx text-white shadow border-b border-gold/30">
     <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
       <RouterLink to="/" class="flex items-center gap-2 font-bold text-lg leading-none">
         <img

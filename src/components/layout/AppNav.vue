@@ -16,7 +16,7 @@ const items = [
 <template>
   <nav
     v-if="auth.isAuthed"
-    class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t shadow-lg flex"
+    class="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t shadow-lg flex"
   >
     <RouterLink
       v-for="item in items"
