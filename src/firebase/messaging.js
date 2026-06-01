@@ -71,9 +71,15 @@ export async function enablePushForCurrentUser() {
 
   // RTDB 저장 — 한 사용자 = 여러 디바이스 가능. tokenHash 키 사용.
   const tokenHash = await sha256Short(token)
+  // iOS PWA 푸시는 standalone(홈 화면 추가) 모드에서만 작동 — 디버깅용 표시
+  const standalone =
+    window.matchMedia?.('(display-mode: standalone)').matches ||
+    window.navigator?.standalone === true ||
+    document.referrer?.startsWith('android-app://')
   await set(dbRef(rtdb, `dokkaebi/fcmTokens/${uid}/${tokenHash}`), {
     token,
     userAgent: navigator.userAgent.slice(0, 200),
+    standalone: !!standalone,
     savedAt: serverTimestamp()
   })
   return token
