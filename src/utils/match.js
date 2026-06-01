@@ -46,6 +46,17 @@ export const RESULT_COLOR = {
   L: 'bg-red-100 text-dokkaebi'
 }
 
+// MOM·칭찬 투표 기간: 경기 일시로부터 2주까지만 허용
+export const VOTING_WINDOW_DAYS = 14
+export function isVotingPeriodExpired(match) {
+  if (!match?.date) return false
+  return Date.now() > match.date + VOTING_WINDOW_DAYS * 24 * 60 * 60 * 1000
+}
+export function votingDeadline(match) {
+  if (!match?.date) return null
+  return match.date + VOTING_WINDOW_DAYS * 24 * 60 * 60 * 1000
+}
+
 // 양상(intensity) — 골 차에 따른 5단계
 // big_win/win/draw/loss/big_loss + 1점 차이는 close=true 부가 태그
 const BIG_DIFF = 4

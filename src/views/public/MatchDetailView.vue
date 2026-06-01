@@ -47,6 +47,22 @@ const playerMap = computed(() => {
 const lineupPlayers = computed(() =>
   (match.value?.lineup || []).map((id) => playersStore.getById(id)).filter(Boolean)
 )
+const lineupCount = computed(() => lineupPlayers.value.length)
+const plannedCount = computed(() => {
+  const m = match.value
+  if (!m) return 0
+  if (Array.isArray(m.plannedSquads)) {
+    const set = new Set()
+    for (const s of m.plannedSquads) for (const pid of (s?.lineup || [])) set.add(pid)
+    return set.size
+  }
+  return m.plannedSquad?.lineup?.length || 0
+})
+const goalDiff = computed(() => {
+  const s = match.value?.score
+  if (!s) return 0
+  return (s.dokkaebi ?? 0) - (s.opponent ?? 0)
+})
 
 const quarters = computed(() => match.value?.quarters || [])
 const resultCardOpen = ref(false)
@@ -119,28 +135,47 @@ watch(() => route.params.id, load)
 
       <div class="flex items-center justify-center gap-4 py-2">
         <span class="flex-1 text-right font-bold text-navy text-lg">도깨비 FC</span>
-        <span v-if="isFinished" class="text-2xl font-bold tabular-nums">
+        <span v-if="isFinished" class="text-3xl font-extrabold tabular-nums">
           {{ match.score.dokkaebi }} : {{ match.score.opponent }}
         </span>
         <span v-else class="text-gray-400">vs</span>
         <span class="flex-1 font-bold text-gray-700 text-lg">{{ match.opponent }}</span>
       </div>
 
-      <div v-if="result" class="text-center mt-1">
+      <div v-if="result" class="flex items-center justify-center gap-2 mt-1">
         <span class="px-3 py-1 rounded-full text-sm font-bold" :class="RESULT_COLOR[result]">
           {{ RESULT_LABEL[result] }}
         </span>
+        <span
+          v-if="isFinished"
+          class="px-2 py-0.5 rounded-full text-[11px] font-semibold tabular-nums"
+          :class="goalDiff > 0 ? 'bg-blue-50 text-blue-700' : goalDiff < 0 ? 'bg-rose-50 text-rose-700' : 'bg-gray-100 text-gray-600'"
+        >
+          득실 {{ goalDiff > 0 ? '+' : '' }}{{ goalDiff }}
+        </span>
       </div>
 
-      <div class="mt-4 space-y-1 text-sm text-gray-600">
-        <p>🕒 {{ formatDateTime(match.date) }}</p>
-        <p>
-          📍
-          <a v-if="match.locationUrl" :href="match.locationUrl" target="_blank" class="text-navy underline">
+      <!-- 핵심 정보 그리드: 일시 · 장소 · 출전 인원 -->
+      <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+        <div class="bg-gray-50 rounded-lg p-2">
+          <p class="text-[10px] text-gray-400 font-semibold mb-0.5">🕒 일시</p>
+          <p class="text-xs text-onyx leading-tight">{{ formatDateTime(match.date) }}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-2">
+          <p class="text-[10px] text-gray-400 font-semibold mb-0.5">📍 장소</p>
+          <a v-if="match.locationUrl" :href="match.locationUrl" target="_blank" class="text-xs text-navy underline leading-tight block truncate">
             {{ match.location || '장소 미정' }}
           </a>
-          <span v-else>{{ match.location || '장소 미정' }}</span>
-        </p>
+          <p v-else class="text-xs text-onyx leading-tight truncate">{{ match.location || '장소 미정' }}</p>
+        </div>
+        <div class="bg-emerald-50 rounded-lg p-2">
+          <p class="text-[10px] text-emerald-600 font-semibold mb-0.5">👥 출전</p>
+          <p class="text-xs text-emerald-700 font-bold leading-tight">
+            <span v-if="isFinished">{{ lineupCount }}명</span>
+            <span v-else-if="plannedCount > 0">{{ plannedCount }}명 (예정)</span>
+            <span v-else class="text-gray-400 font-normal">미정</span>
+          </p>
+        </div>
       </div>
 
       <div class="mt-5 pt-4 border-t flex flex-wrap gap-2">

@@ -5,6 +5,7 @@ import { usePlayersStore } from '@/stores/players'
 import { useMatchCompliments } from '@/composables/useMatchCompliments'
 import { useToast } from '@/composables/useToast'
 import { COMPLIMENT_TAGS, COMPLIMENT_TAG_MAP, COMPLIMENT_MAX_PLAYERS } from '@/utils/compliments'
+import { isVotingPeriodExpired } from '@/utils/match'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 
 const props = defineProps({ match: { type: Object, required: true } })
@@ -31,7 +32,8 @@ const eligible = computed(() => {
   if (!pid) return false
   return (props.match.lineup || []).includes(pid)
 })
-const closed = computed(() => !!props.match.votingClosed)
+const expired = computed(() => isVotingPeriodExpired(props.match))
+const closed = computed(() => !!props.match.votingClosed || expired.value)
 
 const myPickedPlayerCount = computed(() =>
   Object.values(localPicks.value).filter((tags) => Array.isArray(tags) && tags.length).length
@@ -43,6 +45,7 @@ function isPickedTag(pid, tagId) {
 
 async function toggleTag(pid, tagId) {
   if (!eligible.value) return toast.error('이 경기에 참여한 선수만 칭찬할 수 있습니다.')
+  if (expired.value) return toast.error('경기 후 2주가 지나 칭찬 투표가 종료되었습니다.')
   if (closed.value) return
   if (pid === auth.myPlayerId) return  // 본인 제외
 
@@ -89,8 +92,11 @@ const ranking = computed(() => {
       <span class="text-xs text-gray-400">{{ totalVoters }}명 참여</span>
     </div>
 
-    <p v-if="closed" class="text-xs text-gray-500 mb-3">
+    <p v-if="match.votingClosed" class="text-xs text-gray-500 mb-3">
       칭찬 투표가 마감되었습니다. 받은 태그 개수가 매너 점수로 누적됐어요.
+    </p>
+    <p v-else-if="expired" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mb-3 leading-relaxed">
+      ⏰ 경기 후 2주가 지나 투표가 종료되었습니다.
     </p>
     <p v-else-if="!eligible" class="text-xs text-gray-500 mb-3">
       <template v-if="!auth.myPlayerId">먼저 헤더의 "내 선수 연결"에서 본인 선수를 지정하세요.</template>

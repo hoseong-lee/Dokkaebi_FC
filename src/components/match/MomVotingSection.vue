@@ -6,6 +6,8 @@ import { useMatchVotes } from '@/composables/useMatchVotes'
 import { useToast } from '@/composables/useToast'
 import { confirm } from '@/composables/useConfirm'
 import { finalizeMomVoting } from '@/firebase/database'
+import { isVotingPeriodExpired, VOTING_WINDOW_DAYS } from '@/utils/match'
+import { formatDate } from '@/utils/date'
 import BaseButton from '@/components/common/BaseButton.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 
@@ -30,10 +32,17 @@ const eligible = computed(() => {
   return (props.match.lineup || []).includes(pid)
 })
 
-const closed = computed(() => !!props.match.votingClosed)
+const expired = computed(() => isVotingPeriodExpired(props.match))
+const closed = computed(() => !!props.match.votingClosed || expired.value)
+const deadlineDate = computed(() => {
+  if (!props.match.date) return ''
+  const d = new Date(props.match.date + VOTING_WINDOW_DAYS * 24 * 60 * 60 * 1000)
+  return formatDate(d.getTime())
+})
 
 async function pick(playerId) {
   if (!eligible.value) return toast.error('이 경기에 참여한 선수만 투표할 수 있습니다.')
+  if (expired.value) return toast.error('경기 후 2주가 지나 투표가 종료되었습니다.')
   if (closed.value) return
   try {
     const next = myVote.value === playerId ? null : playerId
@@ -79,12 +88,18 @@ async function close() {
       <span class="text-xs text-gray-400">{{ totalVotes }}표</span>
     </div>
 
-    <p v-if="closed" class="text-xs text-gray-500 mb-3">
+    <p v-if="match.votingClosed" class="text-xs text-gray-500 mb-3">
       투표가 마감되었습니다. MOM:
       <span v-if="match.momPlayerId" class="font-semibold text-amber-600">
         {{ playersStore.getById(match.momPlayerId)?.name }}
       </span>
       <span v-else>없음</span>
+    </p>
+    <p v-else-if="expired" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mb-3 leading-relaxed">
+      ⏰ 경기 후 2주가 지나 투표가 종료되었습니다.
+    </p>
+    <p v-else-if="match.date" class="text-[11px] text-gray-400 mb-2">
+      ⏱ 투표 마감: <span class="font-semibold text-onyx">{{ deadlineDate }}</span> (경기 후 2주)
     </p>
     <p v-else-if="!eligible" class="text-xs text-gray-500 mb-3">
       <template v-if="!auth.myPlayerId">
