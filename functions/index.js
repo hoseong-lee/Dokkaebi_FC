@@ -8,6 +8,27 @@ admin.initializeApp()
 const RTDB_INSTANCE = 'hosing-5913f-default-rtdb'  // Firebase project DB instance
 const APP_URL = 'https://hoseong-lee.github.io/Dokkaebi_FC'
 
+const VOTING_WINDOW_MS = 14 * 24 * 60 * 60 * 1000  // 2주
+
+// 칭찬 태그 라벨 (frontend utils/compliments.js 와 동기화)
+const COMPLIMENT_TAG_LABEL = {
+  altruistic: '🤝 이타적인 플레이를 해요',
+  effort:     '🔥 열심히 해요',
+  pass:       '⚽ 패스를 잘해요',
+  dribble:    '🏃 드리블을 잘해요',
+  stamina:    '💪 체력이 좋아요',
+  defense:    '🛡 수비를 잘해요',
+  vision:     '👁 시야가 좋아요',
+  shot:       '🎯 슛이 좋아요',
+  leadership: '👑 리더십이 좋아요'
+}
+
+// playerId → uid 역검색 (한 번 fetch + map 캐싱)
+async function findUidByPlayerId(playerId, cachedUsers = null) {
+  const users = cachedUsers || (await admin.database().ref('dokkaebi/users').get()).val() || {}
+  return Object.entries(users).find(([, u]) => u?.playerId === playerId)?.[0] || null
+}
+
 // ── 공통: 모든 활성 토큰 수집 ──
 async function fetchAllTokens(excludeUid = null) {
   const snap = await admin.database().ref('dokkaebi/fcmTokens').get()
@@ -149,6 +170,123 @@ async function getUserTokens(uid) {
   const map = snap.val() || {}
   return Object.values(map).map((t) => t?.token).filter(Boolean)
 }
+
+// ── 6. 칭찬 작성 → 받은 선수에게 푸시 ──
+exports.onComplimentCreate = onValueCreated(
+  { ref: '/dokkaebi/matches/{matchId}/compliments/{voterUid}', instance: RTDB_INSTANCE },
+  async (event) => {
+    const picks = event.data.val()
+    if (!picks || typeof picks !== 'object') return
+    const voterUid = event.params.voterUid
+    const matchId = event.params.matchId
+
+    // voter 이름
+    const voterSnap = await admin.database().ref(`dokkaebi/users/${voterUid}`).get()
+    const voterName = voterSnap.val()?.displayName || '누군가'
+
+    // users 노드 한 번 fetch (모든 picks 에 재사용)
+    const usersSnap = await admin.database().ref('dokkaebi/users').get()
+    const users = usersSnap.val() || {}
+
+    for (const [playerId, tags] of Object.entries(picks)) {
+      if (!Array.isArray(tags) || !tags.length) continue
+      const receiverUid = await findUidByPlayerId(playerId, users)
+      if (!receiverUid || receiverUid === voterUid) continue
+
+      const tokens = await getUserTokens(receiverUid)
+      if (!tokens.length) continue
+
+      const labels = tags.map((t) => COMPLIMENT_TAG_LABEL[t] || t).join(' · ')
+      await sendToTokens(tokens, {
+        title: `💝 ${voterName}님이 칭찬했어요`,
+        body: labels,
+        link: `${APP_URL}/matches/${matchId}`
+      })
+    }
+  }
+)
+
+// ── 7. 매일 KST 03:00 — 2주 만료 경기 자동 MOM/칭찬 마감 + 통계 누적 ──
+exports.autoFinalizeExpiredVotes = onSchedule(
+  { schedule: 'every day 03:00', timeZone: 'Asia/Seoul' },
+  async () => {
+    const now = Date.now()
+    const snap = await admin.database().ref('dokkaebi/matches').get()
+    const matches = snap.val() || {}
+    const Inc = admin.database.ServerValue.increment
+
+    for (const [matchId, m] of Object.entries(matches)) {
+      if (m.votingClosed) continue
+      if (m.status !== 'finished') continue  // 결과 미입력 경기 skip
+      if (!m.date) continue
+      if (now - m.date < VOTING_WINDOW_MS) continue  // 아직 2주 안 됨
+
+      // MOM 자동 선정 (표 가장 많은 선수)
+      const votes = m.votes || {}
+      const tally = {}
+      for (const candidateId of Object.values(votes)) {
+        if (!candidateId) continue
+        tally[candidateId] = (tally[candidateId] || 0) + 1
+      }
+      let winnerId = null, maxVotes = 0
+      for (const [pid, cnt] of Object.entries(tally)) {
+        if (cnt > maxVotes) { maxVotes = cnt; winnerId = pid }
+      }
+
+      // 칭찬 집계 — tag totals + tag breakdown
+      const compliments = m.compliments || {}
+      const totals = {}  // pid → total
+      const breakdown = {}  // pid → { tag: count }
+      for (const perVoter of Object.values(compliments)) {
+        if (!perVoter || typeof perVoter !== 'object') continue
+        for (const [pid, tags] of Object.entries(perVoter)) {
+          if (!Array.isArray(tags) || !tags.length) continue
+          totals[pid] = (totals[pid] || 0) + tags.length
+          if (!breakdown[pid]) breakdown[pid] = {}
+          for (const t of tags) {
+            breakdown[pid][t] = (breakdown[pid][t] || 0) + 1
+          }
+        }
+      }
+
+      const seasonId = m.seasonId
+      const updates = {}
+      if (winnerId) {
+        updates[`dokkaebi/players/${winnerId}/stats/momCount`] = Inc(1)
+        if (seasonId) updates[`dokkaebi/players/${winnerId}/seasonStats/${seasonId}/momCount`] = Inc(1)
+      }
+      for (const [pid, count] of Object.entries(totals)) {
+        updates[`dokkaebi/players/${pid}/stats/complimentCount`] = Inc(count)
+        if (seasonId) updates[`dokkaebi/players/${pid}/seasonStats/${seasonId}/complimentCount`] = Inc(count)
+      }
+      for (const [pid, tags] of Object.entries(breakdown)) {
+        for (const [tag, count] of Object.entries(tags)) {
+          updates[`dokkaebi/players/${pid}/stats/complimentTags/${tag}`] = Inc(count)
+          if (seasonId) updates[`dokkaebi/players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`] = Inc(count)
+        }
+      }
+      updates[`dokkaebi/matches/${matchId}/momPlayerId`] = winnerId
+      updates[`dokkaebi/matches/${matchId}/votingClosed`] = true
+      updates[`dokkaebi/matches/${matchId}/autoFinalized`] = true
+      updates[`dokkaebi/matches/${matchId}/updatedAt`] = admin.database.ServerValue.TIMESTAMP
+
+      await admin.database().ref().update(updates)
+      console.log(`[autoFinalize] match ${matchId} → MOM=${winnerId || 'none'}, players=${Object.keys(totals).length}`)
+
+      // 자동 마감 알림 (그 경기 참여자에게)
+      if (winnerId) {
+        const playerSnap = await admin.database().ref(`dokkaebi/players/${winnerId}`).get()
+        const momName = playerSnap.val()?.name || ''
+        const tokens = await fetchAllTokens()
+        await sendToTokens(tokens, {
+          title: '🏆 MOM 자동 확정',
+          body: `vs ${m.opponent} · MOM: ${momName}`,
+          link: `${APP_URL}/matches/${matchId}`
+        })
+      }
+    }
+  }
+)
 
 // ── 5-A. 매일 KST 9:00 — D-5 경기 RSVP 미응답자에게 리마인더 ──
 exports.rsvpReminderD5 = onSchedule(
