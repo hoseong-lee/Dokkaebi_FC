@@ -1,15 +1,27 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
+import { useMatchesStore } from '@/stores/matches'
 import { seasonStatsOf, attackPoints } from '@/utils/stats'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import SeasonReviewModal from '@/components/match/SeasonReviewModal.vue'
 
 const players = usePlayersStore()
 const seasons = useSeasonStore()
+const matchesStore = useMatchesStore()
+
+const reviewOpen = ref(false)
+const reviewSeason = ref(null)
+
+function openReview(season) {
+  reviewSeason.value = season
+  reviewOpen.value = true
+}
 
 function pickTop(metric, seasonId) {
   let best = null
@@ -49,6 +61,7 @@ const loading = computed(() => players.loading || (!seasons.loaded))
 onMounted(() => {
   seasons.ensure()
   players.fetchAll()
+  matchesStore.loaded ? null : matchesStore.fetchAll()
 })
 </script>
 
@@ -71,6 +84,11 @@ onMounted(() => {
         <div class="flex items-center gap-2 mb-3">
           <h2 class="font-bold text-navy">{{ sa.season.name }}</h2>
           <span v-if="sa.season.active" class="text-[10px] bg-dokkaebi text-white px-2 py-0.5 rounded-full">진행중</span>
+          <button
+            type="button"
+            class="ml-auto text-xs px-3 py-1.5 rounded-full bg-rose-500 text-white font-semibold hover:bg-rose-600"
+            @click="openReview(sa.season)"
+          >📸 결산 카드</button>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div
@@ -106,5 +124,13 @@ onMounted(() => {
         </div>
       </section>
     </div>
+
+    <SeasonReviewModal
+      v-model="reviewOpen"
+      :players="players.players"
+      :matches="matchesStore.matches"
+      :season-id="reviewSeason?.id || null"
+      :season-name="reviewSeason?.name || ''"
+    />
   </div>
 </template>
