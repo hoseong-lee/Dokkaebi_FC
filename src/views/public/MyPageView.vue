@@ -7,6 +7,12 @@ import { useMatchesStore } from '@/stores/matches'
 import { useToast } from '@/composables/useToast'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
 import { POSITION_OPTIONS, POSITION_LABEL as POS_DETAIL_LABEL, POSITION_CATEGORY } from '@/utils/positions'
+import {
+  enablePushForCurrentUser,
+  disablePushForCurrentUser,
+  isPushSupported,
+  notificationPermissionState
+} from '@/firebase/messaging'
 import { personalPartners } from '@/utils/duos'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
 import BaseButton from '@/components/common/BaseButton.vue'
@@ -32,6 +38,36 @@ const favoritePlayer = ref('')
 const mainPos = ref('')
 const subPos = ref('')
 const linkModalOpen = ref(false)
+
+// 푸시 알림
+const pushSupported = ref(false)
+const pushPerm = ref('default') // granted | denied | default | unsupported
+const pushBusy = ref(false)
+const pushEnabled = computed(() => pushPerm.value === 'granted')
+
+async function refreshPushState() {
+  pushSupported.value = await isPushSupported()
+  pushPerm.value = notificationPermissionState()
+}
+
+async function togglePush() {
+  if (pushBusy.value) return
+  pushBusy.value = true
+  try {
+    if (pushEnabled.value) {
+      await disablePushForCurrentUser()
+      toast.success('이 디바이스 알림을 껐습니다.')
+    } else {
+      await enablePushForCurrentUser()
+      toast.success('🔔 알림을 켰습니다! 새 공지·경기 알림이 도착합니다.')
+    }
+    await refreshPushState()
+  } catch (e) {
+    toast.error(e?.message || String(e))
+  } finally {
+    pushBusy.value = false
+  }
+}
 
 const myPlayer = computed(() =>
   auth.myPlayerId ? playersStore.getById(auth.myPlayerId) : null
@@ -79,7 +115,10 @@ async function load() {
   }
   loading.value = false
 }
-onMounted(load)
+onMounted(async () => {
+  await load()
+  await refreshPushState()
+})
 watch(() => auth.myPlayerId, load)
 
 async function save() {
@@ -132,6 +171,41 @@ function onAvatarSelect(url) {
               권한: {{ auth.isAdmin ? '관리자' : '멤버' }}
             </p>
           </div>
+        </div>
+      </section>
+
+      <!-- 푸시 알림 -->
+      <section class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex-1 min-w-0">
+            <h2 class="font-bold text-navy flex items-center gap-2">🔔 알림</h2>
+            <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+              <template v-if="!pushSupported">
+                이 브라우저는 푸시 알림을 지원하지 않습니다.
+                <span class="block text-amber-700 mt-0.5">📲 iOS 는 홈 화면에 추가한 뒤 가능합니다.</span>
+              </template>
+              <template v-else-if="pushPerm === 'denied'">
+                ⚠️ 알림 권한이 거부됨. 브라우저 설정 → 알림 허용으로 변경하세요.
+              </template>
+              <template v-else-if="pushEnabled">
+                ✅ 새 공지·경기·댓글 알림이 이 디바이스에 도착합니다.
+              </template>
+              <template v-else>
+                새 공지·경기·댓글이 올라오면 즉시 알려드려요.
+              </template>
+            </p>
+          </div>
+          <button
+            type="button"
+            class="shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-colors disabled:opacity-50"
+            :class="pushEnabled ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'"
+            :disabled="pushBusy || !pushSupported || pushPerm === 'denied'"
+            @click="togglePush"
+          >
+            <span v-if="pushBusy">⏳</span>
+            <span v-else-if="pushEnabled">ON</span>
+            <span v-else>OFF</span>
+          </button>
         </div>
       </section>
 

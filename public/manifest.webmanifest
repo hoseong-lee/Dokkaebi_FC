@@ -1,0 +1,38 @@
+{
+  "name": "도깨비 FC",
+  "short_name": "도깨비FC",
+  "description": "도깨비FC 동호회 — 경기 기록·통계·소통",
+  "start_url": "/Dokkaebi_FC/",
+  "scope": "/Dokkaebi_FC/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a2540",
+  "theme_color": "#0a2540",
+  "lang": "ko",
+  "categories": ["sports", "social"],
+  "icons": [
+    {
+      "src": "dokkaebi-emblem-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "dokkaebi-emblem-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "dokkaebi-emblem-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "경기", "url": "/Dokkaebi_FC/matches", "icons": [{ "src": "dokkaebi-emblem-96.png", "sizes": "96x96" }] },
+    { "name": "선수", "url": "/Dokkaebi_FC/players", "icons": [{ "src": "dokkaebi-emblem-96.png", "sizes": "96x96" }] },
+    { "name": "랭킹", "url": "/Dokkaebi_FC/rankings", "icons": [{ "src": "dokkaebi-emblem-96.png", "sizes": "96x96" }] }
+  ]
+}
