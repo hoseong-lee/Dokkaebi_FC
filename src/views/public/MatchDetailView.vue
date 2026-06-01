@@ -18,6 +18,7 @@ import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import MatchEventTimeline from '@/components/match/MatchEventTimeline.vue'
+import { ytEmbedUrl, ytWatchUrl, ytThumbUrl, formatTime } from '@/utils/youtube'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
@@ -46,6 +47,11 @@ const lineupPlayers = computed(() =>
 
 const quarters = computed(() => match.value?.quarters || [])
 const resultCardOpen = ref(false)
+
+// 영상 (videoUrls 배열)
+const videos = computed(() => Array.isArray(match.value?.videoUrls) ? match.value.videoUrls : [])
+const activeVideoIdx = ref(0)
+const activeVideo = computed(() => videos.value[activeVideoIdx.value] || null)
 
 // 예정 스쿼드 목록 (쿼터 배열 우선, legacy 단일 스쿼드 폴백)
 const plannedSquadList = computed(() => {
@@ -233,6 +239,52 @@ watch(() => route.params.id, load)
           <PlayerAvatar :player="p" :size="44" />
           <span class="text-xs truncate w-full">{{ p.name }}</span>
         </RouterLink>
+      </div>
+    </section>
+
+    <!-- 경기 영상 (YouTube 임베드) -->
+    <section v-if="videos.length" class="bg-white rounded-2xl shadow p-5 space-y-3">
+      <div class="flex items-center gap-2">
+        <h3 class="font-bold text-navy">📹 경기 영상</h3>
+        <span class="text-xs text-gray-400">{{ videos.length }}개</span>
+      </div>
+
+      <!-- 영상 탭 (2개 이상일 때) -->
+      <div v-if="videos.length > 1" class="flex gap-1.5 flex-wrap">
+        <button
+          v-for="(v, i) in videos" :key="i"
+          type="button"
+          class="text-xs px-3 py-1.5 rounded-full ring-1 transition-colors"
+          :class="activeVideoIdx === i ? 'bg-rose-500 text-white ring-rose-500 shadow' : 'bg-white text-gray-600 ring-gray-200 hover:bg-gray-50'"
+          @click="activeVideoIdx = i"
+        >▶ {{ v.label || `영상 ${i + 1}` }}</button>
+      </div>
+
+      <!-- 선택된 영상 임베드 -->
+      <div v-if="activeVideo" class="space-y-2">
+        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-gray-200">
+          <iframe
+            :key="activeVideoIdx"
+            :src="ytEmbedUrl(activeVideo.url, { start: activeVideo.start, end: activeVideo.end })"
+            class="absolute inset-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+          />
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-gray-500">
+            <span v-if="activeVideo.start != null || activeVideo.end != null" class="text-rose-600 font-semibold">
+              ⏱ 구간:
+              {{ activeVideo.start != null ? formatTime(activeVideo.start) : '0:00' }}
+              ~ {{ activeVideo.end != null ? formatTime(activeVideo.end) : '끝' }}
+            </span>
+            <span v-else>전체 재생</span>
+          </span>
+          <a :href="ytWatchUrl(activeVideo.url, { start: activeVideo.start })" target="_blank" rel="noopener" class="text-rose-600 hover:underline">
+            YouTube 에서 보기 ↗
+          </a>
+        </div>
       </div>
     </section>
 

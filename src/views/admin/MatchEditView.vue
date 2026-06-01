@@ -8,6 +8,7 @@ import { MATCH_TYPE_LABEL } from '@/utils/match'
 import { toInputDateTime, fromInputDateTime, dayjs } from '@/utils/date'
 import { required } from '@/utils/validators'
 import { useToast } from '@/composables/useToast'
+import { parseTimeString, formatTime } from '@/utils/youtube'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import SquadMaker from '@/components/match/SquadMaker.vue'
@@ -31,6 +32,11 @@ const form = reactive({
   locationUrl: '',
   type: 'friendly'
 })
+
+// 영상 N개. { label, url, startStr, endStr } — start/end 는 "1:30" 같은 mm:ss 문자열로 입력받음
+const videos = reactive([])
+function addVideo() { videos.push({ label: `${videos.length + 1}Q`, url: '', startStr: '', endStr: '' }) }
+function removeVideo(i) { videos.splice(i, 1) }
 
 function emptySquad() {
   return { lineup: [], formation: '', positions: {} }
@@ -68,6 +74,15 @@ async function load() {
     locationUrl: m.locationUrl || '',
     type: m.type || 'friendly'
   })
+  videos.splice(0, videos.length)
+  if (Array.isArray(m.videoUrls)) {
+    m.videoUrls.forEach((v) => videos.push({
+      label: v.label || '',
+      url: v.url || '',
+      startStr: v.start != null ? formatTime(v.start) : '',
+      endStr: v.end != null ? formatTime(v.end) : ''
+    }))
+  }
   if (Array.isArray(m.plannedSquads)) {
     for (let i = 0; i < 4; i++) loadSquad(i, m.plannedSquads[i])
     if (m.plannedSquads.some((s) => s?.lineup?.length)) squadOpen.value = true
@@ -91,6 +106,25 @@ async function save() {
         }))
       : null
 
+    const cleanVideos = videos
+      .map((v) => {
+        const start = parseTimeString(v.startStr)
+        const end = parseTimeString(v.endStr)
+        return {
+          label: (v.label || '').trim(),
+          url: (v.url || '').trim(),
+          start: start != null ? start : null,
+          end: end != null ? end : null
+        }
+      })
+      .filter((v) => v.url)
+      .map((v) => {
+        // Firebase 는 undefined/null 키 일부 거부 — null 제거
+        const out = { label: v.label, url: v.url }
+        if (v.start != null) out.start = v.start
+        if (v.end != null) out.end = v.end
+        return out
+      })
     const payload = {
       opponent: form.opponent.trim(),
       date: fromInputDateTime(form.date),
@@ -98,7 +132,8 @@ async function save() {
       locationUrl: form.locationUrl.trim(),
       type: form.type,
       plannedSquads,
-      plannedSquad: null
+      plannedSquad: null,
+      videoUrls: cleanVideos.length ? cleanVideos : null
     }
     if (isEdit.value) {
       await store.update(route.params.id, payload)
@@ -158,6 +193,33 @@ onMounted(load)
           <label class="block text-xs text-gray-500 mb-1">지도 링크 (선택)</label>
           <input v-model="form.locationUrl" type="url" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="https://map..." />
         </div>
+      </div>
+
+      <!-- 경기 영상 (선택, 쿼터별 분리 가능) -->
+      <div class="bg-white rounded-2xl shadow p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="font-bold text-navy">📹 경기 영상 (선택)</p>
+          <button type="button" class="text-xs px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 font-semibold hover:bg-rose-100" @click="addVideo">+ 영상 추가</button>
+        </div>
+        <p v-if="videos.length === 0" class="text-xs text-gray-400">유튜브 영상 URL을 등록하면 경기 상세 페이지에서 임베드로 재생됩니다.</p>
+        <div v-for="(v, i) in videos" :key="i" class="bg-gray-50 rounded-lg p-2.5 space-y-1.5">
+          <div class="flex gap-2 items-center">
+            <input v-model="v.label" type="text" maxlength="10" placeholder="라벨 (예: 1Q, 하이라이트)" class="w-32 border rounded-lg px-2 py-1.5 text-sm shrink-0" />
+            <input v-model="v.url" type="url" placeholder="https://youtu.be/..." class="flex-1 border rounded-lg px-3 py-1.5 text-sm font-mono min-w-0" />
+            <button type="button" class="text-rose-500 hover:bg-rose-50 rounded-full w-7 h-7 flex items-center justify-center shrink-0" @click="removeVideo(i)" title="제거">✕</button>
+          </div>
+          <div class="flex gap-2 items-center pl-1">
+            <span class="text-[11px] text-gray-500 font-semibold shrink-0">⏱ 구간 (선택)</span>
+            <input v-model="v.startStr" type="text" placeholder="시작 (1:30)" class="w-24 border rounded-lg px-2 py-1 text-xs font-mono" />
+            <span class="text-gray-400 text-xs">~</span>
+            <input v-model="v.endStr" type="text" placeholder="끝 (2:45)" class="w-24 border rounded-lg px-2 py-1 text-xs font-mono" />
+            <span class="text-[10px] text-gray-400">비워두면 전체 재생</span>
+          </div>
+        </div>
+        <p v-if="videos.length > 0" class="text-[11px] text-gray-400">
+          ✓ 지원 URL: youtube.com/watch?v= / youtu.be/ / shorts/ / embed/<br>
+          ✓ 시간 포맷: <span class="font-mono">1:30</span> (1분 30초) · <span class="font-mono">90</span> (90초) · <span class="font-mono">1:02:30</span> (1시간 2분 30초)
+        </p>
       </div>
 
       <!-- 스쿼드 메이커 (접이식, 4쿼터) -->
