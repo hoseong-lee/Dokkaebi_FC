@@ -20,18 +20,39 @@ export const SKILL_TAGS = [
 export const SKILL_TAG_MAP = Object.fromEntries(SKILL_TAGS.map((t) => [t.id, t]))
 export const SKILL_TAG_IDS = SKILL_TAGS.map((t) => t.id)
 
-// endorsements = { voterUid: [tagId, ...] }
-// 한 선수가 받은 endorsements 객체를 → { tagId: voterCount } 로 집계
-export function tallyEndorsements(endorsements = {}) {
+// match.skillVotes = { voterUid: { playerId: [tag, ...] } }
+// → { playerId: 받은_태그_총합 } 집계 (매너점수 누적용)
+export function tallySkillTotals(skillVotes = {}) {
   const map = {}
-  for (const tags of Object.values(endorsements)) {
-    if (!Array.isArray(tags)) continue
-    for (const t of tags) {
-      if (!SKILL_TAG_MAP[t]) continue
-      map[t] = (map[t] || 0) + 1
+  for (const perVoter of Object.values(skillVotes)) {
+    if (!perVoter || typeof perVoter !== 'object') continue
+    for (const [pid, tags] of Object.entries(perVoter)) {
+      if (!Array.isArray(tags) || !tags.length) continue
+      map[pid] = (map[pid] || 0) + tags.length
     }
   }
   return map
+}
+// → { playerId: { tag: count } } (선수별 태그 분포)
+export function tallySkillTags(skillVotes = {}) {
+  const map = {}
+  for (const perVoter of Object.values(skillVotes)) {
+    if (!perVoter || typeof perVoter !== 'object') continue
+    for (const [pid, tags] of Object.entries(perVoter)) {
+      if (!Array.isArray(tags)) continue
+      if (!map[pid]) map[pid] = {}
+      for (const t of tags) {
+        if (!SKILL_TAG_MAP[t]) continue
+        map[pid][t] = (map[pid][t] || 0) + 1
+      }
+    }
+  }
+  return map
+}
+
+// 선수 stats.skillTags 객체 → { tagId: voterCount } 와 동일 형식 (호환)
+export function tallyEndorsements(skillTagsStats = {}) {
+  return skillTagsStats || {}
 }
 
 // 받은 endorsements → 상위 N개 스킬 ({ tagId, count, ...meta })

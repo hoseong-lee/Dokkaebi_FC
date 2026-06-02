@@ -21,7 +21,7 @@ import {
 } from '@/utils/compliments'
 export { COMPLIMENT_TAGS, COMPLIMENT_MAX_PLAYERS, tallyComplimentTotals as tallyCompliments }
 
-import { SKILL_TAGS, SKILL_TAG_IDS } from '@/utils/skills'
+import { SKILL_TAGS, SKILL_TAG_IDS, tallySkillTotals, tallySkillTags } from '@/utils/skills'
 export { SKILL_TAGS }
 
 // 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
@@ -182,11 +182,18 @@ export async function deleteMatch(id) {
       for (const [pid, count] of Object.entries(cTally)) {
         bump(updates, pid, seasonId, 'complimentCount', -count)
       }
-      // 태그별 차감
       for (const [pid, tags] of Object.entries(cTagTally)) {
         for (const [tag, count] of Object.entries(tags)) {
           updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(-count)
           if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(-count)
+        }
+      }
+      // 스킬 평가 차감
+      const sTagTally = tallySkillTags(data.skillVotes || {})
+      for (const [pid, tags] of Object.entries(sTagTally)) {
+        for (const [tag, count] of Object.entries(tags)) {
+          updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(-count)
+          if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(-count)
         }
       }
     }
@@ -257,7 +264,6 @@ export async function recomputeAllStats() {
         ensure(pid).total.complimentCount += count
         if (seasonId) ensureSeason(pid, seasonId).complimentCount += count
       }
-      // 태그별 카운트 재계산
       for (const [pid, tags] of Object.entries(cTagTally)) {
         if (!players[pid]) continue
         const a = ensure(pid)
@@ -270,6 +276,23 @@ export async function recomputeAllStats() {
           if (!s.complimentTags) s.complimentTags = {}
           for (const [tag, count] of Object.entries(tags)) {
             s.complimentTags[tag] = (s.complimentTags[tag] || 0) + count
+          }
+        }
+      }
+      // 스킬 평가 재계산
+      const sTagTally = tallySkillTags(m.skillVotes || {})
+      for (const [pid, tags] of Object.entries(sTagTally)) {
+        if (!players[pid]) continue
+        const a = ensure(pid)
+        if (!a.total.skillTags) a.total.skillTags = {}
+        for (const [tag, count] of Object.entries(tags)) {
+          a.total.skillTags[tag] = (a.total.skillTags[tag] || 0) + count
+        }
+        if (seasonId) {
+          const s = ensureSeason(pid, seasonId)
+          if (!s.skillTags) s.skillTags = {}
+          for (const [tag, count] of Object.entries(tags)) {
+            s.skillTags[tag] = (s.skillTags[tag] || 0) + count
           }
         }
       }
@@ -498,12 +521,20 @@ export async function finalizeMomVoting(matchId, winnerId) {
       updates[nsPath(`players/${pid}/stats/complimentCount`)] = increment(count)
       if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentCount`)] = increment(count)
     }
-    // 태그별 카운트도 increment
     for (const [pid, tags] of Object.entries(tagTally)) {
       for (const [tag, count] of Object.entries(tags)) {
         if (!count) continue
         updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(count)
         if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(count)
+      }
+    }
+    // 스킬 평가 — 매너와 동일 패턴
+    const skillTagTally = tallySkillTags(data.skillVotes || {})
+    for (const [pid, tags] of Object.entries(skillTagTally)) {
+      for (const [tag, count] of Object.entries(tags)) {
+        if (!count) continue
+        updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(count)
+        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(count)
       }
     }
   }
@@ -865,33 +896,23 @@ export async function migrateOpponentNames() {
   return { changed: changes.length, changes }
 }
 
-// ───────────── 스킬 Endorsement (선수 평판) ─────────────
-// dokkaebi/endorsements/{playerId}/{voterUid} = [tagId, ...]
-// 한 voter 가 한 선수에게 여러 스킬 endorse 가능, 자유롭게 (시간/인원 제약 X)
-// 본인이 본인 endorse 금지는 클라이언트에서 막음 (UI 비활성)
+// ───────────── 스킬 평가 (경기당 투표) ─────────────
+// dokkaebi/matches/{matchId}/skillVotes/{voterUid} = { playerId: [tagId, ...] }
+// 매너 칭찬과 동일 패턴 — 그 경기 참여자만, 인원·태그 자유 (관찰한 만큼)
+// finalizeMomVoting 시 player.stats.skillTags 누적
 
-export async function listEndorsements(playerId) {
-  const snap = await get(ref(rtdb, nsPath(`endorsements/${playerId}`)))
-  return snap.val() || {}
-}
-
-export async function setEndorsement(playerId, tags) {
+export async function castSkillVotes(matchId, picks) {
   const uid = auth.currentUser?.uid
   if (!uid) throw new Error('로그인이 필요합니다.')
-  const valid = Array.isArray(tags)
-    ? [...new Set(tags.filter((t) => SKILL_TAG_IDS.includes(t)))]
-    : []
-  const r = ref(rtdb, nsPath(`endorsements/${playerId}/${uid}`))
-  if (!valid.length) await remove(r)
-  else await set(r, valid)
-}
-
-// 한 voter 가 해당 선수에게 준 endorsement 조회 (UI 초기값용)
-export async function getMyEndorsement(playerId) {
-  const uid = auth.currentUser?.uid
-  if (!uid) return []
-  const snap = await get(ref(rtdb, nsPath(`endorsements/${playerId}/${uid}`)))
-  return Array.isArray(snap.val()) ? snap.val() : []
+  const cleaned = {}
+  for (const [pid, tags] of Object.entries(picks || {})) {
+    if (!Array.isArray(tags)) continue
+    const valid = [...new Set(tags.filter((t) => SKILL_TAG_IDS.includes(t)))]
+    if (valid.length) cleaned[pid] = valid
+  }
+  const r = ref(rtdb, nsPath(`matches/${matchId}/skillVotes/${uid}`))
+  if (!Object.keys(cleaned).length) await remove(r)
+  else await set(r, cleaned)
 }
 
 // ───────────── 구장 (Venues) — 길찾기/즐겨찾기 ─────────────

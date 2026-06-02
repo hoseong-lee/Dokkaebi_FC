@@ -25,6 +25,7 @@ import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
 import MomVotingSection from '@/components/match/MomVotingSection.vue'
 import ComplimentSection from '@/components/match/ComplimentSection.vue'
+import SkillVoteSection from '@/components/match/SkillVoteSection.vue'
 import ResultCardModal from '@/components/match/ResultCardModal.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import DirectionsModal from '@/components/match/DirectionsModal.vue'
@@ -256,10 +257,11 @@ watch(() => route.params.id, load)
       >📅 참석</button>
     </div>
 
-    <!-- ⭐ 투표 탭: MOM + 칭찬 -->
+    <!-- ⭐ 투표 탭: MOM + 칭찬 + 스킬 -->
     <template v-if="activeTab === 'vote' && isFinished">
       <MomVotingSection :match="match" />
       <ComplimentSection :match="match" />
+      <SkillVoteSection :match="match" />
     </template>
 
     <!-- 📅 참석 탭: RSVP -->

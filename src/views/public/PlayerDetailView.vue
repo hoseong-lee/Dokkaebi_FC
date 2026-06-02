@@ -204,7 +204,7 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- 스킬 평판 (Endorsement) -->
-    <EndorsementSection :player="player" />
+    <EndorsementSection :player="player" :season-id="scope === 'total' ? null : scope" />
 
     <!-- 받은 칭찬 분포 -->
     <section v-if="complimentTagStats.length" class="bg-white rounded-2xl shadow p-6">
