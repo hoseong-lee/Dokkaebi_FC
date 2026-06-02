@@ -24,7 +24,7 @@ watch(
     <Transition name="modal">
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4"
+        class="fixed inset-0 z-[55] flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4"
         @click.self="close"
       >
         <div

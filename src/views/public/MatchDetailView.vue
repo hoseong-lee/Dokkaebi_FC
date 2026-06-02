@@ -234,7 +234,7 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- ─── 3탭 ─── -->
-    <div class="grid grid-cols-3 gap-1 bg-white rounded-xl p-1 shadow-sm text-sm sticky top-0 z-10">
+    <div class="grid grid-cols-3 gap-1 bg-white rounded-xl p-1 shadow-sm text-sm sticky top-0 z-20">
       <button
         type="button"
         class="py-2.5 rounded-lg font-medium transition-colors"
