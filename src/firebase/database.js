@@ -913,6 +913,51 @@ export async function incrementVenueUsage(venueId, delta = 1) {
   })
 }
 
+// 기존 경기들 중 venueId 없는데 location 이 venue.name 을 포함하면 자동 연결.
+// 매칭된 venue 의 usageCount 도 동시 증가.
+export async function autoLinkMatchesToVenues() {
+  const [venuesSnap, matchesSnap] = await Promise.all([
+    get(ref(rtdb, nsPath('venues'))),
+    get(ref(rtdb, nsPath('matches')))
+  ])
+  const venues = toList(venuesSnap)
+  const matches = matchesSnap.val() || {}
+  if (!venues.length || !Object.keys(matches).length) return { linked: 0, total: 0 }
+
+  const updates = {}
+  const venueDelta = {}  // venueId → usageCount delta
+  let linked = 0
+
+  for (const [matchId, m] of Object.entries(matches)) {
+    if (m.venueId) continue  // 이미 연결됨
+    if (!m.location) continue
+    const loc = m.location.trim()
+    if (!loc) continue
+    // location 이 venue.name 을 포함하거나 venue.name 이 location 을 포함
+    const match = venues.find((v) => {
+      const vn = (v.name || '').trim()
+      if (!vn) return false
+      return loc.includes(vn) || vn.includes(loc)
+    })
+    if (!match) continue
+
+    updates[nsPath(`matches/${matchId}/venueId`)] = match.id
+    venueDelta[match.id] = (venueDelta[match.id] || 0) + 1
+    linked++
+  }
+
+  for (const [vid, delta] of Object.entries(venueDelta)) {
+    updates[nsPath(`venues/${vid}/usageCount`)] = increment(delta)
+  }
+
+  if (Object.keys(updates).length > 0) {
+    await update(ref(rtdb), updates)
+    await logAudit('update', 'matches/venue-autolink', { linked })
+  }
+
+  return { linked, total: Object.keys(matches).length }
+}
+
 // 초기 구장 시드 일괄 등록 (중복 방지 — 같은 이름이 이미 있으면 skip)
 export async function importInitialVenues() {
   const snap = await get(ref(rtdb, nsPath('venues')))

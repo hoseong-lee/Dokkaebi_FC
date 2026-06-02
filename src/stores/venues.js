@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { listVenues, createVenue, updateVenue, deleteVenue, importInitialVenues } from '@/firebase/database'
+import { listVenues, createVenue, updateVenue, deleteVenue, importInitialVenues, autoLinkMatchesToVenues } from '@/firebase/database'
 
 export const useVenuesStore = defineStore('venues', () => {
   const venues = ref([])
@@ -39,6 +39,11 @@ export const useVenuesStore = defineStore('venues', () => {
     await fetchAll(true)
     return res
   }
+  async function autolink() {
+    const res = await autoLinkMatchesToVenues()
+    await fetchAll(true)
+    return res
+  }
 
-  return { venues, loading, loaded, fetchAll, getById, create, update, remove, seed }
+  return { venues, loading, loaded, fetchAll, getById, create, update, remove, seed, autolink }
 })

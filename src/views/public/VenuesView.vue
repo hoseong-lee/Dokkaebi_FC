@@ -9,18 +9,51 @@ import EmptyState from '@/components/common/EmptyState.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DirectionsModal from '@/components/match/DirectionsModal.vue'
 import VenueEditModal from '@/components/match/VenueEditModal.vue'
+import VenueStatsModal from '@/components/match/VenueStatsModal.vue'
 import { confirm } from '@/composables/useConfirm'
+import { computed } from 'vue'
+import { useMatchesStore } from '@/stores/matches'
+import { statsForVenue, pickLuckyVenue } from '@/utils/venueStats'
 
 const store = useVenuesStore()
 const auth = useAuthStore()
+const matchesStore = useMatchesStore()
 const toast = useToast()
+
+function venueStats(v) {
+  return statsForVenue(v, matchesStore.matches)
+}
+
+const luckyVenue = computed(() => pickLuckyVenue(store.venues, matchesStore.matches))
 
 const loading = ref(true)
 const seeding = ref(false)
+const linking = ref(false)
 const directionsOpen = ref(false)
 const editOpen = ref(false)
 const editingVenue = ref(null)
 const selectedVenue = ref(null)
+const statsOpen = ref(false)
+const statsVenue = ref(null)
+
+async function runAutolink() {
+  if (linking.value) return
+  linking.value = true
+  try {
+    const res = await store.autolink()
+    await matchesStore.fetchAll({}, true)
+    toast.success(`기존 경기 ${res.linked}건을 구장에 자동 연결했습니다.`)
+  } catch (e) {
+    toast.error(`자동 연결 실패: ${e?.message || e}`)
+  } finally {
+    linking.value = false
+  }
+}
+
+function openStats(v) {
+  statsVenue.value = v
+  statsOpen.value = true
+}
 
 function openEdit(v = null) {
   editingVenue.value = v
@@ -45,7 +78,10 @@ async function removeVenue(v) {
 
 async function load() {
   loading.value = true
-  await store.fetchAll(true)
+  await Promise.all([
+    store.fetchAll(true),
+    matchesStore.loaded ? Promise.resolve() : matchesStore.fetchAll()
+  ])
   loading.value = false
 }
 onMounted(load)
@@ -76,15 +112,34 @@ async function importSeed() {
         <h1 class="text-xl font-bold text-navy">🗺 우리 구장</h1>
         <p class="text-xs text-gray-500 mt-1">자주 가는 구장 + 길찾기</p>
       </div>
-      <div v-if="auth.isAdmin" class="flex gap-1.5">
-        <BaseButton size="sm" variant="secondary" :loading="seeding" @click="importSeed">
+      <div v-if="auth.isAdmin" class="flex gap-1.5 flex-wrap">
+        <BaseButton size="sm" variant="secondary" :loading="seeding" @click="importSeed" title="다락원·초안산·창골·수락산·불암산 5개 시드">
           🌱 시드
+        </BaseButton>
+        <BaseButton size="sm" variant="secondary" :loading="linking" @click="runAutolink" title="기존 경기의 'location' 텍스트와 구장명 매칭 → venueId 자동 연결 + usageCount 갱신">
+          🔗 자동 연결
         </BaseButton>
         <BaseButton size="sm" variant="primary" @click="openEdit(null)">+ 구장 등록</BaseButton>
       </div>
     </div>
 
     <LoadingSpinner v-if="loading" />
+
+    <!-- 행운의 구장 (자동 시상) -->
+    <section v-if="!loading && luckyVenue" class="mb-4 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-2xl shadow-md p-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🍀</span>
+        <div class="flex-1 min-w-0">
+          <p class="text-[10px] font-bold opacity-80 tracking-[0.2em]">LUCKY VENUE</p>
+          <p class="font-bold text-base">🏆 행운의 구장 — {{ luckyVenue.venue.name }}</p>
+          <p class="text-xs opacity-90 mt-0.5">
+            {{ luckyVenue.stats.played }}경기 ·
+            {{ luckyVenue.stats.wins }}승 {{ luckyVenue.stats.draws }}무 {{ luckyVenue.stats.losses }}패
+            · 승률 <span class="font-bold">{{ Math.round(luckyVenue.stats.winRate * 100) }}%</span>
+          </p>
+        </div>
+      </div>
+    </section>
 
     <EmptyState
       v-else-if="store.venues.length === 0"
@@ -114,6 +169,18 @@ async function importSeed() {
             </p>
           </div>
         </div>
+
+        <!-- 미니 통계 (정식 경기 기록 있을 때) -->
+        <div v-if="venueStats(v).played > 0" class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 text-xs">
+          <span class="text-gray-400 shrink-0">📊</span>
+          <span class="text-onyx font-semibold">{{ venueStats(v).played }}경기</span>
+          <span class="text-blue-600 font-bold">{{ venueStats(v).wins }}승</span>
+          <span class="text-gray-500">{{ venueStats(v).draws }}무</span>
+          <span class="text-rose-600 font-bold">{{ venueStats(v).losses }}패</span>
+          <span class="ml-auto px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold tabular-nums">
+            {{ Math.round(venueStats(v).winRate * 100) }}%
+          </span>
+        </div>
         <div class="flex gap-2 mt-3 pt-3 border-t border-gray-100">
           <button
             type="button"
@@ -121,12 +188,18 @@ async function importSeed() {
             :disabled="!isValidCoord(v.lat, v.lng)"
             @click="openDirections(v)"
           >🗺 길찾기</button>
+          <button
+            v-if="venueStats(v).played > 0"
+            type="button"
+            class="text-xs px-3 py-2 rounded-lg bg-navy/10 text-navy font-semibold hover:bg-navy/20"
+            @click="openStats(v)"
+          >📊 상세</button>
           <template v-if="auth.isAdmin">
             <button
               type="button"
               class="text-xs px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
               @click="openEdit(v)"
-            >✏️ 수정</button>
+            >✏️</button>
             <button
               type="button"
               class="text-xs px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50"
@@ -139,5 +212,6 @@ async function importSeed() {
 
     <DirectionsModal v-model="directionsOpen" :venue="selectedVenue" />
     <VenueEditModal v-model="editOpen" :venue="editingVenue" />
+    <VenueStatsModal v-model="statsOpen" :venue="statsVenue" />
   </div>
 </template>
