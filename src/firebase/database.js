@@ -21,6 +21,9 @@ import {
 } from '@/utils/compliments'
 export { COMPLIMENT_TAGS, COMPLIMENT_MAX_PLAYERS, tallyComplimentTotals as tallyCompliments }
 
+import { SKILL_TAGS, SKILL_TAG_IDS } from '@/utils/skills'
+export { SKILL_TAGS }
+
 // 이 앱의 모든 데이터는 RTDB 의 'dokkaebi/' 노드 아래에 둔다
 // (travel/calendar 와 동일하게 앱별 네임스페이스 분리).
 export const NS = 'dokkaebi'
@@ -860,6 +863,35 @@ export async function migrateOpponentNames() {
   await update(ref(rtdb), updates)
   await logAudit('update', 'matches/opponent-normalize', { count: changes.length })
   return { changed: changes.length, changes }
+}
+
+// ───────────── 스킬 Endorsement (선수 평판) ─────────────
+// dokkaebi/endorsements/{playerId}/{voterUid} = [tagId, ...]
+// 한 voter 가 한 선수에게 여러 스킬 endorse 가능, 자유롭게 (시간/인원 제약 X)
+// 본인이 본인 endorse 금지는 클라이언트에서 막음 (UI 비활성)
+
+export async function listEndorsements(playerId) {
+  const snap = await get(ref(rtdb, nsPath(`endorsements/${playerId}`)))
+  return snap.val() || {}
+}
+
+export async function setEndorsement(playerId, tags) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const valid = Array.isArray(tags)
+    ? [...new Set(tags.filter((t) => SKILL_TAG_IDS.includes(t)))]
+    : []
+  const r = ref(rtdb, nsPath(`endorsements/${playerId}/${uid}`))
+  if (!valid.length) await remove(r)
+  else await set(r, valid)
+}
+
+// 한 voter 가 해당 선수에게 준 endorsement 조회 (UI 초기값용)
+export async function getMyEndorsement(playerId) {
+  const uid = auth.currentUser?.uid
+  if (!uid) return []
+  const snap = await get(ref(rtdb, nsPath(`endorsements/${playerId}/${uid}`)))
+  return Array.isArray(snap.val()) ? snap.val() : []
 }
 
 // ───────────── 구장 (Venues) — 길찾기/즐겨찾기 ─────────────
