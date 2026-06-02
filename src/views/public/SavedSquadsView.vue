@@ -19,8 +19,9 @@ const myUid = computed(() => auth.user?.uid || null)
 const mySquads = computed(() =>
   store.squads.filter((s) => s.authorUid === myUid.value)
 )
+// "공개" 탭은 본인 것 포함 — 본인이 공개로 만들었으면 거기도 표시되어야 자연스러움
 const publicSquads = computed(() =>
-  store.squads.filter((s) => s.isPublic !== false && s.authorUid !== myUid.value)
+  store.squads.filter((s) => s.isPublic !== false)
 )
 
 const visible = computed(() => (tab.value === 'mine' ? mySquads.value : publicSquads.value))

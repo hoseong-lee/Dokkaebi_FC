@@ -9,6 +9,23 @@ import { suggestFormation } from '@/utils/autoFormation'
 import { matchesQuery } from '@/utils/choseong'
 import { usePlayersStore } from '@/stores/players'
 import { useToast } from '@/composables/useToast'
+import { POSITION_CATEGORY } from '@/utils/positions'
+
+// 선수 카드 포지션별 배경/테두리 색
+const POS_CARD_TONE = {
+  GK: { unsel: 'bg-amber-50 ring-1 ring-amber-200', sel: 'bg-amber-100 ring-2 ring-amber-400' },
+  DF: { unsel: 'bg-sky-50 ring-1 ring-sky-200',     sel: 'bg-sky-100 ring-2 ring-sky-400' },
+  MF: { unsel: 'bg-emerald-50 ring-1 ring-emerald-200', sel: 'bg-emerald-100 ring-2 ring-emerald-400' },
+  FW: { unsel: 'bg-rose-50 ring-1 ring-rose-200',   sel: 'bg-rose-100 ring-2 ring-rose-400' }
+}
+function posCardClass(player, picked) {
+  const cat = POSITION_CATEGORY[player?.mainPosition] || POSITION_CATEGORY[player?.subPosition]
+  const tones = POS_CARD_TONE[cat]
+  if (!tones) {
+    return picked ? 'border-2 border-navy bg-navy/5' : 'border-2 border-transparent bg-gray-50'
+  }
+  return picked ? `border-2 border-transparent ${tones.sel}` : `border-2 border-transparent ${tones.unsel}`
+}
 
 const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
 const OTHER_FORMATIONS = FORMATION_NAMES.filter((f) => !POPULAR_FORMATIONS.includes(f))
@@ -213,8 +230,8 @@ function clearSlot() {
           v-for="p in filteredPlayers"
           :key="p.id"
           type="button"
-          class="relative flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-          :class="s.lineup.includes(p.id) ? 'border-navy bg-navy/5' : 'border-transparent bg-gray-50'"
+          class="relative flex flex-col items-center gap-1 p-2 rounded-lg transition-colors"
+          :class="posCardClass(p, s.lineup.includes(p.id))"
           @click="toggleLineup(p.id)"
         >
           <!-- 쿼터 카운트 (좌상단) -->
