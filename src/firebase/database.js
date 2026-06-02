@@ -862,6 +862,78 @@ export async function migrateOpponentNames() {
   return { changed: changes.length, changes }
 }
 
+// ───────────── 구장 (Venues) — 길찾기/즐겨찾기 ─────────────
+import { INITIAL_VENUES } from '@/utils/venues'
+
+export async function listVenues() {
+  const snap = await get(ref(rtdb, nsPath('venues')))
+  return toList(snap).sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0) || (a.name || '').localeCompare(b.name || ''))
+}
+export async function getVenue(id) {
+  const snap = await get(ref(rtdb, nsPath(`venues/${id}`)))
+  return snap.exists() ? { id, ...snap.val() } : null
+}
+export async function createVenue(data) {
+  const r = push(ref(rtdb, nsPath('venues')))
+  await set(r, {
+    name: (data.name || '').trim().slice(0, 60),
+    address: (data.address || '').trim().slice(0, 200) || null,
+    lat: data.lat != null ? Number(data.lat) : null,
+    lng: data.lng != null ? Number(data.lng) : null,
+    type: data.type || 'field',
+    notes: (data.notes || '').trim().slice(0, 300) || null,
+    usageCount: 0,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  })
+  await logAudit('create', `venues/${r.key}`)
+  return r.key
+}
+export async function updateVenue(id, data) {
+  const patch = { updatedAt: serverTimestamp() }
+  if (data.name !== undefined) patch.name = (data.name || '').trim().slice(0, 60)
+  if (data.address !== undefined) patch.address = (data.address || '').trim().slice(0, 200) || null
+  if (data.lat !== undefined) patch.lat = data.lat != null ? Number(data.lat) : null
+  if (data.lng !== undefined) patch.lng = data.lng != null ? Number(data.lng) : null
+  if (data.type !== undefined) patch.type = data.type || 'field'
+  if (data.notes !== undefined) patch.notes = (data.notes || '').trim().slice(0, 300) || null
+  await update(ref(rtdb, nsPath(`venues/${id}`)), patch)
+  await logAudit('update', `venues/${id}`)
+}
+export async function deleteVenue(id) {
+  await remove(ref(rtdb, nsPath(`venues/${id}`)))
+  await logAudit('delete', `venues/${id}`)
+}
+
+// 구장 사용 횟수 증가 (경기 등록·수정 시 venue 변경 후 호출)
+export async function incrementVenueUsage(venueId, delta = 1) {
+  if (!venueId) return
+  await update(ref(rtdb, nsPath(`venues/${venueId}`)), {
+    usageCount: increment(delta)
+  })
+}
+
+// 초기 구장 시드 일괄 등록 (중복 방지 — 같은 이름이 이미 있으면 skip)
+export async function importInitialVenues() {
+  const snap = await get(ref(rtdb, nsPath('venues')))
+  const existing = toList(snap)
+  const existingNames = new Set(existing.map((v) => v.name))
+  let added = 0
+  for (const seed of INITIAL_VENUES) {
+    if (existingNames.has(seed.name)) continue
+    const r = push(ref(rtdb, nsPath('venues')))
+    await set(r, {
+      ...seed,
+      usageCount: 0,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    })
+    added++
+  }
+  await logAudit('create', 'venues/seed-import', { added })
+  return { added, skipped: INITIAL_VENUES.length - added }
+}
+
 // ───────────── 저장된 스쿼드 (멤버가 만든 라인업, 재활용) ─────────────
 export async function listSavedSquads() {
   const snap = await get(ref(rtdb, nsPath('savedSquads')))

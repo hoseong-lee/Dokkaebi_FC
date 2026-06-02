@@ -130,6 +130,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/venues',
+    name: 'venues',
+    component: () => import('@/views/public/VenuesView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/squads',
     name: 'saved-squads',
     component: () => import('@/views/public/SavedSquadsView.vue'),

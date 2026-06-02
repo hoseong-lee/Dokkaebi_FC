@@ -13,7 +13,8 @@ const tiles = [
   { to: '/guide', label: '축구 가이드', icon: '⚽', desc: '포지션·포메이션 한눈에' },
   { to: '/squads', label: '스쿼드 메이커', icon: '⚔️', desc: '라인업 저장·재활용·이미지 공유' },
   { to: '/analytics', label: '승률 분석', icon: '📊', desc: '포메이션·선수·상대팀별 인사이트' },
-  { to: '/highlights', label: '베스트 골 모음', icon: '🏅', desc: '시즌 명장면 영상 모아보기 + 단톡 공유' }
+  { to: '/highlights', label: '베스트 골 모음', icon: '🏅', desc: '시즌 명장면 영상 모아보기 + 단톡 공유' },
+  { to: '/venues', label: '우리 구장', icon: '🗺', desc: '자주 가는 구장 + 네이버지도 길찾기' }
 ]
 </script>
 
