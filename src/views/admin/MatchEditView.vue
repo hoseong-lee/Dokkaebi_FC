@@ -9,6 +9,8 @@ import { toInputDateTime, fromInputDateTime, dayjs } from '@/utils/date'
 import { required } from '@/utils/validators'
 import { useToast } from '@/composables/useToast'
 import { parseTimeString, formatTime } from '@/utils/youtube'
+import { useVenuesStore } from '@/stores/venues'
+import { incrementVenueUsage } from '@/firebase/database'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import SquadMaker from '@/components/match/SquadMaker.vue'
@@ -18,6 +20,7 @@ const router = useRouter()
 const store = useMatchesStore()
 const seasonStore = useSeasonStore()
 const playersStore = usePlayersStore()
+const venuesStore = useVenuesStore()
 const toast = useToast()
 
 const isEdit = computed(() => !!route.params.id)
@@ -30,8 +33,18 @@ const form = reactive({
   date: '',
   location: '',
   locationUrl: '',
+  venueId: '',
   type: 'friendly'
 })
+const prevVenueId = ref(null)  // 수정 시 이전 venue 추적 (usageCount diff)
+
+// 선택된 venue 의 정보 → location 자동 채움 (없으면 기존 location 유지)
+function applyVenueAuto(venueId) {
+  if (!venueId) return
+  const v = venuesStore.getById(venueId)
+  if (!v) return
+  if (!form.location.trim()) form.location = v.name || ''
+}
 
 // 영상 N개. { label, url, startStr, endStr, highlight }
 // highlight=true 면 "🏅 베스트 골 모음" 페이지에 자동 노출
@@ -59,7 +72,7 @@ function loadSquad(i, src) {
 }
 
 async function load() {
-  await Promise.all([seasonStore.ensure(), playersStore.fetchAll()])
+  await Promise.all([seasonStore.ensure(), playersStore.fetchAll(), venuesStore.fetchAll()])
   if (!isEdit.value) return
   loading.value = true
   const m = await store.fetchOne(route.params.id)
@@ -73,8 +86,10 @@ async function load() {
     date: toInputDateTime(m.date),
     location: m.location || '',
     locationUrl: m.locationUrl || '',
+    venueId: m.venueId || '',
     type: m.type || 'friendly'
   })
+  prevVenueId.value = m.venueId || null
   videos.splice(0, videos.length)
   if (Array.isArray(m.videoUrls)) {
     m.videoUrls.forEach((v) => videos.push({
@@ -133,6 +148,7 @@ async function save() {
       date: fromInputDateTime(form.date),
       location: form.location.trim(),
       locationUrl: form.locationUrl.trim(),
+      venueId: form.venueId || null,
       type: form.type,
       plannedSquads,
       plannedSquad: null,
@@ -140,11 +156,17 @@ async function save() {
     }
     if (isEdit.value) {
       await store.update(route.params.id, payload)
+      // venue 변경 시 usageCount diff
+      if (prevVenueId.value !== form.venueId) {
+        if (prevVenueId.value) await incrementVenueUsage(prevVenueId.value, -1).catch(() => {})
+        if (form.venueId) await incrementVenueUsage(form.venueId, 1).catch(() => {})
+      }
       toast.success('경기를 수정했습니다.')
       router.push(`/matches/${route.params.id}`)
     } else {
       payload.seasonId = seasonStore.activeId
       const id = await store.add(payload)
+      if (form.venueId) await incrementVenueUsage(form.venueId, 1).catch(() => {})
       toast.success('경기를 등록했습니다.')
       router.push(`/matches/${id}`)
     }
@@ -189,8 +211,24 @@ onMounted(load)
           </div>
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">경기장</label>
-          <input v-model="form.location" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="경기장 이름" />
+          <label class="block text-xs text-gray-500 mb-1">구장 선택 (즐겨찾기)</label>
+          <select
+            v-model="form.venueId"
+            class="w-full border rounded-lg px-3 py-2 text-sm bg-white"
+            @change="applyVenueAuto(form.venueId)"
+          >
+            <option value="">선택 안 함</option>
+            <option v-for="v in venuesStore.venues" :key="v.id" :value="v.id">
+              {{ v.name }}{{ v.address ? ' (' + v.address + ')' : '' }}
+            </option>
+          </select>
+          <p class="text-[10px] text-gray-400 mt-0.5">
+            등록된 구장이 없으면 <RouterLink to="/venues" class="text-navy underline">우리 구장</RouterLink>에서 먼저 등록하세요. 길찾기 자동 활성됩니다.
+          </p>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">경기장 이름 (자유 입력)</label>
+          <input v-model="form.location" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="구장 미선택 시 직접 입력" />
         </div>
         <div>
           <label class="block text-xs text-gray-500 mb-1">지도 링크 (선택)</label>

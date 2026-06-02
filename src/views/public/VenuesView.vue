@@ -8,6 +8,8 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 import DirectionsModal from '@/components/match/DirectionsModal.vue'
+import VenueEditModal from '@/components/match/VenueEditModal.vue'
+import { confirm } from '@/composables/useConfirm'
 
 const store = useVenuesStore()
 const auth = useAuthStore()
@@ -16,7 +18,30 @@ const toast = useToast()
 const loading = ref(true)
 const seeding = ref(false)
 const directionsOpen = ref(false)
+const editOpen = ref(false)
+const editingVenue = ref(null)
 const selectedVenue = ref(null)
+
+function openEdit(v = null) {
+  editingVenue.value = v
+  editOpen.value = true
+}
+
+async function removeVenue(v) {
+  const ok = await confirm({
+    title: '구장 삭제',
+    message: `"${v.name}" 구장을 삭제할까요?\n해당 구장의 누적 경기 통계는 그대로 유지됩니다.`,
+    confirmText: '삭제',
+    variant: 'danger'
+  })
+  if (!ok) return
+  try {
+    await store.remove(v.id)
+    toast.success('삭제했습니다.')
+  } catch (e) {
+    toast.error(`삭제 실패: ${e?.message || e}`)
+  }
+}
 
 async function load() {
   loading.value = true
@@ -51,9 +76,12 @@ async function importSeed() {
         <h1 class="text-xl font-bold text-navy">🗺 우리 구장</h1>
         <p class="text-xs text-gray-500 mt-1">자주 가는 구장 + 길찾기</p>
       </div>
-      <BaseButton v-if="auth.isAdmin" size="sm" variant="secondary" :loading="seeding" @click="importSeed">
-        🌱 초기 구장 가져오기
-      </BaseButton>
+      <div v-if="auth.isAdmin" class="flex gap-1.5">
+        <BaseButton size="sm" variant="secondary" :loading="seeding" @click="importSeed">
+          🌱 시드
+        </BaseButton>
+        <BaseButton size="sm" variant="primary" @click="openEdit(null)">+ 구장 등록</BaseButton>
+      </div>
     </div>
 
     <LoadingSpinner v-if="loading" />
@@ -93,10 +121,23 @@ async function importSeed() {
             :disabled="!isValidCoord(v.lat, v.lng)"
             @click="openDirections(v)"
           >🗺 길찾기</button>
+          <template v-if="auth.isAdmin">
+            <button
+              type="button"
+              class="text-xs px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+              @click="openEdit(v)"
+            >✏️ 수정</button>
+            <button
+              type="button"
+              class="text-xs px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50"
+              @click="removeVenue(v)"
+            >🗑</button>
+          </template>
         </div>
       </article>
     </div>
 
     <DirectionsModal v-model="directionsOpen" :venue="selectedVenue" />
+    <VenueEditModal v-model="editOpen" :venue="editingVenue" />
   </div>
 </template>

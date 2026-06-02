@@ -27,11 +27,14 @@ import MomVotingSection from '@/components/match/MomVotingSection.vue'
 import ComplimentSection from '@/components/match/ComplimentSection.vue'
 import ResultCardModal from '@/components/match/ResultCardModal.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
+import DirectionsModal from '@/components/match/DirectionsModal.vue'
+import { useVenuesStore } from '@/stores/venues'
 
 const route = useRoute()
 const router = useRouter()
 const store = useMatchesStore()
 const playersStore = usePlayersStore()
+const venuesStore = useVenuesStore()
 const auth = useAuthStore()
 const toast = useToast()
 
@@ -81,6 +84,20 @@ const activeVideo = computed(() => videos.value[activeVideoIdx.value] || null)
 
 // 캘린더 추가 모달
 const calendarOpen = ref(false)
+
+// 길찾기 모달
+const directionsOpen = ref(false)
+const matchVenue = computed(() => {
+  const m = match.value
+  if (!m) return null
+  if (m.venueId) {
+    const v = venuesStore.getById(m.venueId)
+    if (v) return v
+  }
+  // venue 미지정이지만 location 있으면 임시 venue 객체 (좌표 없음 → 길찾기 비활성)
+  if (m.location) return { name: m.location, address: m.location, lat: null, lng: null }
+  return null
+})
 function downloadIcs() {
   if (!match.value) return
   downloadMatchICS(match.value)
@@ -105,7 +122,11 @@ const plannedSquadList = computed(() => {
 const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
 
+async function ensureVenues() {
+  if (!venuesStore.loaded) await venuesStore.fetchAll()
+}
 async function load() {
+  await ensureVenues()
   loading.value = true
   await playersStore.fetchAll()
   match.value = await store.fetchOne(route.params.id)
@@ -188,6 +209,9 @@ watch(() => route.params.id, load)
       <div class="mt-5 pt-4 border-t flex flex-wrap gap-2">
         <BaseButton variant="ghost" size="sm" @click="calendarOpen = true">
           📅 내 캘린더에 추가
+        </BaseButton>
+        <BaseButton v-if="matchVenue" variant="ghost" size="sm" @click="directionsOpen = true">
+          🗺 길찾기
         </BaseButton>
         <BaseButton v-if="isFinished" variant="ghost" size="sm" @click="resultCardOpen = true">
           📸 결과 카드 만들기
@@ -387,6 +411,7 @@ watch(() => route.params.id, load)
     <!-- ─── 📊 개요 탭 본문 끝 ─── -->
 
     <ResultCardModal v-if="isFinished" v-model="resultCardOpen" :match="match" />
+    <DirectionsModal v-model="directionsOpen" :venue="matchVenue" />
 
     <!-- 캘린더 추가 모달 -->
     <BaseModal v-model="calendarOpen" title="📅 내 캘린더에 추가">
