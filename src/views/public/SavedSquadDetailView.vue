@@ -13,6 +13,7 @@ import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import SquadSocialSection from '@/components/match/SquadSocialSection.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -215,6 +216,9 @@ async function remove() {
         </RouterLink>
       </div>
     </section>
+
+    <!-- 좋아요 + 이모지 반응 + 댓글 (공개 스쿼드만 의미 있지만 비공개도 본인은 볼 수 있음) -->
+    <SquadSocialSection :squad-id="squad.id" />
 
     <!-- 액션 -->
     <div class="space-y-2">

@@ -1075,6 +1075,38 @@ export async function deleteSavedSquad(id) {
   await logAudit('delete', `savedSquads/${id}`)
 }
 
+// 좋아요 (사용자당 1개) — 사진첩 패턴 동일
+export async function toggleSquadLike(squadId) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const r = ref(rtdb, nsPath(`savedSquads/${squadId}/likes/${uid}`))
+  const snap = await get(r)
+  if (snap.exists()) { await remove(r); return false }
+  await set(r, true)
+  return true
+}
+
+// 이모지 반응 (사용자당 1개 — 이모지 변경 가능 / 같은 거 다시 누르면 해제)
+export async function setSquadReaction(squadId, emoji) {
+  const uid = auth.currentUser?.uid
+  if (!uid) throw new Error('로그인이 필요합니다.')
+  const r = ref(rtdb, nsPath(`savedSquads/${squadId}/reactions/${uid}`))
+  if (!emoji) await remove(r)
+  else await set(r, emoji)
+}
+
+// 댓글
+export async function addSquadComment(squadId, body) {
+  const text = (body || '').trim().slice(0, 500)
+  if (!text) throw new Error('댓글 내용을 입력하세요.')
+  const r = push(ref(rtdb, nsPath(`savedSquads/${squadId}/comments`)))
+  await set(r, { body: text, ...authorMeta(), createdAt: serverTimestamp() })
+  return r.key
+}
+export async function deleteSquadComment(squadId, commentId) {
+  await remove(ref(rtdb, nsPath(`savedSquads/${squadId}/comments/${commentId}`)))
+}
+
 // ───────────── 초기 데이터 가져오기 ─────────────
 // seed = { seasons, players, matches } 를 dokkaebi/ 하위에 기록.
 // allowedEmails/users 는 건드리지 않는다.

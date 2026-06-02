@@ -43,6 +43,16 @@ function playerNames(squad) {
     .filter(Boolean)
     .join(', ')
 }
+
+// 이모지 반응 summary — 가장 많은 거 2개만 표시
+function reactionSummary(squad) {
+  const r = squad.reactions
+  if (!r || typeof r !== 'object') return ''
+  const counts = {}
+  for (const e of Object.values(r)) counts[e] = (counts[e] || 0) + 1
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 2)
+  return top.map(([e, c]) => `${e} ${c}`).join(' ')
+}
 </script>
 
 <template>
@@ -104,6 +114,11 @@ function playerNames(squad) {
         </div>
         <p v-if="s.notes" class="text-xs text-gray-600 leading-snug mb-2 line-clamp-2">💬 {{ s.notes }}</p>
         <p class="text-[11px] text-gray-500 truncate">{{ playerNames(s) }}<span v-if="(s.lineup?.length || 0) > 6">…</span></p>
+        <div v-if="reactionSummary(s)" class="flex items-center gap-2 text-[11px] text-gray-500 mt-2 pt-2 border-t border-gray-100">
+          <span v-if="(s.likes && Object.keys(s.likes).length) || 0">❤️ {{ Object.keys(s.likes || {}).length }}</span>
+          <span v-if="reactionSummary(s)">{{ reactionSummary(s) }}</span>
+          <span v-if="s.comments" class="ml-auto">💬 {{ Object.keys(s.comments || {}).length }}</span>
+        </div>
       </RouterLink>
     </div>
   </div>
