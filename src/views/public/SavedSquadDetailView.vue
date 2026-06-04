@@ -75,7 +75,8 @@ async function load() {
     playersStore.loaded ? Promise.resolve() : playersStore.fetchAll(),
     canApply.value ? (matchesStore.loaded ? Promise.resolve() : matchesStore.fetchAll()) : Promise.resolve()
   ])
-  squad.value = await store.fetchOne(route.params.id)
+  // 항상 fresh fetch — 편집 후 반영 보장
+  squad.value = await store.fetchOne(route.params.id, true)
   if (!squad.value) {
     toast.error('스쿼드를 찾을 수 없습니다.')
     router.replace('/squads')

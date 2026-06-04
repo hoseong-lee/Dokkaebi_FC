@@ -137,6 +137,15 @@ function onFormationChange() {
   }
 }
 
+// 선수 → 배치된 slot.id 역매핑
+const assignedSlotMap = computed(() => {
+  const m = new Map()
+  for (const [sid, pid] of Object.entries(s.positions || {})) {
+    if (pid) m.set(pid, sid)
+  }
+  return m
+})
+
 const slotModalOpen = ref(false)
 const activeSlot = ref(null)
 const slotSearch = ref('')
@@ -247,6 +256,12 @@ function clearSlot() {
           <span class="text-[11px] truncate w-full text-center">
             {{ p.name }}<span v-if="p.number != null" class="text-gray-400"> #{{ p.number }}</span>
           </span>
+          <!-- 배치된 슬롯 라벨 (포메이션 배치 시) -->
+          <span
+            v-if="assignedSlotMap.get(p.id)"
+            class="text-[9px] mt-0.5 px-1.5 py-0.5 rounded bg-navy text-white font-bold leading-tight"
+            :title="`${assignedSlotMap.get(p.id)} 자리에 배치됨`"
+          >📍 {{ assignedSlotMap.get(p.id) }}</span>
         </button>
       </div>
     </div>
@@ -318,11 +333,21 @@ function clearSlot() {
           v-for="p in slotCandidates"
           :key="p.id"
           type="button"
-          class="flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50"
+          class="relative flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50"
+          :class="assignedSlotMap.get(p.id) ? 'border-amber-300 bg-amber-50' : 'border-gray-200'"
           @click="assignToSlot(p.id)"
         >
           <PlayerAvatar :player="p" :size="36" />
           <span class="text-[11px] truncate w-full">{{ p.name }}</span>
+          <span
+            v-if="assignedSlotMap.get(p.id)"
+            class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500 text-white font-bold leading-tight"
+            :title="`현재 ${assignedSlotMap.get(p.id)} 자리에 배치됨 — 클릭 시 이동`"
+          >📍 {{ assignedSlotMap.get(p.id) }}</span>
+          <span
+            v-else
+            class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 leading-tight"
+          >미배치</span>
         </button>
         <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 py-2">
           명단에서 선수를 먼저 선택하세요.

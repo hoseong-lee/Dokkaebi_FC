@@ -29,10 +29,18 @@ export const useSavedSquadsStore = defineStore('savedSquads', () => {
     return squads.value.find((s) => s.id === id) || null
   }
 
-  async function fetchOne(id) {
-    const cached = getById(id)
-    if (cached) return cached
-    return getSavedSquad(id)
+  async function fetchOne(id, force = false) {
+    if (!force) {
+      const cached = getById(id)
+      if (cached) return cached
+    }
+    const fresh = await getSavedSquad(id)
+    if (fresh) {
+      const idx = squads.value.findIndex((s) => s.id === id)
+      if (idx >= 0) squads.value[idx] = fresh
+      else squads.value.unshift(fresh)
+    }
+    return fresh
   }
 
   async function create(data) {
@@ -43,7 +51,14 @@ export const useSavedSquadsStore = defineStore('savedSquads', () => {
 
   async function update(id, data) {
     await updateSavedSquad(id, data)
-    await fetchAll(true)
+    // 단일 record refetch — fetchAll(true) race 회피
+    const fresh = await getSavedSquad(id)
+    if (fresh) {
+      const idx = squads.value.findIndex((s) => s.id === id)
+      if (idx >= 0) squads.value[idx] = fresh
+      else squads.value.unshift(fresh)
+    }
+    return fresh
   }
 
   async function remove(id) {

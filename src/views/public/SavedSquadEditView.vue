@@ -41,7 +41,8 @@ async function load() {
     playersStore.loaded ? Promise.resolve() : playersStore.fetchAll()
   ])
   if (isEdit.value) {
-    const s = await store.fetchOne(editingId.value)
+    // 항상 fresh fetch — 캐시 stale 방지
+    const s = await store.fetchOne(editingId.value, true)
     if (!s) {
       toast.error('스쿼드를 찾을 수 없습니다.')
       router.replace('/squads')
