@@ -123,12 +123,11 @@ export async function generateSquadImage({ squad, players, emblemUrl }) {
   ctx.strokeRect(PITCH_X + (PITCH_W - PB_W) / 2, PITCH_Y + PITCH_H - PB_H - 8, PB_W, PB_H)
 
   // 선수 배치 — slot 좌표 기반 (slots 의 x/y 는 %)
-  const placeMap = new Map() // slotId → playerId
-  Object.entries(posMap).forEach(([pid, info]) => {
-    if (info?.slotId) placeMap.set(info.slotId, pid)
-  })
+  // posMap 구조: { slotId: playerId } — SquadEditor / FormationPitch 와 일치
+  const placeMap = new Map(Object.entries(posMap)) // slotId → playerId
   // 매핑 안 된 선수는 빈 슬롯에 순서대로 채움
-  const unmappedPlayers = lineup.filter((pid) => !Array.from(placeMap.values()).includes(pid))
+  const placedPids = new Set(placeMap.values())
+  const unmappedPlayers = lineup.filter((pid) => !placedPids.has(pid))
   let cursor = 0
   for (const slot of slots) {
     if (placeMap.has(slot.id)) continue

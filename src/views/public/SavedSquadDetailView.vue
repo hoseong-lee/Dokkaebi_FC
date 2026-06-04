@@ -41,15 +41,14 @@ const lineupPlayers = computed(() =>
 )
 
 // 슬롯 → 선수 매핑 (포메이션 있을 때)
+// positions 구조: { slotId: playerId } — SquadEditor / FormationPitch 와 일치
 const slotAssignments = computed(() => {
   if (!squad.value?.formation) return []
   const slots = getSlots(squad.value.formation)
   const posMap = squad.value.positions || {}
-  const placed = new Map()
-  Object.entries(posMap).forEach(([pid, info]) => {
-    if (info?.slotId) placed.set(info.slotId, pid)
-  })
-  const unmapped = (squad.value.lineup || []).filter((pid) => !Array.from(placed.values()).includes(pid))
+  const placed = new Map(Object.entries(posMap)) // slotId → playerId
+  const placedPids = new Set(placed.values())
+  const unmapped = (squad.value.lineup || []).filter((pid) => !placedPids.has(pid))
   let cursor = 0
   return slots.map((slot) => {
     let pid = placed.get(slot.id)
