@@ -228,7 +228,8 @@ const routes = [
       {
         path: 'audit-logs',
         name: 'admin-audit-logs',
-        component: () => import('@/views/admin/AuditLogsView.vue')
+        component: () => import('@/views/admin/AuditLogsView.vue'),
+        meta: { requiresSuperAdmin: true }
       }
     ]
   },

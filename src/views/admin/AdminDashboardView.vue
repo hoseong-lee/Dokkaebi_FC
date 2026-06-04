@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
+import { useAuthStore } from '@/stores/auth'
 import { dayjs } from '@/utils/date'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
@@ -16,6 +17,7 @@ import BaseButton from '@/components/common/BaseButton.vue'
 const matchesStore = useMatchesStore()
 const playersStore = usePlayersStore()
 const seasonStore = useSeasonStore()
+const auth = useAuthStore()
 const toast = useToast()
 
 const creatingSeason = ref(false)
@@ -153,6 +155,7 @@ const seedCounts = {
 }
 
 async function runImport() {
+  if (!auth.isSuperAdmin) return toast.error('슈퍼관리자만 초기 데이터를 가져올 수 있습니다.')
   const ok = await confirm({
     title: '초기 데이터 가져오기',
     message: `카카오톡 기록 기반 선수 ${seedCounts.players}명 · 경기 ${seedCounts.matches}건을 가져옵니다.\n기존 선수/경기/시즌 데이터를 덮어씁니다. 계속할까요?`,
@@ -248,13 +251,14 @@ onMounted(async () => {
       </BaseButton>
     </div>
 
-    <!-- 초기 데이터 가져오기 / 다시 가져오기 -->
+    <!-- 초기 데이터 가져오기 / 다시 가져오기 — 슈퍼관리자 전용 -->
     <div
-      v-if="playersStore.loaded"
+      v-if="auth.isSuperAdmin && playersStore.loaded"
       class="bg-navy/5 border border-navy/20 rounded-xl p-4 text-sm"
     >
-      <p class="font-medium text-navy">
+      <p class="font-medium text-navy flex items-center gap-2">
         {{ playersStore.players.length === 0 ? '초기 데이터 가져오기' : '데이터 다시 가져오기' }}
+        <span class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full font-bold">🔒 슈퍼</span>
       </p>
       <p class="text-gray-500 mt-1">
         카카오톡 기록 기반 선수 {{ seedCounts.players }}명 · 경기 {{ seedCounts.matches }}건(4쿼터 기록 포함)을 등록합니다.

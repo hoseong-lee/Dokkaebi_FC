@@ -12,7 +12,7 @@ const allLinks = [
   { to: '/admin/matches/new', label: '경기 등록' },
   { to: '/admin/fees', label: '회비 관리' },
   { to: '/admin/allowed-emails', label: '🔒 화이트리스트', superOnly: true },
-  { to: '/admin/audit-logs', label: '변경 이력' }
+  { to: '/admin/audit-logs', label: '🔒 변경 이력', superOnly: true }
 ]
 const links = computed(() => allLinks.filter((l) => !l.superOnly || auth.isSuperAdmin))
 </script>

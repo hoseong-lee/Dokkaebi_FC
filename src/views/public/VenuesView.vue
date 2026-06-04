@@ -93,6 +93,7 @@ function openDirections(v) {
 
 async function importSeed() {
   if (seeding.value) return
+  if (!auth.isSuperAdmin) return toast.error('슈퍼관리자만 초기 구장을 시드할 수 있습니다.')
   seeding.value = true
   try {
     const res = await store.seed()
@@ -113,8 +114,13 @@ async function importSeed() {
         <p class="text-xs text-gray-500 mt-1">자주 가는 구장 + 길찾기</p>
       </div>
       <div v-if="auth.isAdmin" class="flex gap-1.5 flex-wrap">
-        <BaseButton size="sm" variant="secondary" :loading="seeding" @click="importSeed" title="다락원·초안산·창골·수락산·불암산 5개 시드">
-          🌱 시드
+        <BaseButton
+          v-if="auth.isSuperAdmin"
+          size="sm" variant="secondary" :loading="seeding"
+          @click="importSeed"
+          title="다락원·초안산·창골·수락산·불암산 5개 시드 (슈퍼관리자 전용)"
+        >
+          🌱 시드 🔒
         </BaseButton>
         <BaseButton size="sm" variant="secondary" :loading="linking" @click="runAutolink" title="기존 경기의 'location' 텍스트와 구장명 매칭 → venueId 자동 연결 + usageCount 갱신">
           🔗 자동 연결

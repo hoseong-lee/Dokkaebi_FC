@@ -2,22 +2,29 @@
 import { ref, onMounted } from 'vue'
 import { listAuditLogs } from '@/firebase/database'
 import { formatDateTime } from '@/utils/date'
+import { useAuthStore } from '@/stores/auth'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
+const auth = useAuthStore()
 const logs = ref([])
 const loading = ref(true)
 
-const ACTION_LABEL = { create: '생성', update: '수정', delete: '삭제' }
+const ACTION_LABEL = { create: '생성', update: '수정', delete: '삭제', approve: '승인', reject: '거절' }
 const ACTION_COLOR = {
   create: 'bg-green-100 text-green-700',
   update: 'bg-blue-100 text-blue-700',
-  delete: 'bg-red-100 text-dokkaebi'
+  delete: 'bg-red-100 text-dokkaebi',
+  approve: 'bg-emerald-100 text-emerald-700',
+  reject: 'bg-gray-100 text-gray-600'
 }
 
 onMounted(async () => {
+  if (!auth.isSuperAdmin) { loading.value = false; return }
   try {
     logs.value = await listAuditLogs(100)
+  } catch (e) {
+    console.error('audit logs load failed', e)
   } finally {
     loading.value = false
   }
@@ -26,7 +33,15 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h2 class="font-bold text-navy mb-4">변경 이력</h2>
+    <h2 class="font-bold text-navy mb-4 flex items-center gap-2">
+      변경 이력
+      <span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">🔒 슈퍼관리자 전용</span>
+    </h2>
+
+    <div v-if="!auth.isSuperAdmin" class="bg-rose-50 ring-1 ring-rose-200 rounded-2xl p-5 text-center text-sm text-rose-700">
+      슈퍼관리자만 변경 이력을 확인할 수 있습니다.
+    </div>
+    <template v-else>
 
     <LoadingSpinner v-if="loading" />
     <EmptyState v-else-if="logs.length === 0" icon="📋" title="기록된 변경 이력이 없습니다" />
@@ -47,5 +62,6 @@ onMounted(async () => {
         </div>
       </li>
     </ul>
+    </template>
   </div>
 </template>
