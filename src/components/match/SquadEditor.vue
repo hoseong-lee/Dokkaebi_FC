@@ -171,6 +171,30 @@ const assignedSlotMap = computed(() => {
   return m
 })
 
+// 슬롯 id (r0p0 등 내부값) → 사용자 친화 라벨 (DF1 / MF2 / FW1 …)
+// 같은 role 슬롯들을 x 오름차순 인덱싱
+const slotLabelMap = computed(() => {
+  const m = new Map()
+  if (!s.formation) return m
+  const slots = getSlots(s.formation)
+  const byRole = new Map()
+  for (const sl of slots) {
+    if (!byRole.has(sl.role)) byRole.set(sl.role, [])
+    byRole.get(sl.role).push(sl)
+  }
+  for (const [role, list] of byRole.entries()) {
+    list.sort((a, b) => a.x - b.x)
+    list.forEach((sl, i) => {
+      // GK 는 1개라 번호 생략, 나머지는 1부터
+      m.set(sl.id, role === 'GK' ? 'GK' : `${role}${i + 1}`)
+    })
+  }
+  return m
+})
+function slotLabel(slotId) {
+  return slotLabelMap.value.get(slotId) || slotId || ''
+}
+
 const slotModalOpen = ref(false)
 const activeSlot = ref(null)
 const slotSearch = ref('')
@@ -312,8 +336,8 @@ function clearSlot() {
           <span
             v-if="assignedSlotMap.get(p.id)"
             class="text-[9px] mt-0.5 px-1.5 py-0.5 rounded bg-navy text-white font-bold leading-tight"
-            :title="`${assignedSlotMap.get(p.id)} 자리에 배치됨`"
-          >📍 {{ assignedSlotMap.get(p.id) }}</span>
+            :title="`${slotLabel(assignedSlotMap.get(p.id))} 자리에 배치됨`"
+          >📍 {{ slotLabel(assignedSlotMap.get(p.id)) }}</span>
         </button>
       </div>
     </div>
@@ -370,7 +394,7 @@ function clearSlot() {
       </p>
     </div>
 
-    <BaseModal v-model="slotModalOpen" :title="`${activeSlot?.role || ''} 자리에 배치`">
+    <BaseModal v-model="slotModalOpen" :title="`${activeSlot ? slotLabel(activeSlot.id) : ''} 자리에 배치`">
       <div class="relative mb-2">
         <input
           v-model="slotSearch"
@@ -398,7 +422,7 @@ function clearSlot() {
           @click="slotPosFilter = cat"
         >{{ cat }}</button>
         <span class="text-[10px] text-gray-400 ml-auto self-center">
-          이 자리: <span class="font-bold text-navy">{{ activeSlot?.role || '-' }}</span>
+          이 자리: <span class="font-bold text-navy">{{ activeSlot ? slotLabel(activeSlot.id) : '-' }}</span>
         </span>
       </div>
       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-72 overflow-y-auto">
@@ -415,8 +439,8 @@ function clearSlot() {
           <span
             v-if="assignedSlotMap.get(p.id)"
             class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500 text-white font-bold leading-tight"
-            :title="`현재 ${assignedSlotMap.get(p.id)} 자리에 배치됨 — 클릭 시 이동`"
-          >📍 {{ assignedSlotMap.get(p.id) }}</span>
+            :title="`현재 ${slotLabel(assignedSlotMap.get(p.id))} 자리에 배치됨 — 클릭 시 이동`"
+          >📍 {{ slotLabel(assignedSlotMap.get(p.id)) }}</span>
           <span
             v-else
             class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 leading-tight"

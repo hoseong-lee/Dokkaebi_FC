@@ -125,7 +125,7 @@ async function importSeed() {
 
     <LoadingSpinner v-if="loading" />
 
-    <!-- 행운의 구장 (자동 시상) -->
+    <!-- 행운의 구장 (자동 시상) — 독립 섹션 (구장 목록과 별개) -->
     <section v-if="!loading && luckyVenue" class="mb-4 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-2xl shadow-md p-4">
       <div class="flex items-center gap-3">
         <span class="text-3xl">🍀</span>
@@ -142,13 +142,13 @@ async function importSeed() {
     </section>
 
     <EmptyState
-      v-else-if="store.venues.length === 0"
+      v-if="!loading && store.venues.length === 0"
       icon="🗺"
       title="등록된 구장이 없어요"
       description="관리자가 '🌱 초기 구장 가져오기' 버튼을 누르면 5개 구장(다락원·초안산·창골·수락산·불암산)이 자동 등록됩니다."
     />
 
-    <div v-else class="space-y-3">
+    <div v-else-if="!loading" class="space-y-3">
       <article
         v-for="v in store.venues" :key="v.id"
         class="bg-white rounded-2xl shadow p-4"
