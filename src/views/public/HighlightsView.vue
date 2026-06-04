@@ -49,11 +49,16 @@ const highlights = computed(() => {
 
 async function load() {
   loading.value = true
-  await Promise.all([
-    matchesStore.loaded ? Promise.resolve() : matchesStore.fetchAll(),
-    seasonStore.ensure()
-  ])
-  loading.value = false
+  try {
+    await Promise.all([
+      matchesStore.loaded ? Promise.resolve() : matchesStore.fetchAll(),
+      seasonStore.ensure()
+    ])
+  } catch (e) {
+    console.error('HighlightsView load failed', e)
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(load)
 

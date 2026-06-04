@@ -20,7 +20,7 @@ const visible = computed(() => {
   return list.filter((p) => p.position === filter.value)
 })
 
-onMounted(() => store.fetchAll())
+onMounted(async () => { await store.fetchAll() })
 </script>
 
 <template>

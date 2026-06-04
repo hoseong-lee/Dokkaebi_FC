@@ -10,7 +10,7 @@ const tab = ref('upcoming') // upcoming | finished
 
 const list = computed(() => (tab.value === 'upcoming' ? store.upcoming : store.finished))
 
-onMounted(() => store.fetchAll())
+onMounted(async () => { await store.fetchAll() })
 </script>
 
 <template>

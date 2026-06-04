@@ -5,11 +5,13 @@ import { useMatchesStore } from '@/stores/matches'
 import { listPhotoPosts } from '@/firebase/database'
 import { cldThumb } from '@/utils/cloudinary'
 import { fromNow, formatDate } from '@/utils/date'
+import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
 const matchesStore = useMatchesStore()
+const toast = useToast()
 const posts = ref([])
 const loading = ref(true)
 const tagFilter = ref('')
@@ -37,7 +39,14 @@ const visible = computed(() => {
 
 async function load() {
   loading.value = true
-  try { posts.value = await listPhotoPosts() } finally { loading.value = false }
+  try {
+    posts.value = await listPhotoPosts()
+  } catch (e) {
+    toast.error(`사진 불러오기 실패: ${e?.message || e}`)
+    posts.value = []
+  } finally {
+    loading.value = false
+  }
 }
 
 function matchLabel(id) {
@@ -53,8 +62,8 @@ function commentCount(p) {
 }
 
 onMounted(async () => {
-  matchesStore.fetchAll()
-  await load()
+  // 두 호출 병렬 (matchesStore 에 loaded 가드 있어 중복 안전)
+  await Promise.all([matchesStore.fetchAll(), load()])
 })
 </script>
 

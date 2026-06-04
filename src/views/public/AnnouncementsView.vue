@@ -30,6 +30,9 @@ async function load() {
   loading.value = true
   try {
     items.value = await listAnnouncements()
+  } catch (e) {
+    toast.error(`공지 불러오기 실패: ${e?.message || e}`)
+    items.value = []
   } finally {
     loading.value = false
   }

@@ -3,16 +3,21 @@ import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { listPosts } from '@/firebase/database'
 import { fromNow } from '@/utils/date'
+import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
 const posts = ref([])
 const loading = ref(true)
+const toast = useToast()
 
 onMounted(async () => {
   try {
     posts.value = await listPosts()
+  } catch (e) {
+    toast.error(`게시글 불러오기 실패: ${e?.message || e}`)
+    posts.value = []
   } finally {
     loading.value = false
   }

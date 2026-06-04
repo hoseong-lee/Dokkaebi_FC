@@ -5,12 +5,14 @@ import { useSavedSquadsStore } from '@/stores/savedSquads'
 import { usePlayersStore } from '@/stores/players'
 import { useAuthStore } from '@/stores/auth'
 import { formatDate } from '@/utils/date'
+import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 
 const store = useSavedSquadsStore()
 const playersStore = usePlayersStore()
 const auth = useAuthStore()
+const toast = useToast()
 
 const tab = ref('mine') // mine | public
 const loading = ref(true)
@@ -28,11 +30,16 @@ const visible = computed(() => (tab.value === 'mine' ? mySquads.value : publicSq
 
 async function load() {
   loading.value = true
-  await Promise.all([
-    store.fetchAll(true),
-    playersStore.loaded ? Promise.resolve() : playersStore.fetchAll()
-  ])
-  loading.value = false
+  try {
+    await Promise.all([
+      store.fetchAll(true),
+      playersStore.loaded ? Promise.resolve() : playersStore.fetchAll()
+    ])
+  } catch (e) {
+    toast.error(`스쿼드 불러오기 실패: ${e?.message || e}`)
+  } finally {
+    loading.value = false
+  }
 }
 onMounted(load)
 
