@@ -415,13 +415,15 @@ export async function listRsvps(matchId) {
 }
 
 export async function setRsvp(matchId, status, note = '') {
-  const uid = auth.currentUser.uid
+  const cu = auth.currentUser
+  if (!cu) throw new Error('로그인이 필요합니다.')
+  const uid = cu.uid
   const userSnap = await get(ref(rtdb, nsPath(`users/${uid}`)))
   const u = userSnap.val() || {}
   await set(ref(rtdb, nsPath(`matches/${matchId}/rsvps/${uid}`)), {
     uid,
     playerId: u.playerId || null,
-    displayName: u.displayName || auth.currentUser.displayName,
+    displayName: u.displayName || cu.displayName || 'Guest',
     status,
     note,
     respondedAt: serverTimestamp()

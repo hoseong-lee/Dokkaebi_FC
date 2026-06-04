@@ -25,13 +25,16 @@ const canEdit = computed(() => post.value && (post.value.authorUid === auth.user
 
 async function load() {
   loading.value = true
-  post.value = await getPost(route.params.id)
-  if (!post.value) {
+  try {
+    post.value = await getPost(route.params.id)
+    if (!post.value) return
+    comments.value = await listComments(route.params.id)
+  } catch (e) {
+    toast.error(`불러오기 실패: ${e?.message || e}`)
+    post.value = null
+  } finally {
     loading.value = false
-    return
   }
-  comments.value = await listComments(route.params.id)
-  loading.value = false
 }
 onMounted(load)
 watch(() => route.params.id, load)
