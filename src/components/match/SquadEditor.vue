@@ -51,6 +51,18 @@ const toast = useToast()
 
 const search = ref('')
 const filterMode = ref('all') // all | regular | guest
+const posFilter = ref('all') // all | GK | DF | MF | FW
+
+const POS_CATEGORIES = ['GK', 'DF', 'MF', 'FW']
+const POS_FILTER_TONE = {
+  GK: { on: 'bg-amber-400 text-navy', off: 'text-amber-600 bg-amber-50 hover:bg-amber-100' },
+  DF: { on: 'bg-sky-500 text-white',  off: 'text-sky-600 bg-sky-50 hover:bg-sky-100' },
+  MF: { on: 'bg-emerald-500 text-white', off: 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100' },
+  FW: { on: 'bg-rose-500 text-white', off: 'text-rose-600 bg-rose-50 hover:bg-rose-100' }
+}
+function playerCat(p) {
+  return POSITION_CATEGORY[p?.mainPosition] || POSITION_CATEGORY[p?.subPosition] || null
+}
 
 const regulars = computed(() => props.players.filter((p) => p.isRegular))
 
@@ -59,6 +71,9 @@ const filteredPlayers = computed(() => {
   let list = props.players
   if (filterMode.value === 'regular') list = list.filter((p) => p.isRegular)
   else if (filterMode.value === 'guest') list = list.filter((p) => !p.isRegular)
+  if (posFilter.value !== 'all') {
+    list = list.filter((p) => playerCat(p) === posFilter.value)
+  }
   if (q.trim()) {
     list = list.filter(
       (p) =>
@@ -68,6 +83,16 @@ const filteredPlayers = computed(() => {
     )
   }
   return list
+})
+
+// 카테고리별 인원수 (chip 표시)
+const posCounts = computed(() => {
+  const c = { GK: 0, DF: 0, MF: 0, FW: 0 }
+  for (const p of props.players) {
+    const cat = playerCat(p)
+    if (cat) c[cat]++
+  }
+  return c
 })
 
 const lineupPlayers = computed(() =>
@@ -149,16 +174,25 @@ const assignedSlotMap = computed(() => {
 const slotModalOpen = ref(false)
 const activeSlot = ref(null)
 const slotSearch = ref('')
+const slotPosFilter = ref('all') // all | GK | DF | MF | FW (모달 열 때 slot.role 자동)
 const slotCandidates = computed(() => {
+  let list = lineupPlayers.value
+  if (slotPosFilter.value !== 'all') {
+    list = list.filter((p) => playerCat(p) === slotPosFilter.value)
+  }
   const q = slotSearch.value
-  if (!q.trim()) return lineupPlayers.value
-  return lineupPlayers.value.filter(
-    (p) => matchesQuery(p.name, q) || String(p.number ?? '').includes(q.trim())
-  )
+  if (q.trim()) {
+    list = list.filter(
+      (p) => matchesQuery(p.name, q) || String(p.number ?? '').includes(q.trim())
+    )
+  }
+  return list
 })
 function openSlot(slot) {
   activeSlot.value = slot
   slotSearch.value = ''
+  // 슬롯 role 기반 자동 필터 (사용자 1클릭 절감)
+  slotPosFilter.value = POS_CATEGORIES.includes(slot.role) ? slot.role : 'all'
   slotModalOpen.value = true
 }
 function assignToSlot(playerId) {
@@ -229,6 +263,24 @@ function clearSlot() {
             @click="filterMode = f.k"
           >{{ f.l }}</button>
         </div>
+      </div>
+
+      <!-- 포지션 카테고리 chip 필터 -->
+      <div class="flex flex-wrap gap-1.5 mb-2">
+        <button
+          type="button"
+          class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors"
+          :class="posFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="posFilter = 'all'"
+        >전체 {{ props.players.length }}</button>
+        <button
+          v-for="cat in POS_CATEGORIES"
+          :key="cat"
+          type="button"
+          class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors"
+          :class="posFilter === cat ? POS_FILTER_TONE[cat].on : POS_FILTER_TONE[cat].off"
+          @click="posFilter = cat"
+        >{{ cat }} {{ posCounts[cat] }}</button>
       </div>
 
       <div v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 py-3 text-center">
@@ -319,7 +371,7 @@ function clearSlot() {
     </div>
 
     <BaseModal v-model="slotModalOpen" :title="`${activeSlot?.role || ''} 자리에 배치`">
-      <div class="relative mb-3">
+      <div class="relative mb-2">
         <input
           v-model="slotSearch"
           type="text"
@@ -327,6 +379,27 @@ function clearSlot() {
           class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
         />
         <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+      </div>
+
+      <!-- 포지션 카테고리 chip (출전 명단 내에서 필터) -->
+      <div class="flex flex-wrap gap-1 mb-3">
+        <button
+          type="button"
+          class="px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors"
+          :class="slotPosFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="slotPosFilter = 'all'"
+        >전체</button>
+        <button
+          v-for="cat in POS_CATEGORIES"
+          :key="cat"
+          type="button"
+          class="px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors"
+          :class="slotPosFilter === cat ? POS_FILTER_TONE[cat].on : POS_FILTER_TONE[cat].off"
+          @click="slotPosFilter = cat"
+        >{{ cat }}</button>
+        <span class="text-[10px] text-gray-400 ml-auto self-center">
+          이 자리: <span class="font-bold text-navy">{{ activeSlot?.role || '-' }}</span>
+        </span>
       </div>
       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-72 overflow-y-auto">
         <button
