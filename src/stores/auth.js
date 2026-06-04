@@ -90,6 +90,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function linkPlayer(playerId) {
     if (!user.value) throw new Error('not signed in')
+    // 본인 연결은 관리자만 변경 가능 (다른 선수 프로필 오염 방지)
+    if (!isAdmin.value) throw new Error('선수 연결 변경은 관리자만 가능합니다. 관리자에게 문의해주세요.')
     await linkUserToPlayer(user.value.uid, playerId)
     profile.value = { ...(profile.value || {}), playerId: playerId || null }
   }

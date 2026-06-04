@@ -214,9 +214,11 @@ function onAvatarSelect(url) {
       <section class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-3">
           <h2 class="font-bold text-navy">연결된 선수</h2>
-          <BaseButton size="sm" variant="ghost" @click="linkModalOpen = true">
+          <!-- 일반 사용자는 변경 불가 — 관리자만 가능 (다른 선수 프로필 오염 방지) -->
+          <BaseButton v-if="auth.isAdmin" size="sm" variant="ghost" @click="linkModalOpen = true">
             {{ myPlayer ? '변경' : '연결' }}
           </BaseButton>
+          <span v-else-if="myPlayer" class="text-[10px] text-gray-400">🔒 관리자만 변경</span>
         </div>
         <div v-if="myPlayer" class="flex items-center gap-3">
           <PlayerAvatar :player="myPlayer" :size="56" />
@@ -242,8 +244,8 @@ function onAvatarSelect(url) {
         <div v-else class="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-3 text-sm">
           <p class="font-medium">아직 본인 선수가 연결되지 않았어요.</p>
           <p class="text-xs mt-1">
-            관리자가 화이트리스트 추가 시 선수를 지정하면 자동 연결됩니다.<br>
-            없으면 위 [연결] 버튼으로 직접 골라주세요. MOM 투표·내 통계 표시에 필요합니다.
+            관리자가 화이트리스트 추가 시 본인 선수가 자동 연결됩니다.<br>
+            연결이 안 되어 있으면 <b>관리자에게 문의</b>해주세요. MOM 투표·내 통계 표시에 필요합니다.
           </p>
         </div>
       </section>

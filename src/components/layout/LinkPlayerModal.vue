@@ -36,6 +36,11 @@ const linkedPlayer = computed(() =>
 )
 
 async function pick(playerId) {
+  if (!auth.isAdmin) {
+    toast.error('선수 연결 변경은 관리자만 가능합니다.')
+    model.value = false
+    return
+  }
   saving.value = true
   try {
     await auth.linkPlayer(playerId)
