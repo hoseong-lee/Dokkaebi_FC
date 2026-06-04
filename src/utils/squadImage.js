@@ -1,6 +1,7 @@
 // 스쿼드 → 1080×1350 (인스타 세로) 이미지 PNG Blob 생성
 // 위: 헤더(엠블렘 + 스쿼드 이름) / 중간: 미니피치 + 선수 배치 / 아래: 명단 + 작성자
 import { getSlots } from './formations'
+import { parsePositions } from './squadPositions'
 
 function loadImage(src) {
   return new Promise((resolve) => {
@@ -123,8 +124,8 @@ export async function generateSquadImage({ squad, players, emblemUrl }) {
   ctx.strokeRect(PITCH_X + (PITCH_W - PB_W) / 2, PITCH_Y + PITCH_H - PB_H - 8, PB_W, PB_H)
 
   // 선수 배치 — slot 좌표 기반 (slots 의 x/y 는 %)
-  // posMap 구조: { slotId: playerId } — SquadEditor / FormationPitch 와 일치
-  const placeMap = new Map(Object.entries(posMap)) // slotId → playerId
+  // 두 형식 모두 호환: { slotId: playerId } (신) / { playerId: { slotId } } (구)
+  const placeMap = parsePositions(posMap) // slotId → playerId
   // 매핑 안 된 선수는 빈 슬롯에 순서대로 채움
   const placedPids = new Set(placeMap.values())
   const unmappedPlayers = lineup.filter((pid) => !placedPids.has(pid))

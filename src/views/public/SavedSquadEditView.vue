@@ -8,6 +8,7 @@ import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import SquadEditor from '@/components/match/SquadEditor.vue'
+import { normalizePositions } from '@/utils/squadPositions'
 
 const route = useRoute()
 const router = useRouter()
@@ -59,7 +60,8 @@ async function load() {
     isPublic.value = s.isPublic !== false
     squad.lineup = [...(s.lineup || [])]
     squad.formation = s.formation || ''
-    squad.positions = { ...(s.positions || {}) }
+    // 옛 데이터(playerId key) 도 새 형식(slotId key) 으로 정규화 후 사용
+    squad.positions = normalizePositions(s.positions)
   }
   loading.value = false
 }

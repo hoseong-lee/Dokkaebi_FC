@@ -9,6 +9,7 @@ import { useToast } from '@/composables/useToast'
 import { formatDate } from '@/utils/date'
 import { generateSquadImage, downloadBlob } from '@/utils/squadImage'
 import { getSlots } from '@/utils/formations'
+import { parsePositions } from '@/utils/squadPositions'
 import BaseButton from '@/components/common/BaseButton.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -41,12 +42,11 @@ const lineupPlayers = computed(() =>
 )
 
 // 슬롯 → 선수 매핑 (포메이션 있을 때)
-// positions 구조: { slotId: playerId } — SquadEditor / FormationPitch 와 일치
+// 두 형식 모두 호환: { slotId: playerId } (신) / { playerId: { slotId } } (구)
 const slotAssignments = computed(() => {
   if (!squad.value?.formation) return []
   const slots = getSlots(squad.value.formation)
-  const posMap = squad.value.positions || {}
-  const placed = new Map(Object.entries(posMap)) // slotId → playerId
+  const placed = parsePositions(squad.value.positions) // slotId → playerId
   const placedPids = new Set(placed.values())
   const unmapped = (squad.value.lineup || []).filter((pid) => !placedPids.has(pid))
   let cursor = 0
