@@ -5,7 +5,8 @@ import {
   signOut as fbSignOut,
   watchAuth,
   fetchRole,
-  NotAllowedError
+  NotAllowedError,
+  SignupPendingError
 } from '@/firebase/auth'
 import { getUserProfile, linkUserToPlayer } from '@/firebase/database'
 
@@ -16,7 +17,9 @@ export const useAuthStore = defineStore('auth', () => {
   const ready = ref(false)
   const error = ref('')
 
-  const isAdmin = computed(() => role.value === 'admin')
+  // admin / superAdmin 모두 광의의 "관리자" — 기존 admin 가드 그대로 통과
+  const isAdmin = computed(() => role.value === 'admin' || role.value === 'superAdmin')
+  const isSuperAdmin = computed(() => role.value === 'superAdmin')
   const isAuthed = computed(() => !!user.value)
   const myPlayerId = computed(() => profile.value?.playerId || null)
 
@@ -69,7 +72,10 @@ export const useAuthStore = defineStore('auth', () => {
       return true
     } catch (e) {
       console.error('login error', e)
-      if (e instanceof NotAllowedError) {
+      if (e instanceof SignupPendingError) {
+        // 가입 신청 자동 등록됨 — error 가 아닌 안내성 메시지
+        error.value = `📨 ${e.message}`
+      } else if (e instanceof NotAllowedError) {
         error.value = e.message
       } else if (e?.code === 'auth/popup-closed-by-user') {
         error.value = ''
@@ -98,7 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user, role, profile, ready, error,
-    isAdmin, isAuthed, myPlayerId,
+    isAdmin, isSuperAdmin, isAuthed, myPlayerId,
     ensureReady, login, logout, linkPlayer
   }
 })

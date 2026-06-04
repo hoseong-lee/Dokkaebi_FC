@@ -217,7 +217,8 @@ const routes = [
       {
         path: 'allowed-emails',
         name: 'admin-allowed-emails',
-        component: () => import('@/views/admin/AllowedEmailsView.vue')
+        component: () => import('@/views/admin/AllowedEmailsView.vue'),
+        meta: { requiresSuperAdmin: true }
       },
       {
         path: 'fees',
@@ -250,9 +251,15 @@ router.beforeEach(async (to) => {
   if (to.meta.requiresAuth && !authStore.isAuthed) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
+  // matched 배열에서 자손 라우트의 meta 도 함께 검사 (admin layout 자식 라우트 대응)
+  const requiresSuperAdmin = to.matched.some((r) => r.meta?.requiresSuperAdmin)
   if (to.meta.requiresAdmin && !authStore.isAdmin) {
     pushToast('관리자만 접근할 수 있습니다.', 'error')
     return { path: '/' }
+  }
+  if (requiresSuperAdmin && !authStore.isSuperAdmin) {
+    pushToast('슈퍼관리자만 접근할 수 있습니다.', 'error')
+    return { path: '/admin' }
   }
   if (to.name === 'login' && authStore.isAuthed) {
     return { path: '/' }

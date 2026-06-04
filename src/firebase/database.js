@@ -467,6 +467,43 @@ export async function removeAllowedEmail(email) {
   await logAudit('delete', `allowedEmails/${email}`)
 }
 
+// ───────────── 가입 요청 (등록 안 된 사용자 → 관리자 승인 대기) ─────────────
+// signupRequests/{uid} = { uid, email, displayName, photoURL, requestedAt }
+// 승인 시 allowedEmails 에 추가하고 해당 요청 제거.
+
+export async function listSignupRequests() {
+  const snap = await get(ref(rtdb, nsPath('signupRequests')))
+  const v = snap.val() || {}
+  return Object.entries(v).map(([uid, r]) => ({ uid, ...r }))
+    .sort((a, b) => (a.requestedAt || 0) - (b.requestedAt || 0))
+}
+
+export async function createSignupRequest(user) {
+  if (!user?.uid || !user?.email) throw new Error('invalid user')
+  await set(ref(rtdb, nsPath(`signupRequests/${user.uid}`)), {
+    uid: user.uid,
+    email: user.email.toLowerCase(),
+    displayName: user.displayName || '',
+    photoURL: user.photoURL || '',
+    requestedAt: serverTimestamp()
+  })
+}
+
+export async function approveSignupRequest(uid, role = 'member', playerId = null) {
+  const snap = await get(ref(rtdb, nsPath(`signupRequests/${uid}`)))
+  if (!snap.exists()) throw new Error('가입 요청을 찾을 수 없습니다.')
+  const req = snap.val()
+  // allowedEmails 에 등록 (active=true)
+  await addAllowedEmail(req.email, role, '가입 요청 승인', playerId)
+  await remove(ref(rtdb, nsPath(`signupRequests/${uid}`)))
+  await logAudit('approve', `signupRequests/${uid}`, { email: req.email, role })
+}
+
+export async function rejectSignupRequest(uid) {
+  await remove(ref(rtdb, nsPath(`signupRequests/${uid}`)))
+  await logAudit('reject', `signupRequests/${uid}`)
+}
+
 // ───────────── 사용자 ─────────────
 export async function upsertUser(uid, data) {
   await update(ref(rtdb, nsPath(`users/${uid}`)), data)

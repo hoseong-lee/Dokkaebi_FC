@@ -31,7 +31,8 @@ async function handleLogin() {
       <h1 class="text-2xl font-bold text-onyx tracking-wide">도깨비 FC</h1>
       <p class="text-xs text-gold font-semibold tracking-[0.3em] mt-1">DOKKEBY FOOTBALL CLUB</p>
       <p class="text-sm text-gray-500 mt-3 mb-8">
-        등록된 회원만 로그인할 수 있습니다.
+        등록된 회원만 로그인할 수 있습니다.<br>
+        <span class="text-[11px] text-gray-400">처음이신가요? 그래도 일단 로그인해주세요 — 자동으로 가입 신청이 접수됩니다.</span>
       </p>
 
       <button
@@ -48,7 +49,12 @@ async function handleLogin() {
         {{ loading ? '로그인 중...' : 'Google로 로그인' }}
       </button>
 
-      <p v-if="authStore.error" class="mt-4 text-sm text-dokkaebi">
+      <!-- 가입 신청 안내(📨 prefix) 와 일반 에러 구분 -->
+      <p
+        v-if="authStore.error"
+        class="mt-4 text-sm rounded-lg p-3"
+        :class="authStore.error.startsWith('📨') ? 'bg-amber-50 text-amber-800 ring-1 ring-amber-200' : 'text-dokkaebi'"
+      >
         {{ authStore.error }}
       </p>
     </div>
