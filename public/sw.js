@@ -1,6 +1,6 @@
 // 도깨비FC 메인 Service Worker — 정적 자산 캐싱 + 오프라인 fallback
 // 빌드 시 캐시 키를 갱신해 새 버전 자동 활성화
-const CACHE = 'dokkaebi-v3'
+const CACHE = 'dokkaebi-v4'
 const PRECACHE = [
   '/Dokkaebi_FC/',
   '/Dokkaebi_FC/index.html',
@@ -26,17 +26,40 @@ self.addEventListener('activate', (event) => {
   self.clients.claim()
 })
 
-// 전략: Firebase API/DB/cdn 은 네트워크 우선, 정적 자산은 캐시 우선
+// 전략:
+//  - 외부 API(Firebase/Google/CDN): 네트워크 우선
+//  - HTML navigation (index.html / SPA 진입): 네트워크 우선
+//    └ 새 빌드 deploy 시 옛 index.html 캐시 hit 으로 옛 chunk hash → 404 → 메뉴 먹통 방지
+//  - 그 외 정적 자산(JS/CSS/이미지): 캐시 우선 + 백그라운드 갱신
 self.addEventListener('fetch', (event) => {
   const req = event.request
   if (req.method !== 'GET') return
   const url = new URL(req.url)
 
-  // Firebase / Google API / DiceBear / api-sports / jsdelivr / youtube — 네트워크 우선
+  // 외부 API — 네트워크 우선
   const isExternalApi = /(firebaseio|firebasestorage|googleapis|gstatic|dicebear|api-sports|jsdelivr|youtube|ytimg|cloudinary)/.test(url.hostname)
   if (isExternalApi) {
     event.respondWith(
       fetch(req).catch(() => caches.match(req))
+    )
+    return
+  }
+
+  // HTML / navigation — 네트워크 우선 (offline 시 캐시 fallback)
+  const isHtml = req.mode === 'navigate' ||
+                 req.destination === 'document' ||
+                 (req.headers.get('accept') || '').includes('text/html')
+  if (isHtml) {
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.status === 200) {
+          const clone = res.clone()
+          caches.open(CACHE).then((c) => c.put(req, clone)).catch(() => {})
+        }
+        return res
+      }).catch(() =>
+        caches.match(req).then((c) => c || caches.match('/Dokkaebi_FC/index.html') || caches.match('/Dokkaebi_FC/'))
+      )
     )
     return
   }

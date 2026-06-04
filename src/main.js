@@ -16,7 +16,27 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register(import.meta.env.BASE_URL + 'sw.js', { scope: import.meta.env.BASE_URL })
+      .then((reg) => {
+        // 새 버전 install 감지 → 사용자에게 알림
+        reg.addEventListener('updatefound', () => {
+          const sw = reg.installing
+          if (!sw) return
+          sw.addEventListener('statechange', () => {
+            if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+              pushToast('🆕 새 버전 준비 완료 — 화면을 새로고침해주세요.', 'info', 8000)
+            }
+          })
+        })
+      })
       .catch((e) => console.warn('SW 등록 실패', e))
+
+    // SW controller 교체 시 1회 자동 reload (캐시 stale chunk 즉시 해소)
+    let reloaded = false
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloaded) return
+      reloaded = true
+      window.location.reload()
+    })
   })
 }
 
