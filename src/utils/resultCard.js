@@ -27,7 +27,8 @@ function nameWithNumber(p) {
 }
 
 // 1080×1080 인스타그램 정사각 결과 카드 → Blob(PNG)
-export async function generateResultCard(match, players) {
+// venue: { name, address } (선택) — 카드 우측 하단에 표시
+export async function generateResultCard(match, players, venue = null) {
   const SIZE = 1080
   const canvas = document.createElement('canvas')
   canvas.width = SIZE
@@ -71,6 +72,15 @@ export async function generateResultCard(match, players) {
   ctx.fillStyle = 'rgba(255,255,255,0.8)'
   ctx.textAlign = 'right'
   ctx.fillText(dayjs(match.date).format('YYYY.MM.DD (ddd)'), SIZE - 80, 96)
+
+  // 구장 (날짜 아래) — venue 우선, 없으면 match.location fallback
+  const venueName = venue?.name || match.location || ''
+  if (venueName) {
+    ctx.font = '500 22px "Pretendard", system-ui, sans-serif'
+    ctx.fillStyle = 'rgba(255,255,255,0.55)'
+    ctx.textAlign = 'right'
+    ctx.fillText('📍 ' + venueName, SIZE - 80, 188)
+  }
 
   // 결과 배지 (W/D/L)
   if (result) {

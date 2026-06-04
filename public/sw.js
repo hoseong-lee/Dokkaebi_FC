@@ -1,6 +1,6 @@
 // 도깨비FC 메인 Service Worker — 정적 자산 캐싱 + 오프라인 fallback
 // 빌드 시 캐시 키를 갱신해 새 버전 자동 활성화
-const CACHE = 'dokkaebi-v1'
+const CACHE = 'dokkaebi-v2'
 const PRECACHE = [
   '/Dokkaebi_FC/',
   '/Dokkaebi_FC/index.html',

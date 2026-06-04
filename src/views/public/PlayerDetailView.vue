@@ -7,6 +7,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attackPoints } from '@/utils/stats'
 import { COMPLIMENT_TAGS, COMPLIMENT_TAG_MAP } from '@/utils/compliments'
 import EndorsementSection from '@/components/player/EndorsementSection.vue'
+import SkillRadarChart from '@/components/player/SkillRadarChart.vue'
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
@@ -201,6 +202,16 @@ watch(() => route.params.id, load)
     <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
       <PlayerMonthlyChart :series="series" />
+    </section>
+
+    <!-- FIFA 능력치 카드 (스킬 평판 기반 자동) -->
+    <section v-if="player" class="bg-white rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy mb-3">🎮 능력치 카드</h2>
+      <SkillRadarChart
+        :skill-tags="scope === 'total' ? (player.stats?.skillTags || {}) : (player.seasonStats?.[scope]?.skillTags || {})"
+        :name="player.name"
+        :position="player.mainPosition"
+      />
     </section>
 
     <!-- 스킬 평판 (Endorsement) -->

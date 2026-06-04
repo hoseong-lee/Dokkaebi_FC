@@ -22,6 +22,7 @@ import PlayerStatsCards from '@/components/player/PlayerStatsCards.vue'
 import AvatarPicker from '@/components/player/AvatarPicker.vue'
 import ClubPicker from '@/components/player/ClubPicker.vue'
 import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
+import SkillRadarChart from '@/components/player/SkillRadarChart.vue'
 
 const auth = useAuthStore()
 const playersStore = usePlayersStore()
@@ -259,6 +260,19 @@ function onAvatarSelect(url) {
         <p class="text-center text-xs text-gray-400 mt-2">
           통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM · 💝 {{ totalStats.complimentCount || 0 }}
         </p>
+      </section>
+
+      <!-- 내 FIFA 능력치 카드 -->
+      <section v-if="myPlayer" class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold text-navy">🎮 내 능력치 카드</h2>
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy hover:underline">상세 보기 →</RouterLink>
+        </div>
+        <SkillRadarChart
+          :skill-tags="myPlayer.stats?.skillTags || {}"
+          :name="myPlayer.name"
+          :position="myPlayer.mainPosition"
+        />
       </section>
 
       <!-- 내 단짝 + 뱃지 -->

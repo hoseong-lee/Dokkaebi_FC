@@ -12,6 +12,7 @@
 import { getSlots, FORMATION_NAMES } from './formations'
 import { categoryOf, POSITION_CATEGORY } from './positions'
 import { personalPartners } from './duos'
+import { recommendPositions } from './skillMap'
 
 const POPULAR_FORMATIONS = ['4-3-3', '4-2-3-1', '4-4-2', '4-3-2-1']
 
@@ -26,6 +27,21 @@ function scorePlayerForSlot(player, slot, ctx) {
   if (cat && cat === slotCategory(slot.role)) score += 100
   if (player.mainPosition === slot.id || POSITION_CATEGORY[player.mainPosition] === slot.role) score += 50
   if (player.isRegular) score += 10
+
+  // 스킬 평판 기반 슬롯 적합도 가산 — recommendPositions 의 percent 값 활용
+  const skillTags = player.stats?.skillTags
+  if (skillTags && Object.values(skillTags).some((v) => v > 0)) {
+    const recs = recommendPositions(skillTags, 5)
+    // 슬롯의 role(GK/DF/MF/FW) 또는 detailed code 매칭하는 추천 → 가산
+    for (const rec of recs) {
+      const recCat = POSITION_CATEGORY[rec.code]
+      if (recCat === slot.role) {
+        // 카테고리 매치: percent 의 절반 가산 (최대 +50)
+        score += Math.round(rec.percent * 0.5)
+        break
+      }
+    }
+  }
   return score
 }
 

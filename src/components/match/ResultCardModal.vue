@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { generateResultCard, downloadBlob, shareBlob } from '@/utils/resultCard'
 import { usePlayersStore } from '@/stores/players'
+import { useVenuesStore } from '@/stores/venues'
 import { useToast } from '@/composables/useToast'
 import { dayjs } from '@/utils/date'
 import BaseModal from '@/components/common/BaseModal.vue'
@@ -13,6 +14,7 @@ const props = defineProps({
 const model = defineModel({ type: Boolean, default: false })
 
 const playersStore = usePlayersStore()
+const venuesStore = useVenuesStore()
 const toast = useToast()
 
 const generating = ref(false)
@@ -24,7 +26,9 @@ async function build() {
   previewUrl.value = ''
   try {
     if (!playersStore.loaded) await playersStore.fetchAll()
-    const blob = await generateResultCard(props.match, playersStore.players)
+    if (!venuesStore.loaded) await venuesStore.fetchAll()
+    const venue = props.match.venueId ? venuesStore.getById(props.match.venueId) : null
+    const blob = await generateResultCard(props.match, playersStore.players, venue)
     lastBlob = blob
     previewUrl.value = URL.createObjectURL(blob)
   } catch (e) {

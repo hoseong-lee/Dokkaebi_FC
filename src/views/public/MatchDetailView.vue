@@ -29,6 +29,7 @@ import SkillVoteSection from '@/components/match/SkillVoteSection.vue'
 import ResultCardModal from '@/components/match/ResultCardModal.vue'
 import BaseModal from '@/components/common/BaseModal.vue'
 import DirectionsModal from '@/components/match/DirectionsModal.vue'
+import VenueWeatherCard from '@/components/match/VenueWeatherCard.vue'
 import { useVenuesStore } from '@/stores/venues'
 
 const route = useRoute()
@@ -264,8 +265,9 @@ watch(() => route.params.id, load)
       <SkillVoteSection :match="match" />
     </template>
 
-    <!-- 📅 참석 탭: RSVP -->
+    <!-- 📅 참석 탭: RSVP + 날씨 -->
     <template v-if="activeTab === 'rsvp'">
+      <VenueWeatherCard :venue="matchVenue" :match-date="match.date" />
       <RsvpSection :match-id="match.id" />
     </template>
 
