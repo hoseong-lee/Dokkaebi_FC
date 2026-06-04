@@ -166,6 +166,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/gps-analysis',
+    name: 'gps-analysis',
+    component: () => import('@/views/public/GpsAnalysisView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/me',
     name: 'me',
     component: () => import('@/views/public/MyPageView.vue'),
