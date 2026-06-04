@@ -27,6 +27,14 @@ const PITCH = '#0e7a4a'
 const PITCH_DARK = '#0a5f3a'
 const WHITE = '#ffffff'
 
+// 포지션별 점 색 (FormationPitch / 미니피치와 동일)
+const ROLE_COLOR = {
+  GK: '#fbbf24',  // amber-400
+  DF: '#0ea5e9',  // sky-500
+  MF: '#10b981',  // emerald-500
+  FW: '#f43f5e'   // rose-500
+}
+
 export async function generateSquadImage({ squad, players, emblemUrl }) {
   const W = 1080
   const H = 1350
@@ -137,7 +145,7 @@ export async function generateSquadImage({ squad, players, emblemUrl }) {
     const cy = PITCH_Y + (slot.y / 100) * PITCH_H
 
     // 점 (역할별 색상)
-    const fill = slot.role === 'GK' ? GOLD : WHITE
+    const fill = ROLE_COLOR[slot.role] || WHITE
     ctx.fillStyle = fill
     ctx.strokeStyle = NAVY
     ctx.lineWidth = 4
@@ -146,16 +154,17 @@ export async function generateSquadImage({ squad, players, emblemUrl }) {
     ctx.fill()
     ctx.stroke()
 
-    // 등번호 (중앙)
+    // 등번호 (중앙) — GK 만 navy 텍스트, 나머지는 흰색
+    const textColor = slot.role === 'GK' ? NAVY : WHITE
     if (player?.number != null) {
-      ctx.fillStyle = NAVY
+      ctx.fillStyle = textColor
       ctx.font = 'bold 24px "Pretendard", sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       ctx.fillText(String(player.number), cx, cy)
     } else {
       // 등번호 없으면 슬롯 코드 표시 (GK/DF/MF/FW)
-      ctx.fillStyle = NAVY
+      ctx.fillStyle = textColor
       ctx.font = 'bold 14px "Pretendard", sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'

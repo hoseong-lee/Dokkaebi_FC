@@ -183,8 +183,13 @@ async function remove() {
           :style="{ left: sa.slot.x + '%', top: sa.slot.y + '%' }"
         >
           <div
-            class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-navy"
-            :class="sa.slot.role === 'GK' ? 'bg-amber-400 text-navy' : 'bg-white text-navy'"
+            class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-navy text-white"
+            :class="{
+              'bg-amber-400 !text-navy': sa.slot.role === 'GK',
+              'bg-sky-500': sa.slot.role === 'DF',
+              'bg-emerald-500': sa.slot.role === 'MF',
+              'bg-rose-500': sa.slot.role === 'FW'
+            }"
           >
             <template v-if="sa.player?.number != null">{{ sa.player.number }}</template>
             <template v-else>{{ sa.slot.role }}</template>
