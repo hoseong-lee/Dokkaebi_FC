@@ -20,8 +20,7 @@ async function onFile(e) {
   if (!file) return
   parsing.value = true
   try {
-    const text = await file.text()
-    const t = parseGpsFile(file.name, text)
+    const t = await parseGpsFile(file)
     const s = computeGpsStats(t.points)
     if (!s) throw new Error('통계 계산 실패')
     track.value = t
@@ -140,23 +139,24 @@ const zonePct = computed(() => {
     <section v-if="!track" class="bg-white rounded-2xl shadow p-5 space-y-3">
       <p class="font-bold text-navy">📂 지원 형식</p>
       <ul class="text-sm text-onyx space-y-1.5 list-disc list-inside">
-        <li><span class="font-bold">.gpx</span> — 애플 건강, Strava, RunGap, HealthFit 등 표준</li>
+        <li><span class="font-bold">.gpx</span> — 애플 건강, Strava, RunGap, HealthFit 표준</li>
         <li><span class="font-bold">.tcx</span> — Samsung Health(갤럭시워치), Garmin Connect</li>
+        <li><span class="font-bold">.fit</span> — Garmin / Samsung 바이너리 (원본 그대로 가능)</li>
       </ul>
       <div class="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 space-y-1">
         <p>📱 <b>애플워치</b>: Apple 건강 → 운동 → 해당 활동 → 공유 → .gpx</p>
-        <p>📱 <b>갤럭시워치</b>: shealth.samsung.com 로그인 → 운동 → 해당 활동 → 다운로드 → .tcx</p>
-        <p>💡 <b>Strava 연동 시</b>: 활동 페이지 → ⋯ → Export GPX (가장 편함)</p>
+        <p>📱 <b>갤럭시워치</b>: shealth.samsung.com → 운동 → 해당 활동 → 다운로드 → .tcx 또는 .fit</p>
+        <p>💡 <b>Strava 연동 시</b>: 활동 페이지 → ⋯ → Export GPX/Original (가장 편함)</p>
       </div>
       <input
         ref="fileInput"
         type="file"
-        accept=".gpx,.tcx,.xml"
+        accept=".gpx,.tcx,.fit,.xml"
         class="hidden"
         @change="onFile"
       />
       <BaseButton variant="primary" :loading="parsing" block @click="pickFile">
-        📂 GPS 파일 선택 (.gpx / .tcx)
+        📂 GPS 파일 선택 (.gpx / .tcx / .fit)
       </BaseButton>
       <p class="text-[11px] text-amber-700 bg-amber-50 rounded px-2 py-1">
         ⚠ 현재 MVP — 본인 분석만 가능합니다. 매치 연동·동료 비교·시즌 누적은 다음 단계.

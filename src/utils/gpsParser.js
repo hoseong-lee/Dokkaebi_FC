@@ -1,10 +1,10 @@
-// GPS 트랙 파서 — .gpx / .tcx (둘 다 XML)
+// GPS 트랙 파서 — .gpx / .tcx / .fit
 // 출력: { points: [{ t: ms, lat, lng, ele?, hr?, speed? }], meta: { start, end, source } }
 //
 // 형식 안내:
-// - .gpx: 표준 (Apple 건강, Strava export, RunGap, HealthFit)
-// - .tcx: Garmin/Samsung Health 표준 (갤럭시워치 사용자 권장)
-// - .fit:  지원 안 함 — gpx.studio 등에서 .gpx 로 변환 후 업로드
+// - .gpx: 표준 XML (Apple 건강 / Strava export / RunGap / HealthFit)
+// - .tcx: XML (Garmin Connect / Samsung Health)
+// - .fit: Garmin/Samsung 바이너리 — fit-file-parser 사용
 
 function parseXml(text) {
   const doc = new DOMParser().parseFromString(text, 'application/xml')
@@ -55,26 +55,32 @@ function parseTcx(doc) {
   return points
 }
 
-/**
- * @param {string} filename — 확장자 인식용
- * @param {string} text     — 파일 내용 (UTF-8 텍스트)
- */
-export function parseGpsFile(filename, text) {
-  const lower = (filename || '').toLowerCase()
-  const doc = parseXml(text)
-  let points, source
-  if (lower.endsWith('.tcx')) {
-    points = parseTcx(doc); source = 'tcx'
-  } else if (lower.endsWith('.gpx')) {
-    points = parseGpx(doc); source = 'gpx'
-  } else {
-    // 확장자 없으면 root element 로 자동 인식
-    const root = doc.documentElement?.tagName?.toLowerCase() || ''
-    if (root.includes('trainingcenterdatabase')) { points = parseTcx(doc); source = 'tcx' }
-    else if (root === 'gpx') { points = parseGpx(doc); source = 'gpx' }
-    else throw new Error('지원하지 않는 형식 — .gpx 또는 .tcx 만 가능합니다')
-  }
-  // 시간 정렬 + null t 제거
+async function parseFit(arrayBuffer) {
+  // 동적 import — fit 파일을 안 쓸 때 청크 안 받게
+  const { default: FitParser } = await import('fit-file-parser')
+  const parser = new FitParser({
+    force: true,
+    speedUnit: 'm/s',
+    lengthUnit: 'm',
+    elapsedRecordField: false,
+    mode: 'list'
+  })
+  const data = await parser.parseAsync(arrayBuffer)
+  const records = data?.records || []
+  if (records.length === 0) throw new Error('fit 파일에 record 가 없어요')
+  return records
+    .filter((r) => Number.isFinite(r.position_lat) && Number.isFinite(r.position_long))
+    .map((r) => ({
+      t: Date.parse(r.timestamp),
+      lat: r.position_lat,
+      lng: r.position_long,
+      ele: Number.isFinite(r.altitude) ? r.altitude : (Number.isFinite(r.enhanced_altitude) ? r.enhanced_altitude : null),
+      hr: Number.isFinite(r.heart_rate) ? r.heart_rate : null,
+      speed: Number.isFinite(r.enhanced_speed) ? r.enhanced_speed : (Number.isFinite(r.speed) ? r.speed : null)
+    }))
+}
+
+function finalize(points, source) {
   const valid = points.filter((p) => Number.isFinite(p.t)).sort((a, b) => a.t - b.t)
   if (valid.length < 2) throw new Error('유효한 좌표 샘플이 부족해요 (최소 2개 필요)')
   return {
@@ -87,4 +93,29 @@ export function parseGpsFile(filename, text) {
       durationSec: Math.round((valid[valid.length - 1].t - valid[0].t) / 1000)
     }
   }
+}
+
+/**
+ * 통합 진입점.
+ * @param {File} file — input[type=file] 가 준 File 객체
+ */
+export async function parseGpsFile(file) {
+  const lower = (file.name || '').toLowerCase()
+  if (lower.endsWith('.fit')) {
+    const buf = await file.arrayBuffer()
+    return finalize(await parseFit(buf), 'fit')
+  }
+  // XML 계열 (.gpx / .tcx)
+  const text = await file.text()
+  const doc = parseXml(text)
+  let points, source
+  if (lower.endsWith('.tcx')) { points = parseTcx(doc); source = 'tcx' }
+  else if (lower.endsWith('.gpx')) { points = parseGpx(doc); source = 'gpx' }
+  else {
+    const root = doc.documentElement?.tagName?.toLowerCase() || ''
+    if (root.includes('trainingcenterdatabase')) { points = parseTcx(doc); source = 'tcx' }
+    else if (root === 'gpx') { points = parseGpx(doc); source = 'gpx' }
+    else throw new Error('지원하지 않는 형식 — .gpx / .tcx / .fit 만 가능합니다')
+  }
+  return finalize(points, source)
 }
