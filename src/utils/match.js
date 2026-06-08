@@ -49,24 +49,9 @@ export function quarterTally(match) {
 }
 
 // 도깨비 기준 승무패: 'W' | 'D' | 'L' | null
-// 우선순위 (사용자 결정 — 2026-06-04):
-//   1) 쿼터별 승수 비교 (4쿼터 중 더 많이 이긴 쪽)
-//   2) 쿼터 동률 시: 골 득실 tiebreaker
-//   3) 그래도 동률: 무
-// quarters 가 없는 옛 데이터는 score(누적 골) 로 fallback.
+// 골 득실 기준 (사용자 재결정 2026-06-04) — 쿼터별 결과는 timeline 표시로만 활용.
 export function matchResult(match) {
-  if (match?.status !== 'finished') return null
-  const t = quarterTally(match)
-  if (t) {
-    if (t.quarterWins > t.quarterLosses) return 'W'
-    if (t.quarterWins < t.quarterLosses) return 'L'
-    // 쿼터 승수 동률 → 골 득실로 tiebreak
-    if (t.gd > 0) return 'W'
-    if (t.gd < 0) return 'L'
-    return 'D'
-  }
-  // 옛 데이터 fallback — score 누적 비교
-  if (match.score?.dokkaebi == null) return null
+  if (match?.status !== 'finished' || match.score?.dokkaebi == null) return null
   const { dokkaebi, opponent } = match.score
   if (dokkaebi > opponent) return 'W'
   if (dokkaebi < opponent) return 'L'
@@ -91,36 +76,18 @@ export function votingDeadline(match) {
   return match.date + VOTING_WINDOW_DAYS * 24 * 60 * 60 * 1000
 }
 
-// 양상(intensity) — 쿼터 승차에 따른 5단계
-// big_win/win/draw/loss/big_loss + 1쿼터 차이는 close=true 부가 태그
-// 압도 기준: 4쿼터 중 2쿼터 이상 차이 (예: 3승 1패 / 4승 0패 / 3승 0패 1무)
-const BIG_QUARTER_DIFF = 2
+// 양상(intensity) — 골 차에 따른 5단계
+// big_win/win/draw/loss/big_loss + 1점 차이는 close=true 부가 태그
+const BIG_DIFF = 4
 
 export function matchIntensity(match) {
-  if (match?.status !== 'finished') return null
-  const t = quarterTally(match)
-  if (t) {
-    const d = t.quarterWins - t.quarterLosses
-    const close = Math.abs(d) === 1
-    if (d >= BIG_QUARTER_DIFF) return { key: 'big_win', close: false }
-    if (d > 0) return { key: 'win', close }
-    if (d === 0) {
-      // 쿼터 동률 시 골 득실로 보조 양상 결정
-      if (t.gd > 0) return { key: 'win', close: true }
-      if (t.gd < 0) return { key: 'loss', close: true }
-      return { key: 'draw', close: false }
-    }
-    if (d > -BIG_QUARTER_DIFF) return { key: 'loss', close }
-    return { key: 'big_loss', close: false }
-  }
-  // 옛 데이터 fallback — 골 차 기준 4단계
-  if (match.score?.dokkaebi == null) return null
-  const dg = (match.score.dokkaebi || 0) - (match.score.opponent || 0)
-  const close = Math.abs(dg) === 1
-  if (dg >= 4) return { key: 'big_win', close: false }
-  if (dg > 0) return { key: 'win', close }
-  if (dg === 0) return { key: 'draw', close: false }
-  if (dg > -4) return { key: 'loss', close }
+  if (match?.status !== 'finished' || match.score?.dokkaebi == null) return null
+  const d = (match.score.dokkaebi || 0) - (match.score.opponent || 0)
+  const close = Math.abs(d) === 1
+  if (d >= BIG_DIFF) return { key: 'big_win', close: false }
+  if (d > 0) return { key: 'win', close }
+  if (d === 0) return { key: 'draw', close: false }
+  if (d > -BIG_DIFF) return { key: 'loss', close }
   return { key: 'big_loss', close: false }
 }
 

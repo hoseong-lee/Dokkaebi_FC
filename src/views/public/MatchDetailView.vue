@@ -263,12 +263,6 @@ watch(() => route.params.id, load)
           <span class="text-gray-600 font-bold">{{ quarterLine.tally.quarterDraws }}무</span>
           <span class="text-gray-400 mx-1">·</span>
           <span class="text-rose-700 font-bold">{{ quarterLine.tally.quarterLosses }}패</span>
-          <span
-            v-if="quarterLine.tally.quarterWins === quarterLine.tally.quarterLosses && quarterLine.tally.gd !== 0"
-            class="ml-1.5 text-[9px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded"
-          >
-            쿼터 동률 → 골득실 {{ quarterLine.tally.gd > 0 ? '+' : '' }}{{ quarterLine.tally.gd }} tiebreak
-          </span>
         </p>
       </div>
 
