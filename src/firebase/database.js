@@ -550,25 +550,8 @@ export async function finalizeMomVoting(matchId, winnerId) {
     }
   }
 
-  // 칭찬 확정 — votingClosed=false 였던 경기는 이번에 처음 누적
-  // votingClosed=true 였다면 이미 누적되어 있으므로 skip
-  if (!data.votingClosed) {
-    const tally = tallyComplimentTotals(data.compliments || {})
-    const tagTally = tallyComplimentTags(data.compliments || {})
-    for (const [pid, count] of Object.entries(tally)) {
-      if (!count) continue
-      updates[nsPath(`players/${pid}/stats/complimentCount`)] = increment(count)
-      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentCount`)] = increment(count)
-    }
-    for (const [pid, tags] of Object.entries(tagTally)) {
-      for (const [tag, count] of Object.entries(tags)) {
-        if (!count) continue
-        updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(count)
-        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(count)
-      }
-    }
-    // 스킬 평가는 castSkillVotes 가 이미 즉시 reconcile — finalize 에서 중복 누적 X
-  }
+  // 칭찬/스킬은 castCompliments / castSkillVotes 가 즉시 reconcile —
+  // finalize 는 MOM 확정 + votingClosed 잠금만 담당
 
   updates[nsPath(`matches/${matchId}/momPlayerId`)] = winnerId || null
   updates[nsPath(`matches/${matchId}/votingClosed`)] = true
@@ -584,6 +567,7 @@ export async function finalizeMomVoting(matchId, winnerId) {
 
 // 한 voter 의 칭찬을 한 번에 저장. picks = { playerId: [tagId, ...] }
 // 빈 배열인 선수는 자동 제거, 빈 객체면 전체 삭제.
+// + players.stats.complimentCount / complimentTags 즉시 reconcile (스킬과 동일)
 export async function castCompliments(matchId, picks) {
   const uid = auth.currentUser?.uid
   if (!uid) throw new Error('로그인이 필요합니다.')
@@ -596,9 +580,44 @@ export async function castCompliments(matchId, picks) {
     if (valid.length) cleaned[pid] = valid
   }
 
-  const r = ref(rtdb, nsPath(`matches/${matchId}/compliments/${uid}`))
-  if (!Object.keys(cleaned).length) await remove(r)
-  else await set(r, cleaned)
+  // 이전 vote 와 diff 계산 — finalize 대기 없이 즉시 반영
+  const matchSnap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
+  const matchData = matchSnap.val() || {}
+  const seasonId = matchData.seasonId || null
+  if (matchData.votingClosed) {
+    throw new Error('이미 마감된 경기 — 칭찬을 변경할 수 없습니다.')
+  }
+  const prev = matchData.compliments?.[uid] || {}
+
+  const updates = {}
+  const allPids = new Set([...Object.keys(prev), ...Object.keys(cleaned)])
+  for (const pid of allPids) {
+    const prevTags = new Set(prev[pid] || [])
+    const newTags = new Set(cleaned[pid] || [])
+    let countDelta = 0
+    // 추가된 태그 +1 (count + tag)
+    for (const tag of newTags) {
+      if (prevTags.has(tag)) continue
+      countDelta += 1
+      updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(1)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(1)
+    }
+    // 제거된 태그 -1
+    for (const tag of prevTags) {
+      if (newTags.has(tag)) continue
+      countDelta -= 1
+      updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(-1)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(-1)
+    }
+    if (countDelta !== 0) {
+      updates[nsPath(`players/${pid}/stats/complimentCount`)] = increment(countDelta)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentCount`)] = increment(countDelta)
+    }
+  }
+
+  updates[nsPath(`matches/${matchId}/compliments/${uid}`)] = Object.keys(cleaned).length ? cleaned : null
+
+  await update(ref(rtdb), updates)
 }
 
 // ───────────── 공지사항 ─────────────
