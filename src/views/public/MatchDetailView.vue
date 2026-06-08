@@ -9,6 +9,7 @@ import {
   MATCH_TYPE_LABEL,
   MATCH_STATUS_LABEL,
   matchResult,
+  quarterTally,
   RESULT_LABEL,
   RESULT_COLOR
 } from '@/utils/match'
@@ -124,6 +125,29 @@ const plannedSquadList = computed(() => {
 const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
 
+// 쿼터별 W/D/L 라인 — 새 판정 기준(쿼터 승수 우선) 시각화
+const quarterLine = computed(() => {
+  if (!isFinished.value) return null
+  const qs = match.value?.quarters || []
+  if (qs.length === 0) return null
+  const items = qs.map((q, i) => {
+    const dok = q?.score?.dokkaebi ?? 0
+    const opp = q?.score?.opponent ?? 0
+    let kind = 'D'
+    if (dok > opp) kind = 'W'
+    else if (dok < opp) kind = 'L'
+    return { idx: i + 1, kind, dok, opp }
+  })
+  const tally = quarterTally(match.value)
+  return { items, tally }
+})
+
+const Q_KIND_STYLE = {
+  W: { tone: 'bg-blue-100 text-blue-700 ring-1 ring-blue-200', icon: '✅', label: '승' },
+  D: { tone: 'bg-gray-100 text-gray-600 ring-1 ring-gray-200', icon: '🤝', label: '무' },
+  L: { tone: 'bg-rose-100 text-rose-700 ring-1 ring-rose-200', icon: '❌', label: '패' }
+}
+
 async function ensureVenues() {
   if (!venuesStore.loaded) await venuesStore.fetchAll()
 }
@@ -183,6 +207,35 @@ watch(() => route.params.id, load)
         >
           득실 {{ goalDiff > 0 ? '+' : '' }}{{ goalDiff }}
         </span>
+      </div>
+
+      <!-- 쿼터별 결과 timeline (새 판정 기준 시각화) -->
+      <div v-if="quarterLine" class="mt-3 pt-3 border-t border-gray-100">
+        <p class="text-[10px] text-gray-400 text-center mb-2 font-semibold tracking-wide">쿼터별 결과</p>
+        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+          <div
+            v-for="q in quarterLine.items" :key="q.idx"
+            class="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg"
+            :class="Q_KIND_STYLE[q.kind].tone"
+          >
+            <span class="text-[9px] opacity-70 font-bold tracking-wider">Q{{ q.idx }}</span>
+            <span class="text-base leading-none">{{ Q_KIND_STYLE[q.kind].icon }}</span>
+            <span class="text-[10px] tabular-nums font-semibold">{{ q.dok }}:{{ q.opp }}</span>
+          </div>
+        </div>
+        <p class="text-[10px] text-center text-gray-500 mt-2 tabular-nums">
+          <span class="text-blue-700 font-bold">{{ quarterLine.tally.quarterWins }}승</span>
+          <span class="text-gray-400 mx-1">·</span>
+          <span class="text-gray-600 font-bold">{{ quarterLine.tally.quarterDraws }}무</span>
+          <span class="text-gray-400 mx-1">·</span>
+          <span class="text-rose-700 font-bold">{{ quarterLine.tally.quarterLosses }}패</span>
+          <span
+            v-if="quarterLine.tally.quarterWins === quarterLine.tally.quarterLosses && quarterLine.tally.gd !== 0"
+            class="ml-1.5 text-[9px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded"
+          >
+            쿼터 동률 → 골득실 {{ quarterLine.tally.gd > 0 ? '+' : '' }}{{ quarterLine.tally.gd }} tiebreak
+          </span>
+        </p>
       </div>
 
       <!-- 핵심 정보 그리드: 일시 · 장소 · 출전 인원 -->
