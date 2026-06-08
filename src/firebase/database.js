@@ -567,15 +567,7 @@ export async function finalizeMomVoting(matchId, winnerId) {
         if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(count)
       }
     }
-    // 스킬 평가 — 매너와 동일 패턴
-    const skillTagTally = tallySkillTags(data.skillVotes || {})
-    for (const [pid, tags] of Object.entries(skillTagTally)) {
-      for (const [tag, count] of Object.entries(tags)) {
-        if (!count) continue
-        updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(count)
-        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(count)
-      }
-    }
+    // 스킬 평가는 castSkillVotes 가 이미 즉시 reconcile — finalize 에서 중복 누적 X
   }
 
   updates[nsPath(`matches/${matchId}/momPlayerId`)] = winnerId || null
@@ -949,9 +941,41 @@ export async function castSkillVotes(matchId, picks) {
     const valid = [...new Set(tags.filter((t) => SKILL_TAG_IDS.includes(t)))]
     if (valid.length) cleaned[pid] = valid
   }
-  const r = ref(rtdb, nsPath(`matches/${matchId}/skillVotes/${uid}`))
-  if (!Object.keys(cleaned).length) await remove(r)
-  else await set(r, cleaned)
+
+  // 이전 vote 와 비교 — diff 계산 후 players.stats.skillTags 즉시 reconcile
+  // finalize 대기 없이 SkillRadarChart / FIFA 능력치에 즉시 반영
+  const matchSnap = await get(ref(rtdb, nsPath(`matches/${matchId}`)))
+  const matchData = matchSnap.val() || {}
+  const seasonId = matchData.seasonId || null
+  // 이미 finalize 된 경기 (votingClosed) 는 보호 — finalize 가 이미 누적함
+  if (matchData.votingClosed) {
+    throw new Error('이미 마감된 경기 — 투표를 변경할 수 없습니다.')
+  }
+  const prev = matchData.skillVotes?.[uid] || {}
+
+  const updates = {}
+  const allPids = new Set([...Object.keys(prev), ...Object.keys(cleaned)])
+  for (const pid of allPids) {
+    const prevTags = new Set(prev[pid] || [])
+    const newTags = new Set(cleaned[pid] || [])
+    // 추가된 태그 — +1
+    for (const tag of newTags) {
+      if (prevTags.has(tag)) continue
+      updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(1)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(1)
+    }
+    // 제거된 태그 — -1
+    for (const tag of prevTags) {
+      if (newTags.has(tag)) continue
+      updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(-1)
+      if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(-1)
+    }
+  }
+
+  // votes 자체 — 빈 객체면 제거, 아니면 set
+  updates[nsPath(`matches/${matchId}/skillVotes/${uid}`)] = Object.keys(cleaned).length ? cleaned : null
+
+  await update(ref(rtdb), updates)
 }
 
 // ───────────── 구장 (Venues) — 길찾기/즐겨찾기 ─────────────

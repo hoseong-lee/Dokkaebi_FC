@@ -17,10 +17,11 @@ const playersStore = usePlayersStore()
 const toast = useToast()
 const { votesMap, tally, totalVotes, saving, vote } = useMatchVotes(props.match.id)
 
+// MOM 후보는 정규 멤버만 — 용병 제외 (사용자 결정 2026-06-04)
 const candidates = computed(() =>
   (props.match.lineup || [])
     .map((id) => playersStore.getById(id))
-    .filter(Boolean)
+    .filter((p) => p && p.isRegular)
 )
 
 const myUid = computed(() => auth.user?.uid || null)

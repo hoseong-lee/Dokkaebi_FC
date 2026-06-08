@@ -75,6 +75,13 @@ const resultCardOpen = ref(false)
 
 // 3탭 — 결과 입력된 경기는 개요, 그 외는 참석 기본
 const activeTab = ref('overview')
+// 투표 stepper: 1=MOM / 2=칭찬 / 3=스킬
+const voteStep = ref(1)
+const voteSteps = [
+  { key: 'mom', label: 'MOM' },
+  { key: 'compliment', label: '칭찬' },
+  { key: 'skill', label: '스킬' }
+]
 watch(() => match.value?.status, (s) => {
   if (s === 'finished') activeTab.value = 'overview'
   else activeTab.value = 'rsvp'
@@ -338,11 +345,38 @@ watch(() => route.params.id, load)
       >📅 참석</button>
     </div>
 
-    <!-- ⭐ 투표 탭: MOM + 칭찬 + 스킬 -->
+    <!-- ⭐ 투표 탭: MOM → 칭찬 → 스킬 (순차 stepper) -->
     <template v-if="activeTab === 'vote' && isFinished">
-      <MomVotingSection :match="match" />
-      <ComplimentSection :match="match" />
-      <SkillVoteSection :match="match" />
+      <section class="bg-navy/5 rounded-2xl p-3">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-bold text-navy text-sm">🗳 경기 투표</h2>
+          <span class="text-xs text-gray-500 tabular-nums">{{ voteStep }} / 3</span>
+        </div>
+        <div class="flex gap-1.5">
+          <button
+            v-for="(s, i) in voteSteps" :key="s.key"
+            type="button"
+            class="flex-1 py-2 rounded-lg text-xs font-bold transition-colors"
+            :class="voteStep === i + 1 ? 'bg-navy text-white' : 'bg-white text-gray-500 hover:bg-gray-100 ring-1 ring-gray-200'"
+            @click="voteStep = i + 1"
+          >
+            {{ i + 1 }}. {{ s.label }}
+          </button>
+        </div>
+      </section>
+
+      <!-- 현재 단계만 표시 (v-show — composable 들이 백그라운드에서도 동작) -->
+      <MomVotingSection v-show="voteStep === 1" :match="match" />
+      <ComplimentSection v-show="voteStep === 2" :match="match" />
+      <SkillVoteSection v-show="voteStep === 3" :match="match" />
+
+      <!-- 이전 / 다음 -->
+      <div class="flex gap-2">
+        <BaseButton v-if="voteStep > 1" variant="secondary" @click="voteStep--">← 이전</BaseButton>
+        <div class="flex-1"></div>
+        <BaseButton v-if="voteStep < 3" variant="primary" @click="voteStep++">다음 →</BaseButton>
+        <BaseButton v-else variant="ghost" @click="voteStep = 1">처음으로 ↺</BaseButton>
+      </div>
     </template>
 
     <!-- 📅 참석 탭: RSVP + 날씨 -->
