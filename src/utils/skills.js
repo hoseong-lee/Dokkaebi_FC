@@ -14,7 +14,11 @@ export const SKILL_TAGS = [
   { id: 'teamwork',  label: '팀플레이',    icon: '🤝', tone: 'bg-amber-50 text-amber-800 ring-amber-300'        },
   { id: 'two_foot',  label: '양발 사용',   icon: '🦶', tone: 'bg-lime-50 text-lime-800 ring-lime-300'           },
   { id: 'set_piece', label: '세트피스',    icon: '🎯', tone: 'bg-purple-50 text-purple-800 ring-purple-300'     },
-  { id: 'aerial',    label: '공중볼',      icon: '⬆', tone: 'bg-fuchsia-50 text-fuchsia-800 ring-fuchsia-300'   }
+  { id: 'aerial',    label: '공중볼',      icon: '⬆', tone: 'bg-fuchsia-50 text-fuchsia-800 ring-fuchsia-300'   },
+  // 골키퍼 관련
+  { id: 'keeping',    label: '선방',       icon: '🧤', tone: 'bg-yellow-50 text-yellow-800 ring-yellow-300'     },
+  { id: 'reflexes',   label: '반사신경',   icon: '⚡', tone: 'bg-teal-50 text-teal-800 ring-teal-300'           },
+  { id: 'commanding', label: '위치선정',   icon: '🥅', tone: 'bg-stone-100 text-stone-800 ring-stone-300'       }
 ]
 
 export const SKILL_TAG_MAP = Object.fromEntries(SKILL_TAGS.map((t) => [t.id, t]))

@@ -7,7 +7,7 @@ import { SKILL_TAGS } from './skills'
 export const ATTR_MAP = [
   {
     id: 'PAC', label: 'PACE',  ko: '스피드', icon: '💨',
-    skills: { speed: 2, stamina: 1 }
+    skills: { speed: 2, stamina: 1, reflexes: 1 }
   },
   {
     id: 'SHO', label: 'SHOOT', ko: '슈팅', icon: '⚽',
@@ -23,11 +23,11 @@ export const ATTR_MAP = [
   },
   {
     id: 'DEF', label: 'DEFEND', ko: '수비', icon: '🛡',
-    skills: { defense: 2, aerial: 1, vision: 0.5 }
+    skills: { defense: 2, aerial: 1, vision: 0.5, keeping: 2, commanding: 1 }
   },
   {
     id: 'PHY', label: 'PHYS',  ko: '체력', icon: '💪',
-    skills: { stamina: 2, aerial: 1, teamwork: 1 }
+    skills: { stamina: 2, aerial: 1, teamwork: 1, commanding: 1 }
   }
 ]
 
@@ -97,7 +97,7 @@ const POSITION_FIT = [
   },
   {
     code: 'GK', label: '골키퍼', category: 'GK',
-    skills: { vision: 2, aerial: 2, teamwork: 1 }  // GK 전용 스킬 부재 — 일반치만
+    skills: { keeping: 3, reflexes: 2.5, commanding: 2, aerial: 1.5, vision: 1 }
   }
 ]
 

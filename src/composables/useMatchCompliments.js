@@ -3,6 +3,7 @@ import { ref as dbRef, onValue } from 'firebase/database'
 import { rtdb } from '@/firebase/config'
 import { nsPath, castCompliments } from '@/firebase/database'
 import { tallyComplimentTotals, tallyComplimentTags } from '@/utils/compliments'
+import { usePlayersStore } from '@/stores/players'
 
 // 경기 상세에서 실시간 구독.
 // match.compliments = { voterUid: { playerId: [tagId, ...] } }
@@ -17,10 +18,14 @@ export function useMatchCompliments(matchId) {
   const tagBreakdown = computed(() => tallyComplimentTags(map.value))
   const totalVoters = computed(() => Object.keys(map.value).length)
 
+  const playersStore = usePlayersStore()
   async function save(picks) {
     saving.value = true
     try {
       await castCompliments(matchId, picks)
+      // players.stats.complimentCount/Tags 가 즉시 reconcile 됐으니
+      // 클라이언트 캐시도 갱신 — 매너 점수 / 칭찬 분포 즉시 반영
+      await playersStore.fetchAll(true)
     } finally {
       saving.value = false
     }
