@@ -93,8 +93,8 @@ export function votingDeadline(match) {
 
 // 양상(intensity) — 쿼터 승차에 따른 5단계
 // big_win/win/draw/loss/big_loss + 1쿼터 차이는 close=true 부가 태그
-// 압도 기준: 4쿼터 중 3쿼터 이상 차이 (예: 4승 0패 / 3승 0패 1무)
-const BIG_QUARTER_DIFF = 3
+// 압도 기준: 4쿼터 중 2쿼터 이상 차이 (예: 3승 1패 / 4승 0패 / 3승 0패 1무)
+const BIG_QUARTER_DIFF = 2
 
 export function matchIntensity(match) {
   if (match?.status !== 'finished') return null
