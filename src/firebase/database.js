@@ -255,45 +255,43 @@ export async function recomputeAllStats() {
       ensure(m.momPlayerId).total.momCount += 1
       if (seasonId) ensureSeason(m.momPlayerId, seasonId).momCount += 1
     }
-    // 칭찬도 votingClosed=true 인 경기만 누적
-    if (m.votingClosed) {
-      const cTally = tallyComplimentTotals(m.compliments || {})
-      const cTagTally = tallyComplimentTags(m.compliments || {})
-      for (const [pid, count] of Object.entries(cTally)) {
-        if (!players[pid]) continue
-        ensure(pid).total.complimentCount += count
-        if (seasonId) ensureSeason(pid, seasonId).complimentCount += count
+    // 칭찬·스킬은 votingClosed 무관 — 즉시 reconcile 패턴 도입 후 모든 vote 가 stats 반영 대상
+    const cTally = tallyComplimentTotals(m.compliments || {})
+    const cTagTally = tallyComplimentTags(m.compliments || {})
+    for (const [pid, count] of Object.entries(cTally)) {
+      if (!players[pid]) continue
+      ensure(pid).total.complimentCount += count
+      if (seasonId) ensureSeason(pid, seasonId).complimentCount += count
+    }
+    for (const [pid, tags] of Object.entries(cTagTally)) {
+      if (!players[pid]) continue
+      const a = ensure(pid)
+      if (!a.total.complimentTags) a.total.complimentTags = {}
+      for (const [tag, count] of Object.entries(tags)) {
+        a.total.complimentTags[tag] = (a.total.complimentTags[tag] || 0) + count
       }
-      for (const [pid, tags] of Object.entries(cTagTally)) {
-        if (!players[pid]) continue
-        const a = ensure(pid)
-        if (!a.total.complimentTags) a.total.complimentTags = {}
+      if (seasonId) {
+        const s = ensureSeason(pid, seasonId)
+        if (!s.complimentTags) s.complimentTags = {}
         for (const [tag, count] of Object.entries(tags)) {
-          a.total.complimentTags[tag] = (a.total.complimentTags[tag] || 0) + count
-        }
-        if (seasonId) {
-          const s = ensureSeason(pid, seasonId)
-          if (!s.complimentTags) s.complimentTags = {}
-          for (const [tag, count] of Object.entries(tags)) {
-            s.complimentTags[tag] = (s.complimentTags[tag] || 0) + count
-          }
+          s.complimentTags[tag] = (s.complimentTags[tag] || 0) + count
         }
       }
-      // 스킬 평가 재계산
-      const sTagTally = tallySkillTags(m.skillVotes || {})
-      for (const [pid, tags] of Object.entries(sTagTally)) {
-        if (!players[pid]) continue
-        const a = ensure(pid)
-        if (!a.total.skillTags) a.total.skillTags = {}
+    }
+    // 스킬 평가 재계산 — 동일 (votingClosed 무관)
+    const sTagTally = tallySkillTags(m.skillVotes || {})
+    for (const [pid, tags] of Object.entries(sTagTally)) {
+      if (!players[pid]) continue
+      const a = ensure(pid)
+      if (!a.total.skillTags) a.total.skillTags = {}
+      for (const [tag, count] of Object.entries(tags)) {
+        a.total.skillTags[tag] = (a.total.skillTags[tag] || 0) + count
+      }
+      if (seasonId) {
+        const s = ensureSeason(pid, seasonId)
+        if (!s.skillTags) s.skillTags = {}
         for (const [tag, count] of Object.entries(tags)) {
-          a.total.skillTags[tag] = (a.total.skillTags[tag] || 0) + count
-        }
-        if (seasonId) {
-          const s = ensureSeason(pid, seasonId)
-          if (!s.skillTags) s.skillTags = {}
-          for (const [tag, count] of Object.entries(tags)) {
-            s.skillTags[tag] = (s.skillTags[tag] || 0) + count
-          }
+          s.skillTags[tag] = (s.skillTags[tag] || 0) + count
         }
       }
     }
