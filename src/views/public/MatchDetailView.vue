@@ -126,6 +126,7 @@ const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
 
 // 쿼터별 W/D/L 라인 — 새 판정 기준(쿼터 승수 우선) 시각화
+// + 각 쿼터의 도깨비 골 / 자책골 이벤트 미니 아이콘
 const quarterLine = computed(() => {
   if (!isFinished.value) return null
   const qs = match.value?.quarters || []
@@ -136,7 +137,20 @@ const quarterLine = computed(() => {
     let kind = 'D'
     if (dok > opp) kind = 'W'
     else if (dok < opp) kind = 'L'
-    return { idx: i + 1, kind, dok, opp }
+    const evs = Array.isArray(q?.events) ? q.events : []
+    const goals = evs
+      .filter((e) => e.type === 'goal')
+      .map((e) => ({
+        icon: '⚽',
+        name: playersStore.getById(e.playerId)?.name || '?'
+      }))
+    const ogs = evs
+      .filter((e) => e.type === 'own_goal')
+      .map((e) => ({
+        icon: '🥅',
+        name: playersStore.getById(e.playerId)?.name || '?'
+      }))
+    return { idx: i + 1, kind, dok, opp, goals, ogs }
   })
   const tally = quarterTally(match.value)
   return { items, tally }
@@ -212,15 +226,28 @@ watch(() => route.params.id, load)
       <!-- 쿼터별 결과 timeline (새 판정 기준 시각화) -->
       <div v-if="quarterLine" class="mt-3 pt-3 border-t border-gray-100">
         <p class="text-[10px] text-gray-400 text-center mb-2 font-semibold tracking-wide">쿼터별 결과</p>
-        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+        <div class="grid grid-cols-4 gap-1.5">
           <div
             v-for="q in quarterLine.items" :key="q.idx"
-            class="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg"
+            class="flex flex-col items-center gap-0.5 px-1.5 py-1.5 rounded-lg min-w-0"
             :class="Q_KIND_STYLE[q.kind].tone"
           >
             <span class="text-[9px] opacity-70 font-bold tracking-wider">Q{{ q.idx }}</span>
             <span class="text-base leading-none">{{ Q_KIND_STYLE[q.kind].icon }}</span>
             <span class="text-[10px] tabular-nums font-semibold">{{ q.dok }}:{{ q.opp }}</span>
+            <!-- 골 이벤트 미니 (도깨비 ⚽ + 자책 🥅) -->
+            <div v-if="q.goals.length || q.ogs.length" class="mt-0.5 flex flex-col items-center gap-0.5 w-full">
+              <span
+                v-for="(g, gi) in q.goals" :key="`g${gi}`"
+                class="text-[9px] leading-tight truncate max-w-full"
+                :title="`${g.name} 골`"
+              >⚽ {{ g.name }}</span>
+              <span
+                v-for="(g, gi) in q.ogs" :key="`o${gi}`"
+                class="text-[9px] leading-tight truncate max-w-full opacity-70"
+                :title="`${g.name} 자책골`"
+              >🥅 {{ g.name }}</span>
+            </div>
           </div>
         </div>
         <p class="text-[10px] text-center text-gray-500 mt-2 tabular-nums">
