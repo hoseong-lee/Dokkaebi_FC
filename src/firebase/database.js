@@ -160,9 +160,7 @@ export async function deleteMatch(id) {
   if (snap.exists()) {
     const data = snap.val()
     const seasonId = data.seasonId
-    const agg = Array.isArray(data.quarters) && data.quarters.length
-      ? aggregateQuarters(data.quarters)
-      : { events: data.events || [], lineup: data.lineup || [] }
+    const agg = prevAggregate(data) // 쿼터 우선, 옛 legacy events 폴백 — 통일
     const tally = tallyEvents(agg.events)
     const updates = {}
     for (const [pid, t] of Object.entries(tally)) {
@@ -228,9 +226,7 @@ export async function recomputeAllStats() {
 
   for (const m of Object.values(matches)) {
     const seasonId = m.seasonId || null
-    const agg = Array.isArray(m.quarters) && m.quarters.length
-      ? aggregateQuarters(m.quarters)
-      : { events: m.events || [], lineup: m.lineup || [] }
+    const agg = prevAggregate(m) // 쿼터 우선, 옛 legacy events 폴백 — 통일
     const tally = tallyEvents(agg.events)
 
     for (const pid of agg.lineup) {

@@ -11,6 +11,7 @@ import { useToast } from '@/composables/useToast'
 import { parseTimeString, formatTime } from '@/utils/youtube'
 import { useVenuesStore } from '@/stores/venues'
 import { incrementVenueUsage } from '@/firebase/database'
+import { normalizePositions } from '@/utils/squadPositions'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import SquadMaker from '@/components/match/SquadMaker.vue'
@@ -68,7 +69,8 @@ const squadCount = computed(() => squads.reduce((n, s) => n + (s.lineup?.length 
 function loadSquad(i, src) {
   squads[i].lineup = [...(src?.lineup || [])]
   squads[i].formation = src?.formation || ''
-  squads[i].positions = { ...(src?.positions || {}) }
+  // 옛 형식 자동 변환 — slotId key 보장
+  squads[i].positions = normalizePositions(src?.positions)
 }
 
 async function load() {
@@ -119,7 +121,7 @@ async function save() {
       ? squads.map((s) => ({
           lineup: s.lineup,
           formation: s.formation || null,
-          positions: s.positions || {}
+          positions: normalizePositions(s.positions) // 저장 시 새 형식 보장
         }))
       : null
 

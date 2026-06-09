@@ -5,6 +5,7 @@ import { useMatchesStore } from '@/stores/matches'
 import { usePlayersStore } from '@/stores/players'
 import { formatDateTime } from '@/utils/date'
 import { useToast } from '@/composables/useToast'
+import { normalizePositions } from '@/utils/squadPositions'
 import BaseButton from '@/components/common/BaseButton.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import QuarterEditor from '@/components/match/QuarterEditor.vue'
@@ -98,7 +99,7 @@ async function load() {
               lineup: [...(e.lineup || [])],
               events: (e.events || []).map((x) => ({ ...x })),
               formation: e.formation || '',
-              positions: { ...(e.positions || {}) }
+              positions: normalizePositions(e.positions) // 옛 형식 자동 변환
             }
           : emptyQuarter()
       }
@@ -119,7 +120,7 @@ async function submit() {
         lineup: q.lineup,
         events: q.events,
         formation: q.formation || null,
-        positions: q.positions || {}
+        positions: normalizePositions(q.positions) // 저장 시 새 형식 보장
       })),
       momPlayerId: momPlayerId.value,
       notes: notes.value
