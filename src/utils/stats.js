@@ -1,5 +1,14 @@
 export function emptyStats() {
-  return { appearances: 0, goals: 0, assists: 0, momCount: 0, complimentCount: 0 }
+  return {
+    appearances: 0,
+    goals: 0,
+    assists: 0,
+    momCount: 0,
+    complimentCount: 0,
+    // 명시적으로 빈 객체 — recomputeAllStats 시 옛 잔여 태그가 자동 제거되도록
+    skillTags: {},
+    complimentTags: {}
+  }
 }
 
 export function attackPoints(stats) {

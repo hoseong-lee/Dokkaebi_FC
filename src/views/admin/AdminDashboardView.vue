@@ -39,7 +39,13 @@ async function runRecomputeStats() {
   try {
     const res = await recomputeAllStats()
     await playersStore.fetchAll(true)
-    toast.success(`재계산 완료: 선수 ${res.players}명 · 경기 ${res.matches}개`)
+    toast.success(
+      `재계산 완료\n` +
+      `선수 ${res.players}명 · 경기 ${res.matches}개\n` +
+      `⭐ 스킬 vote 누적: ${res.skillVoteTotal}건 (${res.playersWithSkill}명)\n` +
+      `🙏 칭찬 vote 누적: ${res.complimentVoteTotal}건 (${res.playersWithCompliment}명)`,
+      8000
+    )
   } catch (e) {
     toast.error(`재계산 실패: ${e?.code || e?.message || e}`)
   } finally {

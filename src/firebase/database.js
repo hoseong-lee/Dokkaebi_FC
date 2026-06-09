@@ -297,17 +297,32 @@ export async function recomputeAllStats() {
     }
   }
 
+  // 진단: 누적된 vote 가 실제 stats 에 반영됐는지 확인용
+  let skillCount = 0
+  let complimentCount = 0
+  let playersWithSkill = 0
+  let playersWithCompliment = 0
+
   const updates = {}
   for (const [pid, a] of Object.entries(acc)) {
     updates[nsPath(`players/${pid}/stats`)] = a.total
     updates[nsPath(`players/${pid}/seasonStats`)] = a.bySeason
+    const skSum = Object.values(a.total.skillTags || {}).reduce((s, n) => s + n, 0)
+    const cmSum = Object.values(a.total.complimentTags || {}).reduce((s, n) => s + n, 0)
+    if (skSum > 0) { playersWithSkill++; skillCount += skSum }
+    if (cmSum > 0) { playersWithCompliment++; complimentCount += cmSum }
   }
   await update(ref(rtdb), updates)
-  await logAudit('update', 'players/stats-recompute', {
+  const result = {
     players: Object.keys(acc).length,
-    matches: Object.keys(matches).length
-  })
-  return { players: Object.keys(acc).length, matches: Object.keys(matches).length }
+    matches: Object.keys(matches).length,
+    skillVoteTotal: skillCount,
+    playersWithSkill,
+    complimentVoteTotal: complimentCount,
+    playersWithCompliment
+  }
+  await logAudit('update', 'players/stats-recompute', result)
+  return result
 }
 
 function bump(updates, playerId, seasonId, field, delta) {
