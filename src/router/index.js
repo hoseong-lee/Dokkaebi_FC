@@ -166,6 +166,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/chemistry',
+    name: 'chemistry',
+    component: () => import('@/views/public/ChemistryView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/gps-analysis',
     name: 'gps-analysis',
     component: () => import('@/views/public/GpsAnalysisView.vue'),

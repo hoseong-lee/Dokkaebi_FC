@@ -15,7 +15,8 @@ const tiles = [
   { to: '/analytics', label: '승률 분석', icon: '📊', desc: '포메이션·선수·상대팀별 인사이트' },
   { to: '/highlights', label: '베스트 골 모음', icon: '🏅', desc: '시즌 명장면 영상 모아보기 + 단톡 공유' },
   { to: '/venues', label: '우리 구장', icon: '🗺', desc: '자주 가는 구장 + 네이버지도 길찾기' },
-  { to: '/gps-analysis', label: 'GPS 분석 🚧', icon: '🏃', desc: '경기 GPS 트랙 → 거리/활동범위 (개발중)' }
+  { to: '/gps-analysis', label: 'GPS 분석 🚧', icon: '🏃', desc: '경기 GPS 트랙 → 거리/활동범위 (개발중)' },
+  { to: '/chemistry', label: '🤝 케미스트리', icon: '🤝', desc: '같이 뛸 때 시너지 나는 페어' }
 ]
 </script>
 
