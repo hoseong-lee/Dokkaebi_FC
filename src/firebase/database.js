@@ -175,26 +175,24 @@ export async function deleteMatch(id) {
     if (data.momPlayerId) {
       bump(updates, data.momPlayerId, seasonId, 'momCount', -1)
     }
-    // 칭찬도 차감 (votingClosed=true 인 경우만, 미확정이면 누적 안 됐으므로 skip)
-    if (data.votingClosed) {
-      const cTally = tallyComplimentTotals(data.compliments || {})
-      const cTagTally = tallyComplimentTags(data.compliments || {})
-      for (const [pid, count] of Object.entries(cTally)) {
-        bump(updates, pid, seasonId, 'complimentCount', -count)
+    // 칭찬·스킬 차감 — votingClosed 무관 (즉시 reconcile 패턴 도입 후 모든 vote 가 stats 누적 대상)
+    const cTally = tallyComplimentTotals(data.compliments || {})
+    const cTagTally = tallyComplimentTags(data.compliments || {})
+    for (const [pid, count] of Object.entries(cTally)) {
+      bump(updates, pid, seasonId, 'complimentCount', -count)
+    }
+    for (const [pid, tags] of Object.entries(cTagTally)) {
+      for (const [tag, count] of Object.entries(tags)) {
+        updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(-count)
+        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(-count)
       }
-      for (const [pid, tags] of Object.entries(cTagTally)) {
-        for (const [tag, count] of Object.entries(tags)) {
-          updates[nsPath(`players/${pid}/stats/complimentTags/${tag}`)] = increment(-count)
-          if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/complimentTags/${tag}`)] = increment(-count)
-        }
-      }
-      // 스킬 평가 차감
-      const sTagTally = tallySkillTags(data.skillVotes || {})
-      for (const [pid, tags] of Object.entries(sTagTally)) {
-        for (const [tag, count] of Object.entries(tags)) {
-          updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(-count)
-          if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(-count)
-        }
+    }
+    // 스킬 평가 차감
+    const sTagTally = tallySkillTags(data.skillVotes || {})
+    for (const [pid, tags] of Object.entries(sTagTally)) {
+      for (const [tag, count] of Object.entries(tags)) {
+        updates[nsPath(`players/${pid}/stats/skillTags/${tag}`)] = increment(-count)
+        if (seasonId) updates[nsPath(`players/${pid}/seasonStats/${seasonId}/skillTags/${tag}`)] = increment(-count)
       }
     }
     if (Object.keys(updates).length > 0) {
