@@ -17,6 +17,16 @@
   <title>도깨비 FC</title>
   <script>
     (function () {
+      try {
+        var saved = localStorage.getItem('dokkaebi-theme') || 'system'
+        var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        var dark = saved === 'dark' || (saved === 'system' && systemDark)
+        if (dark) document.documentElement.classList.add('dark')
+      } catch (e) {}
+    })()
+  </script>
+  <script>
+    (function () {
       var redirect = sessionStorage.redirect
       delete sessionStorage.redirect
       if (redirect && redirect != location.href) {

@@ -22,17 +22,17 @@ const tiles = [
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">더보기</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">더보기</h1>
     <div class="grid grid-cols-2 gap-3">
       <RouterLink
         v-for="t in tiles"
         :key="t.to"
         :to="t.to"
-        class="bg-white rounded-2xl shadow-sm p-5 hover:shadow transition-shadow"
+        class="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm p-5 hover:shadow transition-shadow"
       >
         <div class="text-3xl">{{ t.icon }}</div>
-        <p class="font-bold text-navy mt-2">{{ t.label }}</p>
-        <p class="text-xs text-gray-500 mt-1">{{ t.desc }}</p>
+        <p class="font-bold text-navy dark:text-zinc-100 mt-2">{{ t.label }}</p>
+        <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">{{ t.desc }}</p>
       </RouterLink>
       <RouterLink
         v-if="auth.isAdmin"

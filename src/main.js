@@ -6,10 +6,15 @@ import './assets/styles/main.css'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { onForegroundMessage } from './firebase/messaging'
 import { pushToast } from './composables/useToast'
+import { useThemeStore } from './stores/theme'
 
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
+
+// theme store 초기화 — html.dark 클래스 적용 + system 모드 OS 변경 감지
+useThemeStore()
+
 app.mount('#app')
 
 // 메인 Service Worker 등록 (정적 자산 캐싱 + 오프라인)

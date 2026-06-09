@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
+import { useThemeStore } from '@/stores/theme'
 import { useToast } from '@/composables/useToast'
 import { POSITION_LABEL, POSITION_BADGE_STRONG, seasonStatsOf } from '@/utils/stats'
 import { POSITION_OPTIONS, POSITION_LABEL as POS_DETAIL_LABEL, POSITION_CATEGORY } from '@/utils/positions'
@@ -28,7 +29,14 @@ const auth = useAuthStore()
 const playersStore = usePlayersStore()
 const seasonStore = useSeasonStore()
 const matchesStore = useMatchesStore()
+const themeStore = useThemeStore()
 const toast = useToast()
+
+const themeOptions = [
+  { v: 'light', l: '☀️ 라이트' },
+  { v: 'system', l: '⚙️ 시스템' },
+  { v: 'dark', l: '🌙 다크' }
+]
 
 const loading = ref(true)
 const saving = ref(false)
@@ -149,38 +157,58 @@ function onAvatarSelect(url) {
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">내 정보</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">내 정보</h1>
 
     <LoadingSpinner v-if="loading" />
 
     <div v-else class="space-y-4">
       <!-- 계정 정보 -->
-      <section class="bg-white rounded-2xl shadow p-5">
-        <h2 class="font-bold text-navy mb-3">계정</h2>
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+        <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">계정</h2>
         <div class="flex items-center gap-3">
           <img
             v-if="auth.user?.photoURL"
             :src="auth.user.photoURL"
             referrerpolicy="no-referrer"
             alt="google"
-            class="w-14 h-14 rounded-full ring-1 ring-gray-200"
+            class="w-14 h-14 rounded-full ring-1 ring-gray-200 dark:ring-zinc-700"
           />
           <div class="flex-1 min-w-0">
-            <p class="font-semibold truncate">{{ auth.user?.displayName }}</p>
-            <p class="text-xs text-gray-500 truncate">{{ auth.user?.email }}</p>
-            <p class="text-xs text-gray-400 mt-0.5">
+            <p class="font-semibold truncate dark:text-zinc-100">{{ auth.user?.displayName }}</p>
+            <p class="text-xs text-gray-500 dark:text-zinc-400 truncate">{{ auth.user?.email }}</p>
+            <p class="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">
               권한: {{ auth.isAdmin ? '관리자' : '멤버' }}
             </p>
           </div>
         </div>
       </section>
 
+      <!-- 테마 -->
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+        <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">🌙 테마</h2>
+        <div class="flex gap-2">
+          <button
+            v-for="opt in themeOptions"
+            :key="opt.v"
+            type="button"
+            class="flex-1 py-2 rounded-lg text-sm font-bold transition-colors"
+            :class="themeStore.setting === opt.v
+              ? 'bg-navy text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600'"
+            @click="themeStore.setTheme(opt.v)"
+          >{{ opt.l }}</button>
+        </div>
+        <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
+          시스템 모드는 기기 OS 설정을 따라갑니다.
+        </p>
+      </section>
+
       <!-- 푸시 알림 -->
-      <section class="bg-white rounded-2xl shadow p-5">
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
         <div class="flex items-center justify-between gap-3">
           <div class="flex-1 min-w-0">
-            <h2 class="font-bold text-navy flex items-center gap-2">🔔 알림</h2>
-            <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+            <h2 class="font-bold text-navy dark:text-zinc-100 flex items-center gap-2">🔔 알림</h2>
+            <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1 leading-relaxed">
               <template v-if="!pushSupported">
                 이 브라우저는 푸시 알림을 지원하지 않습니다.
                 <span class="block text-amber-700 mt-0.5">📲 iOS 는 홈 화면에 추가한 뒤 가능합니다.</span>
@@ -199,7 +227,7 @@ function onAvatarSelect(url) {
           <button
             type="button"
             class="shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-colors disabled:opacity-50"
-            :class="pushEnabled ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'"
+            :class="pushEnabled ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600'"
             :disabled="pushBusy || !pushSupported || pushPerm === 'denied'"
             @click="togglePush"
           >
@@ -211,19 +239,19 @@ function onAvatarSelect(url) {
       </section>
 
       <!-- 연결된 선수 -->
-      <section class="bg-white rounded-2xl shadow p-5">
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-bold text-navy">연결된 선수</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100">연결된 선수</h2>
           <!-- 일반 사용자는 변경 불가 — 관리자만 가능 (다른 선수 프로필 오염 방지) -->
           <BaseButton v-if="auth.isAdmin" size="sm" variant="ghost" @click="linkModalOpen = true">
             {{ myPlayer ? '변경' : '연결' }}
           </BaseButton>
-          <span v-else-if="myPlayer" class="text-[10px] text-gray-400">🔒 관리자만 변경</span>
+          <span v-else-if="myPlayer" class="text-[10px] text-gray-400 dark:text-zinc-500">🔒 관리자만 변경</span>
         </div>
         <div v-if="myPlayer" class="flex items-center gap-3">
           <PlayerAvatar :player="myPlayer" :size="56" />
           <div class="flex-1 min-w-0">
-            <p class="font-semibold">
+            <p class="font-semibold dark:text-zinc-100">
               {{ myPlayer.name }}
               <span v-if="myPlayer.number != null" class="text-dokkaebi font-bold">#{{ myPlayer.number }}</span>
               <span v-if="myPlayer.isRegular" class="text-amber-500 text-xs">★</span>
@@ -235,7 +263,7 @@ function onAvatarSelect(url) {
               >
                 {{ POSITION_LABEL[myPlayer.position] || myPlayer.position }}
               </span>
-              <span v-if="myPlayer.mainPosition" class="text-[10px] text-gray-500">
+              <span v-if="myPlayer.mainPosition" class="text-[10px] text-gray-500 dark:text-zinc-400">
                 {{ myPlayer.mainPosition }}<span v-if="myPlayer.subPosition"> / {{ myPlayer.subPosition }}</span>
               </span>
             </div>
@@ -251,24 +279,24 @@ function onAvatarSelect(url) {
       </section>
 
       <!-- 내 시즌 통계 (연결된 선수에만) -->
-      <section v-if="myPlayer && seasonStats" class="bg-white rounded-2xl shadow p-5">
+      <section v-if="myPlayer && seasonStats" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-bold text-navy">내 기록 · {{ seasonName }}</h2>
-          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy hover:underline">
+          <h2 class="font-bold text-navy dark:text-zinc-100">내 기록 · {{ seasonName }}</h2>
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy dark:text-zinc-200 hover:underline">
             전체 보기 →
           </RouterLink>
         </div>
         <PlayerStatsCards :stats="seasonStats" />
-        <p class="text-center text-xs text-gray-400 mt-2">
+        <p class="text-center text-xs text-gray-400 dark:text-zinc-500 mt-2">
           통산 {{ totalStats.appearances || 0 }}경기 · {{ totalStats.goals || 0 }}G · {{ totalStats.assists || 0 }}A · {{ totalStats.momCount || 0 }}MOM · 💝 {{ totalStats.complimentCount || 0 }}
         </p>
       </section>
 
       <!-- 내 FIFA 능력치 카드 -->
-      <section v-if="myPlayer" class="bg-white rounded-2xl shadow p-5">
+      <section v-if="myPlayer" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-bold text-navy">🎮 내 능력치 카드</h2>
-          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy hover:underline">상세 보기 →</RouterLink>
+          <h2 class="font-bold text-navy dark:text-zinc-100">🎮 내 능력치 카드</h2>
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy dark:text-zinc-200 hover:underline">상세 보기 →</RouterLink>
         </div>
         <SkillRadarChart
           :skill-tags="myPlayer.stats?.skillTags || {}"
@@ -278,9 +306,9 @@ function onAvatarSelect(url) {
       </section>
 
       <!-- 내 단짝 + 뱃지 -->
-      <section v-if="myPlayer && (topPartners.length || myBadges.length)" class="bg-white rounded-2xl shadow p-5 space-y-4">
+      <section v-if="myPlayer && (topPartners.length || myBadges.length)" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-4">
         <div v-if="topPartners.length">
-          <h2 class="font-bold text-navy mb-2">⭐ 내 단짝</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">⭐ 내 단짝</h2>
           <ul class="space-y-1.5">
             <li
               v-for="p in topPartners"
@@ -288,82 +316,82 @@ function onAvatarSelect(url) {
               class="flex items-center gap-2 text-sm"
             >
               <PlayerAvatar :player="p.player" :size="32" />
-              <RouterLink :to="`/players/${p.partnerId}`" class="flex-1 font-medium hover:underline">
+              <RouterLink :to="`/players/${p.partnerId}`" class="flex-1 font-medium hover:underline dark:text-zinc-100">
                 {{ p.player.name }}
               </RouterLink>
-              <span class="text-xs text-gray-500">콤비 <span class="font-bold text-navy">{{ p.count }}</span>회</span>
+              <span class="text-xs text-gray-500 dark:text-zinc-400">콤비 <span class="font-bold text-navy dark:text-zinc-100">{{ p.count }}</span>회</span>
             </li>
           </ul>
         </div>
         <div v-if="myBadges.length">
-          <h2 class="font-bold text-navy mb-2">🏅 내 뱃지</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">🏅 내 뱃지</h2>
           <div class="flex flex-wrap gap-1.5">
             <span
               v-for="b in myBadges"
               :key="b.id"
               class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-xs font-semibold"
-              :class="BADGE_TONE[b.icon] || 'bg-gray-50 text-gray-700 border-gray-200'"
+              :class="BADGE_TONE[b.icon] || 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600'"
               :title="b.desc"
             >
               <span>{{ b.icon }}</span>{{ b.label }}
             </span>
           </div>
-          <RouterLink :to="`/players/${myPlayer.id}`" class="text-[11px] text-navy hover:underline mt-2 inline-block">
+          <RouterLink :to="`/players/${myPlayer.id}`" class="text-[11px] text-navy dark:text-zinc-200 hover:underline mt-2 inline-block">
             전체 뱃지 보기 →
           </RouterLink>
         </div>
       </section>
 
       <!-- 프로필 사진 + 한마디 (연결된 선수에만 적용) -->
-      <section v-if="myPlayer" class="bg-white rounded-2xl shadow p-5 space-y-5">
+      <section v-if="myPlayer" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-5">
         <div>
-          <h2 class="font-bold text-navy mb-2">프로필 사진</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">프로필 사진</h2>
           <AvatarPicker :current="photoURL" :name="myPlayer.name" @select="onAvatarSelect" />
-          <p class="text-[11px] text-gray-400 mt-2">
+          <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
             샘플 캐릭터(도깨비FC 유니폼) 또는 직접 사진 업로드.
           </p>
         </div>
 
         <div>
-          <h2 class="font-bold text-navy mb-2">한마디</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">한마디</h2>
           <textarea
             v-model="bio"
             rows="2"
             maxlength="80"
             placeholder="ex) 슈팅보다 도움 더 좋아하는 윙백"
-            class="w-full border rounded-lg px-3 py-2 text-sm"
+            class="w-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 dark:text-zinc-100 rounded-lg px-3 py-2 text-sm"
           ></textarea>
-          <p class="text-[11px] text-gray-400 mt-1 text-right">{{ bio.length }}/80</p>
+          <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-1 text-right">{{ bio.length }}/80</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <h2 class="font-bold text-navy mb-2">⚽ 좋아하는 클럽</h2>
+            <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">⚽ 좋아하는 클럽</h2>
             <ClubPicker v-model="favoriteClub" />
           </div>
           <div>
-            <h2 class="font-bold text-navy mb-2">⭐ 최애 선수</h2>
+            <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">⭐ 최애 선수</h2>
             <input
               v-model="favoritePlayer"
               type="text"
               maxlength="30"
               placeholder="예: 메시"
-              class="w-full border rounded-lg px-3 py-2 text-sm"
+              class="w-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 dark:text-zinc-100 rounded-lg px-3 py-2 text-sm"
             />
           </div>
         </div>
 
         <!-- 선호 포지션 -->
         <div>
-          <h2 class="font-bold text-navy mb-1">🎯 선호 포지션</h2>
-          <p class="text-[11px] text-gray-400 mb-3">자주 뛰는 자리를 표시하면 스쿼드 짤 때 참고됩니다.</p>
+          <h2 class="font-bold text-navy dark:text-zinc-100 mb-1">🎯 선호 포지션</h2>
+          <p class="text-[11px] text-gray-400 dark:text-zinc-500 mb-3">자주 뛰는 자리를 표시하면 스쿼드 짤 때 참고됩니다.</p>
 
-          <p class="text-xs text-gray-600 font-semibold mb-1.5">주 포지션</p>
+          <p class="text-xs text-gray-600 dark:text-zinc-400 font-semibold mb-1.5">주 포지션</p>
           <div class="flex flex-wrap gap-1.5 mb-3">
             <button
               type="button"
               class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors"
-              :class="mainPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50'"
+              :class="mainPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300 dark:bg-zinc-700 dark:text-zinc-200 dark:ring-zinc-600' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50 dark:bg-zinc-900 dark:text-zinc-500 dark:ring-zinc-700 dark:hover:bg-zinc-800'"
               @click="mainPos = ''"
             >미정</button>
             <template v-for="grp in POSITION_OPTIONS" :key="grp.group">
@@ -373,18 +401,18 @@ function onAvatarSelect(url) {
                 class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors font-semibold"
                 :class="mainPos === code
                   ? POSITION_BADGE_STRONG[POSITION_CATEGORY[code]] + ' ring-current shadow-sm'
-                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50'"
+                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50 dark:bg-zinc-900 dark:text-zinc-400 dark:ring-zinc-700 dark:hover:bg-zinc-800'"
                 @click="mainPos = code; if (subPos === code) subPos = ''"
               >{{ code }} {{ POS_DETAIL_LABEL[code] }}</button>
             </template>
           </div>
 
-          <p class="text-xs text-gray-600 font-semibold mb-1.5">예비 포지션 (선택)</p>
+          <p class="text-xs text-gray-600 dark:text-zinc-400 font-semibold mb-1.5">예비 포지션 (선택)</p>
           <div class="flex flex-wrap gap-1.5">
             <button
               type="button"
               class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors"
-              :class="subPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50'"
+              :class="subPos === '' ? 'bg-gray-200 text-gray-700 ring-gray-300 dark:bg-zinc-700 dark:text-zinc-200 dark:ring-zinc-600' : 'bg-white text-gray-400 ring-gray-200 hover:bg-gray-50 dark:bg-zinc-900 dark:text-zinc-500 dark:ring-zinc-700 dark:hover:bg-zinc-800'"
               @click="subPos = ''"
             >없음</button>
             <template v-for="grp in POSITION_OPTIONS" :key="grp.group">
@@ -395,7 +423,7 @@ function onAvatarSelect(url) {
                 class="text-xs px-2.5 py-1 rounded-full ring-1 transition-colors font-semibold disabled:opacity-30 disabled:cursor-not-allowed"
                 :class="subPos === code
                   ? POSITION_BADGE_STRONG[POSITION_CATEGORY[code]] + ' ring-current shadow-sm'
-                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50'"
+                  : 'bg-white text-gray-500 ring-gray-200 hover:bg-gray-50 dark:bg-zinc-900 dark:text-zinc-400 dark:ring-zinc-700 dark:hover:bg-zinc-800'"
                 @click="subPos = code"
               >{{ code }} {{ POS_DETAIL_LABEL[code] }}</button>
             </template>

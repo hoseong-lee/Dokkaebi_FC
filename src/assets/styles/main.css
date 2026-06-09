@@ -14,7 +14,7 @@ body,
 }
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-gray-50 text-gray-900 dark:bg-zinc-900 dark:text-zinc-100;
 }
 
 /* iOS PWA 다이나믹 아일랜드 / 노치 / 홈 인디케이터 safe-area 처리.

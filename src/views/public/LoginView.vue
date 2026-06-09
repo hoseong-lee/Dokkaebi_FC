@@ -22,21 +22,21 @@ async function handleLogin() {
 
 <template>
   <div class="min-h-[60vh] flex items-center justify-center">
-    <div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 text-center">
+    <div class="w-full max-w-sm bg-white dark:bg-zinc-800 rounded-2xl shadow-lg p-8 text-center">
       <img
         :src="emblemSrc"
         alt="DOKKEBY FC"
         class="w-24 h-24 mx-auto mb-3 rounded-full ring-2 ring-gold/60 shadow"
       />
-      <h1 class="text-2xl font-bold text-onyx tracking-wide">도깨비 FC</h1>
+      <h1 class="text-2xl font-bold text-onyx dark:text-zinc-100 tracking-wide">도깨비 FC</h1>
       <p class="text-xs text-gold font-semibold tracking-[0.3em] mt-1">DOKKEBY FOOTBALL CLUB</p>
-      <p class="text-sm text-gray-500 mt-3 mb-8">
+      <p class="text-sm text-gray-500 dark:text-zinc-400 mt-3 mb-8">
         등록된 회원만 로그인할 수 있습니다.<br>
-        <span class="text-[11px] text-gray-400">처음이신가요? 그래도 일단 로그인해주세요 — 자동으로 가입 신청이 접수됩니다.</span>
+        <span class="text-[11px] text-gray-400 dark:text-zinc-500">처음이신가요? 그래도 일단 로그인해주세요 — 자동으로 가입 신청이 접수됩니다.</span>
       </p>
 
       <button
-        class="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-3 font-medium hover:bg-gray-50 transition-colors disabled:opacity-60"
+        class="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-zinc-700 dark:text-zinc-100 rounded-lg py-3 font-medium hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors disabled:opacity-60"
         :disabled="loading"
         @click="handleLogin"
       >
