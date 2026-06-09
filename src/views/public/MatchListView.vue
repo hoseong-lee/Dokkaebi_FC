@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import { useMatchesStore } from '@/stores/matches'
 import MatchCard from '@/components/match/MatchCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -9,6 +10,9 @@ const store = useMatchesStore()
 const tab = ref('upcoming') // upcoming | finished
 
 const list = computed(() => (tab.value === 'upcoming' ? store.upcoming : store.finished))
+
+// MatchCard: p-4 + 3 row + mt-2 + space-y-3 (12px) → 약 112px
+const ITEM_HEIGHT = 112
 
 onMounted(async () => { await store.fetchAll() })
 </script>
@@ -40,8 +44,24 @@ onMounted(async () => { await store.fetchAll() })
       icon="📅"
       :title="tab === 'upcoming' ? '예정된 경기가 없습니다' : '완료된 경기가 없습니다'"
     />
-    <div v-else class="space-y-3">
-      <MatchCard v-for="m in list" :key="m.id" :match="m" />
-    </div>
+    <RecycleScroller
+      v-else
+      class="match-scroller"
+      :items="list"
+      :item-size="ITEM_HEIGHT"
+      key-field="id"
+      page-mode
+      v-slot="{ item }"
+    >
+      <div class="pb-3">
+        <MatchCard :match="item" />
+      </div>
+    </RecycleScroller>
   </div>
 </template>
+
+<style scoped>
+.match-scroller {
+  min-height: 200px;
+}
+</style>

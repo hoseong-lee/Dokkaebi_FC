@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import './assets/styles/main.css'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { onForegroundMessage } from './firebase/messaging'
 import { pushToast } from './composables/useToast'
 

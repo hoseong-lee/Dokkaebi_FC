@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import { usePlayersStore } from '@/stores/players'
 import { POSITION_ORDER, POSITION_LABEL, POSITION_BADGE, POSITION_BADGE_STRONG } from '@/utils/stats'
 import PlayerCard from '@/components/player/PlayerCard.vue'
@@ -20,7 +21,19 @@ const visible = computed(() => {
   return list.filter((p) => p.position === filter.value)
 })
 
-onMounted(async () => { await store.fetchAll() })
+// PlayerCard: p-3 + avatar 48 + gap-2 (8px) → row 약 80px
+const ITEM_HEIGHT = 80
+// sm breakpoint(640px) 이상 2열, 미만 1열 — window 너비 기반 반응형
+const gridColumns = ref(1)
+function syncGridColumns() {
+  gridColumns.value = window.innerWidth >= 640 ? 2 : 1
+}
+
+onMounted(async () => {
+  syncGridColumns()
+  window.addEventListener('resize', syncGridColumns)
+  await store.fetchAll()
+})
 </script>
 
 <template>
@@ -50,8 +63,25 @@ onMounted(async () => { await store.fetchAll() })
       title="등록된 선수가 없습니다"
       description="관리자가 선수를 등록하면 이곳에 표시됩니다."
     />
-    <div v-else class="grid gap-2 sm:grid-cols-2">
-      <PlayerCard v-for="p in visible" :key="p.id" :player="p" />
-    </div>
+    <RecycleScroller
+      v-else
+      class="player-scroller"
+      :items="visible"
+      :item-size="ITEM_HEIGHT"
+      :grid-items="gridColumns"
+      key-field="id"
+      page-mode
+      v-slot="{ item }"
+    >
+      <div class="px-1 pb-2">
+        <PlayerCard :player="item" />
+      </div>
+    </RecycleScroller>
   </div>
 </template>
+
+<style scoped>
+.player-scroller {
+  min-height: 200px;
+}
+</style>
