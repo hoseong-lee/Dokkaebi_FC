@@ -66,10 +66,14 @@ async function toggleTag(pid, tagId) {
   }
   saving.value = true
   try {
+    const affectedIds = new Set([
+      ...Object.keys(prev || {}),
+      ...Object.keys(localPicks.value || {})
+    ])
     await castSkillVotes(props.match.id, localPicks.value)
     // DB 의 players.stats.skillTags 가 atomic update 됐으므로
-    // 클라이언트 캐시도 새로 fetch — SkillRadarChart 즉시 갱신
-    await playersStore.fetchAll(true)
+    // 변경된 선수만 부분 refetch — SkillRadarChart 즉시 갱신
+    await playersStore.refetchPlayers([...affectedIds])
   } catch (e) {
     toast.error(`저장 실패: ${e?.message || e}`)
     localPicks.value = prev

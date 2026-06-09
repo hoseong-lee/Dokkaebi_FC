@@ -74,6 +74,29 @@ export const usePlayersStore = defineStore('players', () => {
     })
   }
 
+  async function refetchPlayer(id) {
+    const fresh = await getPlayer(id)
+    if (!fresh) return null
+    const idx = players.value.findIndex((p) => p.id === id)
+    if (idx >= 0) players.value[idx] = fresh
+    else players.value.push(fresh)
+    return fresh
+  }
+
+  async function refetchPlayers(ids) {
+    if (!Array.isArray(ids) || ids.length === 0) return
+    const uniques = [...new Set(ids)]
+    const results = await Promise.all(uniques.map((id) => getPlayer(id)))
+    const next = [...players.value]
+    for (const fresh of results) {
+      if (!fresh) continue
+      const idx = next.findIndex((p) => p.id === fresh.id)
+      if (idx >= 0) next[idx] = fresh
+      else next.push(fresh)
+    }
+    players.value = next
+  }
+
   return {
     players,
     loading,
@@ -86,6 +109,8 @@ export const usePlayersStore = defineStore('players', () => {
     add,
     update,
     remove,
-    sortedByPosition
+    sortedByPosition,
+    refetchPlayer,
+    refetchPlayers
   }
 })

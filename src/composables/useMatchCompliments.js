@@ -1,6 +1,6 @@
 import { ref, computed, onUnmounted } from 'vue'
 import { ref as dbRef, onValue } from 'firebase/database'
-import { rtdb } from '@/firebase/config'
+import { rtdb, auth } from '@/firebase/config'
 import { nsPath, castCompliments } from '@/firebase/database'
 import { tallyComplimentTotals, tallyComplimentTags } from '@/utils/compliments'
 import { usePlayersStore } from '@/stores/players'
@@ -22,10 +22,16 @@ export function useMatchCompliments(matchId) {
   async function save(picks) {
     saving.value = true
     try {
+      const myUid = auth.currentUser?.uid
+      const prev = myUid ? (map.value[myUid] || {}) : {}
+      const affectedIds = new Set([
+        ...Object.keys(prev),
+        ...Object.keys(picks || {})
+      ])
       await castCompliments(matchId, picks)
       // players.stats.complimentCount/Tags 가 즉시 reconcile 됐으니
-      // 클라이언트 캐시도 갱신 — 매너 점수 / 칭찬 분포 즉시 반영
-      await playersStore.fetchAll(true)
+      // 변경된 선수만 부분 refetch — 매너 점수 / 칭찬 분포 즉시 반영
+      await playersStore.refetchPlayers([...affectedIds])
     } finally {
       saving.value = false
     }
