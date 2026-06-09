@@ -108,9 +108,10 @@ const matchVenue = computed(() => {
   if (m.location) return { name: m.location, address: m.location, lat: null, lng: null }
   return null
 })
+const venueGetter = (id) => venuesStore.getById(id)
 function downloadIcs() {
   if (!match.value) return
-  downloadMatchICS(match.value)
+  downloadMatchICS(match.value, venueGetter)
   toast.success('일정 파일을 다운로드했습니다.')
   calendarOpen.value = false
 }
@@ -533,7 +534,7 @@ watch(() => route.params.id, load)
       </p>
       <div class="space-y-2">
         <a
-          :href="googleCalendarUrl(match)"
+          :href="googleCalendarUrl(match, venueGetter)"
           target="_blank" rel="noopener"
           class="block w-full px-4 py-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors text-blue-700 font-semibold flex items-center justify-between"
           @click="calendarOpen = false"
@@ -542,7 +543,7 @@ watch(() => route.params.id, load)
           <span class="text-xs opacity-60">↗ 새 탭</span>
         </a>
         <a
-          :href="naverCalendarUrl(match)"
+          :href="naverCalendarUrl(match, venueGetter)"
           target="_blank" rel="noopener"
           class="block w-full px-4 py-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition-colors text-emerald-700 font-semibold flex items-center justify-between"
           @click="calendarOpen = false"

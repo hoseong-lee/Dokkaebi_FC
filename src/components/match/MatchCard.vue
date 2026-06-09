@@ -8,15 +8,19 @@ import {
   INTENSITY_LABEL,
   INTENSITY_COLOR
 } from '@/utils/match'
+import { matchVenueLabel } from '@/utils/matchVenue'
+import { useVenuesStore } from '@/stores/venues'
 
 const props = defineProps({
   match: { type: Object, required: true }
 })
 
+const venuesStore = useVenuesStore()
 const intensity = computed(() => matchIntensity(props.match))
 const isFinished = computed(() => props.match.status === 'finished')
 const isCancelled = computed(() => props.match.status === 'cancelled')
 const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.match.date) : ''))
+const venueLabel = computed(() => matchVenueLabel(props.match, (id) => venuesStore.getById(id)))
 </script>
 
 <template>
@@ -51,7 +55,7 @@ const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.mat
     </div>
 
     <div class="flex items-center justify-between mt-2 text-xs">
-      <span class="text-gray-400 truncate">📍 {{ match.location || '장소 미정' }}</span>
+      <span class="text-gray-400 truncate">📍 {{ venueLabel }}</span>
       <span v-if="intensity" class="flex items-center gap-1">
         <span
           v-if="intensity.close"

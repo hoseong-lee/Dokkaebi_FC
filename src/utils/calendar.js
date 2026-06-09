@@ -1,5 +1,6 @@
 // 경기 → 캘린더 등록 (.ics 다운로드 + 구글 캘린더 추가 URL)
 // 표준: RFC 5545 (iCalendar). 구글·iOS·네이버·아웃룩 모두 호환.
+import { matchVenueText } from './matchVenue'
 
 const APP_URL = 'https://hoseong-lee.github.io/Dokkaebi_FC'
 
@@ -35,18 +36,20 @@ function eventTitle(match) {
   return `도깨비FC vs ${match.opponent || '경기'}`
 }
 
-function eventDescription(match) {
+function eventDescription(match, venueLookup) {
   const lines = []
   if (match.type) lines.push(`종류: ${match.type}`)
-  if (match.location) lines.push(`경기장: ${match.location}`)
+  const venueText = matchVenueText(match, venueLookup)
+  if (venueText) lines.push(`경기장: ${venueText}`)
   if (match.locationUrl) lines.push(`지도: ${match.locationUrl}`)
   lines.push(`상세: ${APP_URL}/matches/${match.id}`)
   return lines.join('\n')
 }
 
 // ── ICS 파일 생성 (모든 캘린더 호환) ──
-export function generateMatchICS(match) {
+export function generateMatchICS(match, venueLookup = null) {
   const { start, end } = eventTimes(match)
+  const venueText = matchVenueText(match, venueLookup)
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -59,8 +62,8 @@ export function generateMatchICS(match) {
     `DTSTART:${toUTCStamp(start)}`,
     `DTEND:${toUTCStamp(end)}`,
     `SUMMARY:${escapeICS(eventTitle(match))}`,
-    match.location ? `LOCATION:${escapeICS(match.location)}` : null,
-    `DESCRIPTION:${escapeICS(eventDescription(match))}`,
+    venueText ? `LOCATION:${escapeICS(venueText)}` : null,
+    `DESCRIPTION:${escapeICS(eventDescription(match, venueLookup))}`,
     `URL:${APP_URL}/matches/${match.id}`,
     // D-1 알림 (전날 같은 시각)
     'BEGIN:VALARM',
@@ -80,8 +83,8 @@ export function generateMatchICS(match) {
   return ics
 }
 
-export function downloadMatchICS(match) {
-  const ics = generateMatchICS(match)
+export function downloadMatchICS(match, venueLookup = null) {
+  const ics = generateMatchICS(match, venueLookup)
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -98,28 +101,30 @@ export function downloadMatchICS(match) {
 
 // ── 구글 캘린더 직접 추가 URL (새 탭) ──
 // 구글 계정 로그인된 사용자는 클릭 → 바로 추가 가능
-export function googleCalendarUrl(match) {
+export function googleCalendarUrl(match, venueLookup = null) {
   const { start, end } = eventTimes(match)
+  const venueText = matchVenueText(match, venueLookup)
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: eventTitle(match),
     dates: `${toUTCStamp(start)}/${toUTCStamp(end)}`,
-    details: eventDescription(match)
+    details: eventDescription(match, venueLookup)
   })
-  if (match.location) params.set('location', match.location)
+  if (venueText) params.set('location', venueText)
   return `https://calendar.google.com/calendar/render?${params.toString()}`
 }
 
 // ── 네이버 캘린더 추가 URL (선택) ──
-export function naverCalendarUrl(match) {
+export function naverCalendarUrl(match, venueLookup = null) {
   const { start, end } = eventTimes(match)
+  const venueText = matchVenueText(match, venueLookup)
   const fmt = (d) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`
   const params = new URLSearchParams({
     title: eventTitle(match),
     start: fmt(start),
     end: fmt(end),
-    description: eventDescription(match)
+    description: eventDescription(match, venueLookup)
   })
-  if (match.location) params.set('location', match.location)
+  if (venueText) params.set('location', venueText)
   return `https://calendar.naver.com/schedule/createBySharing.nhn?${params.toString()}`
 }

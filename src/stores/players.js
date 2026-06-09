@@ -8,6 +8,7 @@ import {
   deletePlayer
 } from '@/firebase/database'
 import { POSITION_ORDER } from '@/utils/stats'
+import { POSITION_CATEGORY } from '@/utils/positions'
 
 export const usePlayersStore = defineStore('players', () => {
   const players = ref([])
@@ -17,7 +18,9 @@ export const usePlayersStore = defineStore('players', () => {
   const byPosition = computed(() => {
     const map = { GK: [], DF: [], MF: [], FW: [] }
     for (const p of players.value) {
-      if (map[p.position]) map[p.position].push(p)
+      // mainPosition(상세) → category → fallback 으로 옛 position(GK/DF/MF/FW) 직접
+      const cat = POSITION_CATEGORY[p.mainPosition] || POSITION_CATEGORY[p.subPosition] || p.position
+      if (map[cat]) map[cat].push(p)
     }
     return map
   })
