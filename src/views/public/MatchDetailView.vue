@@ -211,7 +211,7 @@ watch(() => route.params.id, load)
       <div class="flex items-center justify-center gap-4 py-2">
         <span class="flex-1 text-right font-bold text-navy text-lg">도깨비 FC</span>
         <span v-if="isFinished" class="text-3xl font-extrabold tabular-nums">
-          {{ match.score.dokkaebi }} : {{ match.score.opponent }}
+          {{ match.score?.dokkaebi ?? '?' }} : {{ match.score?.opponent ?? '?' }}
         </span>
         <span v-else class="text-gray-400">vs</span>
         <span class="flex-1 font-bold text-gray-700 text-lg">{{ match.opponent }}</span>

@@ -43,7 +43,7 @@ const dday = computed(() => (props.match.status === 'scheduled' ? dDay(props.mat
     <div class="flex items-center justify-center gap-4 py-1">
       <span class="flex-1 text-right font-bold text-navy">도깨비 FC</span>
       <span v-if="isFinished" class="text-lg font-bold tabular-nums">
-        {{ match.score.dokkaebi }} : {{ match.score.opponent }}
+        {{ match.score?.dokkaebi ?? '?' }} : {{ match.score?.opponent ?? '?' }}
       </span>
       <span v-else-if="isCancelled" class="text-sm text-gray-400">취소됨</span>
       <span v-else class="text-sm text-gray-400">vs</span>
