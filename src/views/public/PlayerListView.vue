@@ -1,12 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { RecycleScroller } from 'vue-virtual-scroller'
 import { usePlayersStore } from '@/stores/players'
 import { POSITION_ORDER, POSITION_LABEL, POSITION_BADGE, POSITION_BADGE_STRONG } from '@/utils/stats'
 import PlayerCard from '@/components/player/PlayerCard.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
+// 선수 명단은 보통 50~100명 — virtual scroll 효과 미미 + grid 레이아웃 깨짐 이슈로
+// CSS grid 단순 사용. 100+ 늘어나면 다시 가상 스크롤 검토.
 const store = usePlayersStore()
 const filter = ref('ALL')
 
@@ -21,24 +22,12 @@ const visible = computed(() => {
   return list.filter((p) => p.position === filter.value)
 })
 
-// PlayerCard: p-3 + avatar 48 + gap-2 (8px) → row 약 80px
-const ITEM_HEIGHT = 80
-// sm breakpoint(640px) 이상 2열, 미만 1열 — window 너비 기반 반응형
-const gridColumns = ref(1)
-function syncGridColumns() {
-  gridColumns.value = window.innerWidth >= 640 ? 2 : 1
-}
-
-onMounted(async () => {
-  syncGridColumns()
-  window.addEventListener('resize', syncGridColumns)
-  await store.fetchAll()
-})
+onMounted(async () => { await store.fetchAll() })
 </script>
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">선수 명단</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">선수 명단</h1>
 
     <div class="flex gap-1.5 mb-4 overflow-x-auto pb-1">
       <button
@@ -47,7 +36,7 @@ onMounted(async () => {
         class="px-3 py-1.5 rounded-full text-sm whitespace-nowrap font-semibold transition-colors"
         :class="
           f === 'ALL'
-            ? (filter === f ? 'bg-navy text-white' : 'bg-white text-gray-600 hover:bg-gray-100')
+            ? (filter === f ? 'bg-navy text-white' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-700')
             : (filter === f ? POSITION_BADGE_STRONG[f] : POSITION_BADGE[f] + ' hover:opacity-80')
         "
         @click="filter = f"
@@ -63,25 +52,11 @@ onMounted(async () => {
       title="등록된 선수가 없습니다"
       description="관리자가 선수를 등록하면 이곳에 표시됩니다."
     />
-    <RecycleScroller
-      v-else
-      class="player-scroller"
-      :items="visible"
-      :item-size="ITEM_HEIGHT"
-      :grid-items="gridColumns"
-      key-field="id"
-      page-mode
-      v-slot="{ item }"
-    >
-      <div class="px-1 pb-2">
-        <PlayerCard :player="item" />
-      </div>
-    </RecycleScroller>
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <PlayerCard
+        v-for="p in visible" :key="p.id"
+        :player="p"
+      />
+    </div>
   </div>
 </template>
-
-<style scoped>
-.player-scroller {
-  min-height: 200px;
-}
-</style>

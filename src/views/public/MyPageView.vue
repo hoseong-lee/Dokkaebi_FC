@@ -34,7 +34,6 @@ const toast = useToast()
 
 const themeOptions = [
   { v: 'light', l: '☀️ 라이트' },
-  { v: 'system', l: '⚙️ 시스템' },
   { v: 'dark', l: '🌙 다크' }
 ]
 
@@ -199,7 +198,7 @@ function onAvatarSelect(url) {
           >{{ opt.l }}</button>
         </div>
         <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
-          시스템 모드는 기기 OS 설정을 따라갑니다.
+          기본은 라이트 — 다크는 본인이 켤 때만 적용됩니다.
         </p>
       </section>
 
