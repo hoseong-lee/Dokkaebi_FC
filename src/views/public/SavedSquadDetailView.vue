@@ -174,7 +174,7 @@ async function remove() {
       <div class="relative w-full max-w-sm mx-auto aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-b from-emerald-600 to-emerald-800 ring-1 ring-emerald-700/30">
         <!-- 라인 -->
         <div class="absolute inset-2 ring-2 ring-white/40 rounded-md"></div>
-        <div class="absolute left-2 right-2 top-1/2 h-px bg-white dark:bg-zinc-800/30"></div>
+        <div class="absolute left-2 right-2 top-1/2 h-px bg-white/30"></div>
         <div class="absolute left-1/2 top-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 ring-2 ring-white/30 rounded-full"></div>
         <!-- 선수 점 -->
         <div

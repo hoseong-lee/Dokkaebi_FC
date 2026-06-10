@@ -147,7 +147,7 @@ function matchLabel(id) {
               v-for="(_, i) in images"
               :key="i"
               class="w-1.5 h-1.5 rounded-full"
-              :class="i === activeIdx ? 'bg-white dark:bg-zinc-800' : 'bg-white dark:bg-zinc-800/40'"
+              :class="i === activeIdx ? 'bg-white' : 'bg-white/40'"
             ></span>
           </div>
         </template>

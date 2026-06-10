@@ -40,8 +40,8 @@ async function handleLogout() {
           v-for="link in navLinks"
           :key="link.to"
           :to="link.to"
-          class="px-3 py-1.5 rounded text-sm hover:bg-white dark:bg-zinc-800/10 transition-colors"
-          active-class="bg-white dark:bg-zinc-800/15"
+          class="px-3 py-1.5 rounded text-sm hover:bg-white/10 transition-colors"
+          active-class="bg-white/15"
         >
           {{ link.label }}
         </RouterLink>
@@ -58,7 +58,7 @@ async function handleLogout() {
         <template v-if="authStore.isAuthed">
           <RouterLink
             to="/me"
-            class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-white dark:bg-zinc-800/10 hover:bg-white dark:bg-zinc-800/20 transition-colors"
+            class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             title="내 정보"
           >
             <img
@@ -72,7 +72,7 @@ async function handleLogout() {
             <span v-else>내 정보</span>
           </RouterLink>
           <button
-            class="text-sm px-3 py-1.5 rounded bg-white dark:bg-zinc-800/10 hover:bg-white dark:bg-zinc-800/20 transition-colors"
+            class="text-sm px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 transition-colors"
             @click="handleLogout"
           >
             로그아웃

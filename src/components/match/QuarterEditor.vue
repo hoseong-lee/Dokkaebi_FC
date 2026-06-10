@@ -146,7 +146,7 @@ function onFormationChange() {
         :value="q.opponentScore"
         type="number"
         min="0"
-        class="w-12 text-center text-2xl font-bold bg-white dark:bg-zinc-800/10 rounded tabular-nums"
+        class="w-12 text-center text-2xl font-bold bg-white/10 rounded tabular-nums"
         @input="q.opponentScore = Math.max(0, Number($event.target.value) || 0)"
       />
       <span class="flex-1 font-bold text-sm">상대</span>

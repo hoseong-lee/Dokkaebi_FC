@@ -59,7 +59,7 @@ const roleColor = {
       <span
         v-else
         class="w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-medium border-2 border-dashed border-white/70 text-white/80"
-        :class="editable ? 'bg-white dark:bg-zinc-800/10' : 'bg-black/10'"
+        :class="editable ? 'bg-white/10' : 'bg-black/10'"
       >
         {{ editable ? '+' : slot.role }}
       </span>
