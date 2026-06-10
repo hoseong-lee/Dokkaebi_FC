@@ -10,7 +10,7 @@ const props = defineProps({
 
 // 샘플 사진 매핑 — photoURL 등록 전 임시. admin 에서 등록하면 자동 우선됨.
 const SAMPLE_PHOTOS = {
-  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang-v2.png'
+  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang-v3.png'
 }
 
 const photoSrc = computed(() => {
