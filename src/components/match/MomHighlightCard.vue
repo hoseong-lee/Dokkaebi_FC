@@ -10,7 +10,7 @@ const props = defineProps({
 
 // 샘플 사진 매핑 — photoURL 등록 전 임시. admin 에서 등록하면 자동 우선됨.
 const SAMPLE_PHOTOS = {
-  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang.png'
+  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang-v2.png'
 }
 
 const photoSrc = computed(() => {
@@ -29,25 +29,26 @@ const positionLabel = computed(() => {
     :to="`/players/${player.id}`"
     class="block relative bg-gradient-to-br from-zinc-900 via-black to-zinc-900 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-amber-500/40 hover:ring-amber-400/70 hover:shadow-amber-500/20 transition-all"
   >
-    <!-- 미세한 금색 라디얼 highlight (사진 뒤쪽 후광) -->
-    <div class="absolute right-0 top-0 bottom-0 w-2/3 pointer-events-none">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_right_center,rgba(245,158,11,0.18),transparent_60%)]"></div>
+    <!-- 1) 배경 그라데이션 + 금색 후광 (사진 뒤) -->
+    <div class="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none">
+      <!-- 금색 후광 -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_right_center,rgba(245,158,11,0.22),transparent_60%)]"></div>
+      <!-- 왼쪽 페이드 (텍스트 가독성) — 사진보다 아래 stack -->
+      <div class="absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent"></div>
     </div>
 
-    <!-- 우측 선수 큰 사진 (누끼) -->
-    <div class="absolute right-0 top-0 bottom-0 w-[55%] flex items-end justify-end pointer-events-none">
+    <!-- 2) 선수 큰 사진 (누끼, 그라데이션 위에 또렷이) -->
+    <div class="absolute right-0 top-0 bottom-0 w-[55%] flex items-end justify-end pointer-events-none z-[5]">
       <img
         v-if="photoSrc"
         :src="photoSrc"
         :alt="player.name"
         referrerpolicy="no-referrer"
-        class="h-full w-full object-contain object-bottom drop-shadow-2xl"
+        class="h-full w-full object-contain object-bottom drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
       />
-      <div v-else class="h-full w-full flex items-end justify-center pb-4 opacity-90">
+      <div v-else class="h-full w-full flex items-end justify-center pb-4">
         <PlayerAvatar :player="player" :size="160" />
       </div>
-      <!-- 왼쪽으로 갈수록 검정으로 페이드 (텍스트 가독성) -->
-      <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
     </div>
 
     <!-- 좌측 텍스트 -->
