@@ -25,6 +25,7 @@ import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import RsvpSection from '@/components/match/RsvpSection.vue'
 import FormationPitch from '@/components/match/FormationPitch.vue'
 import MomVotingSection from '@/components/match/MomVotingSection.vue'
+import MomHighlightCard from '@/components/match/MomHighlightCard.vue'
 import ComplimentSection from '@/components/match/ComplimentSection.vue'
 import SkillVoteSection from '@/components/match/SkillVoteSection.vue'
 import ResultCardModal from '@/components/match/ResultCardModal.vue'
@@ -132,6 +133,10 @@ const plannedSquadList = computed(() => {
 })
 const result = computed(() => (match.value ? matchResult(match.value) : null))
 const isFinished = computed(() => match.value?.status === 'finished')
+const momPlayer = computed(() => {
+  const pid = match.value?.momPlayerId
+  return pid ? playersStore.getById(pid) : null
+})
 
 // 쿼터별 W/D/L 라인 — 새 판정 기준(쿼터 승수 우선) 시각화
 // + 각 쿼터의 도깨비 골 / 자책골 이벤트 미니 아이콘
@@ -316,6 +321,9 @@ watch(() => route.params.id, load)
       </div>
     </section>
 
+    <!-- ⭐ MOM 하이라이트 카드 (EPL Recap 스타일) -->
+    <MomHighlightCard v-if="isFinished && momPlayer" :player="momPlayer" />
+
     <!-- ─── 3탭 ─── -->
     <div class="grid grid-cols-3 gap-1 bg-white dark:bg-zinc-800 rounded-xl p-1 shadow-sm text-sm sticky top-0 z-20">
       <button
@@ -439,20 +447,13 @@ watch(() => route.params.id, load)
           :players="playersStore.players"
         />
       </div>
-      <div v-if="match.momPlayerId" class="pt-3 border-t text-sm">
-        <span class="text-amber-500 font-bold">⭐ MOM</span>
-        <span class="ml-2 font-medium">{{ playerMap[match.momPlayerId] }}</span>
-      </div>
+      <!-- MOM 은 상단의 MomHighlightCard 로 통합 표시 -->
     </section>
 
     <!-- 레거시(쿼터 없는) 경기 -->
     <section v-else-if="isFinished" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
       <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">경기 이벤트</h2>
       <MatchEventTimeline :events="match.events || []" :player-map="playerMap" />
-      <div v-if="match.momPlayerId" class="mt-4 pt-3 border-t text-sm">
-        <span class="text-amber-500 font-bold">⭐ MOM</span>
-        <span class="ml-2 font-medium">{{ playerMap[match.momPlayerId] }}</span>
-      </div>
     </section>
 
     <section v-if="lineupPlayers.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
