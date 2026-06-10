@@ -8,6 +8,16 @@ const props = defineProps({
   player: { type: Object, required: true }
 })
 
+// 샘플 사진 매핑 — photoURL 등록 전 임시. admin 에서 등록하면 자동 우선됨.
+const SAMPLE_PHOTOS = {
+  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang.png'
+}
+
+const photoSrc = computed(() => {
+  if (props.player?.photoURL) return props.player.photoURL
+  return SAMPLE_PHOTOS[props.player?.name] || null
+})
+
 const positionLabel = computed(() => {
   const p = props.player
   return POSITION_LABEL[p?.mainPosition] || POSITION_LABEL[p?.position] || p?.mainPosition || '선수'
@@ -22,8 +32,8 @@ const positionLabel = computed(() => {
     <!-- 우측 선수 큰 사진 -->
     <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-end justify-end pointer-events-none">
       <img
-        v-if="player.photoURL"
-        :src="player.photoURL"
+        v-if="photoSrc"
+        :src="photoSrc"
         :alt="player.name"
         referrerpolicy="no-referrer"
         class="h-full w-full object-cover object-center opacity-95"
