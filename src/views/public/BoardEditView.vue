@@ -53,9 +53,9 @@ async function save() {
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">{{ isEdit ? '글 수정' : '글쓰기' }}</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">{{ isEdit ? '글 수정' : '글쓰기' }}</h1>
     <LoadingSpinner v-if="loading" />
-    <form v-else class="bg-white rounded-2xl shadow p-5 space-y-3" @submit.prevent="save">
+    <form v-else class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-3" @submit.prevent="save">
       <input v-model="form.title" type="text" placeholder="제목" class="w-full border rounded-lg px-3 py-2 text-sm" />
       <textarea v-model="form.body" rows="10" placeholder="내용을 작성하세요" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
       <div class="flex gap-2 pt-2">

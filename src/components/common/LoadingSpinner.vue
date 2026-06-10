@@ -6,9 +6,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center gap-2 py-10 text-gray-400">
+  <div class="flex flex-col items-center justify-center gap-2 py-10 text-gray-400 dark:text-zinc-500">
     <svg
-      class="animate-spin text-navy"
+      class="animate-spin text-navy dark:text-zinc-100"
       :width="size"
       :height="size"
       viewBox="0 0 24 24"

@@ -166,7 +166,7 @@ const quarterLine = computed(() => {
 
 const Q_KIND_STYLE = {
   W: { tone: 'bg-blue-100 text-blue-700 ring-1 ring-blue-200', icon: '✅', label: '승' },
-  D: { tone: 'bg-gray-100 text-gray-600 ring-1 ring-gray-200', icon: '🤝', label: '무' },
+  D: { tone: 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 ring-1 ring-gray-200 dark:ring-zinc-700', icon: '🤝', label: '무' },
   L: { tone: 'bg-rose-100 text-rose-700 ring-1 ring-rose-200', icon: '❌', label: '패' }
 }
 
@@ -201,21 +201,21 @@ watch(() => route.params.id, load)
   <LoadingSpinner v-if="loading" label="불러오는 중..." />
   <EmptyState v-else-if="!match" icon="🔍" title="경기를 찾을 수 없습니다" />
   <div v-else class="space-y-4">
-    <section class="bg-white rounded-2xl shadow p-6">
-      <div class="flex items-center justify-between text-xs text-gray-400 mb-3">
-        <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between text-xs text-gray-400 dark:text-zinc-500 mb-3">
+        <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400">
           {{ MATCH_TYPE_LABEL[match.type] }}
         </span>
         <span>{{ MATCH_STATUS_LABEL[match.status] }}</span>
       </div>
 
       <div class="flex items-center justify-center gap-4 py-2">
-        <span class="flex-1 text-right font-bold text-navy text-lg">도깨비 FC</span>
+        <span class="flex-1 text-right font-bold text-navy dark:text-zinc-100 text-lg">도깨비 FC</span>
         <span v-if="isFinished" class="text-3xl font-extrabold tabular-nums">
           {{ match.score?.dokkaebi ?? '?' }} : {{ match.score?.opponent ?? '?' }}
         </span>
-        <span v-else class="text-gray-400">vs</span>
-        <span class="flex-1 font-bold text-gray-700 text-lg">{{ match.opponent }}</span>
+        <span v-else class="text-gray-400 dark:text-zinc-500">vs</span>
+        <span class="flex-1 font-bold text-gray-700 dark:text-zinc-200 text-lg">{{ match.opponent }}</span>
       </div>
 
       <div v-if="result" class="flex items-center justify-center gap-2 mt-1">
@@ -225,15 +225,15 @@ watch(() => route.params.id, load)
         <span
           v-if="isFinished"
           class="px-2 py-0.5 rounded-full text-[11px] font-semibold tabular-nums"
-          :class="goalDiff > 0 ? 'bg-blue-50 text-blue-700' : goalDiff < 0 ? 'bg-rose-50 text-rose-700' : 'bg-gray-100 text-gray-600'"
+          :class="goalDiff > 0 ? 'bg-blue-50 text-blue-700' : goalDiff < 0 ? 'bg-rose-50 text-rose-700' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
         >
           득실 {{ goalDiff > 0 ? '+' : '' }}{{ goalDiff }}
         </span>
       </div>
 
       <!-- 쿼터별 결과 timeline (새 판정 기준 시각화) -->
-      <div v-if="quarterLine" class="mt-3 pt-3 border-t border-gray-100">
-        <p class="text-[10px] text-gray-400 text-center mb-2 font-semibold tracking-wide">쿼터별 결과</p>
+      <div v-if="quarterLine" class="mt-3 pt-3 border-t border-gray-100 dark:border-zinc-700">
+        <p class="text-[10px] text-gray-400 dark:text-zinc-500 text-center mb-2 font-semibold tracking-wide">쿼터별 결과</p>
         <div class="grid grid-cols-4 gap-1.5">
           <div
             v-for="q in quarterLine.items" :key="q.idx"
@@ -258,34 +258,34 @@ watch(() => route.params.id, load)
             </div>
           </div>
         </div>
-        <p class="text-[10px] text-center text-gray-500 mt-2 tabular-nums">
+        <p class="text-[10px] text-center text-gray-500 dark:text-zinc-400 mt-2 tabular-nums">
           <span class="text-blue-700 font-bold">{{ quarterLine.tally.quarterWins }}승</span>
-          <span class="text-gray-400 mx-1">·</span>
-          <span class="text-gray-600 font-bold">{{ quarterLine.tally.quarterDraws }}무</span>
-          <span class="text-gray-400 mx-1">·</span>
+          <span class="text-gray-400 dark:text-zinc-500 mx-1">·</span>
+          <span class="text-gray-600 dark:text-zinc-400 font-bold">{{ quarterLine.tally.quarterDraws }}무</span>
+          <span class="text-gray-400 dark:text-zinc-500 mx-1">·</span>
           <span class="text-rose-700 font-bold">{{ quarterLine.tally.quarterLosses }}패</span>
         </p>
       </div>
 
       <!-- 핵심 정보 그리드: 일시 · 장소 · 출전 인원 -->
       <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-        <div class="bg-gray-50 rounded-lg p-2">
-          <p class="text-[10px] text-gray-400 font-semibold mb-0.5">🕒 일시</p>
-          <p class="text-xs text-onyx leading-tight">{{ formatDateTime(match.date) }}</p>
+        <div class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-2">
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-semibold mb-0.5">🕒 일시</p>
+          <p class="text-xs text-onyx dark:text-zinc-100 leading-tight">{{ formatDateTime(match.date) }}</p>
         </div>
-        <div class="bg-gray-50 rounded-lg p-2">
-          <p class="text-[10px] text-gray-400 font-semibold mb-0.5">📍 장소</p>
-          <a v-if="match.locationUrl" :href="match.locationUrl" target="_blank" class="text-xs text-navy underline leading-tight block truncate">
+        <div class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-2">
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-semibold mb-0.5">📍 장소</p>
+          <a v-if="match.locationUrl" :href="match.locationUrl" target="_blank" class="text-xs text-navy dark:text-zinc-100 underline leading-tight block truncate">
             {{ match.location || '장소 미정' }}
           </a>
-          <p v-else class="text-xs text-onyx leading-tight truncate">{{ match.location || '장소 미정' }}</p>
+          <p v-else class="text-xs text-onyx dark:text-zinc-100 leading-tight truncate">{{ match.location || '장소 미정' }}</p>
         </div>
         <div class="bg-emerald-50 rounded-lg p-2">
           <p class="text-[10px] text-emerald-600 font-semibold mb-0.5">👥 출전</p>
           <p class="text-xs text-emerald-700 font-bold leading-tight">
             <span v-if="isFinished">{{ lineupCount }}명</span>
             <span v-else-if="plannedCount > 0">{{ plannedCount }}명 (예정)</span>
-            <span v-else class="text-gray-400 font-normal">미정</span>
+            <span v-else class="text-gray-400 dark:text-zinc-500 font-normal">미정</span>
           </p>
         </div>
       </div>
@@ -317,17 +317,17 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- ─── 3탭 ─── -->
-    <div class="grid grid-cols-3 gap-1 bg-white rounded-xl p-1 shadow-sm text-sm sticky top-0 z-20">
+    <div class="grid grid-cols-3 gap-1 bg-white dark:bg-zinc-800 rounded-xl p-1 shadow-sm text-sm sticky top-0 z-20">
       <button
         type="button"
         class="py-2.5 rounded-lg font-medium transition-colors"
-        :class="activeTab === 'overview' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        :class="activeTab === 'overview' ? 'bg-navy text-white shadow' : 'text-gray-500 dark:text-zinc-400'"
         @click="activeTab = 'overview'"
       >📊 개요</button>
       <button
         type="button"
         class="py-2.5 rounded-lg font-medium transition-colors disabled:opacity-40"
-        :class="activeTab === 'vote' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        :class="activeTab === 'vote' ? 'bg-navy text-white shadow' : 'text-gray-500 dark:text-zinc-400'"
         :disabled="!isFinished"
         :title="!isFinished ? '결과 입력 후 활성' : ''"
         @click="isFinished && (activeTab = 'vote')"
@@ -335,7 +335,7 @@ watch(() => route.params.id, load)
       <button
         type="button"
         class="py-2.5 rounded-lg font-medium transition-colors"
-        :class="activeTab === 'rsvp' ? 'bg-navy text-white shadow' : 'text-gray-500'"
+        :class="activeTab === 'rsvp' ? 'bg-navy text-white shadow' : 'text-gray-500 dark:text-zinc-400'"
         @click="activeTab = 'rsvp'"
       >📅 참석</button>
     </div>
@@ -344,15 +344,15 @@ watch(() => route.params.id, load)
     <template v-if="activeTab === 'vote' && isFinished">
       <section class="bg-navy/5 rounded-2xl p-3">
         <div class="flex items-center justify-between mb-2">
-          <h2 class="font-bold text-navy text-sm">🗳 경기 투표</h2>
-          <span class="text-xs text-gray-500 tabular-nums">{{ voteStep }} / 3</span>
+          <h2 class="font-bold text-navy dark:text-zinc-100 text-sm">🗳 경기 투표</h2>
+          <span class="text-xs text-gray-500 dark:text-zinc-400 tabular-nums">{{ voteStep }} / 3</span>
         </div>
         <div class="flex gap-1.5">
           <button
             v-for="(s, i) in voteSteps" :key="s.key"
             type="button"
             class="flex-1 py-2 rounded-lg text-xs font-bold transition-colors"
-            :class="voteStep === i + 1 ? 'bg-navy text-white' : 'bg-white text-gray-500 hover:bg-gray-100 ring-1 ring-gray-200'"
+            :class="voteStep === i + 1 ? 'bg-navy text-white' : 'bg-white dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:bg-zinc-700 ring-1 ring-gray-200 dark:ring-zinc-700'"
             @click="voteStep = i + 1"
           >
             {{ i + 1 }}. {{ s.label }}
@@ -386,17 +386,17 @@ watch(() => route.params.id, load)
     <!-- 예정 경기: 쿼터별 미리 짠 스쿼드 -->
     <section
       v-if="!isFinished && plannedSquadList.length"
-      class="bg-white rounded-2xl shadow p-6 space-y-5"
+      class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6 space-y-5"
     >
-      <h2 class="font-bold text-navy">예정 스쿼드</h2>
+      <h2 class="font-bold text-navy dark:text-zinc-100">예정 스쿼드</h2>
       <div
         v-for="ps in plannedSquadList"
         :key="ps.idx"
         class="border-t first:border-t-0 pt-4 first:pt-0"
       >
         <div class="flex items-center justify-between mb-2">
-          <span class="font-semibold text-sm text-gray-700">
-            {{ ps.label }} <span class="text-xs text-gray-400">({{ ps.lineup.length }}명)</span>
+          <span class="font-semibold text-sm text-gray-700 dark:text-zinc-200">
+            {{ ps.label }} <span class="text-xs text-gray-400 dark:text-zinc-500">({{ ps.lineup.length }}명)</span>
           </span>
           <span v-if="ps.formation" class="text-sm font-bold text-dokkaebi">{{ ps.formation }}</span>
         </div>
@@ -421,11 +421,11 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- 쿼터별 기록 -->
-    <section v-if="quarters.length" class="bg-white rounded-2xl shadow p-6 space-y-5">
-      <h2 class="font-bold text-navy">쿼터별 기록</h2>
+    <section v-if="quarters.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6 space-y-5">
+      <h2 class="font-bold text-navy dark:text-zinc-100">쿼터별 기록</h2>
       <div v-for="(q, i) in quarters" :key="i" class="border-t first:border-t-0 pt-4 first:pt-0">
         <div class="flex items-center justify-between mb-2">
-          <span class="font-semibold text-sm text-gray-700">{{ i + 1 }}쿼터</span>
+          <span class="font-semibold text-sm text-gray-700 dark:text-zinc-200">{{ i + 1 }}쿼터</span>
           <span class="text-sm font-bold tabular-nums">
             {{ q.score?.dokkaebi ?? 0 }} : {{ q.score?.opponent ?? 0 }}
           </span>
@@ -446,8 +446,8 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- 레거시(쿼터 없는) 경기 -->
-    <section v-else-if="isFinished" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">경기 이벤트</h2>
+    <section v-else-if="isFinished" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">경기 이벤트</h2>
       <MatchEventTimeline :events="match.events || []" :player-map="playerMap" />
       <div v-if="match.momPlayerId" class="mt-4 pt-3 border-t text-sm">
         <span class="text-amber-500 font-bold">⭐ MOM</span>
@@ -455,8 +455,8 @@ watch(() => route.params.id, load)
       </div>
     </section>
 
-    <section v-if="lineupPlayers.length" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">출전 명단 ({{ lineupPlayers.length }})</h2>
+    <section v-if="lineupPlayers.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">출전 명단 ({{ lineupPlayers.length }})</h2>
       <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
         <RouterLink
           v-for="p in lineupPlayers"
@@ -471,10 +471,10 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- 경기 영상 (YouTube 임베드) -->
-    <section v-if="videos.length" class="bg-white rounded-2xl shadow p-5 space-y-3">
+    <section v-if="videos.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-3">
       <div class="flex items-center gap-2">
-        <h3 class="font-bold text-navy">📹 경기 영상</h3>
-        <span class="text-xs text-gray-400">{{ videos.length }}개</span>
+        <h3 class="font-bold text-navy dark:text-zinc-100">📹 경기 영상</h3>
+        <span class="text-xs text-gray-400 dark:text-zinc-500">{{ videos.length }}개</span>
       </div>
 
       <!-- 영상 탭 (2개 이상일 때) -->
@@ -483,14 +483,14 @@ watch(() => route.params.id, load)
           v-for="(v, i) in videos" :key="i"
           type="button"
           class="text-xs px-3 py-1.5 rounded-full ring-1 transition-colors"
-          :class="activeVideoIdx === i ? 'bg-rose-500 text-white ring-rose-500 shadow' : 'bg-white text-gray-600 ring-gray-200 hover:bg-gray-50'"
+          :class="activeVideoIdx === i ? 'bg-rose-500 text-white ring-rose-500 shadow' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 ring-gray-200 dark:ring-zinc-700 hover:bg-gray-50 dark:bg-zinc-900'"
           @click="activeVideoIdx = i"
         >▶ {{ v.label || `영상 ${i + 1}` }}</button>
       </div>
 
       <!-- 선택된 영상 임베드 -->
       <div v-if="activeVideo" class="space-y-2">
-        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-gray-200">
+        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black ring-1 ring-gray-200 dark:ring-zinc-700">
           <iframe
             :key="activeVideoIdx"
             :src="ytEmbedUrl(activeVideo.url, { start: activeVideo.start, end: activeVideo.end })"
@@ -501,7 +501,7 @@ watch(() => route.params.id, load)
           />
         </div>
         <div class="flex items-center justify-between text-xs">
-          <span class="text-gray-500">
+          <span class="text-gray-500 dark:text-zinc-400">
             <span v-if="activeVideo.start != null || activeVideo.end != null" class="text-rose-600 font-semibold">
               ⏱ 구간:
               {{ activeVideo.start != null ? formatTime(activeVideo.start) : '0:00' }}
@@ -516,8 +516,8 @@ watch(() => route.params.id, load)
       </div>
     </section>
 
-    <p v-if="match.notes" class="bg-white rounded-2xl shadow p-6 text-sm text-gray-700 whitespace-pre-line">
-      <span class="font-bold text-navy block mb-2">경기 후기</span>{{ match.notes }}
+    <p v-if="match.notes" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6 text-sm text-gray-700 dark:text-zinc-200 whitespace-pre-line">
+      <span class="font-bold text-navy dark:text-zinc-100 block mb-2">경기 후기</span>{{ match.notes }}
     </p>
 
     </template>
@@ -528,9 +528,9 @@ watch(() => route.params.id, load)
 
     <!-- 캘린더 추가 모달 -->
     <BaseModal v-model="calendarOpen" title="📅 내 캘린더에 추가">
-      <p class="text-sm text-gray-600 mb-3 leading-relaxed">
-        본인 캘린더에 추가하면 <span class="font-semibold text-navy">자동으로 일정 알림</span>이 옵니다.
-        <span class="block text-xs text-gray-400 mt-1">기본 알림: 1일 전 + 1시간 전 (캘린더 앱에서 변경 가능)</span>
+      <p class="text-sm text-gray-600 dark:text-zinc-400 mb-3 leading-relaxed">
+        본인 캘린더에 추가하면 <span class="font-semibold text-navy dark:text-zinc-100">자동으로 일정 알림</span>이 옵니다.
+        <span class="block text-xs text-gray-400 dark:text-zinc-500 mt-1">기본 알림: 1일 전 + 1시간 전 (캘린더 앱에서 변경 가능)</span>
       </p>
       <div class="space-y-2">
         <a
@@ -553,14 +553,14 @@ watch(() => route.params.id, load)
         </a>
         <button
           type="button"
-          class="block w-full px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 font-semibold flex items-center justify-between"
+          class="block w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 transition-colors text-gray-700 dark:text-zinc-200 font-semibold flex items-center justify-between"
           @click="downloadIcs"
         >
           <span>📥 .ics 파일 다운로드</span>
           <span class="text-xs opacity-60">iOS · 아웃룩 등</span>
         </button>
       </div>
-      <p class="text-[11px] text-gray-400 mt-3 leading-relaxed">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-3 leading-relaxed">
         💡 iOS 는 .ics 파일을 다운로드 후 캘린더 앱이 자동으로 열립니다.<br>
         💡 알림이 안 오면 캘린더 앱 설정에서 "이벤트 알림" 권한 확인.
       </p>

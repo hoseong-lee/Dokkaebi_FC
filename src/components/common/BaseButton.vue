@@ -12,9 +12,9 @@ const props = defineProps({
 
 const variants = {
   primary: 'bg-navy text-white hover:bg-navy/90',
-  secondary: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
+  secondary: 'bg-gray-100 dark:bg-zinc-700 text-gray-800 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600',
   danger: 'bg-dokkaebi text-white hover:bg-dokkaebi/90',
-  ghost: 'bg-transparent text-gray-600 hover:bg-gray-100'
+  ghost: 'bg-transparent text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:bg-zinc-700'
 }
 const sizes = {
   sm: 'text-xs px-2.5 py-1.5',

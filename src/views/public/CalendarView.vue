@@ -51,9 +51,9 @@ function isToday(d) {
 function statusClass(m) {
   if (m.status === 'finished') {
     const r = matchResult(m)
-    return RESULT_COLOR[r] || 'bg-gray-200 text-gray-600'
+    return RESULT_COLOR[r] || 'bg-gray-200 dark:bg-zinc-600 text-gray-600 dark:text-zinc-400'
   }
-  if (m.status === 'cancelled') return 'bg-gray-200 text-gray-500 line-through'
+  if (m.status === 'cancelled') return 'bg-gray-200 dark:bg-zinc-600 text-gray-500 dark:text-zinc-400 line-through'
   return 'bg-navy text-white'
 }
 
@@ -72,25 +72,25 @@ onMounted(() => store.fetchAll())
 <template>
   <div>
     <div class="flex items-center justify-between mb-4">
-      <h1 class="text-xl font-bold text-navy">📅 달력</h1>
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100">📅 달력</h1>
       <div class="flex items-center gap-1.5">
-        <button class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" @click="shift(-1)">◀</button>
-        <button class="px-3 py-1 rounded bg-white shadow-sm text-sm font-semibold" @click="jumpToToday">
+        <button class="px-2 py-1 rounded bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 text-sm" @click="shift(-1)">◀</button>
+        <button class="px-3 py-1 rounded bg-white dark:bg-zinc-800 shadow-sm text-sm font-semibold" @click="jumpToToday">
           {{ monthLabel }}
         </button>
-        <button class="px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" @click="shift(1)">▶</button>
+        <button class="px-2 py-1 rounded bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 text-sm" @click="shift(1)">▶</button>
       </div>
     </div>
 
     <LoadingSpinner v-if="store.loading && !store.matches.length" />
 
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow overflow-hidden">
       <div class="grid grid-cols-7 text-xs font-medium border-b">
         <div
           v-for="(d, i) in DAY_LABELS"
           :key="d"
           class="py-2 text-center"
-          :class="i === 0 ? 'text-dokkaebi' : i === 6 ? 'text-blue-500' : 'text-gray-500'"
+          :class="i === 0 ? 'text-dokkaebi' : i === 6 ? 'text-blue-500' : 'text-gray-500 dark:text-zinc-400'"
         >{{ d }}</div>
       </div>
       <div class="grid grid-cols-7">
@@ -99,7 +99,7 @@ onMounted(() => store.fetchAll())
           :key="d.valueOf()"
           class="min-h-[84px] border-r border-b last:border-r-0 p-1.5 text-xs"
           :class="{
-            'bg-gray-50': !isCurrentMonth(d),
+            'bg-gray-50 dark:bg-zinc-900': !isCurrentMonth(d),
             'bg-amber-50/40': isToday(d)
           }"
         >
@@ -109,7 +109,7 @@ onMounted(() => store.fetchAll())
               'text-gray-300': !isCurrentMonth(d),
               'text-dokkaebi font-bold': isCurrentMonth(d) && d.day() === 0,
               'text-blue-500': isCurrentMonth(d) && d.day() === 6,
-              'text-gray-700': isCurrentMonth(d) && d.day() !== 0 && d.day() !== 6
+              'text-gray-700 dark:text-zinc-200': isCurrentMonth(d) && d.day() !== 0 && d.day() !== 6
             }"
           >
             <span v-if="isToday(d)" class="bg-dokkaebi text-white rounded-full px-1.5 py-0.5">{{ d.date() }}</span>
@@ -131,10 +131,10 @@ onMounted(() => store.fetchAll())
       </div>
     </div>
 
-    <p v-if="monthMatches.length === 0" class="text-xs text-gray-400 mt-3 text-center">
+    <p v-if="monthMatches.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 mt-3 text-center">
       이 달엔 경기가 없습니다.
     </p>
-    <p v-else class="text-[11px] text-gray-400 mt-3">
+    <p v-else class="text-[11px] text-gray-400 dark:text-zinc-500 mt-3">
       이 달 경기 {{ monthMatches.length }}건 · 카드 클릭 시 상세로 이동
     </p>
   </div>

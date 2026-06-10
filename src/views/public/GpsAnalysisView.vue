@@ -95,7 +95,7 @@ const statCards = computed(() => {
 })
 
 const STAT_TONE = {
-  navy: 'bg-navy/5 text-navy',
+  navy: 'bg-navy/5 text-navy dark:text-zinc-100',
   emerald: 'bg-emerald-50 text-emerald-700',
   rose: 'bg-rose-50 text-rose-700',
   amber: 'bg-amber-50 text-amber-700',
@@ -125,25 +125,25 @@ const zonePct = computed(() => {
   <div class="space-y-4">
     <!-- 헤더 -->
     <div>
-      <h1 class="text-xl font-bold text-navy flex items-center gap-2">
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100 flex items-center gap-2">
         🏃 <span>GPS 분석</span>
         <span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">🚧 개발중</span>
       </h1>
-      <p class="text-xs text-gray-500 mt-1">
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">
         축구 경기 중 갤럭시워치·애플워치로 기록한 GPS 트랙을 분석합니다.
         총 거리, 활동 면적, 스프린트, 가속 횟수를 한눈에.
       </p>
     </div>
 
     <!-- 안내 -->
-    <section v-if="!track" class="bg-white rounded-2xl shadow p-5 space-y-3">
-      <p class="font-bold text-navy">📂 지원 형식</p>
-      <ul class="text-sm text-onyx space-y-1.5 list-disc list-inside">
+    <section v-if="!track" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-3">
+      <p class="font-bold text-navy dark:text-zinc-100">📂 지원 형식</p>
+      <ul class="text-sm text-onyx dark:text-zinc-100 space-y-1.5 list-disc list-inside">
         <li><span class="font-bold">.gpx</span> — 애플 건강, Strava, RunGap, HealthFit 표준</li>
         <li><span class="font-bold">.tcx</span> — Samsung Health(갤럭시워치), Garmin Connect</li>
         <li><span class="font-bold">.fit</span> — Garmin / Samsung 바이너리 (원본 그대로 가능)</li>
       </ul>
-      <div class="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 space-y-1">
+      <div class="text-xs text-gray-500 dark:text-zinc-400 bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 space-y-1">
         <p>📱 <b>애플워치</b>: Apple 건강 → 운동 → 해당 활동 → 공유 → .gpx</p>
         <p>📱 <b>갤럭시워치</b>: shealth.samsung.com → 운동 → 해당 활동 → 다운로드 → .tcx 또는 .fit</p>
         <p>💡 <b>Strava 연동 시</b>: 활동 페이지 → ⋯ → Export GPX/Original (가장 편함)</p>
@@ -166,18 +166,18 @@ const zonePct = computed(() => {
     <!-- 분석 결과 -->
     <template v-if="track && stats">
       <!-- 메타 -->
-      <section class="bg-white rounded-2xl shadow p-4 flex items-center justify-between flex-wrap gap-2">
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 flex items-center justify-between flex-wrap gap-2">
         <div class="text-xs">
-          <p class="text-gray-400">소스</p>
-          <p class="font-bold text-navy">.{{ track.meta.source }} · {{ track.meta.sampleCount }} 샘플</p>
+          <p class="text-gray-400 dark:text-zinc-500">소스</p>
+          <p class="font-bold text-navy dark:text-zinc-100">.{{ track.meta.source }} · {{ track.meta.sampleCount }} 샘플</p>
         </div>
         <div class="text-xs">
-          <p class="text-gray-400">활동 시간</p>
-          <p class="font-bold text-navy">{{ fmtDuration(track.meta.durationSec) }}</p>
+          <p class="text-gray-400 dark:text-zinc-500">활동 시간</p>
+          <p class="font-bold text-navy dark:text-zinc-100">{{ fmtDuration(track.meta.durationSec) }}</p>
         </div>
         <div class="text-xs">
-          <p class="text-gray-400">평균 페이스</p>
-          <p class="font-bold text-navy">{{ fmtPace(stats.avgPaceMinPerKm) }}</p>
+          <p class="text-gray-400 dark:text-zinc-500">평균 페이스</p>
+          <p class="font-bold text-navy dark:text-zinc-100">{{ fmtPace(stats.avgPaceMinPerKm) }}</p>
         </div>
         <BaseButton size="sm" variant="ghost" @click="reset">다른 파일</BaseButton>
       </section>
@@ -199,9 +199,9 @@ const zonePct = computed(() => {
       </section>
 
       <!-- 활동 시간 분포 -->
-      <section v-if="zonePct" class="bg-white rounded-2xl shadow p-5">
-        <p class="text-sm font-bold text-navy mb-3">⏱ 활동 시간 분포</p>
-        <div class="flex h-8 rounded-lg overflow-hidden ring-1 ring-gray-200">
+      <section v-if="zonePct" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+        <p class="text-sm font-bold text-navy dark:text-zinc-100 mb-3">⏱ 활동 시간 분포</p>
+        <div class="flex h-8 rounded-lg overflow-hidden ring-1 ring-gray-200 dark:ring-zinc-700">
           <div class="bg-gray-300" :style="{ width: zonePct.stand + '%' }" :title="`정지 ${fmtDuration(zonePct.standSec)}`"></div>
           <div class="bg-emerald-400" :style="{ width: zonePct.jog + '%' }" :title="`조깅 ${fmtDuration(zonePct.jogSec)}`"></div>
           <div class="bg-amber-500" :style="{ width: zonePct.run + '%' }" :title="`러닝 ${fmtDuration(zonePct.runSec)}`"></div>
@@ -228,12 +228,12 @@ const zonePct = computed(() => {
       </section>
 
       <!-- 트랙 미리보기 (SVG, 의존성 0) -->
-      <section class="bg-white rounded-2xl shadow p-5">
-        <p class="text-sm font-bold text-navy mb-2">🗺 트랙 미리보기</p>
-        <p class="text-[10px] text-gray-400 mb-2">위도/경도 정규화 (배경 지도 없음 — 다음 단계에서 추가)</p>
+      <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+        <p class="text-sm font-bold text-navy dark:text-zinc-100 mb-2">🗺 트랙 미리보기</p>
+        <p class="text-[10px] text-gray-400 dark:text-zinc-500 mb-2">위도/경도 정규화 (배경 지도 없음 — 다음 단계에서 추가)</p>
         <svg
           :viewBox="`0 0 ${SVG_W} ${SVG_H}`"
-          class="w-full bg-gradient-to-br from-emerald-50 to-sky-50 rounded-lg ring-1 ring-gray-200"
+          class="w-full bg-gradient-to-br from-emerald-50 to-sky-50 rounded-lg ring-1 ring-gray-200 dark:ring-zinc-700"
         >
           <path :d="trackPath" stroke="#0a2540" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
         </svg>

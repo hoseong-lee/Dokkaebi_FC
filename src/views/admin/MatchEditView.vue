@@ -185,38 +185,38 @@ onMounted(load)
 
 <template>
   <div>
-    <h2 class="font-bold text-navy mb-4">{{ isEdit ? '경기 수정' : '경기 등록' }}</h2>
+    <h2 class="font-bold text-navy dark:text-zinc-100 mb-4">{{ isEdit ? '경기 수정' : '경기 등록' }}</h2>
 
     <LoadingSpinner v-if="loading" />
     <form v-else class="space-y-4" @submit.prevent="save">
       <!-- 기본 정보 -->
-      <div class="bg-white rounded-2xl shadow p-5 space-y-4">
+      <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-4">
         <div>
-          <label class="block text-xs text-gray-500 mb-1">상대팀</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">상대팀</label>
           <input v-model="form.opponent" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="상대팀 이름" />
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">경기 일시</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">경기 일시</label>
           <input v-model="form.date" type="datetime-local" class="w-full border rounded-lg px-3 py-2 text-sm" />
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">경기 종류</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">경기 종류</label>
           <div class="flex gap-1.5 flex-wrap">
             <button
               v-for="(l, k) in MATCH_TYPE_LABEL"
               :key="k"
               type="button"
               class="flex-1 min-w-[4rem] py-2 rounded-lg text-sm transition-colors"
-              :class="form.type === k ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
+              :class="form.type === k ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
               @click="form.type = k"
             >{{ l }}</button>
           </div>
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">구장 선택 (즐겨찾기)</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">구장 선택 (즐겨찾기)</label>
           <select
             v-model="form.venueId"
-            class="w-full border rounded-lg px-3 py-2 text-sm bg-white"
+            class="w-full border rounded-lg px-3 py-2 text-sm bg-white dark:bg-zinc-800"
             @change="applyVenueAuto(form.venueId)"
           >
             <option value="">선택 안 함</option>
@@ -224,65 +224,65 @@ onMounted(load)
               {{ v.name }}{{ v.address ? ' (' + v.address + ')' : '' }}
             </option>
           </select>
-          <p class="text-[10px] text-gray-400 mt-0.5">
-            등록된 구장이 없으면 <RouterLink to="/venues" class="text-navy underline">우리 구장</RouterLink>에서 먼저 등록하세요. 길찾기 자동 활성됩니다.
+          <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-0.5">
+            등록된 구장이 없으면 <RouterLink to="/venues" class="text-navy dark:text-zinc-100 underline">우리 구장</RouterLink>에서 먼저 등록하세요. 길찾기 자동 활성됩니다.
           </p>
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">경기장 이름 (자유 입력)</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">경기장 이름 (자유 입력)</label>
           <input v-model="form.location" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="구장 미선택 시 직접 입력" />
         </div>
         <div>
-          <label class="block text-xs text-gray-500 mb-1">지도 링크 (선택)</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">지도 링크 (선택)</label>
           <input v-model="form.locationUrl" type="url" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="https://map..." />
         </div>
       </div>
 
       <!-- 경기 영상 (선택, 쿼터별 분리 가능) -->
-      <div class="bg-white rounded-2xl shadow p-5 space-y-3">
+      <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-3">
         <div class="flex items-center justify-between">
-          <p class="font-bold text-navy">📹 경기 영상 (선택)</p>
+          <p class="font-bold text-navy dark:text-zinc-100">📹 경기 영상 (선택)</p>
           <button type="button" class="text-xs px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 font-semibold hover:bg-rose-100" @click="addVideo">+ 영상 추가</button>
         </div>
-        <p v-if="videos.length === 0" class="text-xs text-gray-400">유튜브 영상 URL을 등록하면 경기 상세 페이지에서 임베드로 재생됩니다.</p>
-        <div v-for="(v, i) in videos" :key="i" class="bg-gray-50 rounded-lg p-2.5 space-y-1.5">
+        <p v-if="videos.length === 0" class="text-xs text-gray-400 dark:text-zinc-500">유튜브 영상 URL을 등록하면 경기 상세 페이지에서 임베드로 재생됩니다.</p>
+        <div v-for="(v, i) in videos" :key="i" class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-2.5 space-y-1.5">
           <div class="flex gap-2 items-center">
             <input v-model="v.label" type="text" maxlength="10" placeholder="라벨 (예: 1Q, 하이라이트)" class="w-32 border rounded-lg px-2 py-1.5 text-sm shrink-0" />
             <input v-model="v.url" type="url" placeholder="https://youtu.be/..." class="flex-1 border rounded-lg px-3 py-1.5 text-sm font-mono min-w-0" />
             <button type="button" class="text-rose-500 hover:bg-rose-50 rounded-full w-7 h-7 flex items-center justify-center shrink-0" @click="removeVideo(i)" title="제거">✕</button>
           </div>
           <div class="flex gap-2 items-center pl-1">
-            <span class="text-[11px] text-gray-500 font-semibold shrink-0">⏱ 구간 (선택)</span>
+            <span class="text-[11px] text-gray-500 dark:text-zinc-400 font-semibold shrink-0">⏱ 구간 (선택)</span>
             <input v-model="v.startStr" type="text" placeholder="시작 (1:30)" class="w-24 border rounded-lg px-2 py-1 text-xs font-mono" />
-            <span class="text-gray-400 text-xs">~</span>
+            <span class="text-gray-400 dark:text-zinc-500 text-xs">~</span>
             <input v-model="v.endStr" type="text" placeholder="끝 (2:45)" class="w-24 border rounded-lg px-2 py-1 text-xs font-mono" />
-            <span class="text-[10px] text-gray-400">비워두면 전체 재생</span>
+            <span class="text-[10px] text-gray-400 dark:text-zinc-500">비워두면 전체 재생</span>
           </div>
           <label class="flex items-center gap-2 pl-1 cursor-pointer">
             <input type="checkbox" v-model="v.highlight" class="w-4 h-4 accent-amber-500" />
             <span class="text-xs text-amber-700 font-semibold">🏅 베스트 골 모음에 노출</span>
           </label>
         </div>
-        <p v-if="videos.length > 0" class="text-[11px] text-gray-400">
+        <p v-if="videos.length > 0" class="text-[11px] text-gray-400 dark:text-zinc-500">
           ✓ 지원 URL: youtube.com/watch?v= / youtu.be/ / shorts/ / embed/<br>
           ✓ 시간 포맷: <span class="font-mono">1:30</span> (1분 30초) · <span class="font-mono">90</span> (90초) · <span class="font-mono">1:02:30</span> (1시간 2분 30초)
         </p>
       </div>
 
       <!-- 스쿼드 메이커 (접이식, 4쿼터) -->
-      <div class="bg-white rounded-2xl shadow">
+      <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow">
         <button
           type="button"
           class="w-full flex items-center justify-between p-5 text-left"
           @click="squadOpen = !squadOpen"
         >
           <span>
-            <span class="font-bold text-navy">스쿼드 메이커</span>
-            <span class="text-xs text-gray-400 ml-2">
+            <span class="font-bold text-navy dark:text-zinc-100">스쿼드 메이커</span>
+            <span class="text-xs text-gray-400 dark:text-zinc-500 ml-2">
               쿼터별 명단·포메이션 ({{ squadCount }}/4쿼터 작성됨)
             </span>
           </span>
-          <span class="text-gray-400">{{ squadOpen ? '▾' : '▸' }}</span>
+          <span class="text-gray-400 dark:text-zinc-500">{{ squadOpen ? '▾' : '▸' }}</span>
         </button>
         <div v-if="squadOpen" class="px-5 pb-5 border-t pt-4">
           <SquadMaker :squads="squads" :players="playersStore.activePlayers" :match="matchForShare" />

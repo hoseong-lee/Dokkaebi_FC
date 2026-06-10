@@ -92,7 +92,7 @@ onMounted(() => {
         class="fixed inset-x-0 bottom-20 sm:bottom-6 z-[80] px-4 sm:px-6 pointer-events-none"
         style="padding-bottom: env(safe-area-inset-bottom);"
       >
-        <div class="pointer-events-auto max-w-sm mx-auto bg-white rounded-2xl shadow-2xl ring-1 ring-gray-200 overflow-hidden">
+        <div class="pointer-events-auto max-w-sm mx-auto bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl ring-1 ring-gray-200 dark:ring-zinc-700 overflow-hidden">
           <!-- 헤더 -->
           <div class="flex items-center gap-3 p-4 bg-gradient-to-r from-navy to-navy/90 text-white">
             <img
@@ -114,14 +114,14 @@ onMounted(() => {
 
           <!-- 본문 — Android (자동 설치 가능) -->
           <div v-if="deferredEvent" class="p-4 space-y-3">
-            <p class="text-sm text-onyx leading-relaxed">
-              앱처럼 설치하면 <span class="font-semibold text-navy">홈 화면 아이콘</span>으로 빠르게 열고
-              <span class="font-semibold text-navy">알림</span>을 받을 수 있어요.
+            <p class="text-sm text-onyx dark:text-zinc-100 leading-relaxed">
+              앱처럼 설치하면 <span class="font-semibold text-navy dark:text-zinc-100">홈 화면 아이콘</span>으로 빠르게 열고
+              <span class="font-semibold text-navy dark:text-zinc-100">알림</span>을 받을 수 있어요.
             </p>
             <div class="flex gap-2">
               <button
                 type="button"
-                class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold transition-colors"
+                class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 text-gray-700 dark:text-zinc-200 text-sm font-semibold transition-colors"
                 @click="dismiss"
               >나중에</button>
               <button
@@ -135,14 +135,14 @@ onMounted(() => {
 
           <!-- 본문 — iOS (수동 가이드) -->
           <div v-else class="p-4 space-y-3">
-            <p class="text-sm text-onyx leading-relaxed">
-              <span class="font-semibold text-navy">iOS 는 자동 설치가 안 됩니다.</span>
+            <p class="text-sm text-onyx dark:text-zinc-100 leading-relaxed">
+              <span class="font-semibold text-navy dark:text-zinc-100">iOS 는 자동 설치가 안 됩니다.</span>
               아래 순서로 홈 화면에 추가해 주세요:
             </p>
-            <ol class="text-sm text-onyx space-y-1.5 pl-1">
+            <ol class="text-sm text-onyx dark:text-zinc-100 space-y-1.5 pl-1">
               <li class="flex items-start gap-2">
                 <span class="shrink-0 w-5 h-5 rounded-full bg-navy text-white text-xs font-bold flex items-center justify-center">1</span>
-                <span>Safari 하단 <span class="inline-block px-1.5 py-0.5 bg-gray-100 rounded font-mono text-xs">공유 ↑</span> 버튼 탭</span>
+                <span>Safari 하단 <span class="inline-block px-1.5 py-0.5 bg-gray-100 dark:bg-zinc-700 rounded font-mono text-xs">공유 ↑</span> 버튼 탭</span>
               </li>
               <li class="flex items-start gap-2">
                 <span class="shrink-0 w-5 h-5 rounded-full bg-navy text-white text-xs font-bold flex items-center justify-center">2</span>
@@ -159,7 +159,7 @@ onMounted(() => {
             </ol>
             <button
               type="button"
-              class="w-full px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold transition-colors"
+              class="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 text-gray-700 dark:text-zinc-200 text-sm font-semibold transition-colors"
               @click="dismiss"
             >알겠습니다</button>
           </div>

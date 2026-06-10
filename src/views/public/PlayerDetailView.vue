@@ -122,12 +122,12 @@ watch(() => route.params.id, load)
   <LoadingSpinner v-if="loading" label="불러오는 중..." />
   <EmptyState v-else-if="!player" icon="🔍" title="선수를 찾을 수 없습니다" />
   <div v-else class="space-y-4">
-    <section class="bg-white rounded-2xl shadow p-6">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
       <div class="flex items-center gap-4">
         <PlayerAvatar :player="player" :size="80" />
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h1 class="text-2xl font-bold text-navy">{{ player.name }}</h1>
+            <h1 class="text-2xl font-bold text-navy dark:text-zinc-100">{{ player.name }}</h1>
             <span v-if="player.number != null" class="text-dokkaebi font-bold">#{{ player.number }}</span>
             <span v-if="player.isRegular" class="text-amber-500 text-xs">★</span>
           </div>
@@ -138,21 +138,21 @@ watch(() => route.params.id, load)
           >
             {{ POSITION_LABEL[player.position] || player.position }}
           </span>
-          <span v-if="player.mainPosition" class="text-xs text-gray-600">
+          <span v-if="player.mainPosition" class="text-xs text-gray-600 dark:text-zinc-400">
             {{ player.mainPosition }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
           </span>
-          <span v-if="player.preferredFoot" class="text-xs text-gray-500">
+          <span v-if="player.preferredFoot" class="text-xs text-gray-500 dark:text-zinc-400">
             · {{ FOOT_LABEL[player.preferredFoot] }}
           </span>
         </div>
-          <p v-if="player.joinedAt" class="text-xs text-gray-400 mt-1">
+          <p v-if="player.joinedAt" class="text-xs text-gray-400 dark:text-zinc-500 mt-1">
             가입 {{ formatDate(player.joinedAt, 'YYYY.MM.DD') }}
           </p>
         </div>
       </div>
       <p
         v-if="player.bio"
-        class="text-sm text-gray-700 mt-3 bg-gray-50 rounded-lg px-3 py-2 italic"
+        class="text-sm text-gray-700 dark:text-zinc-200 mt-3 bg-gray-50 dark:bg-zinc-900 rounded-lg px-3 py-2 italic"
       >
         💬 {{ player.bio }}
       </p>
@@ -163,13 +163,13 @@ watch(() => route.params.id, load)
         <span
           v-if="player.favoriteClub"
           class="inline-flex items-center gap-1.5 text-xs pl-1 pr-2.5 py-1 rounded-full font-semibold"
-          :class="findClub(player.favoriteClub)?.color || 'bg-gray-100 text-gray-700'"
+          :class="findClub(player.favoriteClub)?.color || 'bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200'"
         >
           <img
             v-if="findClub(player.favoriteClub)"
             :src="clubLogo(findClub(player.favoriteClub).id)"
             :alt="player.favoriteClub"
-            class="w-5 h-5 object-contain bg-white rounded-full p-0.5"
+            class="w-5 h-5 object-contain bg-white dark:bg-zinc-800 rounded-full p-0.5"
           />
           <span v-else>⚽</span>
           {{ player.favoriteClub }}
@@ -183,10 +183,10 @@ watch(() => route.params.id, load)
       </div>
     </section>
 
-    <section class="bg-white rounded-2xl shadow p-6">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
       <div class="flex items-center justify-between mb-4 gap-2">
-        <h2 class="font-bold text-navy">기록</h2>
-        <select v-model="scope" class="border rounded-lg px-3 py-1.5 text-xs bg-white">
+        <h2 class="font-bold text-navy dark:text-zinc-100">기록</h2>
+        <select v-model="scope" class="border rounded-lg px-3 py-1.5 text-xs bg-white dark:bg-zinc-800">
           <option value="total">통산</option>
           <option v-for="s in seasonStore.list" :key="s.id" :value="s.id">{{ s.name }}</option>
         </select>
@@ -194,19 +194,19 @@ watch(() => route.params.id, load)
 
       <PlayerStatsCards :stats="stats" :footer="false" class="mb-4" />
       <PlayerStatsChart :stats="stats" />
-      <p class="text-center text-sm text-gray-500 mt-3">
-        공격 포인트 <span class="font-bold text-navy text-base">{{ attackPoints(stats) }}</span>
+      <p class="text-center text-sm text-gray-500 dark:text-zinc-400 mt-3">
+        공격 포인트 <span class="font-bold text-navy dark:text-zinc-100 text-base">{{ attackPoints(stats) }}</span>
       </p>
     </section>
 
-    <section v-if="scope !== 'total'" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">{{ currentLabel }} 월별 추이</h2>
+    <section v-if="scope !== 'total'" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">{{ currentLabel }} 월별 추이</h2>
       <PlayerMonthlyChart :series="series" />
     </section>
 
     <!-- FIFA 능력치 카드 (스킬 평판 기반 자동) -->
-    <section v-if="player" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">🎮 능력치 카드</h2>
+    <section v-if="player" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">🎮 능력치 카드</h2>
       <SkillRadarChart
         :skill-tags="scope === 'total' ? (player.stats?.skillTags || {}) : (player.seasonStats?.[scope]?.skillTags || {})"
         :name="player.name"
@@ -218,9 +218,9 @@ watch(() => route.params.id, load)
     <EndorsementSection :player="player" :season-id="scope === 'total' ? null : scope" />
 
     <!-- 받은 칭찬 분포 -->
-    <section v-if="complimentTagStats.length" class="bg-white rounded-2xl shadow p-6">
+    <section v-if="complimentTagStats.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-navy">💝 받은 칭찬</h2>
+        <h2 class="font-bold text-navy dark:text-zinc-100">💝 받은 칭찬</h2>
         <span v-if="topComplimentTag" class="text-xs text-rose-600 font-semibold">
           대표 강점: {{ topComplimentTag.icon }} {{ topComplimentTag.label }}
         </span>
@@ -233,27 +233,27 @@ watch(() => route.params.id, load)
           <span class="text-[11px] px-2 py-1 rounded-full ring-1 font-semibold shrink-0 w-44" :class="t.tone">
             {{ t.icon }} {{ t.label }}
           </span>
-          <div class="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+          <div class="flex-1 bg-gray-100 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
             <div
               class="h-full rounded-full transition-all"
               :class="t.tone.split(' ').find(c => c.startsWith('ring-'))?.replace('ring-', 'bg-') || 'bg-rose-500'"
               :style="{ width: Math.min(100, (t.count / (complimentTagStats[0]?.count || 1)) * 100) + '%' }"
             ></div>
           </div>
-          <span class="text-sm font-bold text-onyx tabular-nums shrink-0 w-8 text-right">{{ t.count }}</span>
+          <span class="text-sm font-bold text-onyx dark:text-zinc-100 tabular-nums shrink-0 w-8 text-right">{{ t.count }}</span>
         </div>
       </div>
     </section>
 
     <!-- 뱃지 -->
-    <section v-if="badges.length" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">🏅 획득 뱃지 ({{ badges.length }})</h2>
+    <section v-if="badges.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">🏅 획득 뱃지 ({{ badges.length }})</h2>
       <div class="flex flex-wrap gap-2">
         <div
           v-for="b in badges"
           :key="b.id"
           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold"
-          :class="BADGE_TONE[b.icon] || 'bg-gray-50 text-gray-700 border-gray-200'"
+          :class="BADGE_TONE[b.icon] || 'bg-gray-50 dark:bg-zinc-900 text-gray-700 dark:text-zinc-200 border-gray-200 dark:border-zinc-700'"
           :title="b.desc"
         >
           <span>{{ b.icon }}</span>
@@ -263,38 +263,38 @@ watch(() => route.params.id, load)
     </section>
 
     <!-- 시즌별 비교 -->
-    <section v-if="seasonsForCompare.length >= 2" class="bg-white rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy mb-3">시즌별 비교</h2>
+    <section v-if="seasonsForCompare.length >= 2" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">시즌별 비교</h2>
       <div class="overflow-x-auto">
         <table class="w-full text-sm border-collapse">
           <thead>
             <tr class="border-b">
-              <th class="text-left py-2 text-xs text-gray-500 font-medium">지표</th>
+              <th class="text-left py-2 text-xs text-gray-500 dark:text-zinc-400 font-medium">지표</th>
               <th
                 v-for="s in seasonsForCompare"
                 :key="s.id"
                 class="text-center py-2 text-xs font-bold"
-                :class="s.active ? 'text-dokkaebi' : 'text-gray-700'"
+                :class="s.active ? 'text-dokkaebi' : 'text-gray-700 dark:text-zinc-200'"
               >
                 {{ s.name }}
                 <span v-if="s.active" class="text-[9px] align-middle bg-dokkaebi text-white rounded px-1 ml-0.5">진행</span>
               </th>
-              <th class="text-center py-2 text-xs text-gray-400 font-medium">통산</th>
-              <th class="text-right py-2 text-xs text-gray-400 font-medium">추세</th>
+              <th class="text-center py-2 text-xs text-gray-400 dark:text-zinc-500 font-medium">통산</th>
+              <th class="text-right py-2 text-xs text-gray-400 dark:text-zinc-500 font-medium">추세</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="r in compareTable" :key="r.key" class="border-b last:border-b-0">
-              <td class="py-2 text-gray-600">{{ r.label }}</td>
+              <td class="py-2 text-gray-600 dark:text-zinc-400">{{ r.label }}</td>
               <td
                 v-for="(c, i) in r.cells"
                 :key="c.seasonId"
                 class="text-center py-2 tabular-nums"
-                :class="i === 0 ? 'font-bold text-navy text-base' : 'text-gray-700'"
+                :class="i === 0 ? 'font-bold text-navy dark:text-zinc-100 text-base' : 'text-gray-700 dark:text-zinc-200'"
               >
-                {{ c.value }}<span class="text-[10px] text-gray-400 ml-0.5">{{ r.unit }}</span>
+                {{ c.value }}<span class="text-[10px] text-gray-400 dark:text-zinc-500 ml-0.5">{{ r.unit }}</span>
               </td>
-              <td class="text-center py-2 tabular-nums text-gray-500">{{ r.total }}</td>
+              <td class="text-center py-2 tabular-nums text-gray-500 dark:text-zinc-400">{{ r.total }}</td>
               <td class="text-right py-2 text-xs tabular-nums">
                 <span
                   v-if="r.trend && r.trend > 0"
@@ -310,7 +310,7 @@ watch(() => route.params.id, load)
           </tbody>
         </table>
       </div>
-      <p class="text-[11px] text-gray-400 mt-2">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
         추세 = 최신 시즌({{ seasonsForCompare[0]?.name }}) − 직전({{ seasonsForCompare[1]?.name }})
       </p>
     </section>

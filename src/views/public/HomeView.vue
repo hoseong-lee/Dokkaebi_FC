@@ -59,10 +59,10 @@ onMounted(async () => {
       <section>
         <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold text-navy dark:text-zinc-100">다가오는 경기</h2>
-          <RouterLink to="/matches" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:hover:text-zinc-200">전체 보기</RouterLink>
+          <RouterLink to="/matches" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100 dark:hover:text-zinc-200">전체 보기</RouterLink>
         </div>
         <MatchCard v-if="matchesStore.nextMatch" :match="matchesStore.nextMatch" />
-        <p v-else class="text-sm text-gray-400 dark:text-zinc-400 bg-white dark:bg-zinc-800 rounded-xl p-4 text-center">
+        <p v-else class="text-sm text-gray-400 dark:text-zinc-500 dark:text-zinc-400 bg-white dark:bg-zinc-800 rounded-xl p-4 text-center">
           예정된 경기가 없습니다.
         </p>
       </section>
@@ -79,7 +79,7 @@ onMounted(async () => {
       <section v-if="top3.length">
         <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold text-navy dark:text-zinc-100">공격포인트 TOP 3</h2>
-          <RouterLink to="/rankings" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:hover:text-zinc-200">랭킹 보기</RouterLink>
+          <RouterLink to="/rankings" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100 dark:hover:text-zinc-200">랭킹 보기</RouterLink>
         </div>
         <ol class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm divide-y divide-gray-100 dark:divide-zinc-700">
           <li

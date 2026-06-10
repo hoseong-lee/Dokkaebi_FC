@@ -19,7 +19,7 @@ const options = [
       :key="o.key"
       type="button"
       class="flex flex-col items-center gap-1 py-3 rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
-      :class="current === o.key ? o.active : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+      :class="current === o.key ? o.active : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600'"
       :disabled="saving"
       @click="emit('respond', o.key)"
     >

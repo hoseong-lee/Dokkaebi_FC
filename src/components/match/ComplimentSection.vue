@@ -86,30 +86,30 @@ const ranking = computed(() => {
 </script>
 
 <template>
-  <section class="bg-white rounded-2xl shadow p-6">
+  <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
     <div class="flex items-center justify-between mb-2">
-      <h2 class="font-bold text-navy">💝 칭찬합니다</h2>
-      <span class="text-xs text-gray-400">{{ totalVoters }}명 참여</span>
+      <h2 class="font-bold text-navy dark:text-zinc-100">💝 칭찬합니다</h2>
+      <span class="text-xs text-gray-400 dark:text-zinc-500">{{ totalVoters }}명 참여</span>
     </div>
 
-    <p v-if="match.votingClosed" class="text-xs text-gray-500 mb-3">
+    <p v-if="match.votingClosed" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       칭찬 투표가 마감되었습니다. 받은 태그 개수가 매너 점수로 누적됐어요.
     </p>
     <p v-else-if="expired" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mb-3 leading-relaxed">
       ⏰ 경기 후 2주가 지나 투표가 종료되었습니다.
     </p>
-    <p v-else-if="!eligible" class="text-xs text-gray-500 mb-3">
+    <p v-else-if="!eligible" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       <template v-if="!auth.myPlayerId">먼저 헤더의 "내 선수 연결"에서 본인 선수를 지정하세요.</template>
       <template v-else>이 경기에 참여한 선수만 칭찬할 수 있습니다.</template>
     </p>
-    <p v-else class="text-xs text-gray-500 mb-3 leading-relaxed">
+    <p v-else class="text-xs text-gray-500 dark:text-zinc-400 mb-3 leading-relaxed">
       좋은 플레이를 보여준 동료에게 어떤 점이 인상적이었는지 태그로 골라주세요.
       <br>
-      최대 <span class="font-bold text-navy">{{ COMPLIMENT_MAX_PLAYERS }}명</span> · 자기 자신 제외 · 한 명에게 여러 태그 가능
+      최대 <span class="font-bold text-navy dark:text-zinc-100">{{ COMPLIMENT_MAX_PLAYERS }}명</span> · 자기 자신 제외 · 한 명에게 여러 태그 가능
     </p>
 
     <!-- 태그 범례 -->
-    <div class="flex flex-wrap gap-1.5 mb-4 pb-3 border-b border-gray-100">
+    <div class="flex flex-wrap gap-1.5 mb-4 pb-3 border-b border-gray-100 dark:border-zinc-700">
       <span
         v-for="t in COMPLIMENT_TAGS" :key="t.id"
         class="text-[10px] px-2 py-0.5 rounded-full ring-1"
@@ -124,20 +124,20 @@ const ranking = computed(() => {
       <li
         v-for="c in candidates" :key="c.id"
         class="p-3 rounded-xl transition-colors"
-        :class="(localPicks[c.id] || []).length ? 'bg-rose-50 ring-1 ring-rose-200' : 'bg-gray-50'"
+        :class="(localPicks[c.id] || []).length ? 'bg-rose-50 ring-1 ring-rose-200' : 'bg-gray-50 dark:bg-zinc-900'"
       >
         <div class="flex items-center gap-3 mb-2">
           <span v-if="closed && ranking[0]?.pid === c.id && ranking[0]?.count > 0" class="text-amber-500 text-lg">🏅</span>
           <PlayerAvatar :player="c" :size="36" />
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-onyx truncate">
+            <p class="text-sm font-bold text-onyx dark:text-zinc-100 truncate">
               {{ c.name }}
-              <span v-if="c.id === auth.myPlayerId" class="text-[10px] text-gray-400 font-normal">(나)</span>
+              <span v-if="c.id === auth.myPlayerId" class="text-[10px] text-gray-400 dark:text-zinc-500 font-normal">(나)</span>
             </p>
             <div v-if="tagBreakdown[c.id] && Object.keys(tagBreakdown[c.id]).length" class="flex flex-wrap gap-1 mt-1">
               <span
                 v-for="(count, tag) in tagBreakdown[c.id]" :key="tag"
-                class="text-[10px] px-1.5 py-0.5 rounded bg-white text-gray-600 ring-1 ring-gray-200"
+                class="text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 ring-1 ring-gray-200 dark:ring-zinc-700"
                 :title="COMPLIMENT_TAG_MAP[tag]?.label"
               >
                 {{ COMPLIMENT_TAG_MAP[tag]?.icon }} {{ count }}
@@ -155,7 +155,7 @@ const ranking = computed(() => {
             v-for="t in COMPLIMENT_TAGS" :key="t.id"
             type="button"
             class="text-xs px-2.5 py-1 rounded-full font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            :class="isPickedTag(c.id, t.id) ? t.tone + ' ring-1 ring-current scale-105 shadow-sm' : 'bg-white text-gray-500 ring-1 ring-gray-200'"
+            :class="isPickedTag(c.id, t.id) ? t.tone + ' ring-1 ring-current scale-105 shadow-sm' : 'bg-white dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 ring-1 ring-gray-200 dark:ring-zinc-700'"
             :disabled="!eligible || saving"
             @click="toggleTag(c.id, t.id)"
           >
@@ -165,7 +165,7 @@ const ranking = computed(() => {
       </li>
     </ul>
 
-    <p v-if="!closed && eligible" class="text-[11px] text-gray-400 mt-3 text-right">
+    <p v-if="!closed && eligible" class="text-[11px] text-gray-400 dark:text-zinc-500 mt-3 text-right">
       칭찬한 선수: <span class="font-bold text-rose-600">{{ myPickedPlayerCount }}</span>/{{ COMPLIMENT_MAX_PLAYERS }}
     </p>
   </section>

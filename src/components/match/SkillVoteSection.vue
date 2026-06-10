@@ -84,29 +84,29 @@ async function toggleTag(pid, tagId) {
 </script>
 
 <template>
-  <section class="bg-white rounded-2xl shadow p-6">
+  <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
     <div class="flex items-center justify-between mb-2">
-      <h2 class="font-bold text-navy">⭐ 스킬 평가</h2>
-      <span class="text-xs text-gray-400">{{ totalVoters }}명 참여</span>
+      <h2 class="font-bold text-navy dark:text-zinc-100">⭐ 스킬 평가</h2>
+      <span class="text-xs text-gray-400 dark:text-zinc-500">{{ totalVoters }}명 참여</span>
     </div>
 
-    <p v-if="match.votingClosed" class="text-xs text-gray-500 mb-3">
+    <p v-if="match.votingClosed" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       스킬 평가가 마감되었습니다. 받은 태그가 누적 평판으로 더해졌어요.
     </p>
     <p v-else-if="expired" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mb-3">
       ⏰ 경기 후 2주가 지나 평가가 종료되었습니다.
     </p>
-    <p v-else-if="!eligible" class="text-xs text-gray-500 mb-3">
+    <p v-else-if="!eligible" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       <template v-if="!auth.myPlayerId">먼저 "내 선수 연결"에서 본인 선수를 지정하세요.</template>
       <template v-else>이 경기에 참여한 선수만 평가할 수 있습니다.</template>
     </p>
-    <p v-else class="text-xs text-gray-500 mb-3 leading-relaxed">
+    <p v-else class="text-xs text-gray-500 dark:text-zinc-400 mb-3 leading-relaxed">
       이 경기에서 동료가 어떤 기술/능력을 보여줬는지 자유롭게 평가하세요.
       <br>인원·태그 제약 없음 · 자기 자신 제외 · 누적되어 평판이 됩니다.
     </p>
 
     <!-- 태그 범례 -->
-    <div class="flex flex-wrap gap-1 mb-4 pb-3 border-b border-gray-100">
+    <div class="flex flex-wrap gap-1 mb-4 pb-3 border-b border-gray-100 dark:border-zinc-700">
       <span
         v-for="t in SKILL_TAGS" :key="t.id"
         class="text-[10px] px-1.5 py-0.5 rounded-full ring-1"
@@ -121,19 +121,19 @@ async function toggleTag(pid, tagId) {
       <li
         v-for="c in candidates" :key="c.id"
         class="p-3 rounded-xl transition-colors"
-        :class="(localPicks[c.id] || []).length ? 'bg-blue-50 ring-1 ring-blue-200' : 'bg-gray-50'"
+        :class="(localPicks[c.id] || []).length ? 'bg-blue-50 ring-1 ring-blue-200' : 'bg-gray-50 dark:bg-zinc-900'"
       >
         <div class="flex items-center gap-3 mb-2">
           <PlayerAvatar :player="c" :size="36" />
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-onyx truncate">
+            <p class="text-sm font-bold text-onyx dark:text-zinc-100 truncate">
               {{ c.name }}
-              <span v-if="c.id === auth.myPlayerId" class="text-[10px] text-gray-400 font-normal">(나)</span>
+              <span v-if="c.id === auth.myPlayerId" class="text-[10px] text-gray-400 dark:text-zinc-500 font-normal">(나)</span>
             </p>
             <div v-if="tagBreakdown[c.id] && Object.keys(tagBreakdown[c.id]).length" class="flex flex-wrap gap-1 mt-1">
               <span
                 v-for="(count, tag) in tagBreakdown[c.id]" :key="tag"
-                class="text-[10px] px-1.5 py-0.5 rounded bg-white text-gray-600 ring-1 ring-gray-200"
+                class="text-[10px] px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 ring-1 ring-gray-200 dark:ring-zinc-700"
                 :title="SKILL_TAG_MAP[tag]?.label"
               >
                 {{ SKILL_TAG_MAP[tag]?.icon }} {{ count }}
@@ -151,7 +151,7 @@ async function toggleTag(pid, tagId) {
             v-for="t in SKILL_TAGS" :key="t.id"
             type="button"
             class="text-xs px-2.5 py-1 rounded-full font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            :class="isPickedTag(c.id, t.id) ? t.tone + ' ring-1 ring-current scale-105 shadow-sm' : 'bg-white text-gray-500 ring-1 ring-gray-200'"
+            :class="isPickedTag(c.id, t.id) ? t.tone + ' ring-1 ring-current scale-105 shadow-sm' : 'bg-white dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 ring-1 ring-gray-200 dark:ring-zinc-700'"
             :disabled="!eligible || saving"
             @click="toggleTag(c.id, t.id)"
           >

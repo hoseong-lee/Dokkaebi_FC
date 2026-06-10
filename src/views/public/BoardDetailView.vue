@@ -75,25 +75,25 @@ async function remove() {
   <LoadingSpinner v-if="loading" />
   <EmptyState v-else-if="!post" icon="🔍" title="글을 찾을 수 없습니다" />
   <div v-else class="space-y-4">
-    <article class="bg-white rounded-2xl shadow p-5">
+    <article class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <div class="flex items-start justify-between gap-2">
-        <h1 class="text-lg font-bold text-navy">{{ post.title }}</h1>
+        <h1 class="text-lg font-bold text-navy dark:text-zinc-100">{{ post.title }}</h1>
         <div v-if="canEdit" class="flex gap-1 shrink-0">
-          <RouterLink :to="`/board/${post.id}/edit`" class="text-xs text-gray-400 hover:text-navy">수정</RouterLink>
-          <button class="text-xs text-gray-400 hover:text-dokkaebi" @click="remove">삭제</button>
+          <RouterLink :to="`/board/${post.id}/edit`" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100">수정</RouterLink>
+          <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-dokkaebi" @click="remove">삭제</button>
         </div>
       </div>
-      <p class="text-xs text-gray-400 mt-1">{{ post.authorName }} · {{ formatDateTime(post.createdAt) }}</p>
-      <p class="text-sm text-gray-800 whitespace-pre-line mt-4">{{ post.body }}</p>
+      <p class="text-xs text-gray-400 dark:text-zinc-500 mt-1">{{ post.authorName }} · {{ formatDateTime(post.createdAt) }}</p>
+      <p class="text-sm text-gray-800 dark:text-zinc-200 whitespace-pre-line mt-4">{{ post.body }}</p>
     </article>
 
-    <section class="bg-white rounded-2xl shadow p-5">
-      <h2 class="font-bold text-navy mb-3">댓글 ({{ comments.length }})</h2>
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">댓글 ({{ comments.length }})</h2>
       <ul class="space-y-2 mb-4">
         <li v-for="c in comments" :key="c.id" class="flex items-start gap-2 text-sm">
           <div class="flex-1">
-            <p class="font-medium">{{ c.authorName }} <span class="text-xs text-gray-400">{{ fromNow(c.createdAt) }}</span></p>
-            <p class="text-gray-700 whitespace-pre-line">{{ c.body }}</p>
+            <p class="font-medium">{{ c.authorName }} <span class="text-xs text-gray-400 dark:text-zinc-500">{{ fromNow(c.createdAt) }}</span></p>
+            <p class="text-gray-700 dark:text-zinc-200 whitespace-pre-line">{{ c.body }}</p>
           </div>
           <button
             v-if="c.authorUid === auth.user?.uid || auth.isAdmin"

@@ -106,25 +106,25 @@ function matchLabel(id) {
   <LoadingSpinner v-if="loading" />
   <EmptyState v-else-if="!post" icon="🔍" title="글을 찾을 수 없습니다" />
   <div v-else class="space-y-4">
-    <article class="bg-white rounded-2xl shadow overflow-hidden">
+    <article class="bg-white dark:bg-zinc-800 rounded-2xl shadow overflow-hidden">
       <div class="p-5">
         <div class="flex items-start justify-between gap-2">
-          <h1 class="text-lg font-bold text-navy">{{ post.title || '(제목 없음)' }}</h1>
+          <h1 class="text-lg font-bold text-navy dark:text-zinc-100">{{ post.title || '(제목 없음)' }}</h1>
           <div v-if="canEdit" class="flex gap-1 shrink-0">
-            <RouterLink :to="`/photos/${post.id}/edit`" class="text-xs text-gray-400 hover:text-navy">수정</RouterLink>
-            <button class="text-xs text-gray-400 hover:text-dokkaebi" @click="remove">삭제</button>
+            <RouterLink :to="`/photos/${post.id}/edit`" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100">수정</RouterLink>
+            <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-dokkaebi" @click="remove">삭제</button>
           </div>
         </div>
-        <p class="text-xs text-gray-400 mt-1">
+        <p class="text-xs text-gray-400 dark:text-zinc-500 mt-1">
           {{ post.authorName }} · {{ formatDateTime(post.createdAt) }}
-          <RouterLink v-if="post.matchId" :to="`/matches/${post.matchId}`" class="ml-1 text-navy">
+          <RouterLink v-if="post.matchId" :to="`/matches/${post.matchId}`" class="ml-1 text-navy dark:text-zinc-100">
             · {{ matchLabel(post.matchId) }}
           </RouterLink>
         </p>
       </div>
 
       <!-- 이미지 캐러셀 -->
-      <div v-if="images.length" class="relative bg-gray-100">
+      <div v-if="images.length" class="relative bg-gray-100 dark:bg-zinc-700">
         <img
           :src="cldThumb(images[activeIdx], 1080)"
           alt=""
@@ -147,49 +147,49 @@ function matchLabel(id) {
               v-for="(_, i) in images"
               :key="i"
               class="w-1.5 h-1.5 rounded-full"
-              :class="i === activeIdx ? 'bg-white' : 'bg-white/40'"
+              :class="i === activeIdx ? 'bg-white dark:bg-zinc-800' : 'bg-white dark:bg-zinc-800/40'"
             ></span>
           </div>
         </template>
       </div>
 
       <div class="p-5 space-y-3">
-        <p v-if="post.body" class="text-sm text-gray-800 whitespace-pre-line">{{ post.body }}</p>
+        <p v-if="post.body" class="text-sm text-gray-800 dark:text-zinc-200 whitespace-pre-line">{{ post.body }}</p>
         <div v-if="post.tags?.length" class="flex flex-wrap gap-1">
           <span
             v-for="t in post.tags"
             :key="t"
-            class="text-[10px] text-navy bg-navy/5 px-1.5 py-0.5 rounded"
+            class="text-[10px] text-navy dark:text-zinc-100 bg-navy/5 px-1.5 py-0.5 rounded"
           >#{{ t }}</span>
         </div>
 
         <div class="flex items-center gap-4 pt-2 border-t">
           <button
             class="flex items-center gap-1.5 text-sm transition-transform disabled:opacity-50"
-            :class="liked ? 'text-dokkaebi' : 'text-gray-500'"
+            :class="liked ? 'text-dokkaebi' : 'text-gray-500 dark:text-zinc-400'"
             :disabled="liking"
             @click="toggleLike"
           >
             <span class="text-lg leading-none">{{ liked ? '❤️' : '🤍' }}</span>
             <span class="font-semibold tabular-nums">{{ likeCount }}</span>
           </button>
-          <span class="flex items-center gap-1.5 text-sm text-gray-500">
+          <span class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-zinc-400">
             💬 <span class="font-semibold tabular-nums">{{ comments.length }}</span>
           </span>
         </div>
       </div>
     </article>
 
-    <section class="bg-white rounded-2xl shadow p-5">
-      <h2 class="font-bold text-navy mb-3">댓글 ({{ comments.length }})</h2>
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">댓글 ({{ comments.length }})</h2>
       <ul v-if="comments.length" class="space-y-2 mb-4">
         <li v-for="c in comments" :key="c.id" class="flex items-start gap-2 text-sm">
           <div class="flex-1">
             <p class="font-medium">
               {{ c.authorName }}
-              <span class="text-xs text-gray-400 font-normal">{{ fromNow(c.createdAt) }}</span>
+              <span class="text-xs text-gray-400 dark:text-zinc-500 font-normal">{{ fromNow(c.createdAt) }}</span>
             </p>
-            <p class="text-gray-700 whitespace-pre-line">{{ c.body }}</p>
+            <p class="text-gray-700 dark:text-zinc-200 whitespace-pre-line">{{ c.body }}</p>
           </div>
           <button
             v-if="c.authorUid === auth.user?.uid || auth.isAdmin"
@@ -198,7 +198,7 @@ function matchLabel(id) {
           >×</button>
         </li>
       </ul>
-      <p v-else class="text-xs text-gray-400 mb-4">첫 댓글을 남겨보세요.</p>
+      <p v-else class="text-xs text-gray-400 dark:text-zinc-500 mb-4">첫 댓글을 남겨보세요.</p>
       <div class="flex gap-2">
         <input
           v-model="newComment"

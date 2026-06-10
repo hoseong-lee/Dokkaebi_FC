@@ -13,9 +13,9 @@ const { state, accept, cancel } = useConfirm()
         class="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4"
         @click.self="cancel"
       >
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-xs p-6 text-center">
-          <h3 class="font-bold text-navy">{{ state.title }}</h3>
-          <p class="text-sm text-gray-600 mt-2 whitespace-pre-line">{{ state.message }}</p>
+        <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl w-full max-w-xs p-6 text-center">
+          <h3 class="font-bold text-navy dark:text-zinc-100">{{ state.title }}</h3>
+          <p class="text-sm text-gray-600 dark:text-zinc-400 mt-2 whitespace-pre-line">{{ state.message }}</p>
           <div class="flex gap-2 mt-6">
             <BaseButton variant="secondary" block @click="cancel">{{ state.cancelText }}</BaseButton>
             <BaseButton :variant="state.variant" block @click="accept">

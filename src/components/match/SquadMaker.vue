@@ -149,13 +149,13 @@ async function shareAll() {
 <template>
   <div class="space-y-4">
     <!-- 쿼터 탭 -->
-    <div class="flex bg-gray-100 rounded-xl p-1">
+    <div class="flex bg-gray-100 dark:bg-zinc-700 rounded-xl p-1">
       <button
         v-for="(q, i) in squads"
         :key="i"
         type="button"
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="activeQ === i ? 'bg-white shadow font-bold text-navy' : 'text-gray-500'"
+        :class="activeQ === i ? 'bg-white dark:bg-zinc-800 shadow font-bold text-navy dark:text-zinc-100' : 'text-gray-500 dark:text-zinc-400'"
         @click="activeQ = i"
       >
         {{ i + 1 }}쿼터
@@ -175,18 +175,18 @@ async function shareAll() {
       <button
         v-if="activeQ > 0"
         type="button"
-        class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy font-medium hover:bg-navy/20"
+        class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy dark:text-zinc-100 font-medium hover:bg-navy/20"
         @click="copyFromPrev"
       >↻ {{ activeQ }}쿼터 복사</button>
       <button
         v-if="activeQ === 0"
         type="button"
-        class="text-xs px-3 py-1.5 rounded-full bg-gold/20 text-onyx font-semibold hover:bg-gold/30"
+        class="text-xs px-3 py-1.5 rounded-full bg-gold/20 text-onyx dark:text-zinc-100 font-semibold hover:bg-gold/30"
         @click="applyQ1ToAll"
       >📋 1쿼터를 전 쿼터에 적용</button>
       <button
         type="button"
-        class="text-xs px-3 py-1.5 rounded-full bg-white text-gray-500 hover:text-dokkaebi"
+        class="text-xs px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 hover:text-dokkaebi"
         @click="clearQuarter"
       >이 쿼터 비우기</button>
     </div>
@@ -197,20 +197,20 @@ async function shareAll() {
       class="bg-gradient-to-r from-navy/5 to-gold/10 rounded-xl p-3 text-xs space-y-1"
     >
       <div class="flex items-center justify-between font-medium">
-        <span class="text-navy">출전 후보 {{ distribution.totalPlayers }}명 · 쿼터 배정 분포</span>
+        <span class="text-navy dark:text-zinc-100">출전 후보 {{ distribution.totalPlayers }}명 · 쿼터 배정 분포</span>
       </div>
       <div class="grid grid-cols-4 gap-1.5">
         <div
           v-for="n in [1, 2, 3, 4]"
           :key="n"
           class="rounded-lg px-2 py-1.5 text-center"
-          :class="n === 1 ? 'bg-amber-100 text-amber-800' : n < 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-gold/30 text-onyx font-semibold'"
+          :class="n === 1 ? 'bg-amber-100 text-amber-800' : n < 4 ? 'bg-emerald-100 text-emerald-800' : 'bg-gold/30 text-onyx dark:text-zinc-100 font-semibold'"
         >
           <p class="text-[10px] opacity-80">{{ n === 4 ? '풀쿼' : n + '쿼터' }}</p>
           <p class="font-bold tabular-nums">{{ distribution.dist[n] }}명</p>
         </div>
       </div>
-      <p class="text-[10px] text-gray-500">
+      <p class="text-[10px] text-gray-500 dark:text-zinc-400">
         ⚠ 1쿼터만 뛰는 인원이 많으면 회전이 부족할 수 있어요 · 보통 2~3쿼터씩 배정 권장
       </p>
     </div>
@@ -228,12 +228,12 @@ async function shareAll() {
     <div class="pt-3 border-t">
       <button
         type="button"
-        class="w-full text-sm px-4 py-2.5 rounded-lg bg-yellow-300 text-onyx font-semibold hover:bg-yellow-400 transition-colors"
+        class="w-full text-sm px-4 py-2.5 rounded-lg bg-yellow-300 text-onyx dark:text-zinc-100 font-semibold hover:bg-yellow-400 transition-colors"
         @click="shareAll"
       >
         💬 단톡 공유 텍스트 복사 (전 쿼터)
       </button>
-      <p class="text-[11px] text-gray-400 mt-1.5">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-1.5">
         작성된 쿼터만 포함되어 카카오톡 단톡방에 바로 붙여넣을 수 있는 형식으로 복사됩니다.
       </p>
     </div>

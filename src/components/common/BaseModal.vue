@@ -28,16 +28,16 @@ watch(
         @click.self="close"
       >
         <div
-          class="bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col"
+          class="bg-white dark:bg-zinc-800 w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl shadow-xl max-h-[90vh] flex flex-col"
         >
           <header
             v-if="title || $slots.header"
             class="flex items-center justify-between px-5 py-3 border-b"
           >
             <slot name="header">
-              <h2 class="font-bold text-navy">{{ title }}</h2>
+              <h2 class="font-bold text-navy dark:text-zinc-100">{{ title }}</h2>
             </slot>
-            <button class="text-gray-400 hover:text-gray-600 text-xl leading-none" @click="close">
+            <button class="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:text-zinc-400 text-xl leading-none" @click="close">
               ×
             </button>
           </header>

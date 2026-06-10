@@ -70,14 +70,14 @@ async function save() {
 
 <template>
   <LoadingSpinner v-if="loading" label="불러오는 중..." />
-  <div v-else-if="!match" class="text-center text-gray-400 py-10">경기를 찾을 수 없습니다.</div>
+  <div v-else-if="!match" class="text-center text-gray-400 dark:text-zinc-500 py-10">경기를 찾을 수 없습니다.</div>
   <div v-else>
     <div class="mb-4">
-      <h2 class="font-bold text-navy">스쿼드 메이커</h2>
-      <p class="text-sm text-gray-500">vs {{ match.opponent }} · {{ formatDateTime(match.date) }}</p>
+      <h2 class="font-bold text-navy dark:text-zinc-100">스쿼드 메이커</h2>
+      <p class="text-sm text-gray-500 dark:text-zinc-400">vs {{ match.opponent }} · {{ formatDateTime(match.date) }}</p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5">
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <SquadMaker :squads="squads" :players="playersStore.activePlayers" :match="match" />
     </div>
 

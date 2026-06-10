@@ -36,20 +36,20 @@ const googleWeb = computed(() => valid.value ? googleDirectionsUrl(v.value) : ''
     </div>
     <div v-else class="space-y-3">
       <!-- 구장 정보 -->
-      <div class="bg-gray-50 rounded-lg p-3">
-        <p class="font-bold text-navy text-base">📍 {{ v.name }}</p>
-        <p v-if="v.address" class="text-xs text-gray-600 mt-0.5">{{ v.address }}</p>
-        <p v-if="v.notes" class="text-[11px] text-gray-500 mt-1">💡 {{ v.notes }}</p>
+      <div class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
+        <p class="font-bold text-navy dark:text-zinc-100 text-base">📍 {{ v.name }}</p>
+        <p v-if="v.address" class="text-xs text-gray-600 dark:text-zinc-400 mt-0.5">{{ v.address }}</p>
+        <p v-if="v.notes" class="text-[11px] text-gray-500 dark:text-zinc-400 mt-1">💡 {{ v.notes }}</p>
       </div>
 
       <!-- 지도 미리보기 (OpenStreetMap 정적, API 키 X) -->
-      <div class="aspect-[2/1] bg-gray-100 rounded-lg overflow-hidden ring-1 ring-gray-200">
+      <div class="aspect-[2/1] bg-gray-100 dark:bg-zinc-700 rounded-lg overflow-hidden ring-1 ring-gray-200 dark:ring-zinc-700">
         <img :src="mapImg" :alt="v.name" class="w-full h-full object-cover" loading="lazy" referrerpolicy="no-referrer" />
       </div>
 
       <!-- 길찾기 옵션 — 네이버지도 우선 -->
       <div class="space-y-2">
-        <p class="text-[11px] text-gray-400 font-semibold">📲 어떤 지도 앱으로 길찾기 할까요?</p>
+        <p class="text-[11px] text-gray-400 dark:text-zinc-500 font-semibold">📲 어떤 지도 앱으로 길찾기 할까요?</p>
 
         <a
           :href="naverWeb" target="_blank" rel="noopener"
@@ -67,7 +67,7 @@ const googleWeb = computed(() => valid.value ? googleDirectionsUrl(v.value) : ''
         </a>
         <a
           :href="kakaoWeb" target="_blank" rel="noopener"
-          class="block w-full px-4 py-3 rounded-lg bg-yellow-400 hover:bg-yellow-500 transition-colors text-onyx font-bold flex items-center justify-between"
+          class="block w-full px-4 py-3 rounded-lg bg-yellow-400 hover:bg-yellow-500 transition-colors text-onyx dark:text-zinc-100 font-bold flex items-center justify-between"
         >
           <span>🟡 카카오 맵</span>
           <span class="text-xs opacity-80">↗ 길찾기</span>
@@ -81,7 +81,7 @@ const googleWeb = computed(() => valid.value ? googleDirectionsUrl(v.value) : ''
         </a>
       </div>
 
-      <p class="text-[11px] text-gray-400 leading-relaxed">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 leading-relaxed">
         💡 클릭하면 출발지(현재 위치) → 경기장 길찾기가 본인 지도 앱에서 자동으로 열려요.
       </p>
     </div>

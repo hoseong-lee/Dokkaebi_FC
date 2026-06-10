@@ -13,7 +13,7 @@ const props = defineProps({
   <component
     :is="link ? RouterLink : 'div'"
     :to="link ? `/players/${player.id}` : undefined"
-    class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3 hover:shadow transition-shadow"
+    class="flex items-center gap-3 bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 hover:shadow transition-shadow"
     :class="{ 'opacity-60': player.active === false }"
   >
     <div class="relative">
@@ -28,23 +28,23 @@ const props = defineProps({
     <div class="min-w-0 flex-1">
       <p class="font-semibold text-gray-900 truncate">
         {{ player.name }}
-        <span v-if="player.active === false" class="text-xs text-gray-400">(은퇴)</span>
+        <span v-if="player.active === false" class="text-xs text-gray-400 dark:text-zinc-500">(은퇴)</span>
       </p>
       <div class="flex items-center gap-1.5 mt-0.5">
         <span
           class="text-[10px] px-1.5 py-0.5 rounded font-semibold"
-          :class="POSITION_BADGE[player.position] || 'bg-gray-100 text-gray-600'"
+          :class="POSITION_BADGE[player.position] || 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
         >
           {{ POSITION_LABEL[player.position] || player.position }}
         </span>
-        <span v-if="player.mainPosition" class="text-[10px] text-gray-400">
+        <span v-if="player.mainPosition" class="text-[10px] text-gray-400 dark:text-zinc-500">
           {{ player.mainPosition }}<span v-if="player.subPosition"> / {{ player.subPosition }}</span>
         </span>
       </div>
     </div>
-    <div class="text-right text-xs text-gray-500">
-      <p><span class="font-bold text-navy">{{ player.stats?.goals || 0 }}</span> 골</p>
-      <p><span class="font-bold text-navy">{{ player.stats?.assists || 0 }}</span> 도움</p>
+    <div class="text-right text-xs text-gray-500 dark:text-zinc-400">
+      <p><span class="font-bold text-navy dark:text-zinc-100">{{ player.stats?.goals || 0 }}</span> 골</p>
+      <p><span class="font-bold text-navy dark:text-zinc-100">{{ player.stats?.assists || 0 }}</span> 도움</p>
     </div>
   </component>
 </template>

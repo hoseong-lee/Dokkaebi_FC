@@ -144,7 +144,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h2 class="font-bold text-navy mb-4 flex items-center gap-2">
+    <h2 class="font-bold text-navy dark:text-zinc-100 mb-4 flex items-center gap-2">
       화이트리스트 관리
       <span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">🔒 슈퍼관리자 전용</span>
     </h2>
@@ -157,13 +157,13 @@ onMounted(async () => {
     <template v-else>
 
     <!-- 가입 요청 (대기) -->
-    <section class="bg-white rounded-2xl shadow p-4 mb-4">
-      <h3 class="font-bold text-navy text-sm mb-3 flex items-center gap-2">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 mb-4">
+      <h3 class="font-bold text-navy dark:text-zinc-100 text-sm mb-3 flex items-center gap-2">
         📨 가입 요청
-        <span v-if="signupRequests.length" class="text-[10px] bg-amber-400 text-navy px-1.5 py-0.5 rounded-full font-bold">{{ signupRequests.length }}</span>
+        <span v-if="signupRequests.length" class="text-[10px] bg-amber-400 text-navy dark:text-zinc-100 px-1.5 py-0.5 rounded-full font-bold">{{ signupRequests.length }}</span>
       </h3>
       <LoadingSpinner v-if="requestsLoading" />
-      <p v-else-if="signupRequests.length === 0" class="text-xs text-gray-400 text-center py-3">대기 중인 요청이 없습니다.</p>
+      <p v-else-if="signupRequests.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 text-center py-3">대기 중인 요청이 없습니다.</p>
       <ul v-else class="space-y-2">
         <li
           v-for="req in signupRequests" :key="req.uid"
@@ -173,12 +173,12 @@ onMounted(async () => {
             v-if="req.photoURL"
             :src="req.photoURL"
             referrerpolicy="no-referrer"
-            class="w-9 h-9 rounded-full ring-1 ring-gray-200"
+            class="w-9 h-9 rounded-full ring-1 ring-gray-200 dark:ring-zinc-700"
           />
-          <div v-else class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">👤</div>
+          <div v-else class="w-9 h-9 rounded-full bg-gray-200 dark:bg-zinc-600 flex items-center justify-center text-gray-400 dark:text-zinc-500 text-xs">👤</div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold truncate">{{ req.displayName || '이름 없음' }}</p>
-            <p class="text-[11px] text-gray-500 truncate">{{ req.email }}</p>
+            <p class="text-[11px] text-gray-500 dark:text-zinc-400 truncate">{{ req.email }}</p>
           </div>
           <button
             type="button"
@@ -188,15 +188,15 @@ onMounted(async () => {
           >승인</button>
           <button
             type="button"
-            class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
+            class="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600"
             @click="rejectRequest(req)"
           >거절</button>
         </li>
       </ul>
-      <p class="text-[10px] text-gray-400 mt-2">💡 승인 시 자동으로 멤버 권한으로 화이트리스트에 추가됩니다. 선수 연결은 아래에서 별도로 지정하세요.</p>
+      <p class="text-[10px] text-gray-400 dark:text-zinc-500 mt-2">💡 승인 시 자동으로 멤버 권한으로 화이트리스트에 추가됩니다. 선수 연결은 아래에서 별도로 지정하세요.</p>
     </section>
 
-    <form class="bg-white rounded-2xl shadow p-4 mb-4 space-y-3" @submit.prevent="add">
+    <form class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 mb-4 space-y-3" @submit.prevent="add">
       <div class="flex flex-col sm:flex-row gap-2">
         <input
           v-model="form.email"
@@ -225,7 +225,7 @@ onMounted(async () => {
         />
         <BaseButton type="submit" :loading="adding">추가</BaseButton>
       </div>
-      <p class="text-[11px] text-gray-400">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500">
         💡 선수를 연결해두면 해당 이메일로 첫 로그인하는 사람이 자동으로 그 선수에 매칭됩니다.
       </p>
     </form>
@@ -236,16 +236,16 @@ onMounted(async () => {
       <li
         v-for="item in store.emails"
         :key="item.email"
-        class="bg-white rounded-xl shadow-sm p-3 space-y-2"
+        class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 space-y-2"
         :class="{ 'opacity-60': !item.active }"
       >
         <div class="flex items-center gap-2">
           <div class="flex-1 min-w-0">
             <p class="font-medium truncate text-sm">
               {{ item.email }}
-              <span v-if="isSelf(item)" class="text-xs text-navy">(나)</span>
+              <span v-if="isSelf(item)" class="text-xs text-navy dark:text-zinc-100">(나)</span>
             </p>
-            <p v-if="item.note" class="text-xs text-gray-400 truncate">{{ item.note }}</p>
+            <p v-if="item.note" class="text-xs text-gray-400 dark:text-zinc-500 truncate">{{ item.note }}</p>
           </div>
           <select
             :value="item.role"
@@ -258,13 +258,13 @@ onMounted(async () => {
           </select>
           <button
             class="text-xs px-2 py-1 rounded-full"
-            :class="item.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'"
+            :class="item.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400'"
             @click="toggle(item)"
           >{{ item.active ? '활성' : '비활성' }}</button>
           <button class="text-gray-300 hover:text-dokkaebi px-1" @click="remove(item)">×</button>
         </div>
         <div class="flex items-center gap-2 text-xs">
-          <span class="text-gray-500 w-12">선수</span>
+          <span class="text-gray-500 dark:text-zinc-400 w-12">선수</span>
           <select
             :value="item.playerId || ''"
             class="flex-1 border rounded-lg px-2 py-1 text-xs"

@@ -36,7 +36,7 @@ onMounted(async () => { await store.fetchAll() })
         class="px-3 py-1.5 rounded-full text-sm whitespace-nowrap font-semibold transition-colors"
         :class="
           f === 'ALL'
-            ? (filter === f ? 'bg-navy text-white' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-700')
+            ? (filter === f ? 'bg-navy text-white' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 dark:text-zinc-300 hover:bg-gray-100 dark:bg-zinc-700 dark:hover:bg-zinc-700')
             : (filter === f ? POSITION_BADGE_STRONG[f] : POSITION_BADGE[f] + ' hover:opacity-80')
         "
         @click="filter = f"

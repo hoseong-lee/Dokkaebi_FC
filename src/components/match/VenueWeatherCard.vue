@@ -40,13 +40,13 @@ function dayLabel(dateStr) {
 </script>
 
 <template>
-  <section v-if="enabled && validCoord" class="bg-white rounded-2xl shadow p-4 space-y-3">
+  <section v-if="enabled && validCoord" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 space-y-3">
     <div class="flex items-center justify-between">
-      <h3 class="font-bold text-navy flex items-center gap-2">🌤 5일 날씨</h3>
-      <span v-if="venue?.name" class="text-[11px] text-gray-400 truncate ml-2">{{ venue.name }}</span>
+      <h3 class="font-bold text-navy dark:text-zinc-100 flex items-center gap-2">🌤 5일 날씨</h3>
+      <span v-if="venue?.name" class="text-[11px] text-gray-400 dark:text-zinc-500 truncate ml-2">{{ venue.name }}</span>
     </div>
 
-    <p v-if="loading" class="text-center text-xs text-gray-400 py-4">날씨 정보 불러오는 중...</p>
+    <p v-if="loading" class="text-center text-xs text-gray-400 dark:text-zinc-500 py-4">날씨 정보 불러오는 중...</p>
     <p v-else-if="error" class="text-xs text-rose-600 bg-rose-50 rounded p-2">⚠ {{ error }}</p>
 
     <!-- 경기일 강조 (매치 상세에서만 보임) -->
@@ -57,11 +57,11 @@ function dayLabel(dateStr) {
     >
       <img :src="iconUrl(matchForecast.icon)" :alt="matchForecast.desc" class="w-16 h-16" />
       <div class="flex-1 min-w-0">
-        <p class="text-xs text-gray-500 font-semibold">⚽ 경기일 ({{ dayLabel(matchForecast.date) }})</p>
-        <p class="text-sm font-bold text-onyx truncate">{{ matchForecast.desc }}</p>
-        <p class="text-xs text-gray-600 mt-0.5">
+        <p class="text-xs text-gray-500 dark:text-zinc-400 font-semibold">⚽ 경기일 ({{ dayLabel(matchForecast.date) }})</p>
+        <p class="text-sm font-bold text-onyx dark:text-zinc-100 truncate">{{ matchForecast.desc }}</p>
+        <p class="text-xs text-gray-600 dark:text-zinc-400 mt-0.5">
           <span class="font-bold text-rose-600">{{ matchForecast.tempMax }}°</span>
-          <span class="text-gray-400 mx-1">/</span>
+          <span class="text-gray-400 dark:text-zinc-500 mx-1">/</span>
           <span class="font-bold text-blue-600">{{ matchForecast.tempMin }}°</span>
           <span class="mx-2">·</span>
           <span :class="isRainRisk(matchForecast) ? 'font-bold text-amber-700' : ''">
@@ -76,15 +76,15 @@ function dayLabel(dateStr) {
     <div v-if="data?.daily?.length" class="grid grid-cols-5 gap-1">
       <div
         v-for="d in data.daily" :key="d.date"
-        class="bg-gray-50 rounded-lg p-1.5 text-center"
+        class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-1.5 text-center"
       >
-        <p class="text-[9px] text-gray-500 leading-tight">{{ dayLabel(d.date) }}</p>
+        <p class="text-[9px] text-gray-500 dark:text-zinc-400 leading-tight">{{ dayLabel(d.date) }}</p>
         <img :src="iconUrl(d.icon)" :alt="d.desc" class="w-9 h-9 mx-auto" />
         <p class="text-[10px] font-bold tabular-nums">
           <span class="text-rose-600">{{ d.tempMax }}°</span>
           <span class="text-blue-600 ml-0.5">{{ d.tempMin }}°</span>
         </p>
-        <p class="text-[9px]" :class="d.pop >= 70 ? 'font-bold text-amber-700' : 'text-gray-400'">
+        <p class="text-[9px]" :class="d.pop >= 70 ? 'font-bold text-amber-700' : 'text-gray-400 dark:text-zinc-500'">
           {{ d.pop }}%
         </p>
       </div>

@@ -71,27 +71,27 @@ watch(() => props.modelValue, (open) => {
 
 <template>
   <BaseModal :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" title="📸 시즌 결산 카드">
-    <p class="text-sm text-gray-600 mb-3 leading-relaxed">
-      <span class="font-semibold text-navy">{{ seasonName }} 시즌</span>의 1년 결산을 1080×1080 카드로 생성합니다.
+    <p class="text-sm text-gray-600 dark:text-zinc-400 mb-3 leading-relaxed">
+      <span class="font-semibold text-navy dark:text-zinc-100">{{ seasonName }} 시즌</span>의 1년 결산을 1080×1080 카드로 생성합니다.
       각 카드를 인스타그램·단톡에 바로 공유할 수 있어요.
     </p>
 
-    <div v-if="loading" class="text-center py-12 text-gray-400">
+    <div v-if="loading" class="text-center py-12 text-gray-400 dark:text-zinc-500">
       🎨 결산 카드 생성 중...
     </div>
 
-    <div v-else-if="previews.length === 0" class="text-center py-8 text-gray-400">
+    <div v-else-if="previews.length === 0" class="text-center py-8 text-gray-400 dark:text-zinc-500">
       카드를 불러올 수 없습니다.
     </div>
 
     <div v-else>
       <div class="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-1">
         <div v-for="(p, i) in previews" :key="i" class="space-y-1">
-          <div class="aspect-square rounded-lg overflow-hidden bg-navy/5 ring-1 ring-gray-200">
+          <div class="aspect-square rounded-lg overflow-hidden bg-navy/5 ring-1 ring-gray-200 dark:ring-zinc-700">
             <img :src="p" class="w-full h-full object-cover" :alt="cards[i]?.label" />
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-onyx">{{ i + 1 }}. {{ cards[i]?.label }}</span>
+            <span class="text-xs font-semibold text-onyx dark:text-zinc-100">{{ i + 1 }}. {{ cards[i]?.label }}</span>
             <button
               type="button"
               class="text-xs text-rose-600 hover:underline"

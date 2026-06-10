@@ -16,7 +16,7 @@ const ACTION_COLOR = {
   update: 'bg-blue-100 text-blue-700',
   delete: 'bg-red-100 text-dokkaebi',
   approve: 'bg-emerald-100 text-emerald-700',
-  reject: 'bg-gray-100 text-gray-600'
+  reject: 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'
 }
 
 onMounted(async () => {
@@ -33,7 +33,7 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h2 class="font-bold text-navy mb-4 flex items-center gap-2">
+    <h2 class="font-bold text-navy dark:text-zinc-100 mb-4 flex items-center gap-2">
       변경 이력
       <span class="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">🔒 슈퍼관리자 전용</span>
     </h2>
@@ -46,17 +46,17 @@ onMounted(async () => {
     <LoadingSpinner v-if="loading" />
     <EmptyState v-else-if="logs.length === 0" icon="📋" title="기록된 변경 이력이 없습니다" />
     <ul v-else class="space-y-2">
-      <li v-for="log in logs" :key="log.id" class="bg-white rounded-xl shadow-sm p-3 text-sm">
+      <li v-for="log in logs" :key="log.id" class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 text-sm">
         <div class="flex items-center gap-2">
           <span
             class="text-xs px-2 py-0.5 rounded-full font-medium"
-            :class="ACTION_COLOR[log.action] || 'bg-gray-100 text-gray-600'"
+            :class="ACTION_COLOR[log.action] || 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
           >
             {{ ACTION_LABEL[log.action] || log.action }}
           </span>
-          <span class="font-mono text-xs text-gray-500 truncate flex-1">{{ log.target }}</span>
+          <span class="font-mono text-xs text-gray-500 dark:text-zinc-400 truncate flex-1">{{ log.target }}</span>
         </div>
-        <div class="flex items-center justify-between mt-1.5 text-xs text-gray-400">
+        <div class="flex items-center justify-between mt-1.5 text-xs text-gray-400 dark:text-zinc-500">
           <span>{{ log.userDisplayName }}</span>
           <span>{{ formatDateTime(log.timestamp) }}</span>
         </div>

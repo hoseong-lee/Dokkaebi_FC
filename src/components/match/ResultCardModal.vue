@@ -66,11 +66,11 @@ async function shareCard() {
 <template>
   <BaseModal v-model="model" title="결과 카드">
     <div class="space-y-3">
-      <div class="bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
-        <div v-if="generating" class="text-sm text-gray-400">생성 중...</div>
+      <div class="bg-gray-100 dark:bg-zinc-700 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
+        <div v-if="generating" class="text-sm text-gray-400 dark:text-zinc-500">생성 중...</div>
         <img v-else-if="previewUrl" :src="previewUrl" alt="결과 카드" class="w-full h-full object-contain" />
       </div>
-      <p class="text-[11px] text-gray-500">1080×1080 (인스타그램 정사각). 모바일에서 카톡 공유는 '공유하기' 버튼이 가능한 브라우저에서 동작합니다.</p>
+      <p class="text-[11px] text-gray-500 dark:text-zinc-400">1080×1080 (인스타그램 정사각). 모바일에서 카톡 공유는 '공유하기' 버튼이 가능한 브라우저에서 동작합니다.</p>
     </div>
     <template #footer>
       <BaseButton variant="secondary" @click="model = false">닫기</BaseButton>

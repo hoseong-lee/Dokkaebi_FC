@@ -89,7 +89,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-5">
-    <h1 class="text-xl font-bold text-navy">랭킹 · 기록</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100">랭킹 · 기록</h1>
 
     <!-- 팀 전적 요약 -->
     <section v-if="summary.played" class="bg-gradient-to-br from-navy to-navy/80 text-white rounded-2xl shadow p-5">
@@ -124,9 +124,9 @@ onMounted(async () => {
     </section>
 
     <!-- 시즌 베스트 11 -->
-    <section v-if="bestEleven" class="bg-white rounded-2xl shadow p-5">
+    <section v-if="bestEleven" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-bold text-navy">🏆 시즌 베스트 11</h2>
+        <h2 class="font-bold text-navy dark:text-zinc-100">🏆 시즌 베스트 11</h2>
         <span class="text-sm font-bold text-dokkaebi">{{ bestEleven.formation }}</span>
       </div>
       <FormationPitch
@@ -134,7 +134,7 @@ onMounted(async () => {
         :positions="bestEleven.positions"
         :players="store.players"
       />
-      <p class="text-[11px] text-gray-400 mt-2">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
         가중치: 골×3 + 어시×2 + MOM×5 + 출석×0.5 (포지션별 자동 배치)
       </p>
     </section>
@@ -142,7 +142,7 @@ onMounted(async () => {
     <!-- 올해의 선수 (시즌 선택 시) -->
     <section
       v-if="playerOfSeason"
-      class="bg-gradient-to-br from-gold/90 to-gold/70 text-onyx rounded-2xl shadow p-5 flex items-center gap-4"
+      class="bg-gradient-to-br from-gold/90 to-gold/70 text-onyx dark:text-zinc-100 rounded-2xl shadow p-5 flex items-center gap-4"
     >
       <div class="text-3xl">🏅</div>
       <div class="flex-1">
@@ -159,12 +159,12 @@ onMounted(async () => {
 
     <!-- 선수 랭킹 -->
     <section>
-      <div class="flex bg-white rounded-xl p-1 shadow-sm mb-3 overflow-x-auto">
+      <div class="flex bg-white dark:bg-zinc-800 rounded-xl p-1 shadow-sm mb-3 overflow-x-auto">
         <button
           v-for="t in tabs"
           :key="t.key"
           class="flex-1 min-w-[56px] py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
-          :class="tab === t.key ? 'bg-navy text-white' : 'text-gray-500'"
+          :class="tab === t.key ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
           @click="tab = t.key"
         >
           {{ t.label }}
@@ -174,7 +174,7 @@ onMounted(async () => {
       <div class="flex justify-end mb-3">
         <select
           v-model="scope"
-          class="border rounded-lg px-3 py-1.5 text-xs bg-white"
+          class="border rounded-lg px-3 py-1.5 text-xs bg-white dark:bg-zinc-800"
         >
           <option value="total">통산</option>
           <option v-for="s in seasonStore.list" :key="s.id" :value="s.id">{{ s.name }}</option>
@@ -187,43 +187,43 @@ onMounted(async () => {
         <li
           v-for="(r, i) in current.rows"
           :key="r.player.id"
-          class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3"
+          class="flex items-center gap-3 bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3"
           :class="{ 'ring-1 ring-amber-300': i === 0 }"
         >
-          <span class="w-7 text-center font-bold text-gray-400">{{ medal[i] || i + 1 }}</span>
+          <span class="w-7 text-center font-bold text-gray-400 dark:text-zinc-500">{{ medal[i] || i + 1 }}</span>
           <PlayerAvatar :player="r.player" :size="40" />
           <RouterLink :to="`/players/${r.player.id}`" class="flex-1 font-semibold truncate hover:underline">
             {{ r.player.name }}
           </RouterLink>
-          <span class="text-lg font-bold text-navy tabular-nums">{{ r.value }}</span>
-          <span class="text-xs text-gray-400">{{ current.unit }}</span>
+          <span class="text-lg font-bold text-navy dark:text-zinc-100 tabular-nums">{{ r.value }}</span>
+          <span class="text-xs text-gray-400 dark:text-zinc-500">{{ current.unit }}</span>
         </li>
       </ol>
     </section>
 
     <!-- 베스트 콤비 -->
     <section v-if="duos.length">
-      <h2 class="font-bold text-navy mb-2">⭐ 베스트 콤비 (어시 → 골)</h2>
-      <ol class="bg-white rounded-xl shadow-sm divide-y">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">⭐ 베스트 콤비 (어시 → 골)</h2>
+      <ol class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm divide-y">
         <li v-for="(d, i) in duos" :key="i" class="flex items-center gap-3 p-3 text-sm">
-          <span class="w-6 text-center text-xs font-bold text-gray-400">{{ i + 1 }}</span>
+          <span class="w-6 text-center text-xs font-bold text-gray-400 dark:text-zinc-500">{{ i + 1 }}</span>
           <RouterLink :to="`/players/${d.assister}`" class="font-medium hover:underline">
             {{ playerName(d.assister) }}
           </RouterLink>
-          <span class="text-gray-400">→</span>
+          <span class="text-gray-400 dark:text-zinc-500">→</span>
           <RouterLink :to="`/players/${d.scorer}`" class="flex-1 font-medium hover:underline">
             {{ playerName(d.scorer) }}
           </RouterLink>
-          <span class="text-lg font-bold text-navy tabular-nums">{{ d.count }}</span>
-          <span class="text-xs text-gray-400">회</span>
+          <span class="text-lg font-bold text-navy dark:text-zinc-100 tabular-nums">{{ d.count }}</span>
+          <span class="text-xs text-gray-400 dark:text-zinc-500">회</span>
         </li>
       </ol>
     </section>
 
     <!-- 상대 전적 -->
     <section v-if="h2h.length">
-      <h2 class="font-bold text-navy mb-2">상대 전적</h2>
-      <div class="bg-white rounded-xl shadow-sm divide-y">
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">상대 전적</h2>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm divide-y">
         <div
           v-for="h in h2h"
           :key="h.opponent"
@@ -235,11 +235,11 @@ onMounted(async () => {
             class="text-[10px] px-2 py-0.5 rounded-full font-semibold"
             :class="TIER_COLOR[h2hTier(h)]"
           >{{ TIER_LABEL[h2hTier(h)] }}</span>
-          <span class="text-xs text-gray-500">{{ h.win }}승 {{ h.draw }}무 {{ h.loss }}패</span>
-          <span class="text-xs text-gray-400 tabular-nums">{{ h.gf }}-{{ h.ga }}</span>
+          <span class="text-xs text-gray-500 dark:text-zinc-400">{{ h.win }}승 {{ h.draw }}무 {{ h.loss }}패</span>
+          <span class="text-xs text-gray-400 dark:text-zinc-500 tabular-nums">{{ h.gf }}-{{ h.ga }}</span>
         </div>
       </div>
-      <p class="text-[11px] text-gray-400 mt-2">
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-2">
         🟢 우세(승률 ≥ 60%) · ⚪ 백중 · 🔴 약세 (2경기 이상)
       </p>
     </section>

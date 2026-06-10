@@ -47,18 +47,18 @@ function clear() {
   <div>
     <button
       type="button"
-      class="w-full flex items-center gap-3 border rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors"
+      class="w-full flex items-center gap-3 border rounded-lg px-3 py-2 text-sm hover:bg-gray-50 dark:bg-zinc-900 transition-colors"
       @click="modalOpen = true"
     >
       <img
         v-if="selected"
         :src="clubLogo(selected.id)"
         :alt="selected.name"
-        class="w-7 h-7 object-contain bg-white rounded shrink-0"
+        class="w-7 h-7 object-contain bg-white dark:bg-zinc-800 rounded shrink-0"
         loading="lazy"
       />
-      <span v-else class="w-7 h-7 rounded bg-gray-100 text-gray-400 flex items-center justify-center text-sm shrink-0">⚽</span>
-      <span class="flex-1 text-left truncate" :class="modelValue ? 'text-gray-800' : 'text-gray-400'">
+      <span v-else class="w-7 h-7 rounded bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 flex items-center justify-center text-sm shrink-0">⚽</span>
+      <span class="flex-1 text-left truncate" :class="modelValue ? 'text-gray-800 dark:text-zinc-200' : 'text-gray-400 dark:text-zinc-500'">
         {{ modelValue || '클럽 선택' }}
       </span>
       <span class="text-gray-300 text-xs">변경</span>
@@ -80,25 +80,25 @@ function clear() {
           :key="c.id"
           type="button"
           class="flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-          :class="selected?.id === c.id ? 'border-navy bg-navy/5' : 'border-transparent hover:bg-gray-50'"
+          :class="selected?.id === c.id ? 'border-navy bg-navy/5' : 'border-transparent hover:bg-gray-50 dark:bg-zinc-900'"
           @click="pick(c)"
         >
           <img
             :src="clubLogo(c.id)"
             :alt="c.name"
-            class="w-14 h-14 object-contain bg-white rounded shrink-0"
+            class="w-14 h-14 object-contain bg-white dark:bg-zinc-800 rounded shrink-0"
             loading="lazy"
           />
           <span class="text-[11px] font-semibold text-center truncate w-full">{{ c.short }}</span>
-          <span class="text-[9px] text-gray-400">{{ LEAGUE_LABEL[c.league] || c.league }}</span>
+          <span class="text-[9px] text-gray-400 dark:text-zinc-500">{{ LEAGUE_LABEL[c.league] || c.league }}</span>
         </button>
-        <p v-if="filtered.length === 0" class="col-span-full text-xs text-gray-400 text-center py-4">
+        <p v-if="filtered.length === 0" class="col-span-full text-xs text-gray-400 dark:text-zinc-500 text-center py-4">
           검색 결과가 없습니다.
         </p>
       </div>
 
       <div class="pt-3 border-t">
-        <p class="text-xs text-gray-500 mb-2">목록에 없으면 직접 입력</p>
+        <p class="text-xs text-gray-500 dark:text-zinc-400 mb-2">목록에 없으면 직접 입력</p>
         <div class="flex gap-2">
           <input
             v-model="customInput"

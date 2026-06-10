@@ -72,29 +72,29 @@ async function onPick(e) {
 
   <BaseModal v-model="sampleOpen" title="프로필 사진 선택">
     <!-- 4탭: 남자 / 여자 / 동물 / 클럽 -->
-    <div class="flex bg-gray-100 rounded-lg p-0.5 mb-3 text-xs">
+    <div class="flex bg-gray-100 dark:bg-zinc-700 rounded-lg p-0.5 mb-3 text-xs">
       <button
         type="button"
         class="flex-1 py-1.5 rounded-md transition-colors"
-        :class="tab === 'male' ? 'bg-navy text-white font-semibold' : 'text-gray-500'"
+        :class="tab === 'male' ? 'bg-navy text-white font-semibold' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'male'"
       >👨 남자</button>
       <button
         type="button"
         class="flex-1 py-1.5 rounded-md transition-colors"
-        :class="tab === 'female' ? 'bg-dokkaebi text-white font-semibold' : 'text-gray-500'"
+        :class="tab === 'female' ? 'bg-dokkaebi text-white font-semibold' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'female'"
       >👩 여자</button>
       <button
         type="button"
         class="flex-1 py-1.5 rounded-md transition-colors"
-        :class="tab === 'animal' ? 'bg-amber-500 text-white font-semibold' : 'text-gray-500'"
+        :class="tab === 'animal' ? 'bg-amber-500 text-white font-semibold' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'animal'"
       >🐯 동물</button>
       <button
         type="button"
         class="flex-1 py-1.5 rounded-md transition-colors"
-        :class="tab === 'club' ? 'bg-emerald-600 text-white font-semibold' : 'text-gray-500'"
+        :class="tab === 'club' ? 'bg-emerald-600 text-white font-semibold' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'club'"
       >⚽ 클럽</button>
     </div>
@@ -106,7 +106,7 @@ async function onPick(e) {
         :key="a.id"
         type="button"
         class="flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-        :class="current === a.url ? 'border-navy bg-navy/5' : 'border-transparent hover:bg-gray-50'"
+        :class="current === a.url ? 'border-navy bg-navy/5' : 'border-transparent hover:bg-gray-50 dark:bg-zinc-900'"
         @click="pick(a.url)"
       >
         <img
@@ -115,7 +115,7 @@ async function onPick(e) {
           class="w-20 h-20 rounded-full bg-gradient-to-br from-onyx to-gray-800"
           loading="lazy"
         />
-        <span class="text-[10px] text-gray-500">{{ a.label }}</span>
+        <span class="text-[10px] text-gray-500 dark:text-zinc-400">{{ a.label }}</span>
       </button>
     </div>
 
@@ -126,13 +126,13 @@ async function onPick(e) {
         :key="a.id"
         type="button"
         class="flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-        :class="current === a.url ? 'border-amber-500 bg-amber-50' : 'border-transparent hover:bg-gray-50'"
+        :class="current === a.url ? 'border-amber-500 bg-amber-50' : 'border-transparent hover:bg-gray-50 dark:bg-zinc-900'"
         @click="pick(a.url)"
       >
         <div class="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center">
           <img :src="a.url" :alt="a.label" class="w-14 h-14" loading="lazy" />
         </div>
-        <span class="text-[10px] text-gray-500">{{ a.emoji }} {{ a.label }}</span>
+        <span class="text-[10px] text-gray-500 dark:text-zinc-400">{{ a.emoji }} {{ a.label }}</span>
       </button>
     </div>
 
@@ -143,20 +143,20 @@ async function onPick(e) {
         :key="c.id"
         type="button"
         class="flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-        :class="current === clubLogo(c.id) ? 'border-emerald-600 bg-emerald-50' : 'border-transparent hover:bg-gray-50'"
+        :class="current === clubLogo(c.id) ? 'border-emerald-600 bg-emerald-50' : 'border-transparent hover:bg-gray-50 dark:bg-zinc-900'"
         @click="pick(clubLogo(c.id))"
       >
-        <div class="w-20 h-20 rounded-full bg-white ring-1 ring-gray-200 flex items-center justify-center p-2">
+        <div class="w-20 h-20 rounded-full bg-white dark:bg-zinc-800 ring-1 ring-gray-200 dark:ring-zinc-700 flex items-center justify-center p-2">
           <img :src="clubLogo(c.id)" :alt="c.name" class="w-full h-full object-contain" loading="lazy" />
         </div>
-        <span class="text-[10px] text-gray-500 text-center leading-tight">
+        <span class="text-[10px] text-gray-500 dark:text-zinc-400 text-center leading-tight">
           {{ c.short }}
           <span class="block text-[9px] opacity-60">{{ LEAGUE_LABEL[c.league] }}</span>
         </span>
       </button>
     </div>
 
-    <p class="text-[11px] text-gray-400 mt-3">
+    <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-3">
       <template v-if="tab === 'male' || tab === 'female'">DiceBear 무료 아바타 · 검정 유니폼 통일.</template>
       <template v-else-if="tab === 'animal'">Twemoji 동물 이모지 (Twitter, CC-BY 4.0).</template>
       <template v-else-if="tab === 'club'">api-sports.io CDN · 유럽 주요 클럽 24팀.</template>

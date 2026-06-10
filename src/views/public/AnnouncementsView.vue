@@ -86,7 +86,7 @@ async function remove(a) {
 <template>
   <div>
     <div class="flex items-center justify-between mb-4">
-      <h1 class="text-xl font-bold text-navy">공지사항</h1>
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100">공지사항</h1>
       <BaseButton v-if="auth.isAdmin" size="sm" @click="openCreate">+ 공지 작성</BaseButton>
     </div>
 
@@ -96,21 +96,21 @@ async function remove(a) {
       <li
         v-for="a in items"
         :key="a.id"
-        class="bg-white rounded-2xl shadow-sm p-4"
+        class="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm p-4"
         :class="{ 'ring-2 ring-gold/50': a.pinned }"
       >
         <div class="flex items-start justify-between gap-2">
-          <h2 class="font-bold text-navy flex items-center gap-1.5">
+          <h2 class="font-bold text-navy dark:text-zinc-100 flex items-center gap-1.5">
             <span v-if="a.pinned" class="text-amber-500 text-xs">📌</span>
             {{ a.title }}
           </h2>
           <div v-if="auth.isAdmin" class="flex gap-1 shrink-0">
-            <button class="text-xs text-gray-400 hover:text-navy" @click="openEdit(a)">수정</button>
-            <button class="text-xs text-gray-400 hover:text-dokkaebi" @click="remove(a)">삭제</button>
+            <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100" @click="openEdit(a)">수정</button>
+            <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-dokkaebi" @click="remove(a)">삭제</button>
           </div>
         </div>
-        <p class="text-sm text-gray-700 mt-2 whitespace-pre-line">{{ a.body }}</p>
-        <p class="text-xs text-gray-400 mt-2">{{ a.authorName }} · {{ fromNow(a.createdAt) }}</p>
+        <p class="text-sm text-gray-700 dark:text-zinc-200 mt-2 whitespace-pre-line">{{ a.body }}</p>
+        <p class="text-xs text-gray-400 dark:text-zinc-500 mt-2">{{ a.authorName }} · {{ fromNow(a.createdAt) }}</p>
       </li>
     </ul>
 

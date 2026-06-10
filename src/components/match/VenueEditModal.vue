@@ -78,23 +78,23 @@ async function save() {
   >
     <div class="space-y-3">
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">이름 *</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">이름 *</label>
         <input v-model="form.name" type="text" maxlength="60" placeholder="예: 다락원체육공원" class="w-full border rounded-lg px-3 py-2 text-sm" />
       </div>
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">종류</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">종류</label>
         <div class="flex gap-1.5 flex-wrap">
           <button
             v-for="(label, key) in VENUE_TYPE_LABEL" :key="key"
             type="button"
             class="text-xs px-3 py-1.5 rounded-full transition-colors"
-            :class="form.type === key ? 'bg-navy text-white font-bold' : 'bg-gray-100 text-gray-600'"
+            :class="form.type === key ? 'bg-navy text-white font-bold' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
             @click="form.type = key"
           >{{ label }}</button>
         </div>
       </div>
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">주소</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">주소</label>
         <input v-model="form.address" type="text" maxlength="200" placeholder="예: 서울 도봉구 창포원로 45" class="w-full border rounded-lg px-3 py-2 text-sm" />
       </div>
 
@@ -116,13 +116,13 @@ async function save() {
       </div>
 
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">메모 (선택)</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">메모 (선택)</label>
         <textarea v-model="form.notes" rows="2" maxlength="300" placeholder="예: 주차 가능 / 샤워실 OK / 야간 조명" class="w-full border rounded-lg px-3 py-2 text-sm" />
       </div>
 
-      <details class="bg-gray-50 rounded-lg p-2.5">
-        <summary class="text-xs text-gray-600 cursor-pointer font-semibold">💡 좌표 찾는 법</summary>
-        <ol class="text-[11px] text-gray-600 space-y-1 mt-2 pl-3">
+      <details class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-2.5">
+        <summary class="text-xs text-gray-600 dark:text-zinc-400 cursor-pointer font-semibold">💡 좌표 찾는 법</summary>
+        <ol class="text-[11px] text-gray-600 dark:text-zinc-400 space-y-1 mt-2 pl-3">
           <li>1. <a href="https://map.naver.com" target="_blank" class="text-emerald-700 underline">네이버지도</a> 또는 <a href="https://map.kakao.com" target="_blank" class="text-yellow-700 underline">카카오맵</a> 접속</li>
           <li>2. 구장 검색 → 정확한 위치 클릭</li>
           <li>3. 마우스 우클릭 → <span class="font-semibold">"이 위치 좌표 보기"</span> 또는 <span class="font-semibold">"좌표 복사"</span></li>

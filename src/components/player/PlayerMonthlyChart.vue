@@ -54,7 +54,7 @@ const SERIES = [
 </script>
 
 <template>
-  <div v-if="series.length === 0" class="text-xs text-gray-400 text-center py-6">
+  <div v-if="series.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 text-center py-6">
     이 시즌 기록이 없습니다.
   </div>
   <div v-else>
@@ -109,7 +109,7 @@ const SERIES = [
     </svg>
     <!-- 범례 -->
     <div class="flex justify-center gap-3 mt-1 text-[11px]">
-      <span v-for="s in SERIES" :key="s.key" class="flex items-center gap-1 text-gray-600">
+      <span v-for="s in SERIES" :key="s.key" class="flex items-center gap-1 text-gray-600 dark:text-zinc-400">
         <span class="w-3 h-1 rounded" :style="{ background: s.color }"></span>
         {{ s.label }}
       </span>

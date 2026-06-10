@@ -146,7 +146,7 @@ function onFormationChange() {
         :value="q.opponentScore"
         type="number"
         min="0"
-        class="w-12 text-center text-2xl font-bold bg-white/10 rounded tabular-nums"
+        class="w-12 text-center text-2xl font-bold bg-white dark:bg-zinc-800/10 rounded tabular-nums"
         @input="q.opponentScore = Math.max(0, Number($event.target.value) || 0)"
       />
       <span class="flex-1 font-bold text-sm">상대</span>
@@ -155,7 +155,7 @@ function onFormationChange() {
     <!-- 출전 명단 -->
     <div>
       <div class="flex items-center justify-between mb-2">
-        <h4 class="text-sm font-bold text-navy">출전 명단 ({{ lineupPlayers.length }})</h4>
+        <h4 class="text-sm font-bold text-navy dark:text-zinc-100">출전 명단 ({{ lineupPlayers.length }})</h4>
         <div class="flex gap-1.5">
           <button
             type="button"
@@ -166,7 +166,7 @@ function onFormationChange() {
           </button>
           <button
             type="button"
-            class="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+            class="text-xs px-2.5 py-1 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600"
             @click="guestModalOpen = true"
           >
             + 용병
@@ -181,26 +181,26 @@ function onFormationChange() {
             placeholder="이름·초성(ㅇㅎㅊ)·등번호·포지션"
             class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
           />
-          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 text-sm">🔍</span>
           <button
             v-if="search"
             type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-dokkaebi text-sm"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 hover:text-dokkaebi text-sm"
             @click="search = ''"
           >×</button>
         </div>
-        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
+        <div class="flex bg-gray-100 dark:bg-zinc-700 rounded-lg p-0.5 text-xs">
           <button
             v-for="f in [{k:'all',l:'전체'},{k:'regular',l:'★'},{k:'guest',l:'용병'}]"
             :key="f.k"
             type="button"
             class="px-2 py-1 rounded-md"
-            :class="filterMode === f.k ? 'bg-white shadow font-semibold' : 'text-gray-500'"
+            :class="filterMode === f.k ? 'bg-white dark:bg-zinc-800 shadow font-semibold' : 'text-gray-500 dark:text-zinc-400'"
             @click="filterMode = f.k"
           >{{ f.l }}</button>
         </div>
       </div>
-      <p v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 py-3 text-center">
+      <p v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 py-3 text-center">
         검색 결과가 없습니다.
       </p>
       <div v-else class="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -209,7 +209,7 @@ function onFormationChange() {
           :key="p.id"
           type="button"
           class="relative flex flex-col items-center gap-1 p-2 rounded-lg border-2 transition-colors"
-          :class="q.lineup.includes(p.id) ? 'border-navy bg-navy/5' : 'border-transparent bg-gray-50'"
+          :class="q.lineup.includes(p.id) ? 'border-navy bg-navy/5' : 'border-transparent bg-gray-50 dark:bg-zinc-900'"
           @click="toggleLineup(p.id)"
         >
           <span
@@ -219,7 +219,7 @@ function onFormationChange() {
           >★</span>
           <span
             v-else
-            class="absolute top-1 right-1 text-[9px] bg-gray-200 text-gray-600 rounded px-1 leading-tight"
+            class="absolute top-1 right-1 text-[9px] bg-gray-200 dark:bg-zinc-600 text-gray-600 dark:text-zinc-400 rounded px-1 leading-tight"
             title="용병"
           >용병</span>
           <PlayerAvatar :player="p" :size="36" />
@@ -231,7 +231,7 @@ function onFormationChange() {
     <!-- 골 기록 -->
     <div>
       <div class="flex items-center justify-between mb-2">
-        <h4 class="text-sm font-bold text-navy">골 기록</h4>
+        <h4 class="text-sm font-bold text-navy dark:text-zinc-100">골 기록</h4>
         <button
           type="button"
           class="text-xs px-3 py-1 rounded-full bg-dokkaebi text-white disabled:opacity-40"
@@ -241,20 +241,20 @@ function onFormationChange() {
           + 골 추가
         </button>
       </div>
-      <p v-if="q.events.length === 0" class="text-xs text-gray-400 py-1">기록된 골이 없습니다.</p>
+      <p v-if="q.events.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 py-1">기록된 골이 없습니다.</p>
       <ul v-else class="space-y-2">
-        <li v-for="(ev, idx) in q.events" :key="idx" class="flex items-center gap-2 bg-gray-50 rounded-lg p-2 text-sm">
+        <li v-for="(ev, idx) in q.events" :key="idx" class="flex items-center gap-2 bg-gray-50 dark:bg-zinc-900 rounded-lg p-2 text-sm">
           <input v-model.number="ev.minute" type="number" min="0" class="w-12 border rounded px-1.5 py-1 text-center text-xs" placeholder="분" />
           <span class="text-xs">⚽</span>
           <select v-model="ev.playerId" class="flex-1 border rounded px-2 py-1 text-xs">
             <option v-for="p in lineupPlayers" :key="p.id" :value="p.id">{{ p.name }}</option>
           </select>
-          <span class="text-xs text-gray-400">↳</span>
+          <span class="text-xs text-gray-400 dark:text-zinc-500">↳</span>
           <select v-model="ev.assistPlayerId" class="flex-1 border rounded px-2 py-1 text-xs">
             <option :value="null">도움 없음</option>
             <option v-for="p in lineupPlayers" :key="p.id" :value="p.id" :disabled="p.id === ev.playerId">{{ p.name }}</option>
           </select>
-          <button type="button" class="text-gray-400 hover:text-dokkaebi px-1" @click="removeEvent(idx)">×</button>
+          <button type="button" class="text-gray-400 dark:text-zinc-500 hover:text-dokkaebi px-1" @click="removeEvent(idx)">×</button>
         </li>
       </ul>
     </div>
@@ -262,7 +262,7 @@ function onFormationChange() {
     <!-- 포메이션 -->
     <div>
       <div class="flex items-center justify-between mb-2 gap-2">
-        <h4 class="text-sm font-bold text-navy">포메이션 (선택)</h4>
+        <h4 class="text-sm font-bold text-navy dark:text-zinc-100">포메이션 (선택)</h4>
         <div class="flex items-center gap-1.5">
           <button
             type="button"
@@ -293,13 +293,13 @@ function onFormationChange() {
           v-for="p in lineupPlayers"
           :key="p.id"
           type="button"
-          class="flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50"
+          class="flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50 dark:bg-zinc-900"
           @click="assignToSlot(p.id)"
         >
           <PlayerAvatar :player="p" :size="36" />
           <span class="text-[11px] truncate w-full">{{ p.name }}</span>
         </button>
-        <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 py-2">
+        <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 dark:text-zinc-500 py-2">
           먼저 출전 명단에서 선수를 선택하세요.
         </p>
       </div>
@@ -310,7 +310,7 @@ function onFormationChange() {
     </BaseModal>
 
     <BaseModal v-model="guestModalOpen" title="용병 추가">
-      <p class="text-xs text-gray-500 mb-2">
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mb-2">
         이 경기에 한정해 함께 뛰는 용병/게스트입니다. 등록 후 명단에 자동 추가됩니다.
       </p>
       <input

@@ -147,26 +147,26 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
 
 <template>
   <div>
-    <h2 class="font-bold text-navy mb-4">회비 관리</h2>
+    <h2 class="font-bold text-navy dark:text-zinc-100 mb-4">회비 관리</h2>
 
-    <div class="flex bg-white rounded-xl p-1 mb-4 shadow-sm">
+    <div class="flex bg-white dark:bg-zinc-800 rounded-xl p-1 mb-4 shadow-sm">
       <button
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="tab === 'match' ? 'bg-navy text-white' : 'text-gray-500'"
+        :class="tab === 'match' ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'match'"
       >매치비</button>
       <button
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="tab === 'dues' ? 'bg-navy text-white' : 'text-gray-500'"
+        :class="tab === 'dues' ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'dues'"
       >월회비</button>
     </div>
 
     <!-- 매치비 -->
     <div v-if="tab === 'match'" class="space-y-3">
-      <div class="bg-white rounded-2xl shadow p-4 space-y-3">
+      <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 space-y-3">
         <div class="grid grid-cols-2 gap-2">
-          <label class="text-xs text-gray-500 block">
+          <label class="text-xs text-gray-500 dark:text-zinc-400 block">
             경기 선택
             <select v-model="selectedMatchId" class="w-full mt-1 border rounded-lg px-2 py-1.5 text-sm">
               <option v-for="m in finishedMatches" :key="m.id" :value="m.id">
@@ -174,7 +174,7 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
               </option>
             </select>
           </label>
-          <label class="text-xs text-gray-500 block">
+          <label class="text-xs text-gray-500 dark:text-zinc-400 block">
             매치비 금액
             <input
               v-model.number="matchFeeAmount"
@@ -185,14 +185,14 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
           </label>
         </div>
         <div class="flex items-center justify-between text-xs">
-          <span class="text-gray-500">
+          <span class="text-gray-500 dark:text-zinc-400">
             출전 {{ matchStats.total }}명 ·
             <span class="text-green-600 font-semibold">납부 {{ matchStats.paid }}</span> ·
             <span class="text-dokkaebi font-semibold">미납 {{ matchStats.unpaid }}</span>
           </span>
           <span class="flex gap-1">
             <button class="px-2 py-1 rounded bg-green-100 text-green-700" @click="markAllMatch(true)">전체 납부</button>
-            <button class="px-2 py-1 rounded bg-gray-100 text-gray-600" @click="markAllMatch(false)">전체 초기화</button>
+            <button class="px-2 py-1 rounded bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400" @click="markAllMatch(false)">전체 초기화</button>
           </span>
         </div>
       </div>
@@ -204,7 +204,7 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
         <li
           v-for="p in matchAttendees"
           :key="p.id"
-          class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3"
+          class="flex items-center gap-3 bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3"
           :class="{ 'opacity-100': matchPayments[p.id]?.paid, 'opacity-90': !matchPayments[p.id]?.paid }"
         >
           <PlayerAvatar :player="p" :size="36" />
@@ -212,16 +212,16 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
             <p class="font-medium truncate">
               <span v-if="p.isRegular" class="text-amber-500">★</span>
               {{ p.name }}
-              <span class="text-xs text-gray-400">#{{ p.number ?? '-' }}</span>
+              <span class="text-xs text-gray-400 dark:text-zinc-500">#{{ p.number ?? '-' }}</span>
             </p>
-            <p v-if="matchPayments[p.id]?.paidAt" class="text-[11px] text-gray-400">
+            <p v-if="matchPayments[p.id]?.paidAt" class="text-[11px] text-gray-400 dark:text-zinc-500">
               {{ formatDate(matchPayments[p.id].paidAt, 'YYYY.MM.DD HH:mm') }} ·
               {{ matchPayments[p.id].amount?.toLocaleString() }}원
             </p>
           </div>
           <button
             class="text-xs px-3 py-1.5 rounded-full font-semibold"
-            :class="matchPayments[p.id]?.paid ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+            :class="matchPayments[p.id]?.paid ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600'"
             @click="toggleMatchPaid(p.id)"
           >
             {{ matchPayments[p.id]?.paid ? '납부 완료' : '미납' }}
@@ -232,15 +232,15 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
 
     <!-- 월회비 -->
     <div v-else class="space-y-3">
-      <div class="bg-white rounded-2xl shadow p-4 space-y-3">
+      <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 space-y-3">
         <div class="grid grid-cols-2 gap-2">
-          <label class="text-xs text-gray-500 block">
+          <label class="text-xs text-gray-500 dark:text-zinc-400 block">
             월 선택
             <select v-model="selectedMonth" class="w-full mt-1 border rounded-lg px-2 py-1.5 text-sm">
               <option v-for="m in monthOptions" :key="m" :value="m">{{ monthLabel(m) }}</option>
             </select>
           </label>
-          <label class="text-xs text-gray-500 block">
+          <label class="text-xs text-gray-500 dark:text-zinc-400 block">
             회비 금액
             <input
               v-model.number="duesAmount"
@@ -252,14 +252,14 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
           </label>
         </div>
         <div class="flex items-center justify-between text-xs">
-          <span class="text-gray-500">
+          <span class="text-gray-500 dark:text-zinc-400">
             고정멤버 {{ duesStats.total }}명 ·
             <span class="text-green-600 font-semibold">납부 {{ duesStats.paid }}</span> ·
             <span class="text-dokkaebi font-semibold">미납 {{ duesStats.unpaid }}</span>
           </span>
           <span class="flex gap-1">
             <button class="px-2 py-1 rounded bg-green-100 text-green-700" @click="markAllDues(true)">전체 납부</button>
-            <button class="px-2 py-1 rounded bg-gray-100 text-gray-600" @click="markAllDues(false)">전체 초기화</button>
+            <button class="px-2 py-1 rounded bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400" @click="markAllDues(false)">전체 초기화</button>
           </span>
         </div>
       </div>
@@ -269,22 +269,22 @@ watch([tab, selectedMonth], ([t]) => { if (t === 'dues') loadDues() })
         <li
           v-for="p in regulars"
           :key="p.id"
-          class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3"
+          class="flex items-center gap-3 bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3"
         >
           <PlayerAvatar :player="p" :size="36" />
           <div class="flex-1 min-w-0">
             <p class="font-medium truncate">
               <span class="text-amber-500">★</span> {{ p.name }}
-              <span class="text-xs text-gray-400">#{{ p.number ?? '-' }}</span>
+              <span class="text-xs text-gray-400 dark:text-zinc-500">#{{ p.number ?? '-' }}</span>
             </p>
-            <p v-if="duesPayments[p.id]?.paidAt" class="text-[11px] text-gray-400">
+            <p v-if="duesPayments[p.id]?.paidAt" class="text-[11px] text-gray-400 dark:text-zinc-500">
               {{ formatDate(duesPayments[p.id].paidAt, 'YYYY.MM.DD HH:mm') }} ·
               {{ duesPayments[p.id].amount?.toLocaleString() }}원
             </p>
           </div>
           <button
             class="text-xs px-3 py-1.5 rounded-full font-semibold"
-            :class="duesPayments[p.id]?.paid ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+            :class="duesPayments[p.id]?.paid ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600'"
             @click="toggleDuesPaid(p.id)"
           >
             {{ duesPayments[p.id]?.paid ? '납부 완료' : '미납' }}

@@ -20,17 +20,17 @@ const FALLBACK_TONE = {
 }
 const fallbackClass = computed(() => {
   const p = props.player
-  if (!p) return 'bg-navy/10 text-navy'
+  if (!p) return 'bg-navy/10 text-navy dark:text-zinc-100'
   const code = p.mainPosition || p.subPosition
   const cat = code ? POSITION_CATEGORY[code] : null
-  return FALLBACK_TONE[cat] || 'bg-navy/10 text-navy'
+  return FALLBACK_TONE[cat] || 'bg-navy/10 text-navy dark:text-zinc-100'
 })
 </script>
 
 <template>
   <div
     class="rounded-full flex items-center justify-center overflow-hidden shrink-0 font-bold"
-    :class="player?.photoURL ? 'bg-gray-100' : fallbackClass"
+    :class="player?.photoURL ? 'bg-gray-100 dark:bg-zinc-700' : fallbackClass"
     :style="style"
   >
     <img

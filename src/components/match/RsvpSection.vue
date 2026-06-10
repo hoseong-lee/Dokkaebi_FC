@@ -25,8 +25,8 @@ const groups = [
 </script>
 
 <template>
-  <section class="bg-white rounded-2xl shadow p-6">
-    <h2 class="font-bold text-navy mb-3">참석 여부</h2>
+  <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
+    <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">참석 여부</h2>
 
     <RsvpButtons :current="myRsvp?.status" :saving="saving" @respond="onRespond" />
 
@@ -34,16 +34,16 @@ const groups = [
       <div v-for="g in groups" :key="g.key">
         <div class="flex items-center gap-2 text-sm mb-1">
           <span class="font-semibold" :class="g.color">{{ g.label }}</span>
-          <span class="text-xs text-gray-400">{{ grouped[g.key].length }}명</span>
+          <span class="text-xs text-gray-400 dark:text-zinc-500">{{ grouped[g.key].length }}명</span>
         </div>
         <div v-if="grouped[g.key].length" class="flex flex-wrap gap-1.5">
           <span
             v-for="r in grouped[g.key]"
             :key="r.uid"
-            class="text-xs bg-gray-100 rounded-full px-2.5 py-1"
+            class="text-xs bg-gray-100 dark:bg-zinc-700 rounded-full px-2.5 py-1"
           >
             {{ r.displayName }}
-            <span v-if="r.note" class="text-gray-400">· {{ r.note }}</span>
+            <span v-if="r.note" class="text-gray-400 dark:text-zinc-500">· {{ r.note }}</span>
           </span>
         </div>
         <p v-else class="text-xs text-gray-300">없음</p>

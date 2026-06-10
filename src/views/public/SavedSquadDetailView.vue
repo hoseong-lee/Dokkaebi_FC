@@ -151,30 +151,30 @@ async function remove() {
   <LoadingSpinner v-if="loading" />
   <div v-else-if="squad" class="space-y-4">
     <!-- 헤더 -->
-    <div class="bg-white rounded-2xl shadow p-5">
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <div class="flex items-start justify-between gap-3 mb-2">
         <div class="flex-1 min-w-0">
-          <h1 class="text-xl font-bold text-navy">{{ squad.name }}</h1>
-          <p class="text-[11px] text-gray-400 mt-0.5">
+          <h1 class="text-xl font-bold text-navy dark:text-zinc-100">{{ squad.name }}</h1>
+          <p class="text-[11px] text-gray-400 dark:text-zinc-500 mt-0.5">
             {{ squad.authorName || '익명' }} · {{ formatDate(squad.updatedAt || squad.createdAt) }}
           </p>
         </div>
         <div class="flex gap-1 shrink-0">
-          <span v-if="squad.formation" class="text-xs px-2 py-1 rounded-full bg-navy/10 text-navy font-bold tabular-nums">{{ squad.formation }}</span>
+          <span v-if="squad.formation" class="text-xs px-2 py-1 rounded-full bg-navy/10 text-navy dark:text-zinc-100 font-bold tabular-nums">{{ squad.formation }}</span>
           <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold">{{ lineupPlayers.length }}명</span>
-          <span v-if="!squad.isPublic" class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-500">🔒 비공개</span>
+          <span v-if="!squad.isPublic" class="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400">🔒 비공개</span>
         </div>
       </div>
-      <p v-if="squad.notes" class="text-sm text-gray-600 leading-relaxed bg-gray-50 rounded-lg p-3 mt-2">💬 {{ squad.notes }}</p>
+      <p v-if="squad.notes" class="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 mt-2">💬 {{ squad.notes }}</p>
     </div>
 
     <!-- 미니피치 (포메이션 있을 때) -->
-    <section v-if="squad.formation && slotAssignments.length" class="bg-white rounded-2xl shadow p-5">
-      <p class="text-xs text-gray-500 font-semibold mb-3">📐 {{ squad.formation }} 배치</p>
+    <section v-if="squad.formation && slotAssignments.length" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+      <p class="text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-3">📐 {{ squad.formation }} 배치</p>
       <div class="relative w-full max-w-sm mx-auto aspect-[3/4] rounded-xl overflow-hidden bg-gradient-to-b from-emerald-600 to-emerald-800 ring-1 ring-emerald-700/30">
         <!-- 라인 -->
         <div class="absolute inset-2 ring-2 ring-white/40 rounded-md"></div>
-        <div class="absolute left-2 right-2 top-1/2 h-px bg-white/30"></div>
+        <div class="absolute left-2 right-2 top-1/2 h-px bg-white dark:bg-zinc-800/30"></div>
         <div class="absolute left-1/2 top-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 ring-2 ring-white/30 rounded-full"></div>
         <!-- 선수 점 -->
         <div
@@ -185,7 +185,7 @@ async function remove() {
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ring-2 ring-navy text-white"
             :class="{
-              'bg-amber-400 !text-navy': sa.slot.role === 'GK',
+              'bg-amber-400 !text-navy dark:text-zinc-100': sa.slot.role === 'GK',
               'bg-sky-500': sa.slot.role === 'DF',
               'bg-emerald-500': sa.slot.role === 'MF',
               'bg-rose-500': sa.slot.role === 'FW'
@@ -202,13 +202,13 @@ async function remove() {
     </section>
 
     <!-- 명단 -->
-    <section class="bg-white rounded-2xl shadow p-5">
-      <p class="text-xs text-gray-500 font-semibold mb-3">👥 출전 명단 ({{ lineupPlayers.length }}명)</p>
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
+      <p class="text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-3">👥 출전 명단 ({{ lineupPlayers.length }}명)</p>
       <div class="grid grid-cols-2 gap-2">
         <RouterLink
           v-for="p in lineupPlayers" :key="p.id"
           :to="`/players/${p.id}`"
-          class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+          class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-zinc-900 hover:bg-gray-100 dark:bg-zinc-700 transition-colors"
         >
           <PlayerAvatar :player="p" :size="32" />
           <div class="flex-1 min-w-0">
@@ -216,7 +216,7 @@ async function remove() {
               {{ p.name }}
               <span v-if="p.number != null" class="text-dokkaebi text-xs">#{{ p.number }}</span>
             </p>
-            <p v-if="p.mainPosition" class="text-[10px] text-gray-400">{{ p.mainPosition }}</p>
+            <p v-if="p.mainPosition" class="text-[10px] text-gray-400 dark:text-zinc-500">{{ p.mainPosition }}</p>
           </div>
         </RouterLink>
       </div>
@@ -245,9 +245,9 @@ async function remove() {
 
     <!-- 경기 적용 모달 -->
     <BaseModal v-model="applyOpen" title="경기에 적용">
-      <p class="text-sm text-onyx mb-3">이 스쿼드를 어느 경기의 예정 라인업으로 적용할까요?</p>
-      <p class="text-[11px] text-gray-400 mb-3">4쿼터 모두 동일 라인업으로 적용됩니다 (결과 입력 시 쿼터별 수정 가능).</p>
-      <div v-if="applicableMatches.length === 0" class="text-sm text-gray-400 py-4 text-center">
+      <p class="text-sm text-onyx dark:text-zinc-100 mb-3">이 스쿼드를 어느 경기의 예정 라인업으로 적용할까요?</p>
+      <p class="text-[11px] text-gray-400 dark:text-zinc-500 mb-3">4쿼터 모두 동일 라인업으로 적용됩니다 (결과 입력 시 쿼터별 수정 가능).</p>
+      <div v-if="applicableMatches.length === 0" class="text-sm text-gray-400 dark:text-zinc-500 py-4 text-center">
         결과 입력 전 예정 경기가 없습니다.
       </div>
       <select v-else v-model="applyMatchId" class="w-full border rounded-lg px-3 py-2 text-sm">

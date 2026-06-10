@@ -201,10 +201,10 @@ onMounted(async () => {
       class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-sm"
     >
       <p class="font-bold text-amber-800">🏷 상대팀명 정규화 필요</p>
-      <p class="text-gray-700 mt-1">
+      <p class="text-gray-700 dark:text-zinc-200 mt-1">
         같은 팀이 다른 이름으로 분류된 경우가 있어요:
       </p>
-      <ul class="text-xs text-gray-600 mt-1 ml-3 list-disc">
+      <ul class="text-xs text-gray-600 dark:text-zinc-400 mt-1 ml-3 list-disc">
         <li v-for="v in opponentVariants" :key="v.canonical">
           <span class="font-semibold text-amber-700">{{ v.canonical }}</span>
           ← {{ v.variants.join(', ') }}
@@ -218,11 +218,11 @@ onMounted(async () => {
     <!-- 통계 재계산 (안전망 / 정정용) -->
     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm">
       <p class="font-bold text-emerald-800">📊 전체 통계 재계산</p>
-      <p class="text-gray-700 mt-1">
+      <p class="text-gray-700 dark:text-zinc-200 mt-1">
         모든 선수의 <span class="font-semibold">출전·골·어시·MOM</span> 통계를 전체 경기로부터 처음부터 다시 계산합니다.
         경기 삭제 후 통계가 안 맞거나, 누적된 수치에 의심이 들 때 실행하세요.
       </p>
-      <p class="text-xs text-gray-500 mt-1">경기 데이터는 그대로 유지됩니다.</p>
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">경기 데이터는 그대로 유지됩니다.</p>
       <BaseButton size="sm" variant="primary" class="mt-3" :loading="recomputing" @click="runRecomputeStats">
         🔁 통계 재계산 실행
       </BaseButton>
@@ -234,7 +234,7 @@ onMounted(async () => {
       class="bg-dokkaebi/10 border-2 border-dokkaebi/40 rounded-xl p-4 text-sm"
     >
       <p class="font-bold text-dokkaebi">⚠ 시즌 분리 필요</p>
-      <p class="text-gray-700 mt-1">
+      <p class="text-gray-700 dark:text-zinc-200 mt-1">
         옛 단일 시즌(<span class="font-mono text-xs">{{ legacySeasons.map(s => s.name).join(', ') }}</span>)이
         남아 있어 시즌 드롭다운에 한 옵션만 보입니다.
         연도별(2025년·2026년)로 분리하면 각 연도만 따로 볼 수 있게 됩니다.
@@ -262,11 +262,11 @@ onMounted(async () => {
       v-if="auth.isSuperAdmin && playersStore.loaded"
       class="bg-navy/5 border border-navy/20 rounded-xl p-4 text-sm"
     >
-      <p class="font-medium text-navy flex items-center gap-2">
+      <p class="font-medium text-navy dark:text-zinc-100 flex items-center gap-2">
         {{ playersStore.players.length === 0 ? '초기 데이터 가져오기' : '데이터 다시 가져오기' }}
         <span class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full font-bold">🔒 슈퍼</span>
       </p>
-      <p class="text-gray-500 mt-1">
+      <p class="text-gray-500 dark:text-zinc-400 mt-1">
         카카오톡 기록 기반 선수 {{ seedCounts.players }}명 · 경기 {{ seedCounts.matches }}건(4쿼터 기록 포함)을 등록합니다.
         <span v-if="playersStore.players.length > 0" class="text-dokkaebi">기존 선수·경기·시즌을 덮어씁니다.</span>
       </p>
@@ -277,17 +277,17 @@ onMounted(async () => {
 
     <!-- 요약 카드 -->
     <div class="grid grid-cols-3 gap-3">
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <p class="text-2xl font-bold text-navy">{{ playersStore.players.length }}</p>
-        <p class="text-xs text-gray-400 mt-1">선수</p>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-4 text-center">
+        <p class="text-2xl font-bold text-navy dark:text-zinc-100">{{ playersStore.players.length }}</p>
+        <p class="text-xs text-gray-400 dark:text-zinc-500 mt-1">선수</p>
       </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <p class="text-2xl font-bold text-navy">{{ matchesStore.upcoming.length }}</p>
-        <p class="text-xs text-gray-400 mt-1">예정 경기</p>
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-4 text-center">
+        <p class="text-2xl font-bold text-navy dark:text-zinc-100">{{ matchesStore.upcoming.length }}</p>
+        <p class="text-xs text-gray-400 dark:text-zinc-500 mt-1">예정 경기</p>
       </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+      <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-4 text-center">
         <p class="text-2xl font-bold text-dokkaebi">{{ pendingResults.length }}</p>
-        <p class="text-xs text-gray-400 mt-1">결과 미입력</p>
+        <p class="text-xs text-gray-400 dark:text-zinc-500 mt-1">결과 미입력</p>
       </div>
     </div>
 
@@ -303,16 +303,16 @@ onMounted(async () => {
 
     <!-- 결과 미입력 -->
     <section v-if="pendingResults.length">
-      <h2 class="font-bold text-navy mb-2">결과 입력 필요</h2>
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">결과 입력 필요</h2>
       <ul class="space-y-2">
         <li
           v-for="m in pendingResults"
           :key="m.id"
-          class="bg-white rounded-xl shadow-sm p-3 flex items-center justify-between"
+          class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 flex items-center justify-between"
         >
           <div class="min-w-0">
             <p class="font-medium truncate">vs {{ m.opponent }}</p>
-            <p class="text-xs text-gray-400">{{ formatDateTime(m.date) }}</p>
+            <p class="text-xs text-gray-400 dark:text-zinc-500">{{ formatDateTime(m.date) }}</p>
           </div>
           <RouterLink :to="`/admin/matches/${m.id}/result`">
             <BaseButton variant="danger" size="sm">결과 입력</BaseButton>
@@ -323,18 +323,18 @@ onMounted(async () => {
 
     <!-- 이번 주 경기 -->
     <section v-if="thisWeek.length">
-      <h2 class="font-bold text-navy mb-2">이번 주 경기</h2>
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-2">이번 주 경기</h2>
       <ul class="space-y-2">
         <li
           v-for="m in thisWeek"
           :key="m.id"
-          class="bg-white rounded-xl shadow-sm p-3 flex items-center justify-between"
+          class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 flex items-center justify-between"
         >
           <div class="min-w-0">
             <p class="font-medium truncate">vs {{ m.opponent }}</p>
-            <p class="text-xs text-gray-400">{{ formatDateTime(m.date) }}</p>
+            <p class="text-xs text-gray-400 dark:text-zinc-500">{{ formatDateTime(m.date) }}</p>
           </div>
-          <RouterLink :to="`/matches/${m.id}`" class="text-xs text-navy">상세</RouterLink>
+          <RouterLink :to="`/matches/${m.id}`" class="text-xs text-navy dark:text-zinc-100">상세</RouterLink>
         </li>
       </ul>
     </section>

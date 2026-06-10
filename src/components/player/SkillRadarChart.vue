@@ -58,19 +58,19 @@ const labelPoints = computed(() =>
 
       <!-- 추천 포지션 -->
       <div class="flex-1 min-w-0">
-        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1.5">추천 포지션</p>
-        <div v-if="recommended.length === 0" class="text-xs text-gray-400">
+        <p class="text-[10px] text-gray-400 dark:text-zinc-500 font-bold uppercase tracking-wider mb-1.5">추천 포지션</p>
+        <div v-if="recommended.length === 0" class="text-xs text-gray-400 dark:text-zinc-500">
           스킬 평판 데이터가 모이면 자동으로 추천돼요
         </div>
         <ul v-else class="space-y-1">
           <li v-for="(r, i) in recommended" :key="r.code" class="flex items-center gap-2 text-xs">
-            <span class="font-bold text-gray-400 w-5">{{ ['🥇','🥈','🥉'][i] }}</span>
-            <span class="font-bold text-navy">{{ r.code }}</span>
-            <span class="text-gray-600 truncate">{{ r.label }}</span>
-            <div class="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden min-w-[40px]">
+            <span class="font-bold text-gray-400 dark:text-zinc-500 w-5">{{ ['🥇','🥈','🥉'][i] }}</span>
+            <span class="font-bold text-navy dark:text-zinc-100">{{ r.code }}</span>
+            <span class="text-gray-600 dark:text-zinc-400 truncate">{{ r.label }}</span>
+            <div class="flex-1 bg-gray-100 dark:bg-zinc-700 rounded-full h-1.5 overflow-hidden min-w-[40px]">
               <div class="h-full bg-blue-500 rounded-full" :style="{ width: r.percent + '%' }"></div>
             </div>
-            <span class="text-[10px] text-gray-500 tabular-nums w-9 text-right">{{ r.percent }}%</span>
+            <span class="text-[10px] text-gray-500 dark:text-zinc-400 tabular-nums w-9 text-right">{{ r.percent }}%</span>
           </li>
         </ul>
       </div>
@@ -106,13 +106,13 @@ const labelPoints = computed(() =>
           class="absolute -translate-x-1/2 -translate-y-1/2 text-center"
           :style="{ left: (p.x / 260) * 100 + '%', top: (p.y / 260) * 100 + '%' }"
         >
-          <p class="text-[10px] font-bold text-gray-500 leading-tight">{{ p.icon }} {{ p.label }}</p>
-          <p class="text-base font-extrabold text-navy tabular-nums">{{ p.value }}</p>
+          <p class="text-[10px] font-bold text-gray-500 dark:text-zinc-400 leading-tight">{{ p.icon }} {{ p.label }}</p>
+          <p class="text-base font-extrabold text-navy dark:text-zinc-100 tabular-nums">{{ p.value }}</p>
         </div>
       </div>
     </div>
 
-    <p v-if="!hasData" class="text-[11px] text-gray-400 text-center">
+    <p v-if="!hasData" class="text-[11px] text-gray-400 dark:text-zinc-500 text-center">
       💡 동료가 경기에서 스킬 평가를 주면 자동으로 능력치가 산정됩니다
     </p>
   </div>

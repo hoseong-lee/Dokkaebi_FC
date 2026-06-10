@@ -101,16 +101,16 @@ async function submit() {
   <LoadingSpinner v-if="loading" />
   <div v-else class="space-y-4">
     <div>
-      <h1 class="text-xl font-bold text-navy flex items-center gap-2">
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100 flex items-center gap-2">
         ⚔️ <span>{{ isEdit ? '스쿼드 편집' : '새 스쿼드' }}</span>
       </h1>
-      <p class="text-xs text-gray-500 mt-1">라인업과 포메이션을 짜고 저장하세요. 추후 경기에 적용할 수 있습니다.</p>
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">라인업과 포메이션을 짜고 저장하세요. 추후 경기에 적용할 수 있습니다.</p>
     </div>
 
     <!-- 메타 정보 -->
-    <section class="bg-white rounded-2xl shadow p-5 space-y-3">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-3">
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">스쿼드 이름</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">스쿼드 이름</label>
         <input
           v-model="name"
           type="text"
@@ -120,7 +120,7 @@ async function submit() {
         />
       </div>
       <div>
-        <label class="block text-xs text-gray-500 font-semibold mb-1">메모 (선택)</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-1">메모 (선택)</label>
         <textarea
           v-model="notes"
           rows="2"
@@ -128,18 +128,18 @@ async function submit() {
           placeholder="이 스쿼드의 의도, 컨디션 메모 등"
           class="w-full border rounded-lg px-3 py-2 text-sm"
         />
-        <p class="text-[11px] text-gray-400 text-right mt-0.5">{{ notes.length }}/200</p>
+        <p class="text-[11px] text-gray-400 dark:text-zinc-500 text-right mt-0.5">{{ notes.length }}/200</p>
       </div>
       <div class="flex items-center gap-2">
         <input id="public-toggle" v-model="isPublic" type="checkbox" class="w-4 h-4 accent-navy" />
-        <label for="public-toggle" class="text-sm text-onyx cursor-pointer">
+        <label for="public-toggle" class="text-sm text-onyx dark:text-zinc-100 cursor-pointer">
           🌐 공개 — 다른 멤버도 이 스쿼드를 볼 수 있습니다
         </label>
       </div>
     </section>
 
     <!-- 스쿼드 에디터 -->
-    <section class="bg-white rounded-2xl shadow p-5">
+    <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <SquadEditor :squad="squad" :players="playersStore.activePlayers" />
     </section>
 

@@ -22,7 +22,7 @@ function posCardClass(player, picked) {
   const cat = POSITION_CATEGORY[player?.mainPosition] || POSITION_CATEGORY[player?.subPosition]
   const tones = POS_CARD_TONE[cat]
   if (!tones) {
-    return picked ? 'border-2 border-navy bg-navy/5' : 'border-2 border-transparent bg-gray-50'
+    return picked ? 'border-2 border-navy bg-navy/5' : 'border-2 border-transparent bg-gray-50 dark:bg-zinc-900'
   }
   return picked ? `border-2 border-transparent ${tones.sel}` : `border-2 border-transparent ${tones.unsel}`
 }
@@ -42,7 +42,7 @@ const QCOUNT_TONE = {
   1: 'bg-amber-400 text-white',     // 부족 — 1쿼터만
   2: 'bg-emerald-500 text-white',   // 적정
   3: 'bg-emerald-500 text-white',   // 적정
-  4: 'bg-gold text-onyx font-bold'  // 풀쿼
+  4: 'bg-gold text-onyx dark:text-zinc-100 font-bold'  // 풀쿼
 }
 
 const s = props.squad
@@ -55,7 +55,7 @@ const posFilter = ref('all') // all | GK | DF | MF | FW
 
 const POS_CATEGORIES = ['GK', 'DF', 'MF', 'FW']
 const POS_FILTER_TONE = {
-  GK: { on: 'bg-amber-400 text-navy', off: 'text-amber-600 bg-amber-50 hover:bg-amber-100' },
+  GK: { on: 'bg-amber-400 text-navy dark:text-zinc-100', off: 'text-amber-600 bg-amber-50 hover:bg-amber-100' },
   DF: { on: 'bg-sky-500 text-white',  off: 'text-sky-600 bg-sky-50 hover:bg-sky-100' },
   MF: { on: 'bg-emerald-500 text-white', off: 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100' },
   FW: { on: 'bg-rose-500 text-white', off: 'text-rose-600 bg-rose-50 hover:bg-rose-100' }
@@ -240,7 +240,7 @@ function clearSlot() {
     <!-- 출전 명단 -->
     <div>
       <div class="flex items-center justify-between mb-2 gap-2 flex-wrap">
-        <h3 class="text-sm font-bold text-navy">출전 명단 ({{ lineupPlayers.length }})</h3>
+        <h3 class="text-sm font-bold text-navy dark:text-zinc-100">출전 명단 ({{ lineupPlayers.length }})</h3>
         <div class="flex gap-1.5">
           <button
             type="button"
@@ -249,12 +249,12 @@ function clearSlot() {
           >★ 고정 전체</button>
           <button
             type="button"
-            class="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+            class="text-xs px-2.5 py-1 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600"
             @click="guestModalOpen = true"
           >+ 용병</button>
           <button
             type="button"
-            class="text-xs px-2.5 py-1 rounded-full bg-white text-gray-500 hover:bg-gray-50"
+            class="text-xs px-2.5 py-1 rounded-full bg-white dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:bg-zinc-900"
             @click="clearLineup"
           >전체 해제</button>
         </div>
@@ -269,21 +269,21 @@ function clearSlot() {
             placeholder="이름·초성(ㅇㅎㅊ)·등번호·포지션"
             class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
           />
-          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 text-sm">🔍</span>
           <button
             v-if="search"
             type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-dokkaebi text-sm"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 hover:text-dokkaebi text-sm"
             @click="search = ''"
           >×</button>
         </div>
-        <div class="flex bg-gray-100 rounded-lg p-0.5 text-xs">
+        <div class="flex bg-gray-100 dark:bg-zinc-700 rounded-lg p-0.5 text-xs">
           <button
             v-for="f in [{k:'all',l:'전체'},{k:'regular',l:'★'},{k:'guest',l:'용병'}]"
             :key="f.k"
             type="button"
             class="px-2 py-1 rounded-md"
-            :class="filterMode === f.k ? 'bg-white shadow font-semibold' : 'text-gray-500'"
+            :class="filterMode === f.k ? 'bg-white dark:bg-zinc-800 shadow font-semibold' : 'text-gray-500 dark:text-zinc-400'"
             @click="filterMode = f.k"
           >{{ f.l }}</button>
         </div>
@@ -294,7 +294,7 @@ function clearSlot() {
         <button
           type="button"
           class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors"
-          :class="posFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          :class="posFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600'"
           @click="posFilter = 'all'"
         >전체 {{ props.players.length }}</button>
         <button
@@ -307,7 +307,7 @@ function clearSlot() {
         >{{ cat }} {{ posCounts[cat] }}</button>
       </div>
 
-      <div v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 py-3 text-center">
+      <div v-if="filteredPlayers.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 py-3 text-center">
         검색 결과가 없습니다.
       </div>
       <div v-else class="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -327,10 +327,10 @@ function clearSlot() {
             :title="`${quarterCounts[p.id]}/4 쿼터 배정`"
           >{{ quarterCounts[p.id] }}</span>
           <span v-if="p.isRegular" class="absolute top-1 right-1 text-amber-500 text-[10px] leading-none">★</span>
-          <span v-else class="absolute top-1 right-1 text-[9px] bg-gray-200 text-gray-600 rounded px-1 leading-tight">용병</span>
+          <span v-else class="absolute top-1 right-1 text-[9px] bg-gray-200 dark:bg-zinc-600 text-gray-600 dark:text-zinc-400 rounded px-1 leading-tight">용병</span>
           <PlayerAvatar :player="p" :size="36" />
           <span class="text-[11px] truncate w-full text-center">
-            {{ p.name }}<span v-if="p.number != null" class="text-gray-400"> #{{ p.number }}</span>
+            {{ p.name }}<span v-if="p.number != null" class="text-gray-400 dark:text-zinc-500"> #{{ p.number }}</span>
           </span>
           <!-- 배치된 슬롯 라벨 (포메이션 배치 시) -->
           <span
@@ -345,7 +345,7 @@ function clearSlot() {
     <!-- 포메이션 -->
     <div>
       <div class="flex items-center justify-between mb-2 gap-2">
-        <h3 class="text-sm font-bold text-navy">포메이션</h3>
+        <h3 class="text-sm font-bold text-navy dark:text-zinc-100">포메이션</h3>
         <button
           type="button"
           class="text-xs px-3 py-1.5 rounded-full bg-dokkaebi text-white font-semibold hover:bg-dokkaebi/90 disabled:opacity-40"
@@ -362,12 +362,12 @@ function clearSlot() {
           :key="f"
           type="button"
           class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
-          :class="s.formation === f ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          :class="s.formation === f ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600'"
           @click="() => { s.formation = f; onFormationChange() }"
         >{{ f }}</button>
         <select
           :value="OTHER_FORMATIONS.includes(s.formation) ? s.formation : ''"
-          class="border rounded-full px-3 py-1 text-xs bg-white"
+          class="border rounded-full px-3 py-1 text-xs bg-white dark:bg-zinc-800"
           @change="(e) => { s.formation = e.target.value; onFormationChange() }"
         >
           <option value="">기타…</option>
@@ -376,7 +376,7 @@ function clearSlot() {
         <button
           v-if="s.formation"
           type="button"
-          class="px-3 py-1.5 rounded-full text-xs text-gray-400 hover:text-dokkaebi"
+          class="px-3 py-1.5 rounded-full text-xs text-gray-400 dark:text-zinc-500 hover:text-dokkaebi"
           @click="() => { s.formation = ''; s.positions = {} }"
         >해제</button>
       </div>
@@ -389,7 +389,7 @@ function clearSlot() {
         editable
         @slot-click="openSlot"
       />
-      <p v-else class="text-xs text-gray-400">
+      <p v-else class="text-xs text-gray-400 dark:text-zinc-500">
         포메이션 칩을 누르거나 명단 선택 후 ⚡ 자동 추천을 눌러보세요.
       </p>
     </div>
@@ -402,7 +402,7 @@ function clearSlot() {
           placeholder="이름·등번호 검색"
           class="w-full border rounded-lg pl-8 pr-3 py-1.5 text-sm"
         />
-        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+        <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500 text-sm">🔍</span>
       </div>
 
       <!-- 포지션 카테고리 chip (출전 명단 내에서 필터) -->
@@ -410,7 +410,7 @@ function clearSlot() {
         <button
           type="button"
           class="px-2 py-0.5 rounded-full text-[10px] font-bold transition-colors"
-          :class="slotPosFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          :class="slotPosFilter === 'all' ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600'"
           @click="slotPosFilter = 'all'"
         >전체</button>
         <button
@@ -421,8 +421,8 @@ function clearSlot() {
           :class="slotPosFilter === cat ? POS_FILTER_TONE[cat].on : POS_FILTER_TONE[cat].off"
           @click="slotPosFilter = cat"
         >{{ cat }}</button>
-        <span class="text-[10px] text-gray-400 ml-auto self-center">
-          이 자리: <span class="font-bold text-navy">{{ activeSlot ? slotLabel(activeSlot.id) : '-' }}</span>
+        <span class="text-[10px] text-gray-400 dark:text-zinc-500 ml-auto self-center">
+          이 자리: <span class="font-bold text-navy dark:text-zinc-100">{{ activeSlot ? slotLabel(activeSlot.id) : '-' }}</span>
         </span>
       </div>
       <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-72 overflow-y-auto">
@@ -430,8 +430,8 @@ function clearSlot() {
           v-for="p in slotCandidates"
           :key="p.id"
           type="button"
-          class="relative flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50"
-          :class="assignedSlotMap.get(p.id) ? 'border-amber-300 bg-amber-50' : 'border-gray-200'"
+          class="relative flex flex-col items-center gap-1 p-2 rounded-lg border text-center hover:bg-gray-50 dark:bg-zinc-900"
+          :class="assignedSlotMap.get(p.id) ? 'border-amber-300 bg-amber-50' : 'border-gray-200 dark:border-zinc-700'"
           @click="assignToSlot(p.id)"
         >
           <PlayerAvatar :player="p" :size="36" />
@@ -443,13 +443,13 @@ function clearSlot() {
           >📍 {{ slotLabel(assignedSlotMap.get(p.id)) }}</span>
           <span
             v-else
-            class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 leading-tight"
+            class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400 leading-tight"
           >미배치</span>
         </button>
-        <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 py-2">
+        <p v-if="lineupPlayers.length === 0" class="col-span-full text-xs text-gray-400 dark:text-zinc-500 py-2">
           명단에서 선수를 먼저 선택하세요.
         </p>
-        <p v-else-if="slotCandidates.length === 0" class="col-span-full text-xs text-gray-400 py-2">
+        <p v-else-if="slotCandidates.length === 0" class="col-span-full text-xs text-gray-400 dark:text-zinc-500 py-2">
           검색 결과 없음.
         </p>
       </div>
@@ -460,7 +460,7 @@ function clearSlot() {
     </BaseModal>
 
     <BaseModal v-model="guestModalOpen" title="용병 추가">
-      <p class="text-xs text-gray-500 mb-2">이번 경기에 함께 뛰는 용병/게스트입니다.</p>
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mb-2">이번 경기에 함께 뛰는 용병/게스트입니다.</p>
       <input
         v-model="guestName"
         type="text"

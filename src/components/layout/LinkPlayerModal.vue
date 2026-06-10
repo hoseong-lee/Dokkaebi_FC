@@ -56,11 +56,11 @@ async function pick(playerId) {
 
 <template>
   <BaseModal v-model="model" title="내 선수 연결">
-    <p class="text-xs text-gray-500 mb-3">
+    <p class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       앱에서 본인이 어떤 선수인지 지정하세요. MOM 투표 권한과 본인 통계 표시에 사용됩니다.
     </p>
     <p v-if="linkedPlayer" class="text-sm mb-3">
-      현재 연결됨: <span class="font-bold text-navy">{{ linkedPlayer.name }}</span>
+      현재 연결됨: <span class="font-bold text-navy dark:text-zinc-100">{{ linkedPlayer.name }}</span>
       <button class="ml-2 text-xs text-dokkaebi" :disabled="saving" @click="pick(null)">해제</button>
     </p>
 
@@ -75,7 +75,7 @@ async function pick(playerId) {
       <li v-for="p in filtered" :key="p.id">
         <button
           type="button"
-          class="w-full flex items-center gap-3 p-2 hover:bg-gray-50 disabled:opacity-50"
+          class="w-full flex items-center gap-3 p-2 hover:bg-gray-50 dark:bg-zinc-900 disabled:opacity-50"
           :disabled="saving"
           @click="pick(p.id)"
         >
@@ -84,9 +84,9 @@ async function pick(playerId) {
             <p class="font-medium truncate">
               <span v-if="p.isRegular" class="text-amber-500">★</span>
               {{ p.name }}
-              <span class="text-xs text-gray-400">#{{ p.number ?? '-' }}</span>
+              <span class="text-xs text-gray-400 dark:text-zinc-500">#{{ p.number ?? '-' }}</span>
             </p>
-            <p class="text-xs text-gray-500">
+            <p class="text-xs text-gray-500 dark:text-zinc-400">
               {{ p.mainPosition || p.position }}<span v-if="p.subPosition"> / {{ p.subPosition }}</span>
             </p>
           </div>

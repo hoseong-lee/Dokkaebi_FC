@@ -21,7 +21,7 @@ const links = computed(() => allLinks.filter((l) => !l.superOnly || auth.isSuper
   <div>
     <div class="flex items-center gap-2 mb-4">
       <span class="text-dokkaebi font-bold">●</span>
-      <h1 class="font-bold text-navy">관리자</h1>
+      <h1 class="font-bold text-navy dark:text-zinc-100">관리자</h1>
       <span
         v-if="auth.isSuperAdmin"
         class="text-[10px] bg-gradient-to-br from-amber-400 to-amber-600 text-white px-2 py-0.5 rounded-full font-bold"
@@ -33,8 +33,8 @@ const links = computed(() => allLinks.filter((l) => !l.superOnly || auth.isSuper
         v-for="l in links"
         :key="l.to"
         :to="l.to"
-        class="whitespace-nowrap px-3 py-1.5 rounded-t text-sm text-gray-500 hover:text-navy"
-        :class="{ 'text-navy font-semibold border-b-2 border-dokkaebi': l.exact ? $route.path === l.to : $route.path.startsWith(l.to) }"
+        class="whitespace-nowrap px-3 py-1.5 rounded-t text-sm text-gray-500 dark:text-zinc-400 hover:text-navy dark:text-zinc-100"
+        :class="{ 'text-navy dark:text-zinc-100 font-semibold border-b-2 border-dokkaebi': l.exact ? $route.path === l.to : $route.path.startsWith(l.to) }"
       >
         {{ l.label }}
       </RouterLink>

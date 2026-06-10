@@ -68,8 +68,8 @@ onMounted(() => {
 <template>
   <div>
     <div class="mb-4">
-      <h1 class="text-xl font-bold text-navy">🏆 명예의 전당</h1>
-      <p class="text-xs text-gray-500 mt-1">시즌별 자동 시상 (MOM 투표·통계 기준)</p>
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100">🏆 명예의 전당</h1>
+      <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">시즌별 자동 시상 (MOM 투표·통계 기준)</p>
     </div>
 
     <LoadingSpinner v-if="loading" />
@@ -82,7 +82,7 @@ onMounted(() => {
     <div v-else class="space-y-6">
       <section v-for="sa in seasonAwards" :key="sa.season.id">
         <div class="flex items-center gap-2 mb-3">
-          <h2 class="font-bold text-navy">{{ sa.season.name }}</h2>
+          <h2 class="font-bold text-navy dark:text-zinc-100">{{ sa.season.name }}</h2>
           <span v-if="sa.season.active" class="text-[10px] bg-dokkaebi text-white px-2 py-0.5 rounded-full">진행중</span>
           <button
             type="button"

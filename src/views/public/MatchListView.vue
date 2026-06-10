@@ -19,19 +19,19 @@ onMounted(async () => { await store.fetchAll() })
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">경기</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">경기</h1>
 
-    <div class="flex bg-white rounded-xl p-1 mb-4 shadow-sm">
+    <div class="flex bg-white dark:bg-zinc-800 rounded-xl p-1 mb-4 shadow-sm">
       <button
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="tab === 'upcoming' ? 'bg-navy text-white' : 'text-gray-500'"
+        :class="tab === 'upcoming' ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'upcoming'"
       >
         예정 ({{ store.upcoming.length }})
       </button>
       <button
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="tab === 'finished' ? 'bg-navy text-white' : 'text-gray-500'"
+        :class="tab === 'finished' ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
         @click="tab = 'finished'"
       >
         완료 ({{ store.finished.length }})

@@ -70,31 +70,31 @@ onMounted(async () => {
 <template>
   <div>
     <div class="flex items-center justify-between mb-4 gap-2">
-      <h1 class="text-xl font-bold text-navy">📷 사진첩</h1>
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100">📷 사진첩</h1>
       <RouterLink to="/photos/new">
         <BaseButton size="sm">+ 글쓰기</BaseButton>
       </RouterLink>
     </div>
 
     <!-- 필터 -->
-    <div class="bg-white rounded-xl shadow-sm p-3 mb-4 space-y-2">
+    <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3 mb-4 space-y-2">
       <div class="flex flex-wrap gap-1.5 items-center">
-        <span class="text-[11px] text-gray-500">태그</span>
+        <span class="text-[11px] text-gray-500 dark:text-zinc-400">태그</span>
         <button
           class="text-xs px-2.5 py-1 rounded-full"
-          :class="!tagFilter ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600'"
+          :class="!tagFilter ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
           @click="tagFilter = ''"
         >전체</button>
         <button
           v-for="t in allTags"
           :key="t"
           class="text-xs px-2.5 py-1 rounded-full"
-          :class="tagFilter === t ? 'bg-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          :class="tagFilter === t ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600'"
           @click="tagFilter = (tagFilter === t ? '' : t)"
         >#{{ t }}</button>
       </div>
       <div class="flex items-center gap-2 text-xs">
-        <span class="text-gray-500">경기</span>
+        <span class="text-gray-500 dark:text-zinc-400">경기</span>
         <select v-model="matchFilter" class="border rounded-lg px-2 py-1 flex-1">
           <option value="">전체</option>
           <option v-for="m in matchOptions" :key="m.id" :value="m.id">{{ m.label }}</option>
@@ -114,18 +114,18 @@ onMounted(async () => {
     </EmptyState>
 
     <ul v-else class="space-y-4">
-      <li v-for="p in visible" :key="p.id" class="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <li v-for="p in visible" :key="p.id" class="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm overflow-hidden">
         <RouterLink :to="`/photos/${p.id}`" class="block">
           <div class="p-4 pb-2">
-            <p class="text-xs text-gray-400">
+            <p class="text-xs text-gray-400 dark:text-zinc-500">
               {{ p.authorName }} · {{ fromNow(p.createdAt) }}
-              <span v-if="p.matchId" class="ml-1 text-navy">· {{ matchLabel(p.matchId) }}</span>
+              <span v-if="p.matchId" class="ml-1 text-navy dark:text-zinc-100">· {{ matchLabel(p.matchId) }}</span>
             </p>
-            <h2 class="font-bold text-navy mt-0.5">{{ p.title || '(제목 없음)' }}</h2>
+            <h2 class="font-bold text-navy dark:text-zinc-100 mt-0.5">{{ p.title || '(제목 없음)' }}</h2>
           </div>
 
           <!-- 첫 이미지(있으면) -->
-          <div v-if="p.imageUrls?.length" class="relative bg-gray-100">
+          <div v-if="p.imageUrls?.length" class="relative bg-gray-100 dark:bg-zinc-700">
             <img
               :src="cldThumb(p.imageUrls[0], 800)"
               :alt="p.title"
@@ -139,15 +139,15 @@ onMounted(async () => {
           </div>
 
           <div class="p-4 pt-3">
-            <p v-if="p.body" class="text-sm text-gray-700 line-clamp-2">{{ p.body }}</p>
+            <p v-if="p.body" class="text-sm text-gray-700 dark:text-zinc-200 line-clamp-2">{{ p.body }}</p>
             <div v-if="p.tags?.length" class="flex flex-wrap gap-1 mt-2">
               <span
                 v-for="t in p.tags"
                 :key="t"
-                class="text-[10px] text-navy bg-navy/5 px-1.5 py-0.5 rounded"
+                class="text-[10px] text-navy dark:text-zinc-100 bg-navy/5 px-1.5 py-0.5 rounded"
               >#{{ t }}</span>
             </div>
-            <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+            <div class="flex items-center gap-4 mt-3 text-xs text-gray-500 dark:text-zinc-400">
               <span>❤️ {{ likeCount(p) }}</span>
               <span>💬 {{ commentCount(p) }}</span>
             </div>

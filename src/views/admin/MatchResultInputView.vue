@@ -141,27 +141,27 @@ onMounted(load)
 
 <template>
   <LoadingSpinner v-if="loading" label="불러오는 중..." />
-  <div v-else-if="!match" class="text-center text-gray-400 py-10">경기를 찾을 수 없습니다.</div>
+  <div v-else-if="!match" class="text-center text-gray-400 dark:text-zinc-500 py-10">경기를 찾을 수 없습니다.</div>
   <div v-else>
     <div class="mb-4">
-      <h2 class="font-bold text-navy">결과 입력 (4쿼터)</h2>
-      <p class="text-sm text-gray-500">vs {{ match.opponent }} · {{ formatDateTime(match.date) }}</p>
+      <h2 class="font-bold text-navy dark:text-zinc-100">결과 입력 (4쿼터)</h2>
+      <p class="text-sm text-gray-500 dark:text-zinc-400">vs {{ match.opponent }} · {{ formatDateTime(match.date) }}</p>
     </div>
 
     <!-- 합계 스코어 -->
-    <div class="bg-white rounded-2xl shadow p-4 mb-4 flex items-center justify-center gap-4">
-      <span class="flex-1 text-right font-bold text-navy">도깨비</span>
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4 mb-4 flex items-center justify-center gap-4">
+      <span class="flex-1 text-right font-bold text-navy dark:text-zinc-100">도깨비</span>
       <span class="text-3xl font-bold tabular-nums">{{ totalDok }} : {{ totalOpp }}</span>
-      <span class="flex-1 font-bold text-gray-700">{{ match.opponent }}</span>
+      <span class="flex-1 font-bold text-gray-700 dark:text-zinc-200">{{ match.opponent }}</span>
     </div>
 
     <!-- 쿼터 탭 -->
-    <div class="flex bg-white rounded-xl p-1 mb-3 shadow-sm">
+    <div class="flex bg-white dark:bg-zinc-800 rounded-xl p-1 mb-3 shadow-sm">
       <button
         v-for="(q, i) in quarters"
         :key="i"
         class="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-        :class="activeQ === i ? 'bg-navy text-white' : 'text-gray-500'"
+        :class="activeQ === i ? 'bg-navy text-white' : 'text-gray-500 dark:text-zinc-400'"
         @click="activeQ = i"
       >
         {{ i + 1 }}쿼터
@@ -173,7 +173,7 @@ onMounted(load)
       <button
         v-if="hasPlannedSquad"
         type="button"
-        class="text-xs px-3 py-1.5 rounded-full bg-gold/20 text-onyx font-semibold hover:bg-gold/30"
+        class="text-xs px-3 py-1.5 rounded-full bg-gold/20 text-onyx dark:text-zinc-100 font-semibold hover:bg-gold/30"
         @click="copyFromPlanned"
       >
         📋 예정 스쿼드 가져오기
@@ -181,14 +181,14 @@ onMounted(load)
       <button
         v-if="activeQ > 0"
         type="button"
-        class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy font-medium hover:bg-navy/20"
+        class="text-xs px-3 py-1.5 rounded-full bg-navy/10 text-navy dark:text-zinc-100 font-medium hover:bg-navy/20"
         @click="copyFromPrev"
       >
         ↻ {{ activeQ }}쿼터 명단 복사
       </button>
     </div>
 
-    <div class="bg-white rounded-2xl shadow p-5">
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5">
       <!-- :key 로 쿼터 전환 시 QuarterEditor 재생성 — const q = props.quarter 캐시 회피 -->
       <QuarterEditor
         :key="`rq${activeQ}`"
@@ -198,25 +198,25 @@ onMounted(load)
     </div>
 
     <!-- 매치 레벨 -->
-    <div class="bg-white rounded-2xl shadow p-5 mt-4 space-y-4">
+    <div class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 mt-4 space-y-4">
       <div>
-        <h3 class="text-sm font-bold text-navy mb-2">⭐ MOM (선택)</h3>
+        <h3 class="text-sm font-bold text-navy dark:text-zinc-100 mb-2">⭐ MOM (선택)</h3>
         <div class="flex flex-wrap gap-1.5">
           <button
             v-for="p in lineupUnion"
             :key="p.id"
             type="button"
             class="px-3 py-1.5 rounded-full text-xs transition-colors"
-            :class="momPlayerId === p.id ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-600'"
+            :class="momPlayerId === p.id ? 'bg-amber-500 text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400'"
             @click="momPlayerId = momPlayerId === p.id ? null : p.id"
           >
             {{ p.name }}
           </button>
-          <span v-if="lineupUnion.length === 0" class="text-xs text-gray-400 py-1.5">출전 선수를 먼저 선택하세요.</span>
+          <span v-if="lineupUnion.length === 0" class="text-xs text-gray-400 dark:text-zinc-500 py-1.5">출전 선수를 먼저 선택하세요.</span>
         </div>
       </div>
       <div>
-        <label class="block text-xs text-gray-500 mb-1">경기 후기 (선택)</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">경기 후기 (선택)</label>
         <textarea v-model="notes" rows="3" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="경기 후기를 남겨보세요." />
       </div>
     </div>

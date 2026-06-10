@@ -42,7 +42,7 @@ function pct(n) { return `${Math.round((n || 0) * 100)}%` }
 
 <template>
   <BaseModal :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)" :title="`📊 ${venue?.name || '구장'} 통계`">
-    <div v-if="!stats || stats.played === 0" class="text-center py-8 text-gray-400 text-sm">
+    <div v-if="!stats || stats.played === 0" class="text-center py-8 text-gray-400 dark:text-zinc-500 text-sm">
       이 구장에서 진행한 정식 경기 기록이 없어요.<br>
       <span class="text-[11px]">(풋살·자체전은 통계에서 제외)</span>
     </div>
@@ -50,17 +50,17 @@ function pct(n) { return `${Math.round((n || 0) * 100)}%` }
     <div v-else class="space-y-4">
       <!-- 핵심 수치 -->
       <div class="grid grid-cols-4 gap-2 text-center">
-        <div><p class="text-[10px] text-gray-500">경기</p><p class="text-xl font-bold text-navy">{{ stats.played }}</p></div>
+        <div><p class="text-[10px] text-gray-500 dark:text-zinc-400">경기</p><p class="text-xl font-bold text-navy dark:text-zinc-100">{{ stats.played }}</p></div>
         <div><p class="text-[10px] text-blue-500">승</p><p class="text-xl font-bold text-blue-600">{{ stats.wins }}</p></div>
-        <div><p class="text-[10px] text-gray-500">무</p><p class="text-xl font-bold text-gray-600">{{ stats.draws }}</p></div>
+        <div><p class="text-[10px] text-gray-500 dark:text-zinc-400">무</p><p class="text-xl font-bold text-gray-600 dark:text-zinc-400">{{ stats.draws }}</p></div>
         <div><p class="text-[10px] text-rose-500">패</p><p class="text-xl font-bold text-rose-600">{{ stats.losses }}</p></div>
       </div>
 
       <!-- 승률 막대 -->
       <div>
         <div class="flex items-center justify-between mb-1">
-          <span class="text-xs text-gray-500 font-semibold">승률</span>
-          <span class="text-lg font-bold text-navy">{{ pct(stats.winRate) }}</span>
+          <span class="text-xs text-gray-500 dark:text-zinc-400 font-semibold">승률</span>
+          <span class="text-lg font-bold text-navy dark:text-zinc-100">{{ pct(stats.winRate) }}</span>
         </div>
         <div class="flex h-3 rounded-full overflow-hidden">
           <div class="bg-blue-500" :style="{ width: pct(stats.winRate) }"></div>
@@ -70,12 +70,12 @@ function pct(n) { return `${Math.round((n || 0) * 100)}%` }
       </div>
 
       <!-- 득실 -->
-      <div class="bg-gray-50 rounded-lg p-3 text-center">
-        <p class="text-sm text-gray-600">
-          평균 <span class="font-bold text-onyx">{{ stats.avgGf.toFixed(1) }}</span>득점 :
-          <span class="font-bold text-onyx">{{ stats.avgGa.toFixed(1) }}</span>실점
+      <div class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3 text-center">
+        <p class="text-sm text-gray-600 dark:text-zinc-400">
+          평균 <span class="font-bold text-onyx dark:text-zinc-100">{{ stats.avgGf.toFixed(1) }}</span>득점 :
+          <span class="font-bold text-onyx dark:text-zinc-100">{{ stats.avgGa.toFixed(1) }}</span>실점
         </p>
-        <p class="text-xs text-gray-500 mt-1">
+        <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">
           득실차 <span :class="stats.gd >= 0 ? 'text-emerald-600 font-semibold' : 'text-rose-600 font-semibold'">
             {{ stats.gd > 0 ? '+' : '' }}{{ stats.gd }}
           </span> · 경기당 평점 {{ stats.pointsPerGame.toFixed(2) }}점
@@ -84,7 +84,7 @@ function pct(n) { return `${Math.round((n || 0) * 100)}%` }
 
       <!-- 이 구장 MOM 단골 -->
       <div v-if="stats.topMomPlayers.length">
-        <p class="text-xs text-gray-500 font-semibold mb-2">⭐ 이 구장 MOM 단골</p>
+        <p class="text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-2">⭐ 이 구장 MOM 단골</p>
         <div class="space-y-1">
           <div v-for="m in stats.topMomPlayers" :key="m.playerId" class="flex items-center gap-2">
             <PlayerAvatar :player="playersStore.getById(m.playerId)" :size="28" />
@@ -98,10 +98,10 @@ function pct(n) { return `${Math.round((n || 0) * 100)}%` }
 
       <!-- 최근 경기 -->
       <div v-if="recentMatches.length">
-        <p class="text-xs text-gray-500 font-semibold mb-2">📅 최근 경기</p>
+        <p class="text-xs text-gray-500 dark:text-zinc-400 font-semibold mb-2">📅 최근 경기</p>
         <ul class="space-y-1">
           <li v-for="m in recentMatches" :key="m.id" class="flex items-center gap-2">
-            <span class="text-[10px] text-gray-400 w-16 shrink-0">{{ formatDate(m.date) }}</span>
+            <span class="text-[10px] text-gray-400 dark:text-zinc-500 w-16 shrink-0">{{ formatDate(m.date) }}</span>
             <span class="px-1.5 py-0.5 rounded text-[10px] font-bold" :class="RESULT_COLOR[matchResult(m)]">
               {{ RESULT_LABEL[matchResult(m)] }}
             </span>

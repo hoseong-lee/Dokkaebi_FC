@@ -103,13 +103,13 @@ function canDelete(c) {
 </script>
 
 <template>
-  <section class="bg-white rounded-2xl shadow p-5 space-y-4">
+  <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-4">
     <!-- 좋아요 + 이모지 반응 -->
     <div class="flex items-center gap-2 flex-wrap">
       <button
         type="button"
         class="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-sm font-bold disabled:opacity-50"
-        :class="liked ? 'bg-rose-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+        :class="liked ? 'bg-rose-500 text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-400 hover:bg-gray-200 dark:bg-zinc-600'"
         :disabled="!auth.isAuthed"
         @click="onLike"
       >
@@ -122,7 +122,7 @@ function canDelete(c) {
           v-for="r in sortedReactions" :key="r.emoji"
           type="button"
           class="text-lg w-9 h-9 rounded-full transition-all flex items-center justify-center relative disabled:opacity-50"
-          :class="myReaction === r.emoji ? 'bg-amber-100 ring-2 ring-amber-400 scale-110' : 'hover:bg-gray-100'"
+          :class="myReaction === r.emoji ? 'bg-amber-100 ring-2 ring-amber-400 scale-110' : 'hover:bg-gray-100 dark:bg-zinc-700'"
           :disabled="!auth.isAuthed"
           @click="onReact(r.emoji)"
           :title="r.emoji + ' ' + r.count + '명'"
@@ -134,9 +134,9 @@ function canDelete(c) {
     </div>
 
     <!-- 댓글 -->
-    <div class="border-t border-gray-100 pt-3 space-y-3">
+    <div class="border-t border-gray-100 dark:border-zinc-700 pt-3 space-y-3">
       <div class="flex items-center justify-between">
-        <p class="text-sm font-bold text-navy">💬 댓글 <span class="text-xs text-gray-400 font-normal">{{ comments.length }}개</span></p>
+        <p class="text-sm font-bold text-navy dark:text-zinc-100">💬 댓글 <span class="text-xs text-gray-400 dark:text-zinc-500 font-normal">{{ comments.length }}개</span></p>
       </div>
 
       <!-- 댓글 입력 -->
@@ -154,16 +154,16 @@ function canDelete(c) {
           :disabled="submitting || !newComment.trim()"
         >등록</button>
       </form>
-      <p v-else class="text-xs text-gray-400 text-center py-2">로그인 후 댓글을 남길 수 있어요.</p>
+      <p v-else class="text-xs text-gray-400 dark:text-zinc-500 text-center py-2">로그인 후 댓글을 남길 수 있어요.</p>
 
       <!-- 댓글 목록 -->
       <ul v-if="comments.length" class="space-y-2">
-        <li v-for="c in comments" :key="c.id" class="bg-gray-50 rounded-lg p-3">
+        <li v-for="c in comments" :key="c.id" class="bg-gray-50 dark:bg-zinc-900 rounded-lg p-3">
           <div class="flex items-baseline justify-between gap-2 mb-0.5">
-            <span class="text-xs font-bold text-navy">{{ c.authorName || '익명' }}</span>
-            <span class="text-[10px] text-gray-400">{{ formatDateTime(c.createdAt) }}</span>
+            <span class="text-xs font-bold text-navy dark:text-zinc-100">{{ c.authorName || '익명' }}</span>
+            <span class="text-[10px] text-gray-400 dark:text-zinc-500">{{ formatDateTime(c.createdAt) }}</span>
           </div>
-          <p class="text-sm text-onyx leading-relaxed whitespace-pre-line">{{ c.body }}</p>
+          <p class="text-sm text-onyx dark:text-zinc-100 leading-relaxed whitespace-pre-line">{{ c.body }}</p>
           <button
             v-if="canDelete(c)"
             type="button"
@@ -172,7 +172,7 @@ function canDelete(c) {
           >삭제</button>
         </li>
       </ul>
-      <p v-else class="text-xs text-gray-400 text-center py-3">아직 댓글이 없어요.</p>
+      <p v-else class="text-xs text-gray-400 dark:text-zinc-500 text-center py-3">아직 댓글이 없어요.</p>
     </div>
   </section>
 </template>

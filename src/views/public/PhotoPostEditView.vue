@@ -127,16 +127,16 @@ onMounted(load)
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy mb-4">{{ isEdit ? '글 수정' : '글쓰기' }}</h1>
+    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">{{ isEdit ? '글 수정' : '글쓰기' }}</h1>
     <LoadingSpinner v-if="loading" />
-    <form v-else class="bg-white rounded-2xl shadow p-5 space-y-4" @submit.prevent="save">
+    <form v-else class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-5 space-y-4" @submit.prevent="save">
       <div>
-        <label class="block text-xs text-gray-500 mb-1">제목</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">제목</label>
         <input v-model="form.title" type="text" placeholder="제목" class="w-full border rounded-lg px-3 py-2 text-sm" />
       </div>
 
       <div>
-        <label class="block text-xs text-gray-500 mb-1">본문</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">본문</label>
         <textarea
           v-model="form.body"
           rows="5"
@@ -146,7 +146,7 @@ onMounted(load)
       </div>
 
       <div>
-        <label class="block text-xs text-gray-500 mb-1">태그 (공백 또는 콤마로 구분)</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">태그 (공백 또는 콤마로 구분)</label>
         <input
           v-model="form.tagInput"
           type="text"
@@ -154,14 +154,14 @@ onMounted(load)
           class="w-full border rounded-lg px-3 py-2 text-sm"
         />
         <div v-if="tags.length" class="flex flex-wrap gap-1 mt-2">
-          <span v-for="t in tags" :key="t" class="text-[10px] text-navy bg-navy/5 px-1.5 py-0.5 rounded">
+          <span v-for="t in tags" :key="t" class="text-[10px] text-navy dark:text-zinc-100 bg-navy/5 px-1.5 py-0.5 rounded">
             #{{ t }}
           </span>
         </div>
       </div>
 
       <div>
-        <label class="block text-xs text-gray-500 mb-1">관련 경기 (선택)</label>
+        <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">관련 경기 (선택)</label>
         <select v-model="form.matchId" class="w-full border rounded-lg px-3 py-2 text-sm">
           <option value="">(없음)</option>
           <option v-for="m in matchOptions" :key="m.id" :value="m.id">{{ m.label }}</option>
@@ -170,7 +170,7 @@ onMounted(load)
 
       <div>
         <div class="flex items-center justify-between mb-1">
-          <label class="text-xs text-gray-500">사진 ({{ form.images.length }})</label>
+          <label class="text-xs text-gray-500 dark:text-zinc-400">사진 ({{ form.images.length }})</label>
           <BaseButton
             type="button" size="sm" variant="secondary"
             :loading="uploading" :disabled="!configured"
@@ -182,7 +182,7 @@ onMounted(load)
           ⚠ Cloudinary 설정이 필요합니다.
         </div>
         <div v-if="form.images.length" class="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-2">
-          <div v-for="(img, i) in form.images" :key="img.url" class="relative aspect-square rounded overflow-hidden bg-gray-100 group">
+          <div v-for="(img, i) in form.images" :key="img.url" class="relative aspect-square rounded overflow-hidden bg-gray-100 dark:bg-zinc-700 group">
             <img :src="cldThumb(img.url, 300)" alt="" class="w-full h-full object-cover" />
             <button
               type="button"

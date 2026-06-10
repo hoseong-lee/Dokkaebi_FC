@@ -126,7 +126,7 @@ onMounted(() => store.fetchAll())
 <template>
   <div>
     <div class="flex items-center justify-between mb-3">
-      <h2 class="font-bold text-navy">선수 관리</h2>
+      <h2 class="font-bold text-navy dark:text-zinc-100">선수 관리</h2>
       <BaseButton size="sm" @click="openCreate">+ 선수 등록</BaseButton>
     </div>
 
@@ -135,7 +135,7 @@ onMounted(() => store.fetchAll())
         v-for="f in [{k:'all',l:'전체'},{k:'regular',l:'★ 고정'},{k:'guest',l:'용병'}]"
         :key="f.k"
         class="px-3 py-1.5 rounded-full text-xs"
-        :class="filter === f.k ? 'bg-navy text-white' : 'bg-white text-gray-600'"
+        :class="filter === f.k ? 'bg-navy text-white' : 'bg-white dark:bg-zinc-800 text-gray-600 dark:text-zinc-400'"
         @click="filter = f.k"
       >
         {{ f.l }}
@@ -151,18 +151,18 @@ onMounted(() => store.fetchAll())
       <li
         v-for="p in visible"
         :key="p.id"
-        class="flex items-center gap-3 bg-white rounded-xl shadow-sm p-3"
+        class="flex items-center gap-3 bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-3"
       >
         <PlayerAvatar :player="p" :size="44" />
         <div class="flex-1 min-w-0">
           <p class="font-semibold truncate">
             <span v-if="p.isRegular" class="text-amber-500">★</span>
             {{ p.name }}
-            <span class="text-xs text-gray-400">#{{ p.number ?? '-' }}</span>
-            <span v-if="!p.isRegular" class="text-[10px] bg-gray-100 text-gray-500 rounded px-1.5 py-0.5 ml-1">용병</span>
-            <span v-if="p.active === false" class="text-xs text-gray-400">(은퇴)</span>
+            <span class="text-xs text-gray-400 dark:text-zinc-500">#{{ p.number ?? '-' }}</span>
+            <span v-if="!p.isRegular" class="text-[10px] bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400 rounded px-1.5 py-0.5 ml-1">용병</span>
+            <span v-if="p.active === false" class="text-xs text-gray-400 dark:text-zinc-500">(은퇴)</span>
           </p>
-          <p class="text-xs text-gray-500">
+          <p class="text-xs text-gray-500 dark:text-zinc-400">
             {{ p.mainPosition || POSITION_LABEL[p.position] }}<span v-if="p.subPosition"> / {{ p.subPosition }}</span>
           </p>
         </div>
@@ -174,7 +174,7 @@ onMounted(() => store.fetchAll())
     <BaseModal v-model="modalOpen" :title="editingId ? '선수 수정' : '선수 등록'">
       <div class="space-y-4">
         <div>
-          <label class="block text-xs text-gray-500 mb-2">프로필 사진</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-2">프로필 사진</label>
           <AvatarPicker
             :current="form.photoURL"
             :name="form.name"
@@ -183,17 +183,17 @@ onMounted(() => store.fetchAll())
         </div>
 
         <div>
-          <label class="block text-xs text-gray-500 mb-1">이름</label>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">이름</label>
           <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-gray-500 mb-1">등번호</label>
+            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">등번호</label>
             <input v-model="form.number" type="number" min="0" class="w-full border rounded-lg px-3 py-2 text-sm" />
           </div>
           <div>
-            <label class="block text-xs text-gray-500 mb-1">주발</label>
+            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">주발</label>
             <select v-model="form.preferredFoot" class="w-full border rounded-lg px-3 py-2 text-sm">
               <option v-for="(l, k) in FOOT_LABEL" :key="k" :value="k">{{ l }}</option>
             </select>
@@ -202,7 +202,7 @@ onMounted(() => store.fetchAll())
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs text-gray-500 mb-1">메인 포지션</label>
+            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">메인 포지션</label>
             <select v-model="form.mainPosition" class="w-full border rounded-lg px-3 py-2 text-sm">
               <optgroup v-for="g in POSITION_OPTIONS" :key="g.group" :label="g.group">
                 <option v-for="p in g.items" :key="p" :value="p">{{ p }}</option>
@@ -210,7 +210,7 @@ onMounted(() => store.fetchAll())
             </select>
           </div>
           <div>
-            <label class="block text-xs text-gray-500 mb-1">서브 포지션</label>
+            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">서브 포지션</label>
             <select v-model="form.subPosition" class="w-full border rounded-lg px-3 py-2 text-sm">
               <option value="">없음</option>
               <optgroup v-for="g in POSITION_OPTIONS" :key="g.group" :label="g.group">

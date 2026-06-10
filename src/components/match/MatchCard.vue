@@ -26,12 +26,12 @@ const venueLabel = computed(() => matchVenueLabel(props.match, (id) => venuesSto
 <template>
   <RouterLink
     :to="`/matches/${match.id}`"
-    class="block bg-white rounded-xl shadow-sm p-4 hover:shadow transition-shadow"
+    class="block bg-white dark:bg-zinc-800 rounded-xl shadow-sm p-4 hover:shadow transition-shadow"
     :class="{ 'opacity-60': isCancelled }"
   >
-    <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
+    <div class="flex items-center justify-between text-xs text-gray-400 dark:text-zinc-500 mb-2">
       <span class="flex items-center gap-1.5">
-        <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+        <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-zinc-400">
           {{ MATCH_TYPE_LABEL[match.type] || match.type }}
         </span>
         <span
@@ -45,17 +45,17 @@ const venueLabel = computed(() => matchVenueLabel(props.match, (id) => venuesSto
     </div>
 
     <div class="flex items-center justify-center gap-4 py-1">
-      <span class="flex-1 text-right font-bold text-navy">도깨비 FC</span>
+      <span class="flex-1 text-right font-bold text-navy dark:text-zinc-100">도깨비 FC</span>
       <span v-if="isFinished" class="text-lg font-bold tabular-nums">
         {{ match.score?.dokkaebi ?? '?' }} : {{ match.score?.opponent ?? '?' }}
       </span>
-      <span v-else-if="isCancelled" class="text-sm text-gray-400">취소됨</span>
-      <span v-else class="text-sm text-gray-400">vs</span>
-      <span class="flex-1 font-bold text-gray-700">{{ match.opponent }}</span>
+      <span v-else-if="isCancelled" class="text-sm text-gray-400 dark:text-zinc-500">취소됨</span>
+      <span v-else class="text-sm text-gray-400 dark:text-zinc-500">vs</span>
+      <span class="flex-1 font-bold text-gray-700 dark:text-zinc-200">{{ match.opponent }}</span>
     </div>
 
     <div class="flex items-center justify-between mt-2 text-xs">
-      <span class="text-gray-400 truncate">📍 {{ venueLabel }}</span>
+      <span class="text-gray-400 dark:text-zinc-500 truncate">📍 {{ venueLabel }}</span>
       <span v-if="intensity" class="flex items-center gap-1">
         <span
           v-if="intensity.close"

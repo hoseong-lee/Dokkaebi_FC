@@ -83,13 +83,13 @@ async function close() {
 </script>
 
 <template>
-  <section class="bg-white rounded-2xl shadow p-6">
+  <section class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="font-bold text-navy">⭐ MOM 투표</h2>
-      <span class="text-xs text-gray-400">{{ totalVotes }}표</span>
+      <h2 class="font-bold text-navy dark:text-zinc-100">⭐ MOM 투표</h2>
+      <span class="text-xs text-gray-400 dark:text-zinc-500">{{ totalVotes }}표</span>
     </div>
 
-    <p v-if="match.votingClosed" class="text-xs text-gray-500 mb-3">
+    <p v-if="match.votingClosed" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       투표가 마감되었습니다. MOM:
       <span v-if="match.momPlayerId" class="font-semibold text-amber-600">
         {{ playersStore.getById(match.momPlayerId)?.name }}
@@ -99,32 +99,32 @@ async function close() {
     <p v-else-if="expired" class="text-xs text-amber-700 bg-amber-50 rounded-lg p-2 mb-3 leading-relaxed">
       ⏰ 경기 후 2주가 지나 투표가 종료되었습니다.
     </p>
-    <p v-else-if="match.date" class="text-[11px] text-gray-400 mb-2">
-      ⏱ 투표 마감: <span class="font-semibold text-onyx">{{ deadlineDate }}</span> (경기 후 2주)
+    <p v-else-if="match.date" class="text-[11px] text-gray-400 dark:text-zinc-500 mb-2">
+      ⏱ 투표 마감: <span class="font-semibold text-onyx dark:text-zinc-100">{{ deadlineDate }}</span> (경기 후 2주)
     </p>
-    <p v-else-if="!eligible" class="text-xs text-gray-500 mb-3">
+    <p v-else-if="!eligible" class="text-xs text-gray-500 dark:text-zinc-400 mb-3">
       <template v-if="!auth.myPlayerId">
         먼저 헤더의 "내 선수 연결"에서 본인 선수를 지정하세요.
       </template>
       <template v-else>이 경기에 참여한 선수만 투표할 수 있습니다.</template>
     </p>
-    <p v-else class="text-xs text-gray-500 mb-3">자신을 제외한 출전 선수에게 투표하세요.</p>
+    <p v-else class="text-xs text-gray-500 dark:text-zinc-400 mb-3">자신을 제외한 출전 선수에게 투표하세요.</p>
 
     <ul class="space-y-1">
       <li
         v-for="c in candidates"
         :key="c.id"
         class="flex items-center gap-3 p-2 rounded-lg transition-colors"
-        :class="myVote === c.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50'"
+        :class="myVote === c.id ? 'bg-amber-50 ring-1 ring-amber-300' : 'hover:bg-gray-50 dark:bg-zinc-900'"
       >
         <PlayerAvatar :player="c" :size="32" />
         <span class="flex-1 text-sm font-medium truncate">{{ c.name }}</span>
-        <span class="text-xs text-gray-400 tabular-nums w-10 text-right">{{ tally[c.id] || 0 }}</span>
+        <span class="text-xs text-gray-400 dark:text-zinc-500 tabular-nums w-10 text-right">{{ tally[c.id] || 0 }}</span>
         <button
           v-if="!closed"
           type="button"
           class="text-xs px-3 py-1 rounded-full disabled:opacity-50"
-          :class="myVote === c.id ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-700'"
+          :class="myVote === c.id ? 'bg-amber-500 text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-700 dark:text-zinc-200'"
           :disabled="!eligible || saving || c.id === auth.myPlayerId"
           @click="pick(c.id)"
         >
