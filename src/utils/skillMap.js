@@ -32,7 +32,34 @@ export const ATTR_MAP = [
 ]
 
 // 받은 skillTags { tagId: count } → FIFA 6 attrs { PAC, SHO, ... }
-// 정규화: 가장 높은 점수를 99 로 스케일링 + 최저 40 floor (시각적 의미)
+//
+// ⚽ 아마추어 클럽 기준 절대값 스케일 — 1 vote 받았다고 99 안 됨
+// 공식: 50 + sqrt(raw) * 4, 상한 90
+//
+// 받은 raw 점수(가중치 곱해진 값) → 능력치 예시:
+//   0   → 50 (신입 — vote 없음)
+//   1   → 54
+//   4   → 58
+//   9   → 62 (시작 단계)
+//   16  → 66
+//   25  → 70 (아마추어 진입)
+//   36  → 74
+//   49  → 78
+//   64  → 82 (세미프로 진입)
+//   100 → 90 (상한 — 프로 레벨, 매우 드뭄)
+//
+// 등급 매핑 (gradeFromOvr) 과 맞물림:
+//   90+ : 프로 레벨 SS (cap 근접 — 거의 안 나옴)
+//   80+ : 세미프로 S
+//   70+ : 아마추어 A
+//   60+ : 평균 B
+//   50+ : 신입 C
+//
+// '한 경기에 99' 같은 비현실적 점수 차단이 핵심.
+const FIFA_CAP = 90
+const FIFA_BASE = 50
+const FIFA_MULTIPLIER = 4
+
 export function computeFifaAttrs(skillTags = {}) {
   const raw = {}
   for (const attr of ATTR_MAP) {
@@ -42,16 +69,16 @@ export function computeFifaAttrs(skillTags = {}) {
     }
     raw[attr.id] = score
   }
-  const maxScore = Math.max(...Object.values(raw))
-  if (maxScore === 0) {
-    // 데이터 없으면 모두 50 표시
-    return Object.fromEntries(ATTR_MAP.map((a) => [a.id, 50]))
+  const totalRaw = Object.values(raw).reduce((s, v) => s + v, 0)
+  if (totalRaw === 0) {
+    // 데이터 없으면 모두 50 표시 (신입 베이스라인)
+    return Object.fromEntries(ATTR_MAP.map((a) => [a.id, FIFA_BASE]))
   }
-  // 50~99 사이로 스케일 — 최고 점수 = 99, 0점 = 50
   const out = {}
   for (const attr of ATTR_MAP) {
-    const ratio = raw[attr.id] / maxScore
-    out[attr.id] = Math.round(50 + ratio * 49)
+    const score = raw[attr.id]
+    const bonus = Math.round(Math.sqrt(score) * FIFA_MULTIPLIER)
+    out[attr.id] = Math.min(FIFA_CAP, FIFA_BASE + bonus)
   }
   return out
 }
@@ -127,10 +154,16 @@ export function overallRating(fifaAttrs = {}) {
 }
 
 // OVR → 카드 등급 (FIFA 스타일)
+// 도깨비FC 기준 — 아마추어 클럽 분포:
+//   SS (90+): 프로 레벨 (cap 근접, 거의 안 나옴)
+//   S  (80+): 세미프로
+//   A  (70+): 아마추어 — 잘함
+//   B  (60+): 평균 아마추어
+//   C  (50+): 신입 / vote 없음
 export function gradeFromOvr(ovr) {
   if (ovr >= 90) return { label: 'SS', tone: 'bg-gradient-to-br from-amber-400 to-amber-600 text-white', emoji: '🌟' }
-  if (ovr >= 80) return { label: 'S', tone: 'bg-gradient-to-br from-rose-500 to-rose-700 text-white', emoji: '🏆' }
-  if (ovr >= 70) return { label: 'A', tone: 'bg-gradient-to-br from-violet-500 to-violet-700 text-white', emoji: '⭐' }
-  if (ovr >= 60) return { label: 'B', tone: 'bg-gradient-to-br from-emerald-500 to-emerald-700 text-white', emoji: '🔹' }
+  if (ovr >= 80) return { label: 'S',  tone: 'bg-gradient-to-br from-rose-500 to-rose-700 text-white',   emoji: '🏆' }
+  if (ovr >= 70) return { label: 'A',  tone: 'bg-gradient-to-br from-violet-500 to-violet-700 text-white', emoji: '⭐' }
+  if (ovr >= 60) return { label: 'B',  tone: 'bg-gradient-to-br from-emerald-500 to-emerald-700 text-white', emoji: '🔹' }
   return { label: 'C', tone: 'bg-gradient-to-br from-gray-400 to-gray-600 text-white', emoji: '·' }
 }

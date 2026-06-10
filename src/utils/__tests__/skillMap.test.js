@@ -18,10 +18,10 @@ describe('computeFifaAttrs', () => {
     expect(result.SHO).toBe(50)
   })
 
-  it('scales SHO to 99 when only shooting is set', () => {
-    // shooting=5, weight=2 → SHO raw=10 (max) → 99
+  it('scales SHO to moderate value (~63) for shooting=5 — 절대 양 기반', () => {
+    // shooting=5, weight=2 → SHO raw=10 → 50 + sqrt(10)*4 = ~63
     const result = computeFifaAttrs({ shooting: 5 })
-    expect(result.SHO).toBe(99)
+    expect(result.SHO).toBe(63)
     // 다른 attr 들은 shooting 미관여이므로 50 (raw=0)
     expect(result.PAC).toBe(50)
     expect(result.PAS).toBe(50)
@@ -30,7 +30,7 @@ describe('computeFifaAttrs', () => {
     expect(result.PHY).toBe(50)
   })
 
-  it('keeps all attrs within 50~99 range', () => {
+  it('keeps all attrs within 50~90 range (cap 적용)', () => {
     const skillTags = {
       shooting: 3, passing: 2, dribbling: 4, defense: 1, speed: 2, stamina: 1,
       finishing: 2, vision: 1, aerial: 1, keeping: 1
@@ -38,16 +38,29 @@ describe('computeFifaAttrs', () => {
     const result = computeFifaAttrs(skillTags)
     for (const attrId of ['PAC', 'SHO', 'PAS', 'DRI', 'DEF', 'PHY']) {
       expect(result[attrId]).toBeGreaterThanOrEqual(50)
-      expect(result[attrId]).toBeLessThanOrEqual(99)
+      expect(result[attrId]).toBeLessThanOrEqual(90)
     }
   })
 
-  it('scales highest attr to 99 and zero raw to 50', () => {
-    // speed only → PAC raw=2*2=4, 나머지 0
+  it('zero raw stays 50, small votes raise modestly', () => {
+    // speed=2 → PAC raw=4 → 50 + sqrt(4)*4 = 58
     const result = computeFifaAttrs({ speed: 2 })
-    expect(result.PAC).toBe(99)
+    expect(result.PAC).toBe(58)
     expect(result.SHO).toBe(50)
     expect(result.DEF).toBe(50)
+  })
+
+  it('caps at 90 even with huge raw counts (1경기 99 방지)', () => {
+    // shooting=100 → SHO raw=200 → 50 + sqrt(200)*4 ≈ 107 → cap 90
+    const result = computeFifaAttrs({ shooting: 100 })
+    expect(result.SHO).toBe(90)
+  })
+
+  it('1 vote 1 tag (1경기 칭찬) 에서 50~60 사이만', () => {
+    // shooting=1 → SHO raw=2 → 50 + sqrt(2)*4 ≈ 56
+    const result = computeFifaAttrs({ shooting: 1 })
+    expect(result.SHO).toBeGreaterThanOrEqual(50)
+    expect(result.SHO).toBeLessThanOrEqual(60)
   })
 
   it('returns object with 6 keys', () => {
