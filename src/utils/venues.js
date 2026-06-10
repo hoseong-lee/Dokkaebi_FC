@@ -53,12 +53,12 @@ export const INITIAL_VENUES = [
     notes: '주차 가능'
   },
   {
-    name: '창골축구장',
-    address: '서울 노원구 상계동 창골운동장',
+    name: '창골운동장',
+    address: '서울 도봉구 창골운동장',
     lat: 37.6727,
     lng: 127.0617,
     type: 'field',
-    notes: '서울생활체육 등록 시설'
+    notes: '서울생활체육 등록 시설 (정확한 좌표는 admin 에서 등록)'
   },
   {
     name: '수락산스포츠타운',

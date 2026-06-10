@@ -110,15 +110,15 @@ async function importSeed() {
   <div>
     <div class="flex items-center justify-between mb-4">
       <div>
-        <h1 class="text-xl font-bold text-navy">🗺 우리 구장</h1>
-        <p class="text-xs text-gray-500 mt-1">자주 가는 구장 + 길찾기</p>
+        <h1 class="text-xl font-bold text-navy dark:text-zinc-100">🗺 우리 구장</h1>
+        <p class="text-xs text-gray-500 dark:text-zinc-400 mt-1">자주 가는 구장 + 길찾기</p>
       </div>
       <div v-if="auth.isAdmin" class="flex gap-1.5 flex-wrap">
         <BaseButton
           v-if="auth.isSuperAdmin"
           size="sm" variant="secondary" :loading="seeding"
           @click="importSeed"
-          title="다락원·초안산·창골·수락산·불암산 5개 시드 (슈퍼관리자 전용)"
+          title="다락원·초안산·창골운동장·수락산·불암산 5개 시드 (슈퍼관리자 전용)"
         >
           🌱 시드 🔒
         </BaseButton>
@@ -151,25 +151,25 @@ async function importSeed() {
       v-if="!loading && store.venues.length === 0"
       icon="🗺"
       title="등록된 구장이 없어요"
-      description="관리자가 '🌱 초기 구장 가져오기' 버튼을 누르면 5개 구장(다락원·초안산·창골·수락산·불암산)이 자동 등록됩니다."
+      description="관리자가 '🌱 초기 구장 가져오기' 버튼을 누르면 5개 구장(다락원·초안산·창골운동장·수락산·불암산)이 자동 등록됩니다."
     />
 
     <div v-else-if="!loading" class="space-y-3">
       <article
         v-for="v in store.venues" :key="v.id"
-        class="bg-white rounded-2xl shadow p-4"
+        class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4"
       >
         <div class="flex items-start gap-3">
           <span class="text-2xl shrink-0">{{ VENUE_TYPE_LABEL[v.type]?.split(' ')[0] || '📍' }}</span>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1">
-              <p class="font-bold text-navy text-base truncate">{{ v.name }}</p>
+              <p class="font-bold text-navy dark:text-zinc-100 text-base truncate">{{ v.name }}</p>
               <span v-if="v.usageCount" class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold">
                 {{ v.usageCount }}경기
               </span>
             </div>
-            <p v-if="v.address" class="text-xs text-gray-600">{{ v.address }}</p>
-            <p v-if="v.notes" class="text-[11px] text-gray-500 mt-1 leading-relaxed">💡 {{ v.notes }}</p>
+            <p v-if="v.address" class="text-xs text-gray-600 dark:text-zinc-400">{{ v.address }}</p>
+            <p v-if="v.notes" class="text-[11px] text-gray-500 dark:text-zinc-400 mt-1 leading-relaxed">💡 {{ v.notes }}</p>
             <p v-if="!isValidCoord(v.lat, v.lng)" class="text-[11px] text-amber-600 mt-1">
               ⚠ 좌표가 등록되어 있지 않아 길찾기가 제한됩니다
             </p>
@@ -177,17 +177,17 @@ async function importSeed() {
         </div>
 
         <!-- 미니 통계 (정식 경기 기록 있을 때) -->
-        <div v-if="venueStats(v).played > 0" class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 text-xs">
-          <span class="text-gray-400 shrink-0">📊</span>
-          <span class="text-onyx font-semibold">{{ venueStats(v).played }}경기</span>
+        <div v-if="venueStats(v).played > 0" class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-zinc-700 text-xs">
+          <span class="text-gray-400 dark:text-zinc-500 shrink-0">📊</span>
+          <span class="text-onyx dark:text-zinc-100 font-semibold">{{ venueStats(v).played }}경기</span>
           <span class="text-blue-600 font-bold">{{ venueStats(v).wins }}승</span>
-          <span class="text-gray-500">{{ venueStats(v).draws }}무</span>
+          <span class="text-gray-500 dark:text-zinc-400">{{ venueStats(v).draws }}무</span>
           <span class="text-rose-600 font-bold">{{ venueStats(v).losses }}패</span>
           <span class="ml-auto px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold tabular-nums">
             {{ Math.round(venueStats(v).winRate * 100) }}%
           </span>
         </div>
-        <div class="flex gap-2 mt-3 pt-3 border-t border-gray-100">
+        <div class="flex gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-zinc-700">
           <button
             type="button"
             class="flex-1 text-xs py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold disabled:opacity-50"
@@ -197,13 +197,13 @@ async function importSeed() {
           <button
             v-if="venueStats(v).played > 0"
             type="button"
-            class="text-xs px-3 py-2 rounded-lg bg-navy/10 text-navy font-semibold hover:bg-navy/20"
+            class="text-xs px-3 py-2 rounded-lg bg-navy/10 text-navy dark:text-zinc-100 font-semibold hover:bg-navy/20"
             @click="openStats(v)"
           >📊 상세</button>
           <template v-if="auth.isAdmin">
             <button
               type="button"
-              class="text-xs px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+              class="text-xs px-3 py-2 rounded-lg bg-gray-100 dark:bg-zinc-700 hover:bg-gray-200 dark:bg-zinc-600 text-gray-700 dark:text-zinc-200"
               @click="openEdit(v)"
             >✏️</button>
             <button
