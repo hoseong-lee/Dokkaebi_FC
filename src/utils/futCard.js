@@ -225,8 +225,8 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.textBaseline = 'alphabetic'
   ctx.font = '900 102px "Pretendard", sans-serif'
   ctx.fillText(String(ovr), leftX, cy0 + ch * 0.2)
-  ctx.font = '700 36px "Pretendard", sans-serif'
-  ctx.fillText(posCode, leftX, cy0 + ch * 0.255)
+  ctx.font = '700 44px "Pretendard", sans-serif'
+  ctx.fillText(posCode, leftX, cy0 + ch * 0.257)
   ctx.strokeStyle = tone.line
   ctx.lineWidth = 3
   ctx.beginPath()

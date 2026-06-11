@@ -141,7 +141,7 @@ async function download() {
         <!-- 좌상단: OVR + 포지션 + 엠블럼 -->
         <div class="absolute left-[10%] top-[10%] w-[23%] flex flex-col items-center" :style="{ color: tone.text }">
           <span class="text-[42px] font-black leading-none tabular-nums tracking-tight">{{ ovr }}</span>
-          <span class="text-sm font-bold mt-1 tracking-[0.18em]">{{ posCode }}</span>
+          <span class="text-lg font-bold mt-1 tracking-[0.15em]">{{ posCode }}</span>
           <div class="w-7 border-t my-2" :style="{ borderColor: tone.line }"></div>
           <img :src="emblemSrc" alt="도깨비FC" class="w-9 h-9 rounded-full shadow-sm" />
         </div>
