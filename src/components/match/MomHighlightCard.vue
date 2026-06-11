@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { POSITION_LABEL } from '@/utils/positions'
-import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import PlayerSilhouette from '@/components/player/PlayerSilhouette.vue'
 
 const props = defineProps({
   player: { type: Object, required: true }
@@ -46,8 +46,12 @@ const positionLabel = computed(() => {
         referrerpolicy="no-referrer"
         class="h-full w-full object-contain object-bottom drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
       />
-      <div v-else class="h-full w-full flex items-end justify-center pb-4">
-        <PlayerAvatar :player="player" :size="160" />
+      <!-- 사진 없으면 포지션 색 실루엣 — 사진처럼 큰 영역 채움 -->
+      <div v-else class="h-full w-full flex items-end justify-center">
+        <PlayerSilhouette
+          :player="player"
+          class="h-[92%] w-auto drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
+        />
       </div>
     </div>
 
