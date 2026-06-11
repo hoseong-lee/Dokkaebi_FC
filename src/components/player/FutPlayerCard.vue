@@ -143,7 +143,7 @@ async function download() {
           <span class="text-[42px] font-black leading-none tabular-nums tracking-tight">{{ ovr }}</span>
           <span class="text-lg font-bold mt-1 tracking-[0.15em]">{{ posCode }}</span>
           <div class="w-7 border-t my-2" :style="{ borderColor: tone.line }"></div>
-          <img :src="emblemSrc" alt="도깨비FC" class="w-9 h-9 rounded-full shadow-sm" />
+          <img :src="emblemSrc" alt="도깨비FC" class="w-11 h-11 rounded-full shadow-sm" />
         </div>
 
         <!-- 우측: 선수 사진(누끼) 또는 실루엣 -->

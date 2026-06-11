@@ -236,12 +236,12 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   if (emblemUrl) {
     const emblem = await loadImage(emblemUrl)
     if (emblem) {
-      const es = 74
+      const es = 90
       ctx.save()
       ctx.beginPath()
-      ctx.arc(leftX, cy0 + ch * 0.328, es / 2, 0, Math.PI * 2)
+      ctx.arc(leftX, cy0 + ch * 0.332, es / 2, 0, Math.PI * 2)
       ctx.clip()
-      ctx.drawImage(emblem, leftX - es / 2, cy0 + ch * 0.328 - es / 2, es, es)
+      ctx.drawImage(emblem, leftX - es / 2, cy0 + ch * 0.332 - es / 2, es, es)
       ctx.restore()
     }
   }
