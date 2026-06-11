@@ -166,6 +166,19 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.fillStyle = sheen
   ctx.fillRect(cx0, cy0, cw, ch)
 
+  // 홀로그래픽 밴드 (골드 전용) — DOM 의 .holo sweep 스냅샷
+  if (tier === 'gold') {
+    const holo = ctx.createLinearGradient(cx0, cy0 + ch * 0.15, cx0 + cw, cy0 + ch * 0.85)
+    holo.addColorStop(0.18, 'rgba(255,255,255,0)')
+    holo.addColorStop(0.36, 'rgba(255,255,255,0.16)')
+    holo.addColorStop(0.44, 'rgba(170,255,238,0.14)')
+    holo.addColorStop(0.52, 'rgba(255,170,255,0.12)')
+    holo.addColorStop(0.6, 'rgba(255,255,255,0.15)')
+    holo.addColorStop(0.8, 'rgba(255,255,255,0)')
+    ctx.fillStyle = holo
+    ctx.fillRect(cx0, cy0, cw, ch)
+  }
+
   // 기요셰풍 아크 패턴 (하단, 옅게)
   ctx.strokeStyle = tone.line
   ctx.lineWidth = 2
@@ -194,15 +207,15 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
     drawSilhouette(ctx, player, cx0 + cw * 0.62, photoBottom, ch * 0.44)
   }
 
-  // 좌상단: OVR + 포지션 + 엠블럼
-  const leftX = cx0 + cw * 0.165
+  // 좌상단: OVR + 포지션 + 엠블럼 (헤어라인 보더 안쪽으로)
+  const leftX = cx0 + cw * 0.18
   ctx.fillStyle = tone.text
   ctx.textAlign = 'center'
   ctx.textBaseline = 'alphabetic'
-  ctx.font = '900 116px "Pretendard", sans-serif'
-  ctx.fillText(String(ovr), leftX, cy0 + ch * 0.205)
-  ctx.font = '700 40px "Pretendard", sans-serif'
-  ctx.fillText(posCode, leftX, cy0 + ch * 0.258)
+  ctx.font = '900 102px "Pretendard", sans-serif'
+  ctx.fillText(String(ovr), leftX, cy0 + ch * 0.2)
+  ctx.font = '700 36px "Pretendard", sans-serif'
+  ctx.fillText(posCode, leftX, cy0 + ch * 0.255)
   ctx.strokeStyle = tone.line
   ctx.lineWidth = 3
   ctx.beginPath()
@@ -261,11 +274,11 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.lineTo(cxm, statTop + rowGap * 2 + 8)
   ctx.stroke()
 
-  // 하단 클럽 레터링
+  // 하단 클럽 레터링 (방패 테이퍼 폭 안에 들어가게 작게)
   ctx.textAlign = 'center'
-  ctx.font = '700 24px "Pretendard", sans-serif'
+  ctx.font = '700 20px "Pretendard", sans-serif'
   ctx.fillStyle = tone.sub
-  ctx.fillText('D O K K A E B I   F C', cxm, cy0 + ch * 0.885)
+  ctx.fillText('D O K K A E B I  F C', cxm, cy0 + ch * 0.878)
 
   ctx.restore() // clip 해제
 
