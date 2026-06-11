@@ -42,11 +42,12 @@ function statOf(id) {
   return { id, label: meta?.ko || id, value: attrs.value[id] ?? 50 }
 }
 
-// 3D 틸트 (데스크탑 마우스 전용 — 터치는 스크롤 방해라 제외)
+// 3D 틸트 — 데스크탑: 마우스 호버 / 모바일: 카드 누른 채 드래그
 const cardEl = ref(null)
 const tiltTransform = ref('')
-function onTiltMove(e) {
-  if (e.pointerType !== 'mouse') return
+const touchActive = ref(false)
+
+function applyTilt(e) {
   const el = cardEl.value
   if (!el) return
   const r = el.getBoundingClientRect()
@@ -55,7 +56,17 @@ function onTiltMove(e) {
   tiltTransform.value =
     `perspective(700px) rotateY(${(px * 12).toFixed(2)}deg) rotateX(${(-py * 12).toFixed(2)}deg) scale(1.02)`
 }
-function onTiltLeave() {
+function onTiltDown(e) {
+  if (e.pointerType === 'mouse') return
+  touchActive.value = true
+  cardEl.value?.setPointerCapture?.(e.pointerId)
+  applyTilt(e)
+}
+function onTiltMove(e) {
+  if (e.pointerType === 'mouse' || touchActive.value) applyTilt(e)
+}
+function onTiltEnd() {
+  touchActive.value = false
   tiltTransform.value = ''
 }
 
@@ -83,10 +94,13 @@ async function download() {
     <!-- 틸트 래퍼 (그림자는 여기 — 클립과 분리해야 그림자 안 잘림) -->
     <div
       ref="cardEl"
-      class="relative w-64 aspect-[5/7] select-none drop-shadow-[0_18px_28px_rgba(0,0,0,0.35)] transition-transform duration-200 ease-out will-change-transform"
+      class="relative w-64 aspect-[5/7] select-none touch-none drop-shadow-[0_18px_28px_rgba(0,0,0,0.35)] transition-transform duration-200 ease-out will-change-transform"
       :style="{ transform: tiltTransform }"
+      @pointerdown="onTiltDown"
       @pointermove="onTiltMove"
-      @pointerleave="onTiltLeave"
+      @pointerup="onTiltEnd"
+      @pointercancel="onTiltEnd"
+      @pointerleave="onTiltEnd"
     >
       <!-- 방패 실루엣으로 전체 클립 — 콘텐츠 삐져나옴 방지 -->
       <div class="absolute inset-0" :style="{ clipPath: `url(#${uid}-cclip)` }">
