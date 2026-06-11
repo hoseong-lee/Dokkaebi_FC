@@ -124,8 +124,8 @@ async function download() {
           </g>
         </svg>
 
-        <!-- 홀로그래픽 sweep (골드 전용) -->
-        <div v-if="tier === 'gold'" class="holo absolute inset-0 pointer-events-none"></div>
+        <!-- 홀로그래픽 sweep (전 등급 — 빛 반사 느낌) -->
+        <div class="holo absolute inset-0 pointer-events-none"></div>
 
         <!-- 좌상단: OVR + 포지션 + 엠블럼 -->
         <div class="absolute left-[10%] top-[10%] w-[23%] flex flex-col items-center" :style="{ color: tone.text }">

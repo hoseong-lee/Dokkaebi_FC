@@ -166,18 +166,16 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.fillStyle = sheen
   ctx.fillRect(cx0, cy0, cw, ch)
 
-  // 홀로그래픽 밴드 (골드 전용) — DOM 의 .holo sweep 스냅샷
-  if (tier === 'gold') {
-    const holo = ctx.createLinearGradient(cx0, cy0 + ch * 0.15, cx0 + cw, cy0 + ch * 0.85)
-    holo.addColorStop(0.18, 'rgba(255,255,255,0)')
-    holo.addColorStop(0.36, 'rgba(255,255,255,0.16)')
-    holo.addColorStop(0.44, 'rgba(170,255,238,0.14)')
-    holo.addColorStop(0.52, 'rgba(255,170,255,0.12)')
-    holo.addColorStop(0.6, 'rgba(255,255,255,0.15)')
-    holo.addColorStop(0.8, 'rgba(255,255,255,0)')
-    ctx.fillStyle = holo
-    ctx.fillRect(cx0, cy0, cw, ch)
-  }
+  // 홀로그래픽 밴드 (전 등급) — DOM 의 .holo sweep 스냅샷
+  const holo = ctx.createLinearGradient(cx0, cy0 + ch * 0.15, cx0 + cw, cy0 + ch * 0.85)
+  holo.addColorStop(0.18, 'rgba(255,255,255,0)')
+  holo.addColorStop(0.36, 'rgba(255,255,255,0.16)')
+  holo.addColorStop(0.44, 'rgba(170,255,238,0.14)')
+  holo.addColorStop(0.52, 'rgba(255,170,255,0.12)')
+  holo.addColorStop(0.6, 'rgba(255,255,255,0.15)')
+  holo.addColorStop(0.8, 'rgba(255,255,255,0)')
+  ctx.fillStyle = holo
+  ctx.fillRect(cx0, cy0, cw, ch)
 
   // 기요셰풍 아크 패턴 (하단, 옅게)
   ctx.strokeStyle = tone.line
