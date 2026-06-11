@@ -54,7 +54,7 @@ function statStyle(v) {
 
 // 3D 틸트 + 포인터 추적 빛 (공용 composable)
 const { cardEl, tiltTransform, pointer, holoStyle, glareStyle, onTiltDown, onTiltMove, onTiltEnd } =
-  useCardTilt({ maxDeg: 25, scale: 1.05 })
+  useCardTilt({ maxDeg: 32, scale: 1.06 })
 
 async function download() {
   downloading.value = true

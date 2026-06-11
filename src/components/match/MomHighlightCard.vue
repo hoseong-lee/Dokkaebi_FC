@@ -19,7 +19,7 @@ const positionLabel = computed(() => {
 
 // FUT 카드와 동일한 틸트 + 빛 추적 (가로 카드라 각도는 낮춤)
 const { cardEl, tiltTransform, pointer, glareStyle, onTiltDown, onTiltMove, onTiltEnd, consumeSuppressClick } =
-  useCardTilt({ maxDeg: 14, scale: 1.02 })
+  useCardTilt({ maxDeg: 18, scale: 1.03 })
 
 function onNavigate(navigate, e) {
   // 모바일에서 틸트 드래그 후 손 뗄 때 의도치 않은 이동 차단
