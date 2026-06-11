@@ -1,19 +1,29 @@
 // FUT 선수 카드 → 1080×1350 (인스타 4:5) PNG Blob 생성
 // DOM 버전(FutPlayerCard.vue)과 동일 디자인의 canvas 렌더 — 단톡/인스타 공유용
-import { ATTR_MAP, computeFifaAttrs, overallRating, gradeFromOvr } from './skillMap'
+import { ATTR_MAP, computeFifaAttrs, overallRating } from './skillMap'
 import { POSITION_CATEGORY } from './positions'
 import { playerPhotoSrc } from './playerPhoto'
 
 const W = 1080
 const H = 1350
 
-// 등급별 카드 톤 (위→아래 그라데이션) + 텍스트 색
+// EA 정통 3단계 카드 등급 — OVR 70+ 골드 / 65+ 실버 / 그 외 브론즈
+export function futTier(ovr) {
+  if (ovr >= 70) return 'gold'
+  if (ovr >= 65) return 'silver'
+  return 'bronze'
+}
+export const FUT_TIER_LABEL = {
+  gold: { emoji: '🥇', label: 'GOLD' },
+  silver: { emoji: '🥈', label: 'SILVER' },
+  bronze: { emoji: '🥉', label: 'BRONZE' }
+}
+
+// 단계별 카드 톤 (위→아래 그라데이션) + 텍스트 색 — FUT 골드/실버/브론즈 질감
 const FUT_TONE = {
-  SS: { stops: ['#fde68a', '#facc15', '#d97706'], text: '#451a03', sub: 'rgba(69,26,3,0.75)', line: 'rgba(69,26,3,0.3)' },
-  S:  { stops: ['#fda4af', '#f43f5e', '#9f1239'], text: '#ffffff', sub: 'rgba(255,255,255,0.8)', line: 'rgba(255,255,255,0.3)' },
-  A:  { stops: ['#c4b5fd', '#8b5cf6', '#5b21b6'], text: '#ffffff', sub: 'rgba(255,255,255,0.8)', line: 'rgba(255,255,255,0.3)' },
-  B:  { stops: ['#6ee7b7', '#10b981', '#065f46'], text: '#ffffff', sub: 'rgba(255,255,255,0.8)', line: 'rgba(255,255,255,0.3)' },
-  C:  { stops: ['#d4d4d8', '#a1a1aa', '#52525b'], text: '#18181b', sub: 'rgba(24,24,27,0.75)', line: 'rgba(24,24,27,0.25)' }
+  gold:   { stops: ['#fde68a', '#facc15', '#d97706'], text: '#451a03', sub: 'rgba(69,26,3,0.75)', line: 'rgba(69,26,3,0.3)' },
+  silver: { stops: ['#f4f4f5', '#d4d4d8', '#71717a'], text: '#18181b', sub: 'rgba(24,24,27,0.75)', line: 'rgba(24,24,27,0.25)' },
+  bronze: { stops: ['#e7bb94', '#b9803f', '#7c4a21'], text: '#2d1606', sub: 'rgba(45,22,6,0.75)', line: 'rgba(45,22,6,0.3)' }
 }
 
 // 실루엣용 포지션 색 (PlayerSilhouette 와 동일 톤)
@@ -83,9 +93,11 @@ function drawSilhouette(ctx, player, cx, bottomY, height) {
 export async function generateFutCard({ player, skillTags = {}, emblemUrl = null }) {
   const attrs = computeFifaAttrs(skillTags)
   const ovr = overallRating(attrs)
-  const grade = gradeFromOvr(ovr)
-  const tone = FUT_TONE[grade.label] || FUT_TONE.C
+  const tier = futTier(ovr)
+  const tone = FUT_TONE[tier]
   const posCode = player?.mainPosition || player?.position || '—'
+  // 능력치 한글 라벨 (PAC→스피드 등)
+  const KO = Object.fromEntries(ATTR_MAP.map((a) => [a.id, a.ko]))
 
   const canvas = document.createElement('canvas')
   canvas.width = W
@@ -200,9 +212,9 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
       ctx.fillStyle = tone.text
       ctx.fillText(String(attrs[id] ?? 50), colX, y)
       ctx.textAlign = 'left'
-      ctx.font = '600 34px "Pretendard", sans-serif'
+      ctx.font = '600 32px "Pretendard", sans-serif'
       ctx.fillStyle = tone.sub
-      ctx.fillText(id, colX + 14, y)
+      ctx.fillText(KO[id] || id, colX + 14, y)
     })
   }
   draw3(['PAC', 'SHO', 'PAS'], colL)
@@ -223,10 +235,11 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.restore()
 
   // 카드 바깥 하단 — 등급 라벨 + 생성 표기
+  const tierMeta = FUT_TIER_LABEL[tier]
   ctx.textAlign = 'center'
   ctx.font = '700 34px "Pretendard", sans-serif'
   ctx.fillStyle = 'rgba(251,191,36,0.9)'
-  ctx.fillText(`${grade.emoji} ${grade.label} CARD`, W / 2, cy0 + ch + 70)
+  ctx.fillText(`${tierMeta.emoji} ${tierMeta.label} CARD`, W / 2, cy0 + ch + 70)
   ctx.font = '500 24px "Pretendard", sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.35)'
   ctx.fillText('dokkaebi-fc · skill reputation card', W / 2, cy0 + ch + 112)

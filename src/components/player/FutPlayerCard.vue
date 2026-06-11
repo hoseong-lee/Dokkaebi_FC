@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { ATTR_MAP, computeFifaAttrs, overallRating, gradeFromOvr } from '@/utils/skillMap'
+import { ATTR_MAP, computeFifaAttrs, overallRating } from '@/utils/skillMap'
 import { playerPhotoSrc } from '@/utils/playerPhoto'
-import { generateFutCard } from '@/utils/futCard'
+import { generateFutCard, futTier, FUT_TIER_LABEL } from '@/utils/futCard'
 import { downloadBlob } from '@/utils/squadImage'
 import { useToast } from '@/composables/useToast'
 import PlayerSilhouette from '@/components/player/PlayerSilhouette.vue'
@@ -20,26 +20,25 @@ const emblemSrc = (import.meta.env.BASE_URL || '/') + 'dokkaebi-emblem-192.png'
 
 const attrs = computed(() => computeFifaAttrs(props.skillTags))
 const ovr = computed(() => overallRating(attrs.value))
-const grade = computed(() => gradeFromOvr(ovr.value))
 const posCode = computed(() => props.player?.mainPosition || props.player?.position || '—')
 const photoSrc = computed(() => playerPhotoSrc(props.player))
 
-// 등급별 카드 톤 — FUT 골드/스페셜 느낌. text 는 밝은 톤 위 진갈색, 어두운 톤 위 흰색.
+// EA 정통 3단계 — OVR 70+ 골드 / 65+ 실버 / 그 외 브론즈 (futCard.futTier 기준 공유)
 const FUT_TONE = {
-  SS: { bg: 'from-amber-200 via-yellow-400 to-amber-600', text: 'text-amber-950', line: 'border-amber-900/30', sub: 'text-amber-900/80' },
-  S:  { bg: 'from-rose-300 via-rose-500 to-rose-800',     text: 'text-white',     line: 'border-white/30',     sub: 'text-white/80' },
-  A:  { bg: 'from-violet-300 via-violet-500 to-violet-800', text: 'text-white',   line: 'border-white/30',     sub: 'text-white/80' },
-  B:  { bg: 'from-emerald-300 via-emerald-500 to-emerald-800', text: 'text-white', line: 'border-white/30',    sub: 'text-white/80' },
-  C:  { bg: 'from-zinc-300 via-zinc-400 to-zinc-600',     text: 'text-zinc-900',  line: 'border-zinc-900/25',  sub: 'text-zinc-800/80' }
+  gold:   { bg: 'from-amber-200 via-yellow-400 to-amber-600', text: 'text-amber-950', line: 'border-amber-900/30', sub: 'text-amber-900/80' },
+  silver: { bg: 'from-zinc-100 via-zinc-300 to-zinc-500',     text: 'text-zinc-900',  line: 'border-zinc-900/25',  sub: 'text-zinc-800/80' },
+  bronze: { bg: 'from-[#e7bb94] via-[#b9803f] to-[#7c4a21]',  text: 'text-[#2d1606]', line: 'border-[#2d1606]/30', sub: 'text-[#2d1606]/80' }
 }
-const tone = computed(() => FUT_TONE[grade.value.label] || FUT_TONE.C)
+const tier = computed(() => futTier(ovr.value))
+const tone = computed(() => FUT_TONE[tier.value])
+const tierMeta = computed(() => FUT_TIER_LABEL[tier.value])
 
-// FUT 스탯 순서 — 좌: PAC SHO PAS / 우: DRI DEF PHY
+// FUT 스탯 순서 — 좌: PAC SHO PAS / 우: DRI DEF PHY (라벨은 한글)
 const leftStats = computed(() => ['PAC', 'SHO', 'PAS'].map((id) => statOf(id)))
 const rightStats = computed(() => ['DRI', 'DEF', 'PHY'].map((id) => statOf(id)))
 function statOf(id) {
   const meta = ATTR_MAP.find((a) => a.id === id)
-  return { id, label: meta?.label || id, value: attrs.value[id] ?? 50 }
+  return { id, label: meta?.ko || id, value: attrs.value[id] ?? 50 }
 }
 
 async function download() {
@@ -99,13 +98,13 @@ async function download() {
         <div class="space-y-1">
           <p v-for="s in leftStats" :key="s.id" class="text-sm leading-tight">
             <span class="font-black tabular-nums">{{ s.value }}</span>
-            <span class="ml-1.5 text-xs font-semibold" :class="tone.sub">{{ s.id }}</span>
+            <span class="ml-1.5 text-xs font-semibold" :class="tone.sub">{{ s.label }}</span>
           </p>
         </div>
         <div class="space-y-1 border-l pl-3" :class="tone.line">
           <p v-for="s in rightStats" :key="s.id" class="text-sm leading-tight">
             <span class="font-black tabular-nums">{{ s.value }}</span>
-            <span class="ml-1.5 text-xs font-semibold" :class="tone.sub">{{ s.id }}</span>
+            <span class="ml-1.5 text-xs font-semibold" :class="tone.sub">{{ s.label }}</span>
           </p>
         </div>
       </div>
@@ -116,6 +115,10 @@ async function download() {
       </p>
     </div>
 
+    <p class="text-[11px] font-bold text-gray-500 dark:text-zinc-400 tracking-wide">
+      {{ tierMeta.emoji }} {{ tierMeta.label }} CARD
+      <span class="font-normal opacity-70">· 골드 70+ / 실버 65+</span>
+    </p>
     <BaseButton size="sm" variant="secondary" :loading="downloading" @click="download">
       📸 카드 이미지 저장
     </BaseButton>

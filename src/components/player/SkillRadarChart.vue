@@ -39,7 +39,7 @@ const dataPath = computed(() =>
 const labelPoints = computed(() =>
   ATTR_MAP.map((attr, i) => ({
     ...polarToXY(i * 60, R + 22),
-    label: attr.label,
+    label: attr.ko, // 한글 라벨 (스피드/슈팅/패스/드리블/수비/체력)
     value: attrs.value[attr.id] || 50,
     icon: attr.icon
   }))
