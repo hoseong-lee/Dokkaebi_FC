@@ -54,7 +54,7 @@ function applyTilt(e) {
   const px = (e.clientX - r.left) / r.width - 0.5
   const py = (e.clientY - r.top) / r.height - 0.5
   tiltTransform.value =
-    `perspective(700px) rotateY(${(px * 12).toFixed(2)}deg) rotateX(${(-py * 12).toFixed(2)}deg) scale(1.02)`
+    `perspective(650px) rotateY(${(px * 18).toFixed(2)}deg) rotateX(${(-py * 18).toFixed(2)}deg) scale(1.045)`
 }
 function onTiltDown(e) {
   if (e.pointerType === 'mouse') return

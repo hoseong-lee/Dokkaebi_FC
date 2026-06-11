@@ -15,9 +15,9 @@ const recommended = computed(() => recommendPositions(props.skillTags, 3))
 const hasData = computed(() => Object.values(props.skillTags).some((v) => v > 0))
 
 // SVG 6각형 좌표 — 라벨이 안 잘리게 캔버스에 상하/좌우 여백을 넉넉히
-const VB_W = 300, VB_H = 310
-const CX = 150, CY = 152, R = 104
-const LABEL_R = 130
+const VB_W = 320, VB_H = 320
+const CX = 160, CY = 158, R = 102
+const LABEL_R = 134
 function polarToXY(angleDeg, radius) {
   const a = (angleDeg - 90) * Math.PI / 180
   return { x: CX + radius * Math.cos(a), y: CY + radius * Math.sin(a) }
@@ -98,36 +98,38 @@ function valueStyle(v) {
       </div>
     </div>
 
-    <!-- 6각형 차트 -->
-    <div class="relative flex items-center justify-center">
-      <svg :viewBox="`0 0 ${VB_W} ${VB_H}`" class="w-72 max-w-full" style="aspect-ratio: 300 / 310">
-        <!-- 그리드 (40% / 70% / 100%) -->
-        <polygon
-          v-for="r in gridLevels" :key="r"
-          :points="gridPath(r)"
-          fill="none" stroke="#e5e7eb" stroke-width="1"
-        />
-        <!-- 6각형 외곽 -->
-        <polygon :points="sixGonPath" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+    <!-- 6각형 차트 — 라벨 오버레이는 SVG 와 같은 박스 기준 (컨테이너 폭 무관) -->
+    <div class="flex items-center justify-center">
+      <div class="relative w-80 max-w-full" :style="{ aspectRatio: `${VB_W} / ${VB_H}` }">
+        <svg :viewBox="`0 0 ${VB_W} ${VB_H}`" class="absolute inset-0 w-full h-full">
+          <!-- 그리드 (40% / 70% / 100%) -->
+          <polygon
+            v-for="r in gridLevels" :key="r"
+            :points="gridPath(r)"
+            fill="none" stroke="#e5e7eb" stroke-width="1"
+          />
+          <!-- 6각형 외곽 -->
+          <polygon :points="sixGonPath" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
 
-        <!-- 데이터 영역 -->
-        <polygon
-          :points="dataPath"
-          fill="rgba(59,130,246,0.25)"
-          stroke="#3b82f6" stroke-width="2"
-        />
-        <!-- 데이터 포인트 -->
-        <circle v-for="(p, i) in dataPoints" :key="i" :cx="p.x" :cy="p.y" r="3.5" fill="#3b82f6" />
-      </svg>
-      <!-- 라벨 + 수치 (SVG 위 absolute) -->
-      <div class="absolute inset-0 pointer-events-none">
-        <div
-          v-for="(p, i) in labelPoints" :key="i"
-          class="absolute -translate-x-1/2 -translate-y-1/2 text-center whitespace-nowrap"
-          :style="{ left: (p.x / VB_W) * 100 + '%', top: (p.y / VB_H) * 100 + '%' }"
-        >
-          <p class="text-[10px] font-bold text-gray-500 dark:text-zinc-400 leading-tight">{{ p.icon }} {{ p.label }}</p>
-          <p class="text-base font-extrabold tabular-nums" :style="valueStyle(p.value)">{{ p.value }}</p>
+          <!-- 데이터 영역 -->
+          <polygon
+            :points="dataPath"
+            fill="rgba(59,130,246,0.25)"
+            stroke="#3b82f6" stroke-width="2"
+          />
+          <!-- 데이터 포인트 -->
+          <circle v-for="(p, i) in dataPoints" :key="i" :cx="p.x" :cy="p.y" r="3.5" fill="#3b82f6" />
+        </svg>
+        <!-- 라벨 + 수치 (SVG 와 동일 좌표계) -->
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            v-for="(p, i) in labelPoints" :key="i"
+            class="absolute -translate-x-1/2 -translate-y-1/2 text-center whitespace-nowrap"
+            :style="{ left: (p.x / VB_W) * 100 + '%', top: (p.y / VB_H) * 100 + '%' }"
+          >
+            <p class="text-[10px] font-bold text-gray-500 dark:text-zinc-400 leading-tight">{{ p.icon }} {{ p.label }}</p>
+            <p class="text-base font-extrabold tabular-nums" :style="valueStyle(p.value)">{{ p.value }}</p>
+          </div>
         </div>
       </div>
     </div>
