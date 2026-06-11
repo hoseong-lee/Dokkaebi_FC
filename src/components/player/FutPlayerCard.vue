@@ -43,9 +43,11 @@ function statOf(id) {
 }
 
 // 3D 틸트 — 데스크탑: 마우스 호버 / 모바일: 카드 누른 채 드래그
+// + 포인터 위치 따라 홀로/글레어 빛이 함께 움직임 (포켓몬 카드 효과)
 const cardEl = ref(null)
 const tiltTransform = ref('')
 const touchActive = ref(false)
+const pointer = ref({ x: 50, y: 50, active: false })
 
 function applyTilt(e) {
   const el = cardEl.value
@@ -54,7 +56,8 @@ function applyTilt(e) {
   const px = (e.clientX - r.left) / r.width - 0.5
   const py = (e.clientY - r.top) / r.height - 0.5
   tiltTransform.value =
-    `perspective(650px) rotateY(${(px * 18).toFixed(2)}deg) rotateX(${(-py * 18).toFixed(2)}deg) scale(1.045)`
+    `perspective(650px) rotateY(${(px * 25).toFixed(2)}deg) rotateX(${(-py * 25).toFixed(2)}deg) scale(1.05)`
+  pointer.value = { x: (px + 0.5) * 100, y: (py + 0.5) * 100, active: true }
 }
 function onTiltDown(e) {
   if (e.pointerType === 'mouse') return
@@ -68,7 +71,20 @@ function onTiltMove(e) {
 function onTiltEnd() {
   touchActive.value = false
   tiltTransform.value = ''
+  pointer.value = { x: 50, y: 50, active: false }
 }
+
+// 포인터 따라가는 홀로 (잡고 있는 동안 sweep 애니메이션 대신 위치 추적)
+const holoStyle = computed(() =>
+  pointer.value.active
+    ? { backgroundPosition: `${pointer.value.x}% ${pointer.value.y}%`, animation: 'none' }
+    : {}
+)
+// 포인터 지점에 빛 반사 스팟
+const glareStyle = computed(() => ({
+  opacity: pointer.value.active ? 1 : 0,
+  background: `radial-gradient(circle at ${pointer.value.x}% ${pointer.value.y}%, rgba(255,255,255,0.5), rgba(255,255,255,0.13) 35%, transparent 60%)`
+}))
 
 async function download() {
   downloading.value = true
@@ -138,8 +154,14 @@ async function download() {
           </g>
         </svg>
 
-        <!-- 홀로그래픽 sweep (전 등급 — 빛 반사 느낌) -->
-        <div class="holo absolute inset-0 pointer-events-none"></div>
+        <!-- 홀로그래픽 sweep (전 등급) — 틸트 중엔 포인터 위치를 따라감 -->
+        <div class="holo absolute inset-0 pointer-events-none" :style="holoStyle"></div>
+        <!-- 빛 반사 글레어 — 포인터 지점에 스팟 (포켓몬 카드 효과) -->
+        <div
+          class="absolute inset-0 pointer-events-none transition-opacity duration-300"
+          style="mix-blend-mode: overlay"
+          :style="glareStyle"
+        ></div>
 
         <!-- 좌상단: OVR + 포지션 + 엠블럼 -->
         <div class="absolute left-[10%] top-[10%] w-[23%] flex flex-col items-center" :style="{ color: tone.text }">

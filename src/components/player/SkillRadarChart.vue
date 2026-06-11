@@ -14,9 +14,10 @@ const grade = computed(() => gradeFromOvr(ovr.value))
 const recommended = computed(() => recommendPositions(props.skillTags, 3))
 const hasData = computed(() => Object.values(props.skillTags).some((v) => v > 0))
 
-// SVG 6각형 좌표 — 라벨이 안 잘리게 캔버스에 상하/좌우 여백을 넉넉히
-const VB_W = 320, VB_H = 320
-const CX = 160, CY = 158, R = 102
+// 라벨까지 전부 SVG 안에서 렌더 — HTML 오버레이 좌표 어긋남/짤림 원천 차단.
+// 좌우(특히 하단 좌/우 꼭짓점) 여백 넉넉히.
+const VB_W = 360, VB_H = 336
+const CX = 180, CY = 166, R = 104
 const LABEL_R = 134
 function polarToXY(angleDeg, radius) {
   const a = (angleDeg - 90) * Math.PI / 180
@@ -34,7 +35,7 @@ const dataPoints = computed(() =>
   ATTR_MAP.map((attr, i) => {
     const v = attrs.value[attr.id] || 50
     const ratio = (v - 50) / 49  // 50~99 → 0~1
-    return polarToXY(i * 60, R * (0.2 + ratio * 0.8))  // 안쪽 20% 부터 시작 (시각적으로 잘 보이게)
+    return polarToXY(i * 60, R * (0.2 + ratio * 0.8))
   })
 )
 const dataPath = computed(() =>
@@ -57,14 +58,9 @@ function valueColor(v) {
   if (v >= 60) return '#3b82f6'
   return '#18181b'
 }
-// 외곽선 — 색 값엔 검정 테두리, 검정(50대) 값엔 흰 테두리 (배경 간섭 차단)
-function valueStyle(v) {
-  const c = valueColor(v)
-  const o = v < 60 ? '#ffffff' : '#000000'
-  return {
-    color: c,
-    textShadow: `1px 0 0 ${o}, -1px 0 0 ${o}, 0 1px 0 ${o}, 0 -1px 0 ${o}, 1px 1px 0 ${o}, -1px -1px 0 ${o}, 1px -1px 0 ${o}, -1px 1px 0 ${o}`
-  }
+// 외곽선 — 색 값엔 검정, 검정(50대) 값엔 흰색 (배경 간섭 차단)
+function valueStroke(v) {
+  return v < 60 ? '#ffffff' : '#000000'
 }
 </script>
 
@@ -98,40 +94,46 @@ function valueStyle(v) {
       </div>
     </div>
 
-    <!-- 6각형 차트 — 라벨 오버레이는 SVG 와 같은 박스 기준 (컨테이너 폭 무관) -->
+    <!-- 6각형 차트 — 라벨 포함 전부 SVG (스케일 함께 변함 → 절대 안 잘림) -->
     <div class="flex items-center justify-center">
-      <div class="relative w-80 max-w-full" :style="{ aspectRatio: `${VB_W} / ${VB_H}` }">
-        <svg :viewBox="`0 0 ${VB_W} ${VB_H}`" class="absolute inset-0 w-full h-full">
-          <!-- 그리드 (40% / 70% / 100%) -->
-          <polygon
-            v-for="r in gridLevels" :key="r"
-            :points="gridPath(r)"
-            fill="none" stroke="#e5e7eb" stroke-width="1"
-          />
-          <!-- 6각형 외곽 -->
-          <polygon :points="sixGonPath" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+      <svg :viewBox="`0 0 ${VB_W} ${VB_H}`" class="w-[340px] max-w-full h-auto">
+        <!-- 그리드 (40% / 70% / 100%) -->
+        <polygon
+          v-for="r in gridLevels" :key="r"
+          :points="gridPath(r)"
+          fill="none" stroke="#e5e7eb" stroke-width="1"
+        />
+        <!-- 6각형 외곽 -->
+        <polygon :points="sixGonPath" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
 
-          <!-- 데이터 영역 -->
-          <polygon
-            :points="dataPath"
-            fill="rgba(59,130,246,0.25)"
-            stroke="#3b82f6" stroke-width="2"
-          />
-          <!-- 데이터 포인트 -->
-          <circle v-for="(p, i) in dataPoints" :key="i" :cx="p.x" :cy="p.y" r="3.5" fill="#3b82f6" />
-        </svg>
-        <!-- 라벨 + 수치 (SVG 와 동일 좌표계) -->
-        <div class="absolute inset-0 pointer-events-none">
-          <div
-            v-for="(p, i) in labelPoints" :key="i"
-            class="absolute -translate-x-1/2 -translate-y-1/2 text-center whitespace-nowrap"
-            :style="{ left: (p.x / VB_W) * 100 + '%', top: (p.y / VB_H) * 100 + '%' }"
-          >
-            <p class="text-[10px] font-bold text-gray-500 dark:text-zinc-400 leading-tight">{{ p.icon }} {{ p.label }}</p>
-            <p class="text-base font-extrabold tabular-nums" :style="valueStyle(p.value)">{{ p.value }}</p>
-          </div>
-        </div>
-      </div>
+        <!-- 데이터 영역 -->
+        <polygon
+          :points="dataPath"
+          fill="rgba(59,130,246,0.25)"
+          stroke="#3b82f6" stroke-width="2"
+        />
+        <!-- 데이터 포인트 -->
+        <circle v-for="(p, i) in dataPoints" :key="i" :cx="p.x" :cy="p.y" r="3.5" fill="#3b82f6" />
+
+        <!-- 라벨 + 수치 -->
+        <g v-for="(p, i) in labelPoints" :key="`l${i}`" text-anchor="middle">
+          <text
+            :x="p.x" :y="p.y - 7"
+            font-size="12" font-weight="700"
+            class="fill-gray-500 dark:fill-zinc-400"
+          >{{ p.icon }} {{ p.label }}</text>
+          <text
+            :x="p.x" :y="p.y + 13"
+            font-size="19" font-weight="800"
+            paint-order="stroke"
+            :fill="valueColor(p.value)"
+            :stroke="valueStroke(p.value)"
+            stroke-width="2.6"
+            stroke-linejoin="round"
+            style="font-variant-numeric: tabular-nums"
+          >{{ p.value }}</text>
+        </g>
+      </svg>
     </div>
 
     <!-- 값 색상 범례 -->
