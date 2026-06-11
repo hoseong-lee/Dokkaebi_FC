@@ -2,7 +2,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { useMatchesStore } from '@/stores/matches'
+import { teamSummary } from '@/utils/teamStats'
 import MatchCard from '@/components/match/MatchCard.vue'
+import FormGuideChips from '@/components/match/FormGuideChips.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
@@ -10,6 +12,7 @@ const store = useMatchesStore()
 const tab = ref('upcoming') // upcoming | finished
 
 const list = computed(() => (tab.value === 'upcoming' ? store.upcoming : store.finished))
+const teamForm = computed(() => teamSummary(store.matches).form)
 
 // MatchCard: p-4 + 3 row + mt-2 + space-y-3 (12px) → 약 112px
 const ITEM_HEIGHT = 112
@@ -19,7 +22,10 @@ onMounted(async () => { await store.fetchAll() })
 
 <template>
   <div>
-    <h1 class="text-xl font-bold text-navy dark:text-zinc-100 mb-4">경기</h1>
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <h1 class="text-xl font-bold text-navy dark:text-zinc-100">경기</h1>
+      <FormGuideChips :form="teamForm" class="text-gray-500 dark:text-zinc-400" />
+    </div>
 
     <div class="flex bg-white dark:bg-zinc-800 rounded-xl p-1 mb-4 shadow-sm">
       <button

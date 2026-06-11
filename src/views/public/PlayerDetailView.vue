@@ -8,6 +8,7 @@ import { POSITION_LABEL, POSITION_BADGE_STRONG, FOOT_LABEL, seasonStatsOf, attac
 import { COMPLIMENT_TAGS, COMPLIMENT_TAG_MAP } from '@/utils/compliments'
 import EndorsementSection from '@/components/player/EndorsementSection.vue'
 import SkillRadarChart from '@/components/player/SkillRadarChart.vue'
+import FutPlayerCard from '@/components/player/FutPlayerCard.vue'
 import { formatDate } from '@/utils/date'
 import { playerMonthlySeries } from '@/utils/playerSeries'
 import { computePlayerBadges, BADGE_TONE } from '@/utils/badges'
@@ -33,6 +34,14 @@ const stats = computed(() => {
   return scope.value === 'total'
     ? player.value.stats || {}
     : seasonStatsOf(player.value, scope.value)
+})
+
+// 현재 scope 의 스킬 평판 — FUT 카드 + 레이더 차트 공용
+const skillTagsScoped = computed(() => {
+  if (!player.value) return {}
+  return scope.value === 'total'
+    ? (player.value.stats?.skillTags || {})
+    : (player.value.seasonStats?.[scope.value]?.skillTags || {})
 })
 
 // 받은 칭찬 태그 분포 (현재 scope 기준)
@@ -206,9 +215,10 @@ watch(() => route.params.id, load)
 
     <!-- FIFA 능력치 카드 (스킬 평판 기반 자동) -->
     <section v-if="player" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-6">
-      <h2 class="font-bold text-navy dark:text-zinc-100 mb-3">🎮 능력치 카드</h2>
+      <h2 class="font-bold text-navy dark:text-zinc-100 mb-4">🎮 능력치 카드</h2>
+      <FutPlayerCard :player="player" :skill-tags="skillTagsScoped" class="mb-6" />
       <SkillRadarChart
-        :skill-tags="scope === 'total' ? (player.stats?.skillTags || {}) : (player.seasonStats?.[scope]?.skillTags || {})"
+        :skill-tags="skillTagsScoped"
         :name="player.name"
         :position="player.mainPosition"
       />

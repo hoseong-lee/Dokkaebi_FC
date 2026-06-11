@@ -24,6 +24,7 @@ import AvatarPicker from '@/components/player/AvatarPicker.vue'
 import ClubPicker from '@/components/player/ClubPicker.vue'
 import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
 import SkillRadarChart from '@/components/player/SkillRadarChart.vue'
+import FutPlayerCard from '@/components/player/FutPlayerCard.vue'
 
 const auth = useAuthStore()
 const playersStore = usePlayersStore()
@@ -297,6 +298,7 @@ function onAvatarSelect(url) {
           <h2 class="font-bold text-navy dark:text-zinc-100">🎮 내 능력치 카드</h2>
           <RouterLink :to="`/players/${myPlayer.id}`" class="text-xs text-navy dark:text-zinc-200 hover:underline">상세 보기 →</RouterLink>
         </div>
+        <FutPlayerCard :player="myPlayer" :skill-tags="myPlayer.stats?.skillTags || {}" class="mb-6" />
         <SkillRadarChart
           :skill-tags="myPlayer.stats?.skillTags || {}"
           :name="myPlayer.name"

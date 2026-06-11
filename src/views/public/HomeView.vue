@@ -6,8 +6,10 @@ import { useMatchesStore } from '@/stores/matches'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
 import { useRankings } from '@/composables/useRankings'
+import { teamSummary } from '@/utils/teamStats'
 import MatchCard from '@/components/match/MatchCard.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
+import FormGuideChips from '@/components/match/FormGuideChips.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 
 const auth = useAuthStore()
@@ -23,6 +25,8 @@ const { topPoints } = useRankings(playersRef, seasonRef)
 const recentFinished = computed(() => matchesStore.finished.slice(0, 3))
 const top3 = computed(() => topPoints.value.slice(0, 3))
 const loading = computed(() => matchesStore.loading || playersStore.loading)
+// 최근 5경기 폼 (EPL Form Guide)
+const teamForm = computed(() => teamSummary(matchesStore.matches).form)
 
 onMounted(async () => {
   await seasonStore.ensure()
@@ -49,6 +53,7 @@ onMounted(async () => {
         <p class="text-sm text-white/70 mt-1">
           도깨비 FC<span v-if="seasonStore.activeSeason"> · {{ seasonStore.activeSeason.name }}</span>
         </p>
+        <FormGuideChips :form="teamForm" class="mt-3" />
       </div>
     </section>
 

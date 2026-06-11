@@ -2,21 +2,14 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { POSITION_LABEL } from '@/utils/positions'
+import { playerPhotoSrc } from '@/utils/playerPhoto'
 import PlayerSilhouette from '@/components/player/PlayerSilhouette.vue'
 
 const props = defineProps({
   player: { type: Object, required: true }
 })
 
-// 샘플 사진 매핑 — photoURL 등록 전 임시. admin 에서 등록하면 자동 우선됨.
-const SAMPLE_PHOTOS = {
-  '유희창': (import.meta.env.BASE_URL || '/') + 'sample-yuheechang-v3.png'
-}
-
-const photoSrc = computed(() => {
-  if (props.player?.photoURL) return props.player.photoURL
-  return SAMPLE_PHOTOS[props.player?.name] || null
-})
+const photoSrc = computed(() => playerPhotoSrc(props.player))
 
 const positionLabel = computed(() => {
   const p = props.player
