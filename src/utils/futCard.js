@@ -1,6 +1,6 @@
 // FUT 선수 카드 → 1080×1350 (인스타 4:5) PNG Blob 생성
 // DOM 버전(FutPlayerCard.vue)과 디자인 소스를 공유 — SHIELD_D / FUT_TONES / futTier
-import { ATTR_MAP, computeFifaAttrs, overallRating } from './skillMap'
+import { ATTR_MAP, computeFifaAttrs, overallRating, statDecadeColor, statDecadeStroke } from './skillMap'
 import { POSITION_CATEGORY } from './positions'
 import { playerPhotoSrc } from './playerPhoto'
 
@@ -36,8 +36,9 @@ export const FUT_TONES = {
 }
 
 // 곡선 방패 path — viewBox 300×420 기준. DOM(SVG) 과 canvas 가 동일 좌표 사용.
+// 몸통 직선 구간을 y=352(83.8%) 까지 연장 — 스탯 3행(y~81%)이 테이퍼에 안 걸리게.
 export const SHIELD_D =
-  'M150 10 L262 32 Q272 34 272 44 L272 318 Q272 330 264 336 L162 404 Q150 412 138 404 L36 336 Q28 330 28 318 L28 44 Q28 34 38 32 Z'
+  'M150 10 L262 32 Q272 34 272 44 L272 334 Q272 346 264 352 L162 408 Q150 415 138 408 L36 352 Q28 346 28 334 L28 44 Q28 34 38 32 Z'
 
 // 실루엣용 포지션 색 (PlayerSilhouette 와 동일 톤)
 const SIL_TONE = {
@@ -68,12 +69,12 @@ function shieldPath(ctx, x, y, w, h) {
   ctx.moveTo(X(150), Y(10))
   ctx.lineTo(X(262), Y(32))
   ctx.quadraticCurveTo(X(272), Y(34), X(272), Y(44))
-  ctx.lineTo(X(272), Y(318))
-  ctx.quadraticCurveTo(X(272), Y(330), X(264), Y(336))
-  ctx.lineTo(X(162), Y(404))
-  ctx.quadraticCurveTo(X(150), Y(412), X(138), Y(404))
-  ctx.lineTo(X(36), Y(336))
-  ctx.quadraticCurveTo(X(28), Y(330), X(28), Y(318))
+  ctx.lineTo(X(272), Y(334))
+  ctx.quadraticCurveTo(X(272), Y(346), X(264), Y(352))
+  ctx.lineTo(X(162), Y(408))
+  ctx.quadraticCurveTo(X(150), Y(415), X(138), Y(408))
+  ctx.lineTo(X(36), Y(352))
+  ctx.quadraticCurveTo(X(28), Y(346), X(28), Y(334))
   ctx.lineTo(X(28), Y(44))
   ctx.quadraticCurveTo(X(28), Y(34), X(38), Y(32))
   ctx.closePath()
@@ -177,6 +178,18 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   ctx.fillStyle = holo
   ctx.fillRect(cx0, cy0, cw, ch)
 
+  // 스파클 입자 (의사난수 — 매번 같은 자리, 반짝이 질감)
+  for (let i = 0; i < 26; i++) {
+    const fx = ((i * 97 + 13) % 89) / 89
+    const fy = ((i * 57 + 7) % 83) / 83
+    ctx.globalAlpha = 0.3 + ((i * 13) % 50) / 110
+    ctx.fillStyle = '#ffffff'
+    ctx.beginPath()
+    ctx.arc(cx0 + cw * (0.1 + fx * 0.8), cy0 + ch * (0.08 + fy * 0.76), 1.2 + ((i * 31) % 7) / 4, 0, Math.PI * 2)
+    ctx.fill()
+  }
+  ctx.globalAlpha = 1
+
   // 기요셰풍 아크 패턴 (하단, 옅게)
   ctx.strokeStyle = tone.line
   ctx.lineWidth = 2
@@ -253,10 +266,16 @@ export async function generateFutCard({ player, skillTags = {}, emblemUrl = null
   const draw3 = (ids, colX) => {
     ids.forEach((id, i) => {
       const y = statTop + i * rowGap
+      const v = attrs[id] ?? 50
+      // 십의 자리 색상 + 외곽선 (레이더/DOM 카드와 동일 체계)
       ctx.textAlign = 'right'
       ctx.font = '900 44px "Pretendard", sans-serif'
-      ctx.fillStyle = tone.text
-      ctx.fillText(String(attrs[id] ?? 50), colX, y)
+      ctx.lineJoin = 'round'
+      ctx.lineWidth = 5
+      ctx.strokeStyle = statDecadeStroke(v)
+      ctx.strokeText(String(v), colX, y)
+      ctx.fillStyle = statDecadeColor(v)
+      ctx.fillText(String(v), colX, y)
       ctx.textAlign = 'left'
       ctx.font = '500 30px "Pretendard", sans-serif'
       ctx.fillStyle = tone.sub

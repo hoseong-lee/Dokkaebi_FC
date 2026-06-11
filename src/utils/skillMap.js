@@ -146,6 +146,20 @@ export function recommendPositions(skillTags = {}, topN = 3) {
     .slice(0, topN)
 }
 
+// 십의 자리별 능력치 값 색상 — 레이더 차트 / FUT 카드 / canvas 공용
+// 50대 검정 / 60대 파랑 / 70대 보라 / 80대 빨강 / 90대 노랑
+export function statDecadeColor(v) {
+  if (v >= 90) return '#facc15'
+  if (v >= 80) return '#ef4444'
+  if (v >= 70) return '#a855f7'
+  if (v >= 60) return '#3b82f6'
+  return '#18181b'
+}
+// 외곽선 — 컬러 값엔 검정, 검정(50대) 값엔 흰색 (배경 간섭 차단)
+export function statDecadeStroke(v) {
+  return v < 60 ? '#ffffff' : '#000000'
+}
+
 // 전체 능력치 평균 (FIFA OVR 점수)
 export function overallRating(fifaAttrs = {}) {
   const values = Object.values(fifaAttrs)

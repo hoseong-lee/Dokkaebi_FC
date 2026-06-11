@@ -1,14 +1,15 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { ATTR_MAP, computeFifaAttrs, overallRating } from '@/utils/skillMap'
+import { ATTR_MAP, computeFifaAttrs, overallRating, statDecadeColor, statDecadeStroke } from '@/utils/skillMap'
 import { playerPhotoSrc } from '@/utils/playerPhoto'
 import { generateFutCard, futTier, FUT_TIER_LABEL, SHIELD_D, FUT_TONES } from '@/utils/futCard'
 import { downloadBlob } from '@/utils/squadImage'
 import { useToast } from '@/composables/useToast'
+import { useCardTilt } from '@/composables/useCardTilt'
 import PlayerSilhouette from '@/components/player/PlayerSilhouette.vue'
 import BaseButton from '@/components/common/BaseButton.vue'
 
-// EA FC 스타일 선수 카드 — 곡선 방패 + 뮤트 톤 + 홀로그래픽 + 3D 틸트
+// EA FC 스타일 선수 카드 — 곡선 방패 + 뮤트 톤 + 홀로/글레어/스파클 + 3D 틸트
 const props = defineProps({
   player: { type: Object, required: true },
   skillTags: { type: Object, default: () => ({}) }
@@ -30,9 +31,10 @@ const tierMeta = computed(() => FUT_TIER_LABEL[tier.value])
 // SVG defs id 충돌 방지 (한 화면 다중 카드)
 const uid = computed(() => `fut-${props.player?.id || 'anon'}`)
 
-// 방패 실루엣 클립 (objectBoundingBox 0~1 좌표 — SHIELD_D 의 /300, /420 스케일)
+// 방패 실루엣 클립 (objectBoundingBox 0~1 — SHIELD_D 의 /300, /420)
+// 몸통 직선 구간 y=0.838 까지 — 스탯 3행이 테이퍼에 안 걸림
 const CLIP_D =
-  'M0.5 0.0238 L0.8733 0.0762 Q0.9067 0.081 0.9067 0.1048 L0.9067 0.7571 Q0.9067 0.7857 0.88 0.8 L0.54 0.9619 Q0.5 0.981 0.46 0.9619 L0.12 0.8 Q0.0933 0.7857 0.0933 0.7571 L0.0933 0.1048 Q0.0933 0.081 0.1267 0.0762 Z'
+  'M0.5 0.0238 L0.8733 0.0762 Q0.9067 0.081 0.9067 0.1048 L0.9067 0.7952 Q0.9067 0.8238 0.88 0.8381 L0.54 0.9714 Q0.5 0.9881 0.46 0.9714 L0.12 0.8381 Q0.0933 0.8238 0.0933 0.7952 L0.0933 0.1048 Q0.0933 0.081 0.1267 0.0762 Z'
 
 // FUT 스탯 순서 — 좌: PAC SHO PAS / 우: DRI DEF PHY (라벨 한글)
 const leftStats = computed(() => ['PAC', 'SHO', 'PAS'].map((id) => statOf(id)))
@@ -41,50 +43,18 @@ function statOf(id) {
   const meta = ATTR_MAP.find((a) => a.id === id)
   return { id, label: meta?.ko || id, value: attrs.value[id] ?? 50 }
 }
-
-// 3D 틸트 — 데스크탑: 마우스 호버 / 모바일: 카드 누른 채 드래그
-// + 포인터 위치 따라 홀로/글레어 빛이 함께 움직임 (포켓몬 카드 효과)
-const cardEl = ref(null)
-const tiltTransform = ref('')
-const touchActive = ref(false)
-const pointer = ref({ x: 50, y: 50, active: false })
-
-function applyTilt(e) {
-  const el = cardEl.value
-  if (!el) return
-  const r = el.getBoundingClientRect()
-  const px = (e.clientX - r.left) / r.width - 0.5
-  const py = (e.clientY - r.top) / r.height - 0.5
-  tiltTransform.value =
-    `perspective(650px) rotateY(${(px * 25).toFixed(2)}deg) rotateX(${(-py * 25).toFixed(2)}deg) scale(1.05)`
-  pointer.value = { x: (px + 0.5) * 100, y: (py + 0.5) * 100, active: true }
-}
-function onTiltDown(e) {
-  if (e.pointerType === 'mouse') return
-  touchActive.value = true
-  cardEl.value?.setPointerCapture?.(e.pointerId)
-  applyTilt(e)
-}
-function onTiltMove(e) {
-  if (e.pointerType === 'mouse' || touchActive.value) applyTilt(e)
-}
-function onTiltEnd() {
-  touchActive.value = false
-  tiltTransform.value = ''
-  pointer.value = { x: 50, y: 50, active: false }
+// 십의 자리 색상 + 외곽선 (레이더 차트와 동일 체계)
+function statStyle(v) {
+  const o = statDecadeStroke(v)
+  return {
+    color: statDecadeColor(v),
+    textShadow: `1px 0 0 ${o}, -1px 0 0 ${o}, 0 1px 0 ${o}, 0 -1px 0 ${o}, 1px 1px 0 ${o}, -1px -1px 0 ${o}, 1px -1px 0 ${o}, -1px 1px 0 ${o}`
+  }
 }
 
-// 포인터 따라가는 홀로 (잡고 있는 동안 sweep 애니메이션 대신 위치 추적)
-const holoStyle = computed(() =>
-  pointer.value.active
-    ? { backgroundPosition: `${pointer.value.x}% ${pointer.value.y}%`, animation: 'none' }
-    : {}
-)
-// 포인터 지점에 빛 반사 스팟
-const glareStyle = computed(() => ({
-  opacity: pointer.value.active ? 1 : 0,
-  background: `radial-gradient(circle at ${pointer.value.x}% ${pointer.value.y}%, rgba(255,255,255,0.5), rgba(255,255,255,0.13) 35%, transparent 60%)`
-}))
+// 3D 틸트 + 포인터 추적 빛 (공용 composable)
+const { cardEl, tiltTransform, pointer, holoStyle, glareStyle, onTiltDown, onTiltMove, onTiltEnd } =
+  useCardTilt({ maxDeg: 25, scale: 1.05 })
 
 async function download() {
   downloading.value = true
@@ -110,7 +80,7 @@ async function download() {
     <!-- 틸트 래퍼 (그림자는 여기 — 클립과 분리해야 그림자 안 잘림) -->
     <div
       ref="cardEl"
-      class="relative w-64 aspect-[5/7] select-none touch-none drop-shadow-[0_18px_28px_rgba(0,0,0,0.35)] transition-transform duration-200 ease-out will-change-transform"
+      class="relative w-72 aspect-[5/7] select-none touch-none drop-shadow-[0_18px_28px_rgba(0,0,0,0.35)] transition-transform duration-200 ease-out will-change-transform"
       :style="{ transform: tiltTransform }"
       @pointerdown="onTiltDown"
       @pointermove="onTiltMove"
@@ -120,7 +90,7 @@ async function download() {
     >
       <!-- 방패 실루엣으로 전체 클립 — 콘텐츠 삐져나옴 방지 -->
       <div class="absolute inset-0" :style="{ clipPath: `url(#${uid}-cclip)` }">
-        <!-- 배경: 곡선 방패 SVG (그라데이션 + 광택 + 헤어라인 + 아크 패턴) -->
+        <!-- 배경: 곡선 방패 SVG -->
         <svg class="absolute inset-0 w-full h-full" viewBox="0 0 300 420" fill="none" aria-hidden="true">
           <defs>
             <linearGradient :id="`${uid}-bg`" x1="150" y1="0" x2="150" y2="420" gradientUnits="userSpaceOnUse">
@@ -154,9 +124,14 @@ async function download() {
           </g>
         </svg>
 
-        <!-- 홀로그래픽 sweep (전 등급) — 틸트 중엔 포인터 위치를 따라감 -->
+        <!-- 홀로그래픽 sweep — 틸트 중엔 포인터 위치를 따라감 -->
         <div class="holo absolute inset-0 pointer-events-none" :style="holoStyle"></div>
-        <!-- 빛 반사 글레어 — 포인터 지점에 스팟 (포켓몬 카드 효과) -->
+        <!-- 스파클 입자 (틸트 중 더 밝게) -->
+        <div
+          class="sparkle absolute inset-0 pointer-events-none transition-opacity duration-300"
+          :style="{ opacity: pointer.active ? 0.95 : 0.45 }"
+        ></div>
+        <!-- 빛 반사 글레어 — 포인터 지점 스팟 -->
         <div
           class="absolute inset-0 pointer-events-none transition-opacity duration-300"
           style="mix-blend-mode: overlay"
@@ -165,10 +140,10 @@ async function download() {
 
         <!-- 좌상단: OVR + 포지션 + 엠블럼 -->
         <div class="absolute left-[10%] top-[10%] w-[23%] flex flex-col items-center" :style="{ color: tone.text }">
-          <span class="text-[38px] font-black leading-none tabular-nums tracking-tight">{{ ovr }}</span>
+          <span class="text-[42px] font-black leading-none tabular-nums tracking-tight">{{ ovr }}</span>
           <span class="text-sm font-bold mt-1 tracking-[0.18em]">{{ posCode }}</span>
           <div class="w-7 border-t my-2" :style="{ borderColor: tone.line }"></div>
-          <img :src="emblemSrc" alt="도깨비FC" class="w-8 h-8 rounded-full shadow-sm" />
+          <img :src="emblemSrc" alt="도깨비FC" class="w-9 h-9 rounded-full shadow-sm" />
         </div>
 
         <!-- 우측: 선수 사진(누끼) 또는 실루엣 -->
@@ -191,17 +166,17 @@ async function download() {
           <p class="text-lg font-black tracking-[0.1em] truncate">{{ player.name }}</p>
         </div>
 
-        <!-- 6 스탯 (2열) -->
-        <div class="absolute left-[14%] right-[14%] top-[69%] grid grid-cols-2 gap-x-3" :style="{ color: tone.text }">
+        <!-- 6 스탯 (2열) — 십의 자리 색상 + 외곽선 -->
+        <div class="absolute left-[14%] right-[14%] top-[69%] grid grid-cols-2 gap-x-3">
           <div class="space-y-[7px]">
-            <p v-for="s in leftStats" :key="s.id" class="text-[13px] leading-none flex items-baseline">
-              <span class="font-black tabular-nums w-6 shrink-0">{{ s.value }}</span>
+            <p v-for="s in leftStats" :key="s.id" class="text-[14px] leading-none flex items-baseline">
+              <span class="font-black tabular-nums w-7 shrink-0" :style="statStyle(s.value)">{{ s.value }}</span>
               <span class="text-[10px] font-medium truncate" :style="{ color: tone.sub }">{{ s.label }}</span>
             </p>
           </div>
           <div class="space-y-[7px] border-l pl-3" :style="{ borderColor: tone.line }">
-            <p v-for="s in rightStats" :key="s.id" class="text-[13px] leading-none flex items-baseline">
-              <span class="font-black tabular-nums w-6 shrink-0">{{ s.value }}</span>
+            <p v-for="s in rightStats" :key="s.id" class="text-[14px] leading-none flex items-baseline">
+              <span class="font-black tabular-nums w-7 shrink-0" :style="statStyle(s.value)">{{ s.value }}</span>
               <span class="text-[10px] font-medium truncate" :style="{ color: tone.sub }">{{ s.label }}</span>
             </p>
           </div>
@@ -209,7 +184,7 @@ async function download() {
 
         <!-- 하단 클럽 레터링 (방패 테이퍼 안쪽) -->
         <p
-          class="absolute left-[25%] right-[25%] top-[85.5%] text-center text-[7px] font-bold tracking-[0.34em] whitespace-nowrap"
+          class="absolute left-[22%] right-[22%] top-[86.5%] text-center text-[7px] font-bold tracking-[0.34em] whitespace-nowrap"
           :style="{ color: tone.sub }"
         >
           DOKKAEBI FC
@@ -246,5 +221,28 @@ async function download() {
 @keyframes holo-sweep {
   from { background-position: 0% 0%; }
   to { background-position: 100% 100%; }
+}
+
+/* 스파클 — 고정 위치 입자들이 은은히 깜빡임 */
+.sparkle {
+  background-image:
+    radial-gradient(1.6px 1.6px at 14% 18%, rgba(255,255,255,0.95), transparent 60%),
+    radial-gradient(1.2px 1.2px at 26% 64%, rgba(255,255,255,0.8), transparent 60%),
+    radial-gradient(1.8px 1.8px at 38% 32%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(1.1px 1.1px at 52% 76%, rgba(255,255,255,0.75), transparent 60%),
+    radial-gradient(1.5px 1.5px at 64% 22%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(1.2px 1.2px at 72% 55%, rgba(255,255,255,0.8), transparent 60%),
+    radial-gradient(1.7px 1.7px at 84% 38%, rgba(255,255,255,0.92), transparent 60%),
+    radial-gradient(1.1px 1.1px at 45% 12%, rgba(255,255,255,0.7), transparent 60%),
+    radial-gradient(1.4px 1.4px at 18% 44%, rgba(255,255,255,0.85), transparent 60%),
+    radial-gradient(1.2px 1.2px at 58% 48%, rgba(255,255,255,0.75), transparent 60%),
+    radial-gradient(1.6px 1.6px at 78% 72%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(1.1px 1.1px at 32% 82%, rgba(255,255,255,0.7), transparent 60%);
+  mix-blend-mode: screen;
+  animation: sparkle-tw 3.2s ease-in-out infinite alternate;
+}
+@keyframes sparkle-tw {
+  from { filter: brightness(0.7); }
+  to { filter: brightness(1.4); }
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { ATTR_MAP, computeFifaAttrs, overallRating, gradeFromOvr, recommendPositions } from '@/utils/skillMap'
+import { ATTR_MAP, computeFifaAttrs, overallRating, gradeFromOvr, recommendPositions, statDecadeColor, statDecadeStroke } from '@/utils/skillMap'
 
 const props = defineProps({
   skillTags: { type: Object, default: () => ({}) },  // 받은 스킬 평판
@@ -50,18 +50,9 @@ const labelPoints = computed(() =>
   }))
 )
 
-// 십의 자리별 값 색상 — 50대 검정 / 60대 파랑 / 70대 보라 / 80대 빨강 / 90대 노랑
-function valueColor(v) {
-  if (v >= 90) return '#facc15'
-  if (v >= 80) return '#ef4444'
-  if (v >= 70) return '#a855f7'
-  if (v >= 60) return '#3b82f6'
-  return '#18181b'
-}
-// 외곽선 — 색 값엔 검정, 검정(50대) 값엔 흰색 (배경 간섭 차단)
-function valueStroke(v) {
-  return v < 60 ? '#ffffff' : '#000000'
-}
+// 값 색상/외곽선 — skillMap 공용 (FUT 카드와 동일 체계)
+const valueColor = statDecadeColor
+const valueStroke = statDecadeStroke
 </script>
 
 <template>
