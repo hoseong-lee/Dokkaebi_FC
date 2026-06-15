@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { getActiveSeason, listSeasons, createSeason } from '@/firebase/database'
+import { getActiveSeason, listSeasons, createSeason, setSeasonPlayerOfYear } from '@/firebase/database'
 
 export const useSeasonStore = defineStore('season', () => {
   const activeSeason = ref(null)
@@ -53,9 +53,17 @@ export const useSeasonStore = defineStore('season', () => {
     return id
   }
 
+  // 올해의 선수 수동 지정 (관리자). 로컬 캐시도 즉시 갱신.
+  async function setPlayerOfYear(seasonId, playerId) {
+    await setSeasonPlayerOfYear(seasonId, playerId)
+    const s = seasons.value.find((x) => x.id === seasonId)
+    if (s) s.playerOfYearId = playerId || null
+    if (activeSeason.value?.id === seasonId) activeSeason.value.playerOfYearId = playerId || null
+  }
+
   return {
     activeSeason, seasons, selectedId, list, loaded,
     activeId, selectedSeason,
-    ensure, refresh, setSelected, fetchSeasons, create
+    ensure, refresh, setSelected, fetchSeasons, create, setPlayerOfYear
   }
 })

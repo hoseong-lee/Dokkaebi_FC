@@ -85,6 +85,17 @@ export async function createSeason(data) {
   return r.key
 }
 
+export async function updateSeason(id, patch) {
+  await update(ref(rtdb, nsPath(`seasons/${id}`)), patch)
+  await logAudit('update', `seasons/${id}`, patch)
+}
+
+// 시즌 "올해의 선수" 수동 지정 (자동 MVP 와 별개 트로피). playerId=null 이면 해제.
+export async function setSeasonPlayerOfYear(seasonId, playerId) {
+  await update(ref(rtdb, nsPath(`seasons/${seasonId}`)), { playerOfYearId: playerId || null })
+  await logAudit('update', `seasons/${seasonId}`, { playerOfYearId: playerId || null })
+}
+
 // ───────────── 선수 ─────────────
 export async function listPlayers() {
   const snap = await get(ref(rtdb, nsPath('players')))
