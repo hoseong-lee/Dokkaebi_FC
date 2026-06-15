@@ -68,13 +68,41 @@ const seasonAwards = computed(() =>
   }))
 )
 
-// 등록된 시즌이 커버하지 못한 고정 올해의 선수 연도 → 항상 별도 카드로 표시
+// 등록된 시즌이 커버하지 못한 고정 올해의 선수 연도 → 별도 카드
 const legacyPoty = computed(() => {
   const coveredYears = new Set(seasons.list.map((s) => seasonYear(s)).filter(Boolean))
   return Object.entries(PLAYER_OF_YEAR)
     .map(([year, name]) => ({ year: Number(year), name, player: findPlayerByName(name) }))
     .filter((e) => !coveredYears.has(e.year))
-    .sort((a, b) => b.year - a.year)
+})
+
+// 등록 시즌 + 고정 POTY 를 연도 기준 내림차순(최신 위) 통합
+const timeline = computed(() => {
+  const seasonEntries = seasonAwards.value.map((sa) => ({
+    id: `season-${sa.season.id}`,
+    kind: 'season',
+    title: sa.season.name,
+    year: seasonYear(sa.season) ?? -1,
+    active: !!sa.season.active,
+    season: sa.season,
+    poty: sa.poty,            // { player, name } | null
+    awards: sa               // 자동 6트로피 접근용
+  }))
+  const legacyEntries = legacyPoty.value.map((e) => ({
+    id: `legacy-${e.year}`,
+    kind: 'legacy',
+    title: `${e.year} 시즌`,
+    year: e.year,
+    active: false,
+    season: null,
+    poty: { player: e.player, name: e.name },
+    awards: null
+  }))
+  return [...seasonEntries, ...legacyEntries].sort((a, b) => {
+    // 진행중 시즌 최상단, 그 외 연도 내림차순
+    if (a.active !== b.active) return a.active ? -1 : 1
+    return b.year - a.year
+  })
 })
 
 // 올해의 선수는 별도 강조 카드, 나머지는 자동 통계 트로피
@@ -111,72 +139,45 @@ onMounted(() => {
     />
 
     <div v-else class="space-y-6">
-      <!-- 고정 올해의 선수 (등록된 시즌이 없거나 그 연도 시즌이 없는 경우) -->
-      <section v-for="e in legacyPoty" :key="`poty-${e.year}`">
+      <section v-for="entry in timeline" :key="entry.id">
         <div class="flex items-center gap-2 mb-3">
-          <h2 class="font-bold text-navy dark:text-zinc-100">{{ e.year }} 시즌</h2>
-        </div>
-        <div
-          class="relative overflow-hidden rounded-2xl shadow-lg p-5 text-white bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 ring-2 ring-amber-300/60"
-        >
-          <span class="absolute -right-3 -top-2 text-8xl opacity-20 pointer-events-none">🏆</span>
-          <p class="text-[10px] font-bold opacity-90 tracking-[0.3em]">PLAYER OF THE YEAR</p>
-          <div class="flex items-center gap-4 mt-2">
-            <PlayerAvatar v-if="e.player" :player="e.player" :size="64" />
-            <div
-              v-else
-              class="w-16 h-16 rounded-full bg-white/25 flex items-center justify-center text-2xl font-black shrink-0"
-            >{{ e.name.charAt(0) }}</div>
-            <div class="flex-1 min-w-0">
-              <RouterLink
-                v-if="e.player"
-                :to="`/players/${e.player.id}`"
-                class="font-black text-2xl truncate hover:underline block drop-shadow"
-              >{{ e.player.name }}</RouterLink>
-              <p v-else class="font-black text-2xl truncate drop-shadow">{{ e.name }}</p>
-              <p class="text-sm font-semibold opacity-90">🏆 올해의 선수</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section v-for="sa in seasonAwards" :key="sa.season.id">
-        <div class="flex items-center gap-2 mb-3">
-          <h2 class="font-bold text-navy dark:text-zinc-100">{{ sa.season.name }}</h2>
-          <span v-if="sa.season.active" class="text-[10px] bg-dokkaebi text-white px-2 py-0.5 rounded-full">진행중</span>
+          <h2 class="font-bold text-navy dark:text-zinc-100">{{ entry.title }}</h2>
+          <span v-if="entry.active" class="text-[10px] bg-dokkaebi text-white px-2 py-0.5 rounded-full">진행중</span>
           <button
+            v-if="entry.kind === 'season'"
             type="button"
             class="ml-auto text-xs px-3 py-1.5 rounded-full bg-rose-500 text-white font-semibold hover:bg-rose-600"
-            @click="openReview(sa.season)"
+            @click="openReview(entry.season)"
           >📸 결산 카드</button>
         </div>
 
         <!-- 🏆 올해의 선수 — 강조 와이드 카드 (선수 데이터 없어도 이름 표시) -->
         <div
-          v-if="sa.poty"
+          v-if="entry.poty"
           class="relative overflow-hidden rounded-2xl shadow-lg p-5 mb-3 text-white bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 ring-2 ring-amber-300/60"
         >
           <span class="absolute -right-3 -top-2 text-8xl opacity-20 pointer-events-none">🏆</span>
           <p class="text-[10px] font-bold opacity-90 tracking-[0.3em]">PLAYER OF THE YEAR</p>
           <div class="flex items-center gap-4 mt-2">
-            <PlayerAvatar v-if="sa.poty.player" :player="sa.poty.player" :size="64" />
+            <PlayerAvatar v-if="entry.poty.player" :player="entry.poty.player" :size="64" />
             <div
               v-else
               class="w-16 h-16 rounded-full bg-white/25 flex items-center justify-center text-2xl font-black shrink-0"
-            >{{ sa.poty.name.charAt(0) }}</div>
+            >{{ entry.poty.name.charAt(0) }}</div>
             <div class="flex-1 min-w-0">
               <RouterLink
-                v-if="sa.poty.player"
-                :to="`/players/${sa.poty.player.id}`"
+                v-if="entry.poty.player"
+                :to="`/players/${entry.poty.player.id}`"
                 class="font-black text-2xl truncate hover:underline block drop-shadow"
-              >{{ sa.poty.player.name }}</RouterLink>
-              <p v-else class="font-black text-2xl truncate drop-shadow">{{ sa.poty.name }}</p>
+              >{{ entry.poty.player.name }}</RouterLink>
+              <p v-else class="font-black text-2xl truncate drop-shadow">{{ entry.poty.name }}</p>
               <p class="text-sm font-semibold opacity-90">🏆 올해의 선수</p>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- 자동 통계 트로피 (등록 시즌만) -->
+        <div v-if="entry.awards" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div
             v-for="t in trophies"
             :key="t.key"
@@ -190,17 +191,17 @@ onMounted(() => {
                 <p class="text-sm font-medium opacity-90">{{ t.label }}</p>
               </div>
             </div>
-            <div v-if="sa[t.key]" class="mt-3 flex items-center gap-3">
-              <PlayerAvatar :player="sa[t.key].player" :size="48" />
+            <div v-if="entry.awards[t.key]" class="mt-3 flex items-center gap-3">
+              <PlayerAvatar :player="entry.awards[t.key].player" :size="48" />
               <div class="flex-1 min-w-0">
                 <RouterLink
-                  :to="`/players/${sa[t.key].player.id}`"
+                  :to="`/players/${entry.awards[t.key].player.id}`"
                   class="font-bold text-lg truncate hover:underline block"
                 >
-                  {{ sa[t.key].player.name }}
+                  {{ entry.awards[t.key].player.name }}
                 </RouterLink>
                 <p class="text-xs opacity-80">
-                  <span class="font-bold text-base">{{ sa[t.key].value }}</span>
+                  <span class="font-bold text-base">{{ entry.awards[t.key].value }}</span>
                   {{ t.key === 'appearance' ? '경기' : t.key === 'mvp' ? '회' : t.key === 'points' ? 'P' : t.key === 'scorer' ? '골' : t.key === 'manner' ? '점' : '도움' }}
                 </p>
               </div>
