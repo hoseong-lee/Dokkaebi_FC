@@ -4,24 +4,18 @@ import { RouterLink } from 'vue-router'
 import { usePlayersStore } from '@/stores/players'
 import { useSeasonStore } from '@/stores/season'
 import { useMatchesStore } from '@/stores/matches'
-import { useAuthStore } from '@/stores/auth'
-import { useToast } from '@/composables/useToast'
 import { seasonStatsOf, attackPoints } from '@/utils/stats'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
-import BaseButton from '@/components/common/BaseButton.vue'
 import SeasonReviewModal from '@/components/match/SeasonReviewModal.vue'
 
 const players = usePlayersStore()
 const seasons = useSeasonStore()
 const matchesStore = useMatchesStore()
-const auth = useAuthStore()
-const toast = useToast()
 
 const reviewOpen = ref(false)
 const reviewSeason = ref(null)
-const savingPotyId = ref(null)
 
 function openReview(season) {
   reviewSeason.value = season
@@ -40,12 +34,25 @@ function pickTop(metric, seasonId) {
   return max > 0 ? best : null
 }
 
-// 수동 지정된 올해의 선수 (playerOfYearId) → { player } 형태로
+// 올해의 선수 — 코드 고정 매핑 (연도 → 선수 이름). DB 의존 없이 항상 표시.
+const PLAYER_OF_YEAR = {
+  2024: '마진섭',
+  2025: '문종일'
+}
+// 시즌 이름/연도에서 4자리 연도 추출
+function seasonYear(season) {
+  const m = String(season.name || season.year || '').match(/(20\d{2})/)
+  return m ? Number(m[1]) : null
+}
+function findPlayerByName(name) {
+  if (!name) return null
+  return players.players.find((p) => (p.name || '').trim() === name.trim()) || null
+}
 function pickPlayerOfYear(season) {
-  const pid = season.playerOfYearId
-  if (!pid) return null
-  const p = players.getById(pid)
-  return p ? { player: p, value: null } : null
+  const name = PLAYER_OF_YEAR[seasonYear(season)]
+  if (!name) return null
+  // 선수 데이터가 있으면 아바타·링크까지, 없으면 이름만이라도 표시
+  return { player: findPlayerByName(name), name }
 }
 
 const seasonAwards = computed(() =>
@@ -61,6 +68,15 @@ const seasonAwards = computed(() =>
   }))
 )
 
+// 등록된 시즌이 커버하지 못한 고정 올해의 선수 연도 → 항상 별도 카드로 표시
+const legacyPoty = computed(() => {
+  const coveredYears = new Set(seasons.list.map((s) => seasonYear(s)).filter(Boolean))
+  return Object.entries(PLAYER_OF_YEAR)
+    .map(([year, name]) => ({ year: Number(year), name, player: findPlayerByName(name) }))
+    .filter((e) => !coveredYears.has(e.year))
+    .sort((a, b) => b.year - a.year)
+})
+
 // 올해의 선수는 별도 강조 카드, 나머지는 자동 통계 트로피
 const trophies = [
   { key: 'mvp', label: '시즌 MVP', icon: '👑', color: 'from-amber-400 to-amber-600' },
@@ -70,26 +86,6 @@ const trophies = [
   { key: 'points', label: '공격 포인트', icon: '⚡', color: 'from-purple-500 to-purple-700' },
   { key: 'manner', label: '매너왕', icon: '💝', color: 'from-pink-500 to-rose-600' }
 ]
-
-// 관리자 지정용 선수 옵션 (활성 선수, 이름순)
-const playerOptions = computed(() =>
-  [...players.players]
-    .filter((p) => p.active !== false)
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((p) => ({ id: p.id, label: `${p.name}${p.number != null ? ' #' + p.number : ''}` }))
-)
-
-async function setPoty(season, playerId) {
-  savingPotyId.value = season.id
-  try {
-    await seasons.setPlayerOfYear(season.id, playerId || null)
-    toast.success(playerId ? '올해의 선수를 지정했습니다.' : '올해의 선수를 해제했습니다.')
-  } catch (e) {
-    toast.error(`지정 실패: ${e?.message || e}`)
-  } finally {
-    savingPotyId.value = null
-  }
-}
 
 const loading = computed(() => players.loading || (!seasons.loaded))
 
@@ -109,12 +105,41 @@ onMounted(() => {
 
     <LoadingSpinner v-if="loading" />
     <EmptyState
-      v-else-if="seasonAwards.length === 0"
+      v-else-if="seasonAwards.length === 0 && legacyPoty.length === 0"
       icon="🏆"
       title="아직 시즌이 없습니다"
     />
 
     <div v-else class="space-y-6">
+      <!-- 고정 올해의 선수 (등록된 시즌이 없거나 그 연도 시즌이 없는 경우) -->
+      <section v-for="e in legacyPoty" :key="`poty-${e.year}`">
+        <div class="flex items-center gap-2 mb-3">
+          <h2 class="font-bold text-navy dark:text-zinc-100">{{ e.year }} 시즌</h2>
+        </div>
+        <div
+          class="relative overflow-hidden rounded-2xl shadow-lg p-5 text-white bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 ring-2 ring-amber-300/60"
+        >
+          <span class="absolute -right-3 -top-2 text-8xl opacity-20 pointer-events-none">🏆</span>
+          <p class="text-[10px] font-bold opacity-90 tracking-[0.3em]">PLAYER OF THE YEAR</p>
+          <div class="flex items-center gap-4 mt-2">
+            <PlayerAvatar v-if="e.player" :player="e.player" :size="64" />
+            <div
+              v-else
+              class="w-16 h-16 rounded-full bg-white/25 flex items-center justify-center text-2xl font-black shrink-0"
+            >{{ e.name.charAt(0) }}</div>
+            <div class="flex-1 min-w-0">
+              <RouterLink
+                v-if="e.player"
+                :to="`/players/${e.player.id}`"
+                class="font-black text-2xl truncate hover:underline block drop-shadow"
+              >{{ e.player.name }}</RouterLink>
+              <p v-else class="font-black text-2xl truncate drop-shadow">{{ e.name }}</p>
+              <p class="text-sm font-semibold opacity-90">🏆 올해의 선수</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section v-for="sa in seasonAwards" :key="sa.season.id">
         <div class="flex items-center gap-2 mb-3">
           <h2 class="font-bold text-navy dark:text-zinc-100">{{ sa.season.name }}</h2>
@@ -126,7 +151,7 @@ onMounted(() => {
           >📸 결산 카드</button>
         </div>
 
-        <!-- 🏆 올해의 선수 (수동 지정) — 강조 와이드 카드 -->
+        <!-- 🏆 올해의 선수 — 강조 와이드 카드 (선수 데이터 없어도 이름 표시) -->
         <div
           v-if="sa.poty"
           class="relative overflow-hidden rounded-2xl shadow-lg p-5 mb-3 text-white bg-gradient-to-br from-amber-300 via-yellow-500 to-amber-700 ring-2 ring-amber-300/60"
@@ -134,31 +159,21 @@ onMounted(() => {
           <span class="absolute -right-3 -top-2 text-8xl opacity-20 pointer-events-none">🏆</span>
           <p class="text-[10px] font-bold opacity-90 tracking-[0.3em]">PLAYER OF THE YEAR</p>
           <div class="flex items-center gap-4 mt-2">
-            <PlayerAvatar :player="sa.poty.player" :size="64" />
+            <PlayerAvatar v-if="sa.poty.player" :player="sa.poty.player" :size="64" />
+            <div
+              v-else
+              class="w-16 h-16 rounded-full bg-white/25 flex items-center justify-center text-2xl font-black shrink-0"
+            >{{ sa.poty.name.charAt(0) }}</div>
             <div class="flex-1 min-w-0">
               <RouterLink
+                v-if="sa.poty.player"
                 :to="`/players/${sa.poty.player.id}`"
                 class="font-black text-2xl truncate hover:underline block drop-shadow"
-              >
-                {{ sa.poty.player.name }}
-              </RouterLink>
+              >{{ sa.poty.player.name }}</RouterLink>
+              <p v-else class="font-black text-2xl truncate drop-shadow">{{ sa.poty.name }}</p>
               <p class="text-sm font-semibold opacity-90">🏆 올해의 선수</p>
             </div>
           </div>
-        </div>
-
-        <!-- 관리자: 올해의 선수 지정 -->
-        <div v-if="auth.isAdmin" class="flex items-center gap-2 mb-3 text-xs">
-          <span class="text-gray-500 dark:text-zinc-400 shrink-0">🏆 올해의 선수</span>
-          <select
-            :value="sa.season.playerOfYearId || ''"
-            :disabled="savingPotyId === sa.season.id"
-            class="flex-1 border rounded-lg px-2 py-1.5 text-xs bg-white dark:bg-zinc-800 dark:border-zinc-700"
-            @change="setPoty(sa.season, $event.target.value || null)"
-          >
-            <option value="">— 지정 안 함 —</option>
-            <option v-for="o in playerOptions" :key="o.id" :value="o.id">{{ o.label }}</option>
-          </select>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
