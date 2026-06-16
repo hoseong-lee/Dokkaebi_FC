@@ -12,14 +12,15 @@ const props = defineProps({
 
 const variants = {
   primary: 'bg-navy text-white hover:bg-navy/90',
-  secondary: 'bg-gray-100 dark:bg-zinc-700 text-gray-800 dark:text-zinc-200 hover:bg-gray-200 dark:bg-zinc-600',
+  secondary: 'bg-gray-100 dark:bg-zinc-700 text-gray-800 dark:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-600',
   danger: 'bg-dokkaebi text-white hover:bg-dokkaebi/90',
-  ghost: 'bg-transparent text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:bg-zinc-700'
+  ghost: 'bg-transparent text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-700'
 }
+// 모바일 터치 영역 확보 — sm 도 py 상향
 const sizes = {
-  sm: 'text-xs px-2.5 py-1.5',
-  md: 'text-sm px-4 py-2',
-  lg: 'text-base px-5 py-2.5'
+  sm: 'text-xs px-3 py-2',
+  md: 'text-sm px-4 py-2.5',
+  lg: 'text-base px-5 py-3'
 }
 
 const classes = computed(() => [

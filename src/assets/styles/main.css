@@ -40,3 +40,26 @@ body {
 nav.fixed.bottom-0 {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* 모션 민감 사용자 — 카드 홀로/스파클/틸트, 전환 애니메이션 최소화 (접근성).
+   transform 은 레이아웃에 영향 줄 수 있어 카드 틸트만 무력화, 나머지는 즉시 전환. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* 카드 3D 틸트 비활성 (will-change-transform 요소) */
+  .will-change-transform {
+    transform: none !important;
+  }
+  /* 홀로/스파클 빛 레이어 숨김 */
+  .holo,
+  .holo-mini,
+  .sparkle {
+    display: none !important;
+  }
+}
