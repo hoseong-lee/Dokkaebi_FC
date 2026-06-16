@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import PlayerAvatar from './PlayerAvatar.vue'
+import TierBadge from './TierBadge.vue'
 import { POSITION_LABEL, POSITION_BADGE, attackPoints } from '@/utils/stats'
 
 const props = defineProps({
@@ -26,8 +27,9 @@ const props = defineProps({
       </span>
     </div>
     <div class="min-w-0 flex-1">
-      <p class="font-semibold text-gray-900 truncate">
-        {{ player.name }}
+      <p class="font-semibold text-gray-900 dark:text-zinc-100 truncate flex items-center gap-1.5">
+        <span class="truncate">{{ player.name }}</span>
+        <TierBadge :player="player" :show-ovr="false" class="shrink-0" />
         <span v-if="player.active === false" class="text-xs text-gray-400 dark:text-zinc-500">(은퇴)</span>
       </p>
       <div class="flex items-center gap-1.5 mt-0.5">

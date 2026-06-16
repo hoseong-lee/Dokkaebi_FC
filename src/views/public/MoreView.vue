@@ -16,7 +16,9 @@ const tiles = [
   { to: '/highlights', label: '베스트 골 모음', icon: '🏅', desc: '시즌 명장면 영상 모아보기 + 단톡 공유' },
   { to: '/venues', label: '우리 구장', icon: '🗺', desc: '자주 가는 구장 + 네이버지도 길찾기' },
   { to: '/gps-analysis', label: 'GPS 분석 🚧', icon: '🏃', desc: '경기 GPS 트랙 → 거리/활동범위 (개발중)' },
-  { to: '/chemistry', label: '🤝 케미스트리', icon: '🤝', desc: '같이 뛸 때 시너지 나는 페어' }
+  { to: '/chemistry', label: '🤝 케미스트리', icon: '🤝', desc: '같이 뛸 때 시너지 나는 페어' },
+  { to: '/cards', label: '🃏 카드 도감', icon: '🃏', desc: '전 선수 능력치 카드 모아보기 + 티어' },
+  { to: '/cards/compare', label: '⚔️ 1:1 비교', icon: '⚔️', desc: '두 선수 능력치 겹쳐 비교' }
 ]
 </script>
 

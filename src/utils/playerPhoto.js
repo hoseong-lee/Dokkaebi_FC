@@ -10,3 +10,10 @@ export function playerPhotoSrc(player) {
   if (player?.photoURL) return player.photoURL
   return SAMPLE_PHOTOS[player?.name] || null
 }
+
+// 선수의 스킬 평판(skillTags) 추출 — scope 없으면 통산
+export function playerSkillTags(player, seasonId = null) {
+  if (!player) return {}
+  if (seasonId) return player.seasonStats?.[seasonId]?.skillTags || {}
+  return player.stats?.skillTags || {}
+}

@@ -172,6 +172,18 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/cards',
+    name: 'card-gallery',
+    component: () => import('@/views/public/CardGalleryView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cards/compare',
+    name: 'card-compare',
+    component: () => import('@/views/public/CardCompareView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/gps-analysis',
     name: 'gps-analysis',
     component: () => import('@/views/public/GpsAnalysisView.vue'),
