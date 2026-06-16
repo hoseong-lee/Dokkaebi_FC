@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, toRef } from 'vue'
+import { ref, computed, onMounted, toRef } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useMatchesStore } from '@/stores/matches'
@@ -11,12 +11,17 @@ import MatchCard from '@/components/match/MatchCard.vue'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import FormGuideChips from '@/components/match/FormGuideChips.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import LinkPlayerModal from '@/components/layout/LinkPlayerModal.vue'
 
 const auth = useAuthStore()
 const matchesStore = useMatchesStore()
 const playersStore = usePlayersStore()
 const seasonStore = useSeasonStore()
 const emblemSrc = import.meta.env.BASE_URL + 'dokkaebi-emblem-192.png'
+
+// 온보딩: 선수 미연결 사용자 안내
+const linkModalOpen = ref(false)
+const needsLink = computed(() => auth.isAuthed && !auth.myPlayerId && !playersStore.loading)
 
 const playersRef = toRef(playersStore, 'players')
 const seasonRef = computed(() => seasonStore.activeId)
@@ -57,6 +62,26 @@ onMounted(async () => {
       </div>
     </section>
 
+    <!-- 온보딩: 선수 연결 안내 배너 (연결은 관리자만 가능) -->
+    <component
+      :is="auth.isAdmin ? 'button' : 'div'"
+      v-if="needsLink"
+      :type="auth.isAdmin ? 'button' : undefined"
+      class="w-full flex items-center gap-3 bg-amber-50 dark:bg-amber-500/10 ring-1 ring-amber-300/60 rounded-2xl p-4 text-left"
+      :class="auth.isAdmin ? 'hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors' : ''"
+      @click="auth.isAdmin && (linkModalOpen = true)"
+    >
+      <span class="text-2xl shrink-0">👋</span>
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-amber-900 dark:text-amber-200 text-sm">아직 본인 선수가 연결되지 않았어요</p>
+        <p class="text-xs text-amber-700 dark:text-amber-300/80 mt-0.5">
+          <template v-if="auth.isAdmin">탭해서 본인 선수를 연결하세요 — 내 통계·능력치 카드에 사용돼요</template>
+          <template v-else>관리자에게 선수 연결을 요청하세요. 연결되면 내 통계·능력치 카드를 볼 수 있어요</template>
+        </p>
+      </div>
+      <span v-if="auth.isAdmin" class="text-amber-500 text-lg shrink-0">→</span>
+    </component>
+
     <LoadingSpinner v-if="loading" />
 
     <template v-else>
@@ -64,12 +89,17 @@ onMounted(async () => {
       <section>
         <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold text-navy dark:text-zinc-100">다가오는 경기</h2>
-          <RouterLink to="/matches" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100 dark:hover:text-zinc-200">전체 보기</RouterLink>
+          <RouterLink to="/matches" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:hover:text-zinc-200">전체 보기</RouterLink>
         </div>
         <MatchCard v-if="matchesStore.nextMatch" :match="matchesStore.nextMatch" />
-        <p v-else class="text-sm text-gray-400 dark:text-zinc-500 dark:text-zinc-400 bg-white dark:bg-zinc-800 rounded-xl p-4 text-center">
-          예정된 경기가 없습니다.
-        </p>
+        <div v-else class="text-sm text-gray-400 dark:text-zinc-400 bg-white dark:bg-zinc-800 rounded-xl p-5 text-center">
+          <p>예정된 경기가 없습니다.</p>
+          <RouterLink
+            v-if="auth.isAdmin"
+            to="/admin/matches/new"
+            class="inline-flex mt-3 px-4 py-2 rounded-lg bg-navy text-white text-sm font-semibold hover:bg-navy/90"
+          >+ 경기 등록</RouterLink>
+        </div>
       </section>
 
       <!-- 최근 결과 -->
@@ -84,7 +114,7 @@ onMounted(async () => {
       <section v-if="top3.length">
         <div class="flex items-center justify-between mb-2">
           <h2 class="font-bold text-navy dark:text-zinc-100">공격포인트 TOP 3</h2>
-          <RouterLink to="/rankings" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:text-zinc-100 dark:hover:text-zinc-200">랭킹 보기</RouterLink>
+          <RouterLink to="/rankings" class="text-xs text-gray-400 dark:text-zinc-500 hover:text-navy dark:hover:text-zinc-200">랭킹 보기</RouterLink>
         </div>
         <ol class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm divide-y divide-gray-100 dark:divide-zinc-700">
           <li
@@ -102,5 +132,7 @@ onMounted(async () => {
         </ol>
       </section>
     </template>
+
+    <LinkPlayerModal v-model="linkModalOpen" />
   </div>
 </template>
