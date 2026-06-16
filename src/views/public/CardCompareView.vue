@@ -183,8 +183,12 @@ const TIER_TEXT = { gold: 'text-amber-500', silver: 'text-zinc-400', bronze: 'te
 
       <!-- 스탯 우열 표 -->
       <div v-if="A && B" class="bg-white dark:bg-zinc-800 rounded-2xl shadow p-4">
-        <div v-for="r in rows" :key="r.ko" class="flex items-center gap-2 py-1.5">
-          <span class="w-8 text-right font-black tabular-nums" :class="r.a >= r.b ? 'text-rose-500' : 'text-gray-400 dark:text-zinc-500'">{{ r.a }}</span>
+        <div v-for="r in rows" :key="r.ko" class="flex items-center gap-1.5 py-1.5">
+          <!-- A 화살표 -->
+          <span class="w-3 text-[11px] font-black text-center" :class="r.a > r.b ? 'text-rose-500' : 'text-gray-300 dark:text-zinc-600'">
+            {{ r.a > r.b ? '▲' : (r.a === r.b ? '=' : '▼') }}
+          </span>
+          <span class="w-7 text-right font-black tabular-nums" :class="r.a >= r.b ? 'text-rose-500' : 'text-gray-400 dark:text-zinc-500'">{{ r.a }}</span>
           <!-- 좌우 바 -->
           <div class="flex-1 flex items-center gap-0.5">
             <div class="flex-1 flex justify-end">
@@ -194,8 +198,12 @@ const TIER_TEXT = { gold: 'text-amber-500', silver: 'text-zinc-400', bronze: 'te
               <div class="h-2 rounded-r bg-sky-400" :style="{ width: (r.b / (r.a + r.b) * 100) + '%' }"></div>
             </div>
           </div>
-          <span class="w-8 font-black tabular-nums" :class="r.b >= r.a ? 'text-sky-500' : 'text-gray-400 dark:text-zinc-500'">{{ r.b }}</span>
-          <span class="w-12 text-[10px] text-center text-gray-400 dark:text-zinc-500">{{ r.ko }}</span>
+          <span class="w-7 font-black tabular-nums" :class="r.b >= r.a ? 'text-sky-500' : 'text-gray-400 dark:text-zinc-500'">{{ r.b }}</span>
+          <!-- B 화살표 -->
+          <span class="w-3 text-[11px] font-black text-center" :class="r.b > r.a ? 'text-sky-500' : 'text-gray-300 dark:text-zinc-600'">
+            {{ r.b > r.a ? '▲' : (r.a === r.b ? '=' : '▼') }}
+          </span>
+          <span class="w-11 text-[10px] text-center text-gray-400 dark:text-zinc-500">{{ r.ko }}</span>
         </div>
       </div>
 

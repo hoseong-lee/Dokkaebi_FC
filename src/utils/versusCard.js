@@ -119,15 +119,27 @@ export async function generateVersusCard({ playerA, playerB, seasonId = null, se
     ctx.fillStyle = 'rgba(255,255,255,0.85)'
     ctx.font = '700 28px "Pretendard", sans-serif'
     ctx.fillText(attr.ko, W / 2, y + 8)
+    // A 기준 우열 화살표 (A 우위면 빨강▲, 열위면 파랑▼, 동률 =)
+    const aWin = a > b
+    const bWin = b > a
     // A 값 (좌)
     ctx.textAlign = 'right'
     ctx.fillStyle = a >= b ? A_COLOR : 'rgba(255,255,255,0.4)'
     ctx.font = '900 36px "Pretendard", sans-serif'
     ctx.fillText(String(a), W / 2 - 120, y + 10)
+    // A 화살표 (값 왼쪽)
+    ctx.font = '900 30px "Pretendard", sans-serif'
+    ctx.fillStyle = aWin ? A_COLOR : 'rgba(255,255,255,0.25)'
+    ctx.fillText(aWin ? '▲' : (a === b ? '=' : '▼'), W / 2 - 200, y + 9)
     // B 값 (우)
     ctx.textAlign = 'left'
     ctx.fillStyle = b >= a ? B_COLOR : 'rgba(255,255,255,0.4)'
+    ctx.font = '900 36px "Pretendard", sans-serif'
     ctx.fillText(String(b), W / 2 + 120, y + 10)
+    // B 화살표 (값 오른쪽)
+    ctx.font = '900 30px "Pretendard", sans-serif'
+    ctx.fillStyle = bWin ? B_COLOR : 'rgba(255,255,255,0.25)'
+    ctx.fillText(bWin ? '▲' : (a === b ? '=' : '▼'), W / 2 + 175, y + 9)
     // 막대 — 중앙에서 양쪽으로
     const aW = (a / total) * barW
     const bW = (b / total) * barW
