@@ -80,7 +80,8 @@ function shieldPath(ctx, x, y, w, h) {
   ctx.closePath()
 }
 
-function drawSilhouette(ctx, player, cx, bottomY, height) {
+// 포지션 색 실루엣을 canvas 에 그림 (cx=중심 x, bottomY=발끝 y, height=전체 높이)
+export function drawSilhouette(ctx, player, cx, bottomY, height) {
   const cat =
     POSITION_CATEGORY[player?.mainPosition] ||
     POSITION_CATEGORY[player?.subPosition] ||

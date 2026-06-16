@@ -1,6 +1,6 @@
 // 1:1 비교 → 1080×1350 VS 카드 PNG Blob (단톡/인스타 공유용)
 import { ATTR_MAP, computeFifaAttrs, overallRating } from './skillMap'
-import { futTier, FUT_TIER_LABEL } from './futCard'
+import { futTier, FUT_TIER_LABEL, drawSilhouette } from './futCard'
 import { playerSkillTags, playerPhotoSrc } from './playerPhoto'
 
 const W = 1080
@@ -76,15 +76,12 @@ export async function generateVersusCard({ playerA, playerB, seasonId = null, se
       ctx.drawImage(photo, cx - dw / 2, boxY, dw, boxH)
       ctx.restore()
     } else {
-      // 실루엣 대용 — 원형 이니셜
-      ctx.fillStyle = color
-      ctx.beginPath()
-      ctx.arc(cx, boxY + 150, 110, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.fillStyle = '#fff'
-      ctx.textAlign = 'center'
-      ctx.font = '900 120px "Pretendard", sans-serif'
-      ctx.fillText((player.name || '?').charAt(0), cx, boxY + 195)
+      // 사진 없으면 포지션 색 실루엣 (FUT 카드와 동일)
+      ctx.save()
+      ctx.shadowColor = color
+      ctx.shadowBlur = 24
+      drawSilhouette(ctx, player, cx, boxY + boxH, boxH * 0.92)
+      ctx.restore()
     }
     // 이름
     ctx.textAlign = 'center'
