@@ -5,11 +5,16 @@ import { useSeasonStore } from '@/stores/season'
 import { ATTR_MAP, computeFifaAttrs, overallRating } from '@/utils/skillMap'
 import { futTier, FUT_TIER_LABEL } from '@/utils/futCard'
 import { playerSkillTags } from '@/utils/playerPhoto'
+import { generateVersusCard } from '@/utils/versusCard'
+import { downloadBlob } from '@/utils/squadImage'
+import { useToast } from '@/composables/useToast'
 import PlayerAvatar from '@/components/player/PlayerAvatar.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 
 const players = usePlayersStore()
 const seasons = useSeasonStore()
+const toast = useToast()
 
 const scope = ref('total')
 const seasonId = computed(() => (scope.value === 'total' ? null : scope.value))
@@ -68,6 +73,32 @@ const rows = computed(() => {
 })
 
 const loading = computed(() => players.loading || !seasons.loaded)
+
+const seasonName = computed(() =>
+  scope.value === 'total' ? '통산' : (seasons.list.find((s) => s.id === scope.value)?.name || '시즌')
+)
+const downloading = ref(false)
+const emblemSrc = (import.meta.env.BASE_URL || '/') + 'dokkaebi-emblem-192.png'
+async function downloadVs() {
+  if (!A.value || !B.value) return
+  downloading.value = true
+  try {
+    const blob = await generateVersusCard({
+      playerA: A.value.player,
+      playerB: B.value.player,
+      seasonId: seasonId.value,
+      seasonName: seasonName.value,
+      emblemUrl: emblemSrc
+    })
+    const safe = `${A.value.player.name}-vs-${B.value.player.name}`.replace(/[^\w가-힣-]/g, '_')
+    downloadBlob(blob, `dokkaebi-vs-${safe}.png`)
+    toast.success('VS 카드를 저장했습니다.')
+  } catch (e) {
+    toast.error(`이미지 생성 실패: ${e?.message || e}`)
+  } finally {
+    downloading.value = false
+  }
+}
 
 onMounted(async () => {
   await Promise.all([seasons.ensure(), players.loaded ? null : players.fetchAll()])
@@ -167,6 +198,16 @@ const TIER_TEXT = { gold: 'text-amber-500', silver: 'text-zinc-400', bronze: 'te
           <span class="w-12 text-[10px] text-center text-gray-400 dark:text-zinc-500">{{ r.ko }}</span>
         </div>
       </div>
+
+      <!-- VS 카드 저장 -->
+      <BaseButton
+        v-if="A && B"
+        variant="primary"
+        block
+        class="mt-3"
+        :loading="downloading"
+        @click="downloadVs"
+      >📸 VS 카드 이미지 저장</BaseButton>
     </template>
   </div>
 </template>
