@@ -105,49 +105,56 @@ export async function generateVersusCard({ playerA, playerB, seasonId = null, se
   ctx.textAlign = 'center'
   ctx.fillText('VS', W / 2, 420)
 
-  // 스탯 우열 막대 (하단)
-  const statTop = 900
+  // 스탯 우열 (하단) — 가장자리에 값/화살표, 중앙에 라벨+막대 (겹침 없음)
+  // 레이아웃(좌→우): [A화살표 70][A값 150][막대좌 ~430][라벨 540][막대우 ~650][B값 930][B화살표 1010]
+  const statTop = 905
   const rowGap = 66
-  const barW = 360
+  const cx = W / 2
+  const halfBar = 130           // 중앙에서 한쪽 막대 최대 길이
+  const barGap = 70             // 라벨 좌우로 막대가 비켜나는 간격
   ATTR_MAP.forEach((attr, i) => {
     const y = statTop + i * rowGap
     const a = attrsA[attr.id] || 50
     const b = attrsB[attr.id] || 50
-    const total = a + b
-    // 라벨 (중앙)
-    ctx.textAlign = 'center'
-    ctx.fillStyle = 'rgba(255,255,255,0.85)'
-    ctx.font = '700 28px "Pretendard", sans-serif'
-    ctx.fillText(attr.ko, W / 2, y + 8)
-    // A 기준 우열 화살표 (A 우위면 빨강▲, 열위면 파랑▼, 동률 =)
+    const total = a + b || 1
     const aWin = a > b
     const bWin = b > a
-    // A 값 (좌)
-    ctx.textAlign = 'right'
-    ctx.fillStyle = a >= b ? A_COLOR : 'rgba(255,255,255,0.4)'
-    ctx.font = '900 36px "Pretendard", sans-serif'
-    ctx.fillText(String(a), W / 2 - 120, y + 10)
-    // A 화살표 (값 왼쪽)
+    const tie = a === b
+
+    // A 화살표 (맨 왼쪽)
+    ctx.textAlign = 'center'
     ctx.font = '900 30px "Pretendard", sans-serif'
-    ctx.fillStyle = aWin ? A_COLOR : 'rgba(255,255,255,0.25)'
-    ctx.fillText(aWin ? '▲' : (a === b ? '=' : '▼'), W / 2 - 200, y + 9)
-    // B 값 (우)
-    ctx.textAlign = 'left'
-    ctx.fillStyle = b >= a ? B_COLOR : 'rgba(255,255,255,0.4)'
-    ctx.font = '900 36px "Pretendard", sans-serif'
-    ctx.fillText(String(b), W / 2 + 120, y + 10)
-    // B 화살표 (값 오른쪽)
+    ctx.fillStyle = aWin ? A_COLOR : 'rgba(255,255,255,0.22)'
+    ctx.fillText(aWin ? '▲' : (tie ? '=' : '▼'), 70, y + 9)
+    // A 값
+    ctx.textAlign = 'center'
+    ctx.fillStyle = a >= b ? A_COLOR : 'rgba(255,255,255,0.45)'
+    ctx.font = '900 38px "Pretendard", sans-serif'
+    ctx.fillText(String(a), 150, y + 12)
+
+    // B 값
+    ctx.fillStyle = b >= a ? B_COLOR : 'rgba(255,255,255,0.45)'
+    ctx.font = '900 38px "Pretendard", sans-serif'
+    ctx.fillText(String(b), W - 150, y + 12)
+    // B 화살표 (맨 오른쪽)
     ctx.font = '900 30px "Pretendard", sans-serif'
-    ctx.fillStyle = bWin ? B_COLOR : 'rgba(255,255,255,0.25)'
-    ctx.fillText(bWin ? '▲' : (a === b ? '=' : '▼'), W / 2 + 175, y + 9)
-    // 막대 — 중앙에서 양쪽으로
-    const aW = (a / total) * barW
-    const bW = (b / total) * barW
+    ctx.fillStyle = bWin ? B_COLOR : 'rgba(255,255,255,0.22)'
+    ctx.fillText(bWin ? '▲' : (tie ? '=' : '▼'), W - 70, y + 9)
+
+    // 라벨 (중앙, 막대보다 위)
+    ctx.textAlign = 'center'
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'
+    ctx.font = '600 24px "Pretendard", sans-serif'
+    ctx.fillText(attr.ko, cx, y - 16)
+
+    // 막대 — 라벨 양옆에서 바깥쪽으로 (값 텍스트와 안 겹침)
+    const aW = (a / total) * halfBar
+    const bW = (b / total) * halfBar
     ctx.fillStyle = A_COLOR
-    roundRect(ctx, W / 2 - 100 - aW, y - 10, aW, 14, 6)
+    roundRect(ctx, cx - barGap - aW, y - 2, aW, 14, 6)
     ctx.fill()
     ctx.fillStyle = B_COLOR
-    roundRect(ctx, W / 2 + 100, y - 10, bW, 14, 6)
+    roundRect(ctx, cx + barGap, y - 2, bW, 14, 6)
     ctx.fill()
   })
 
