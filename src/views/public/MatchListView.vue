@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { useMatchesStore } from '@/stores/matches'
+import { useAuthStore } from '@/stores/auth'
 import { teamSummary } from '@/utils/teamStats'
 import MatchCard from '@/components/match/MatchCard.vue'
 import FormGuideChips from '@/components/match/FormGuideChips.vue'
@@ -9,6 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 
 const store = useMatchesStore()
+const auth = useAuthStore()
 const tab = ref('upcoming') // upcoming | finished
 
 const list = computed(() => (tab.value === 'upcoming' ? store.upcoming : store.finished))
@@ -49,6 +51,8 @@ onMounted(async () => { await store.fetchAll() })
       v-else-if="list.length === 0"
       icon="📅"
       :title="tab === 'upcoming' ? '예정된 경기가 없습니다' : '완료된 경기가 없습니다'"
+      :action-label="auth.isAdmin && tab === 'upcoming' ? '+ 경기 등록' : ''"
+      action-to="/admin/matches/new"
     />
     <RecycleScroller
       v-else
