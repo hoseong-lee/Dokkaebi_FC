@@ -183,40 +183,63 @@ onMounted(() => store.fetchAll())
         </div>
 
         <div>
-          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">이름</label>
-          <input v-model="form.name" type="text" class="w-full border rounded-lg px-3 py-2 text-sm" />
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">이름 <span class="text-dokkaebi">*</span></label>
+          <input v-model="form.name" type="text" placeholder="선수 이름 (필수)" class="w-full border dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-900 dark:text-zinc-100" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">등번호</label>
-            <input v-model="form.number" type="number" min="0" class="w-full border rounded-lg px-3 py-2 text-sm" />
+            <input v-model="form.number" type="number" min="0" inputmode="numeric" class="w-full border dark:border-zinc-700 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-zinc-900 dark:text-zinc-100" />
           </div>
           <div>
             <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">주발</label>
-            <select v-model="form.preferredFoot" class="w-full border rounded-lg px-3 py-2 text-sm">
-              <option v-for="(l, k) in FOOT_LABEL" :key="k" :value="k">{{ l }}</option>
-            </select>
+            <div class="flex gap-1.5">
+              <button
+                v-for="(l, k) in FOOT_LABEL" :key="k"
+                type="button"
+                class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+                :class="form.preferredFoot === k ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-300'"
+                @click="form.preferredFoot = k"
+              >{{ l }}</button>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">메인 포지션</label>
-            <select v-model="form.mainPosition" class="w-full border rounded-lg px-3 py-2 text-sm">
-              <optgroup v-for="g in POSITION_OPTIONS" :key="g.group" :label="g.group">
-                <option v-for="p in g.items" :key="p" :value="p">{{ p }}</option>
-              </optgroup>
-            </select>
+        <!-- 메인 포지션 — 칩 (카테고리별 그룹) -->
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1.5">메인 포지션</label>
+          <div v-for="g in POSITION_OPTIONS" :key="`m-${g.group}`" class="flex items-center gap-1.5 mb-1.5">
+            <span class="w-7 text-[10px] font-bold text-gray-400 dark:text-zinc-500 shrink-0">{{ g.group }}</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button
+                v-for="p in g.items" :key="p"
+                type="button"
+                class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+                :class="form.mainPosition === p ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-300'"
+                @click="form.mainPosition = p"
+              >{{ p }}</button>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1">서브 포지션</label>
-            <select v-model="form.subPosition" class="w-full border rounded-lg px-3 py-2 text-sm">
-              <option value="">없음</option>
-              <optgroup v-for="g in POSITION_OPTIONS" :key="g.group" :label="g.group">
-                <option v-for="p in g.items" :key="p" :value="p">{{ p }}</option>
-              </optgroup>
-            </select>
+        </div>
+
+        <!-- 서브 포지션 — 칩 + 없음 -->
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-zinc-400 mb-1.5">서브 포지션 <span class="text-gray-400">(선택)</span></label>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+              :class="!form.subPosition ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-300'"
+              @click="form.subPosition = ''"
+            >없음</button>
+            <button
+              v-for="p in POSITION_OPTIONS.flatMap((g) => g.items)" :key="`s-${p}`"
+              type="button"
+              class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+              :class="form.subPosition === p ? 'bg-navy text-white' : 'bg-gray-100 dark:bg-zinc-700 text-gray-600 dark:text-zinc-300'"
+              @click="form.subPosition = p"
+            >{{ p }}</button>
           </div>
         </div>
 
